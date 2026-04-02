@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Founder{% endblock %}
+
+{% block content %}
+         
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
+        Founder Of this School
+    </h4>
+
+    {% for founder in founders %}
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6" style="padding: 0px;">
+                <img src="{{ founder.photo.url }}" class="img-responsive">
+            </div>
+            <div class="col-md-6" style="padding: 0px;">
+                <p style="text-align: justify">
+                    {{ founder.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+
+     
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admission Circulars{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+   <h4 class="mb-3" style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 10px; color: #fff; border-radius: 4px;">
+      Admission Circulars
+    </h4>
+    <div class="row">
+
+    <!-- Filter Form -->
+    <form method="get" class="row mb-3">
+        <div class="col-md-4">
+            <label for="class_name">Class:</label>
+            <select name="class" class="form-control">
+                <option value="">All Classes</option>
+                {% for code, name in class_choices %}
+                    <option value="{{ code }}" {% if selected_class == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    <!-- Circulars Table -->
+    {% if circulars %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SL</th>
+                    <th>Title</th>
+                    <th>Class</th>
+                    <th>Date</th>
+                    <th>Image</th>
+                    <th>Document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for circular in circulars %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ circular.title }}</td>
+                    <td>{{ circular.get_class_name_display }}</td>
+                    <td>{{ circular.created_at|date:"d M Y" }}</td>
+                    <td>
+                        {% if circular.image %}
+                            <img src="{{ circular.image.url }}" alt="{{ circular.title }}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if circular.document %}
+                            <a href="{{ circular.document.url }}" class="btn btn-success btn-sm" download>Download</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-center text-muted mt-4">No circulars found for the selected class.</p>
+    {% endif %}
+
+</div>
+</div>
+{% endblock %}

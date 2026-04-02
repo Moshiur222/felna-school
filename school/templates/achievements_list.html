@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}School Achievements{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
+        Our School Achievements
+    </h4>
+
+    {% for achievement in achievements %}
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6" style="padding: 0px;">
+                <img src="{{ achievement.image.url }}" class="img-responsive" alt="{{ achievement.title }}">
+            </div>
+            <div class="col-md-6" style="padding: 0px;">
+                <h5>{{ achievement.title }}</h5>
+                <p style="text-align: justify">
+                    {{ achievement.short_description }}
+                </p>
+                <a href="{% url 'achievement_detail' achievement.id %}">Read More</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

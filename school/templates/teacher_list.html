@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Our Teachers - Felna High School{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: green; padding: 5px; color: #fff;">
+        আমাদের শিক্ষকবৃন্দ
+    </h4>
+    <div class="row">
+        {% for teacher in teachers %}
+            <div class="col-sm-4 col-xs-6 col-md-3 col-lg-3" style="margin-bottom: 15px;">
+                <div class="thumbnail">
+                    {% if teacher.photo %}
+                        <img src="{{ teacher.photo.url }}" class="img-responsive" style="height: 200px;" alt="{{ teacher.name }}">
+                    {% else %}
+                        <img src="{% static 'img/default.jpg' %}" class="img-responsive" style="height: 200px;" alt="Default Image">
+                    {% endif %}
+                    <div class="caption text-center">
+                        <h5>{{ teacher.name }}</h5>
+                        <p style="margin-bottom: 5px; color: #1E90FF; font-weight: bold;">{{ teacher.designation }}</p>
+                        {% if teacher.subject %}
+                            <p style="font-size: 13px; color: #FF8C00; font-style: italic;">{{ teacher.subject }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>No teachers found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Prospectus{% endblock %}
+
+{% block content %}
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #203C5C; padding: 5px; color: #fff;">
+        Prospectus
+    </h4>
+
+    <!-- Filter Form -->
+    <form method="get" class="row mb-3">
+        <div class="col-md-4">
+            <label for="class_name">Class:</label>
+            <select name="class" class="form-control">
+                <option value="">All Classes</option>
+                {% for code, name in class_choices %}
+                    <option value="{{ code }}" {% if selected_class == code %}selected{% endif %}>{{ name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
+
+    <!-- Prospectus Table -->
+    {% if prospectuses %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped text-center">
+            <thead class="thead-dark">
+                <tr>
+                    <th>SL</th>
+                    <th>Title</th>
+                    <th>Class</th>
+                    <th>Year</th>
+                    <th>Image</th>
+                    <th>Document</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prospectus in prospectuses %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ prospectus.title }}</td>
+                    <td>{{ prospectus.get_class_name_display }}</td>
+                    <td>{{ prospectus.year }}</td>
+                    <td>
+                        {% if prospectus.image %}
+                            <img src="{{ prospectus.image.url }}" alt="{{ prospectus.title }}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if prospectus.document %}
+                            <a href="{{ prospectus.document.url }}" class="btn btn-success btn-sm" download>Download</a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-center text-muted mt-4">No prospectuses found for the selected class.</p>
+    {% endif %}
+</div>
+{% endblock %}

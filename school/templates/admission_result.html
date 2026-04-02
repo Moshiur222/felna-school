@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admission Result{% endblock %}
+
+{% block content %}
+
+            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+                    Admission Result
+                </h4>
+
+                <!-- Search Form -->
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="exam_track_number">Exam Track:</label>
+                            <input type="text" name="exam_track_number" class="form-control"
+                                   placeholder="Enter Your Exam Track Number"
+                                   value="{{ request.POST.exam_track_number }}">
+                            <label for="class_name">Class:</label>
+                            <select name="class_name" class="form-control" required>
+                                <option value="" selected>Select Class</option>
+                                {% for code, name in class_choices %}
+                                    <option value="{{ code }}" {% if request.POST.class_name == code %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="year">Year:</label>
+                            <select name="year" class="form-control" required>
+                                <option value="" selected>Select Passing Year</option>
+                                {% for y in years %}
+                                    <option value="{{ y }}" {% if request.POST.year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input style="margin-top: 10px;" type="submit" class="form-control btn-primary pull-right" value="View Result">
+                    </div>
+                </form>
+
+                <!-- Result Table -->
+                {% if results %}
+                    <div class="col-md-12 mt-4">
+                        <h5>Result for Track Number: {{ results.0.exam_track_number }}, Class: {{ results.0.class_name }}, Year: {{ results.0.year }}</h5>
+                        <table class="table table-bordered table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Student Name</th>
+                                    <th>Status</th>
+                                    <th>Exam Track</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ result.student_name }}</td>
+                                    <td>{{ result.status }}</td>
+                                    <td>{{ result.exam_track_number }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% elif results is not None %}
+                    <p>No results found for the given criteria.</p>
+                {% endif %}
+            </div>
+      
+{% endblock %}

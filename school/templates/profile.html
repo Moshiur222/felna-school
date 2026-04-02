@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+         
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
+        Profile
+    </h4>
+    <table class="table table-responsive table-bordered">
+        <tr>
+            <th>School Name</th><th>:</th><td>{{ profile.school_name }}</td>
+        </tr>
+        <tr>
+            <th>Name Of The Principal</th><th>:</th><td>{{ profile.principal_name }}</td>
+        </tr>
+        <tr>
+            <th>Address</th><th>:</th><td>{{ profile.address }}</td>
+        </tr>
+        <tr>
+            <th>Contact Number</th><th>:</th><td><a href="tel:{{ profile.contact_number }}">{{ profile.contact_number }}</a></td>
+        </tr>
+        <tr>
+            <th>Fax Number</th><th>:</th><td>{{ profile.fax_number }}</td>
+        </tr>
+        <tr>
+            <th>Email ID</th><th>:</th><td>{{ profile.email }}</td>
+        </tr>
+        <tr>
+            <th>Web Address</th><th>:</th><td><a target="_blank" href="{{ profile.web_address }}">{{ profile.web_address }}</a></td>
+        </tr>
+        <tr>
+            <th>Class Room</th><th>:</th><td>{{ profile.class_room_info }}</td>
+        </tr>
+        <tr>
+            <th>Probable Admission Date</th><th>:</th><td>{{ profile.probable_admission_date }}</td>
+        </tr>
+        <tr>
+            <th>Established</th><th>:</th><td>{{ profile.established_date|date:"d/m/Y" }}</td>
+        </tr>
+        <tr>
+            <th>EIIN</th><th>:</th><td>{{ profile.eiin }}</td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+     
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Our Donors - Felna High School{% endblock %}
+
+{% block content %}
+
+            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+                <h4 style="">
+                    Our Donors
+                </h4>
+                <div class="row">
+                    {% for donor in donors %}
+                        <div class="col-sm-4 col-xs-6 col-md-3 col-lg-3" style="margin-bottom: 15px;">
+                            <div class="thumbnail">
+                                {% if donor.photo %}
+                                    <img src="{{ donor.photo.url }}" class="img-responsive" style="height: 200px;" alt="{{ donor.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/default.jpg' %}" class="img-responsive" style="height: 200px;" alt="Default Image">
+                                {% endif %}
+                                <div class="caption text-center">
+                                    <h5>{{ donor.name }}</h5>
+                                    <p style="text-align: justify; max-height: 100px; overflow: hidden;">{{ donor.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>No donors found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+   
+{% endblock content %}

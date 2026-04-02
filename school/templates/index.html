@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block slider %}
+
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {% for slider in sliders %}
+            <div class="item {% if forloop.first %}active{% endif %}">
+                <img src="{{ slider.image.url }}" class="img-responsive" style="height: 400px; width: 100%;">
+                <div class="carousel-caption">
+                    <h3>{{ slider.headline }}</h3>
+                    <p>{{ slider.caption }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Indicators -->
+    <ul class="nav nav-pills nav-justified">
+        {% for slider in sliders %}
+            <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}>
+                <a href="#">{{ slider.headline }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock slider %}
+
+
+{% block content_index %}
+<div class="row">
+      <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
+        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
+            <span>About Institute</span>
+        </div>
+        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
+            {% if welcome_message %}
+                {{ welcome_message.message|linebreaks }}
+            {% else %}
+                
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
+        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
+            <span>Teacher's & Staffs</span>
+        </div>
+        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
+            <marquee direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
+                <table>
+                    <tr>
+                        {% for teacher in teachers %}
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="nav-justified" style="margin: 5px;">
+                                <tr>
+                                    <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
+                                        {% if teacher.photo %}
+                                            <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" style="height:200px;width:200px;border-radius:100px;border:4px solid #F68B1F;">
+                                        {% else %}
+                                            <img src="{% static 'img/default_teacher.png' %}" alt="{{ teacher.name }}" style="height:200px;width:200px;border-radius:100px;border:4px solid #F68B1F;">
+                                        {% endif %}
+                                        <div style="width: 250px; margin: auto;">
+                                            <div style="padding-top: 6px; text-align: center; font-size: 14px; color: #292e8e; font-weight:bold;">
+                                                {{ teacher.name }}
+                                            </div>
+                                            <div style="padding-bottom: 7px; text-align: center; font-size: 12px; color: #4c4b4b; font-weight:bold;">
+                                                {{ teacher.designation }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; padding-top: 1px; padding-bottom: 10px;">
+                                        <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-danger btn-sm">View Detail</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </marquee>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
+        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
+            <span>Meritorious Students</span>
+        </div>
+        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
+             <marquee direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();">
+                <table>
+                    <tr>
+                        {% for student in students %}
+                        <td>
+                            <table cellpadding="0" cellspacing="0" class="nav-justified" style="margin: 5px;">
+                                <tr>
+                                    <td style="text-align: center; padding-top: 10px; padding-bottom: 10px">
+                                        {% if student.photo %}
+                                            <img src="{{ student.photo.url }}" 
+                                                 style="height:150px;width:150px;border-radius:75px 75px;border:4px solid #2c2f60 !important" />
+                                        {% else %}
+                                            <img src="{% static 'images/default_student.png' %}" 
+                                                 style="height:150px;width:150px;border-radius:75px 75px;border:4px solid #2c2f60 !important" />
+                                        {% endif %}
+
+                                        <div style="width: 200px; margin-left: auto; margin-right: auto;">
+                                            <div style="padding-top: 6px; text-align: center; padding-right: 25px; padding-left: 25px; font-size: 14px; color: #292e8e">
+                                                <span style="font-weight:bold;">{{ student.name }}</span>
+                                            </div>
+                                            <div style="padding-bottom: 7px; text-align: center; padding-right: 25px; padding-left: 25px; font-size: 12px; color: #4c4b4b">
+                                                <span style="font-weight:bold;">Class:{{ student.class_name }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </marquee>
+        </div>
+    </div>
+</div>
+
+{% endblock content_index %}

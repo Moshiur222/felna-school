@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* --- আপনার আগের ডিজাইন অপরিবর্তিত --- */
+    .table-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-top: 5px solid #F4A024;
+        padding: 10px;
+        margin-top: 30px;
+    }
+
+    .custom-header {
+        background-color: #203C5C;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+        margin-bottom: 0;
+    }
+
+    #studentTable thead th {
+        background-color: #f8f9fa;
+        color: #203C5C;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 1.5rem;
+    }
+
+    #studentTable td {
+        text-align: center;
+        vertical-align: middle;
+        font-size:1.5rem
+    }
+
+    /* --- লেআউট কন্ট্রোল CSS (নতুন পরিবর্তন) --- */
+    
+    /* উপরের Row: Show Entries (বামে) এবং Search (ডানে) */
+    .top-controls {
+        display: flex;
+        justify-content: space-between; /* এটি বামে এবং ডানে সরিয়ে দেবে */
+        align-items: center;
+        margin-bottom: 2px;
+    }
+
+    /* Show entries styling */
+    .dataTables_length label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 0;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #203C5C;
+    }
+    .dataTables_length select {
+        border: 2px solid #F4A024 !important;
+        border-radius: 4px;
+        padding: 2px;
+    }
+
+    /* Search Box styling */
+    .search-wrapper .form-control {
+        width: 150px; 
+        border: 2px solid #F4A024;
+    }
+
+    /* নিচের Row: Info এবং Pagination (ডানে) */
+    .bottom-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; 
+        margin-top: 1px;
+    }
+
+    .dataTables_info {
+        font-size: 1.1rem;
+        color: #666;
+        font-size: 1.5rem;
+    }
+
+    /* ডিফল্ট ফিল্টার হাইড করা */
+    .dataTables_filter {
+        display: none;
+    }
+
+    
+    /* View Button Professional Design */
+    .view_btn {
+        background-color: #203C5C; /* Header Color */
+        color: #000 !important;
+        padding: 6px 16px;
+        border-radius: 4px;
+        text-decoration: none !important;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s ease;
+        border: 2px solid #203C5C;
+        text-transform: capitalize;
+        letter-spacing: 0.5px;
+        line-height: 1;
+    }
+
+    .view_btn:hover {
+        background-color: #F4A024; /* Theme Orange Color */
+        border-color: #F4A024;
+        color: #006400 !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-1px);
+    }
+
+    .view_btn:active {
+        transform: translateY(0);
+    }
+</style>
+
+<div class="container-fluid">
+    <h3 class="custom-header text-center">Student Registration List</h3>
+
+    <!-- Filter Form -->
+    <div class="table-card mb-4" style="border-top: none; border-bottom: 5px solid #F4A024;">
+        <form method="get" id="filterForm" class="form-row align-items-center">
+            <div class="col-md-2 my-1">
+                <select name="batch" class="form-control form-control-sm filter-select">
+                    <option value="">All Batches</option>
+                    {% for batch in batch_choices %}
+                        <option value="{{ batch }}" {% if selected_batch|stringformat:"s" == batch|stringformat:"s" %}selected{% endif %}>{{ batch }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 my-1">
+                <select name="gender" class="form-control form-control-sm filter-select">
+                    <option value="">All Genders</option>
+                    {% for code, name in gender_choices %}
+                        <option value="{{ code }}" {% if selected_gender|stringformat:"s" == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 my-1">
+                <select name="occupation" class="form-control form-control-sm filter-select">
+                    <option value="">All Occupations</option>
+                    {% for code, name in occupation_choices %}
+                        <option value="{{ code }}" {% if selected_occupation|stringformat:"s" == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-1 my-1">
+                <button type="submit" class="btn btn-primary btn-sm btn-block">Filter</button>
+            </div>
+            <div class="col-md-1 my-1">
+                <a href="{% url 'registration_students_list' %}" class="btn btn-secondary btn-sm btn-block">Reset</a>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Main Table Card -->
+    <div class="table-card">
+        
+        <!-- উপরের অংশ: Show Entries (বামে) এবং Search (ডানে) -->
+        <div class="top-controls">
+            <div id="entries_wrapper"></div> <!-- এটি বাম দিকে থাকবে -->
+            <div class="search-wrapper">
+                <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="🔍 Search...">
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table id="studentTable" class="table table-hover table-bordered w-100">
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>Batch</th>
+                        <th>Student Name</th>
+                        <th>Location</th>
+                        <th>Occupation</th>
+                        <th>Education</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ student.batch }}</td>
+                        <td style="text-align:left; padding-left:20px;">{{ student.student_name }}</td>
+                        <td style="text-align:left; padding-left:20px;">{{ student.current_location.name }}</td>
+                        <td>{{ student.get_occupation_display }}</td>
+                        <td>{{ student.get_last_edu_display }}</td>
+                        <td>
+                            <a href="{% url 'registration_student_detail' student.id %}" class="view_btn">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- নিচের অংশ: Info এবং Pagination (ডানে) -->
+        <div class="bottom-controls">
+            <div id="info_wrapper"></div>
+            <div id="paginate_wrapper"></div>
+        </div>
+
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        var table = $('#studentTable').DataTable({
+            "paging": true,
+            "ordering": true,
+            "info": true,
+            "searching": true,
+            "autoWidth": false,
+            "pageLength": 10,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "dom": 'lrtip', 
+            "language": {
+                "zeroRecords": "No matching students found",
+                "paginate": {
+                    "previous": "«",
+                    "next": "»"
+                }
+            },
+            "initComplete": function() {
+                // 'Show entries' কে বামের ডিভে পাঠানো
+                $('.dataTables_length').detach().appendTo('#entries_wrapper');
+                // Info কে নিচের ডানে পাঠানো
+                $('.dataTables_info').detach().appendTo('#info_wrapper');
+                // Pagination কে নিচের ডানে পাঠানো
+                $('.dataTables_paginate').detach().appendTo('#paginate_wrapper');
+            }
+        });
+
+        // কাস্টম সার্চ
+        $('#customSearchInput').on('keyup input', function() {
+            table.search(this.value).draw();
+        });
+
+        // অটো সিরিয়াল
+        table.on('order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
+
+        $('.filter-select').on('change', function() {
+            $('#filterForm').submit();
+        });
+    });
+</script>
+{% endblock %}

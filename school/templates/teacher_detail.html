@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ teacher.name }} - Teacher Details{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: green; padding: 5px; color: #fff;">
+        {{ teacher.name }}
+    </h4>
+    <div class="row">
+        <div class="col-md-4 text-center">
+            {% if teacher.photo %}
+            <img src="{{ teacher.photo.url }}" class="img-responsive img-thumbnail" alt="{{ teacher.name }}">
+            {% else %}
+            <img src="{% static 'img/default_teacher.png' %}" class="img-responsive img-thumbnail" alt="{{ teacher.name }}">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <p><strong>Designation:</strong> {{ teacher.designation }}</p>
+            {% if teacher.subject %}
+            <p><strong>Subject:</strong> {{ teacher.subject }}</p>
+            {% endif %}
+            {% if teacher.phone %}
+            <p><strong>Phone:</strong> {{ teacher.phone }}</p>
+            {% endif %}
+            {% if teacher.email %}
+            <p><strong>Email:</strong> {{ teacher.email }}</p>
+            {% endif %}
+            {% if teacher.bio %}
+            <p style="text-align: justify; line-height: 25px;">
+                {{ teacher.bio|linebreaks }}
+            </p>
+            {% endif %}
+            {% if teacher.join_date %}
+            <p><strong>Joined On:</strong> {{ teacher.join_date }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h3 style="background-color: #203C5C; color:white; padding:10px;">Class Routine</h3>
+        
+        <!-- Filter options -->
+        <div class="mb-3">
+            <form method="get" class="form-inline">
+                <select name="class" class="form-control mr-2">
+                    <option value="">All Classes</option>
+                    {% for class_val, class_name in class_choices %}
+                    <option value="{{ class_val }}" {% if selected_class == class_val %}selected{% endif %}>
+                        {{ class_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </form>
+        </div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Class</th>
+                    <th>Day</th>
+                    <th>Subject</th>
+                    <th>Time</th>
+                    <th>Teacher</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for routine in routines %}
+                <tr>
+                    <td>{{ routine.get_class_name_display }}</td>
+                    <td>{{ routine.day }}</td>
+                    <td>{{ routine.subject }}</td>
+                    <td>{{ routine.start_time|time:"H:i" }} - {{ routine.end_time|time:"H:i" }}</td>
+                    <td>{% if routine.teacher %}{{ routine.teacher.name }}{% else %}-{% endif %}</td>
+                    <td>
+                        {% if routine.image %}
+                            <img src="{{ routine.image.url }}" alt="Routine Image" 
+                                 style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px; cursor:pointer;"
+                                 data-toggle="modal" data-target="#imageModal" onclick="previewImage('{{ routine.image.url }}')">
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center text-muted">No class routines found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Centered Image Preview Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content" style="background: transparent; border: none;">
+      <div class="modal-body text-center p-0">
+        <img id="modalImage" src="" style="width: auto; max-width: 90%; max-height: 80vh; object-fit: contain; border-radius: 8px;">
+      </div>
+      <div class="modal-footer justify-content-center" style="border-top: none;">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewImage(src) {
+    document.getElementById('modalImage').src = src;
+}
+
+// Hide navbar when modal opens and show when it closes
+$('#imageModal').on('show.bs.modal', function () {
+    $('.navbar, .row2').hide();  // adjust selector to your navbar class/id
+});
+$('#imageModal').on('hidden.bs.modal', function () {
+    $('.navbar, .row2').show();
+});
+</script>
+{% endblock %}

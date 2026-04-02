@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}{{ member.name }} - Management{% endblock %}
+
+{% block content %}
+
+        <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+            <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+                {{ member.name }}
+            </h4>
+            <div class="col-md-4">
+                <img src="{{ member.photo.url }}" class="img-responsive img-thumbnail" alt="{{ member.name }}">
+            </div>
+            <div class="col-md-8">
+                <p style="text-align: justify; line-height: 25px;">
+                    {{ member.description }}
+                </p>
+            </div>
+   
+</div>
+{% endblock content %}

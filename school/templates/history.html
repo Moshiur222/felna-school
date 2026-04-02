@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}History Of Felna High School{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+        {{ history.title }}
+    </h4>
+    <div class="col-md-12 img-thumbnail" style="padding: 15px; height: auto;">                      
+        <p style="text-align: justify; line-height: 25px;">
+            {{ history.content|linebreaks }}
+        </p>
+        <strong>
+            For more details, please visit our 
+            <a href="">Profile</a>
+        </strong>
+    </div>
+</div>
+
+{% endblock content %}

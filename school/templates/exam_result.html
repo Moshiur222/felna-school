@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Examination Result{% endblock %}
+
+{% block content %}
+
+            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+                    Examination Result
+                </h4>
+
+                <!-- Search Form -->
+                <div class="col-md-6">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="class_name">Class:</label>
+                            <select name="class_name" class="form-control" required>
+                                <option value="" selected>Select Your Class</option>
+                                {% for code, name in class_choices %}
+                                    <option value="{{ code }}" {% if request.POST.class_name == code %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <label for="year">Year:</label>
+                            <select name="year" class="form-control" required>
+                                <option value="" selected>Select Passing Year</option>
+                                {% for y in years %}
+                                    <option value="{{ y }}" {% if request.POST.year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="roll_number">Class Roll:</label>
+                            <input type="text" name="roll_number" class="form-control" placeholder="Enter Your class roll number"
+                                   value="{{ request.POST.roll_number }}" required>
+
+                    
+                        </div>
+
+                        <input type="submit" class="form-control btn-primary pull-right" value="View Result">
+                    </form>
+                </div>
+
+                <!-- Result Table -->
+                {% if results %}
+                    <div class="col-md-12 mt-4">
+                        <h5>Result for Roll: {{ results.0.roll_number }}, Class: {{ results.0.class_name }}-{{ results.0.section }}, Year: {{ results.0.year }}</h5>
+                        <table class="table table-bordered table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>SL</th>
+                                    <th>Name</th>
+                                    <th>Subject</th>
+                                    <th>Marks Obtained</th>
+                                    <th>Total Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ result.student_name }}</td>
+                                    <td>{{ result.subject }}</td>
+                                    <td>{{ result.marks_obtained }}</td>
+                                    <td>{{ result.total_marks }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% elif results is not None %}
+                    <p>No results found for the given criteria.</p>
+                {% endif %}
+            </div>
+        
+{% endblock %}

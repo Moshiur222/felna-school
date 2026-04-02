@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block content %}
+
+            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+                    Latest Photo
+                </h4>
+
+                <div class='list-group gallery'>
+                    {% for image in page_obj %}
+                        <div class='col-sm-4 col-xs-6 col-md-3 col-lg-3'>
+                            <a class="thumbnail fancybox" rel="ligthbox" href="{{ image.image.url }}">
+                                <img style="height: 200px;" class="img-responsive" alt="{{ image.title }}" src="{{ image.image.url }}" />
+                                <div class='text-right'>
+                                    <small class='text-muted'>{{ image.title }}</small>
+                                </div>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <p>No images found.</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                <div class="clearfix"></div>
+                <div class="col-md-12 text-center">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page={{ page_obj.previous_page_number }}">«</a></li>
+                        {% else %}
+                            <li class="disabled"><span>«</span></li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="active"><span>{{ num }}</span></li>
+                            {% else %}
+                                <li><a href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}">»</a></li>
+                        {% else %}
+                            <li class="disabled"><span>»</span></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+            </div>
+     
+{% endblock %}

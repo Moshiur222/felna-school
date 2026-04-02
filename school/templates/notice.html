@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}All Notices{% endblock %}
+
+{% block content %}
+
+            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+                    All Notices
+                </h4>
+
+                <table class="table table-responsive table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>SL</th>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>View</th>
+                            <th>Download</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for notice in page_obj %}
+                        <tr>
+                            <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+                            <td>{{ notice.date|date:"d/m/Y" }}</td>
+                            <td>{{ notice.title }}</td>
+                            <td>
+                                {% if notice.file %}
+                                    <a href="{{ notice.file.url }}" target="_blank" title="Click to Open">
+                                        <i class="fa fa-book"></i>
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if notice.file %}
+                                    <a href="{{ notice.file.url }}" download title="Click to Download">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">No notices found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">Next</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+     
+{% endblock %}
