@@ -72,8 +72,9 @@ TEMPLATES = [
                 'school.context_processors.notice_board',
                 'school.context_processors.gallery_images',
                 'school.context_processors.school_context',
-                   'school.context_processors.facility_titles',
-                      'school.context_processors.visitor_stats',
+                'school.context_processors.facility_titles',
+                'school.context_processors.visitor_stats',
+                'school.context_processors.active_menu',
          
             ],
         },
@@ -135,12 +136,150 @@ SASS_PROCESSOR_ROOT = BASE_DIR / 'static/sass'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+from django.urls import reverse_lazy
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 UNFOLD = {
-    "SITE_HEADER": "Felna High School Administration",
-    "SITE_TITLE": "Felna High School Admin Portal",
-    "SITE_INDEX_TITLE": "Welcome to the Felna High School Admin Panel",
+    "SITE_TITLE": "Felna High School Admin",
+    "SITE_HEADER": "Felna High School Adminboard_permission",
+    "SITE_SYMBOL": "school", 
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "COLORS": {
+        "primary": {
+            "50": "238 242 255", "100": "224 231 255", "200": "199 210 254",
+            "300": "165 180 252", "400": "129 140 248", "500": "99 102 241",
+            "600": "79 70 229", "700": "67 56 202", "800": "55 48 163",
+            "900": "49 46 129", "950": "30 27 75",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": False, 
+        "navigation": [
+            {
+                "title": "Main Dashboard",
+                "separator": True,
+                "items": [
+                    {"title": "Overview", "icon": "dashboard", "link": reverse_lazy("admin:index")},
+                ],
+            },
+            {
+                "title": "Home Page",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Home Slider", "icon": "imagesmode", "link": "/admin/school/slider/"}, 
+                    {"title": "About Institute", "icon": "chat", "link": "/admin/school/welcomemessage/"},
+                ],
+            },
+            {
+                "title": "Committe Member",
+                "collapsible": True,
+                "separator": True,  
+                "items": [
+                    {"title": "Management", "icon": "manage_accounts", "link": "/admin/school/management/"},
+                    {"title": "Teacher's & Staffs", "icon": "person_pin", "link": "/admin/school/teacher/"},
+                    {"title": "Photo Gallery", "icon": "photo_library", "link": "/admin/school/gallery/"},
+                ],
+            },
+            {
+                "title": "Introduction",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "History", "icon": "history", "link": "/admin/school/ourhistory/"},
+                    {"title": "Mission & Vision", "icon": "flag", "link": "/admin/school/missionvision/"},
+                    {"title": "Achievements", "icon": "military_tech", "link": "/admin/school/schoolachievement/"},
+                ],
+            },
+            {
+                "title": "Academics",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": "Student List", "icon": "people", "link": "/admin/school/student/"},
+                    {"title": "Class Routine", "icon": "calendar_month", "link": "/admin/school/classroutine/"},
+                    {"title": "Syllabus", "icon": "description", "link": "/admin/school/syllabus/"},
+                    {"title": "Exam Routine", "icon": "schedule", "link": "/admin/school/examroutine/"},
+                ],
+            },
+            {
+                "title": "Result",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": "Exam Results", "icon": "grade", "link": "/admin/school/examresult/"},
+                ],
+            },
+            {
+                "title": "Admission Information",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Admission Circular", "icon": "campaign", "link": "/admin/school/admissioncircular/"},
+                    {"title": "Prospectus", "icon": "menu_book", "link": "/admin/school/prospectus/"},
+                    {"title": "Admission Results", "icon": "assignment_turned_in", "link": "/admin/school/admissionresult/"},
+                ],
+            },
+            {
+                "title": "Facilities",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Facilities", "icon": "apartment", "link": "/admin/school/facility/"},
+                ],
+            },
+            {
+                "title": "Board Permission",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                ],
+            },
+            {
+                "title": "Alunmi Associations",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Alumni Sudents", "icon": "how_to_reg", "link": "/admin/school/studentregistration/"},
+                    {"title": "Villages", "icon": "location_city", "link": "/admin/school/village/"},
+                ],
+            },
+            {
+                "title": "Administration",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "School Profile", "icon": "domain", "link": "/admin/school/schoolprofile/"},
+                    {"title": "Official Notices", "icon": "notifications", "link": "/admin/school/notice/"},
+                ],
+            },
+            {
+                "title": "Website & Media",
+                "collapsible": True,
+                "separator": True,  
+                "items": [
+                    {"title": "Founders", "icon": "workspace_premium", "link": "/admin/school/founder/"},
+                    {"title": "Donors", "icon": "volunteer_activism", "link": "/admin/school/donor/"},
+                ],
+            },
+            {
+                "title": "Messages",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Headmaster Msg", "icon": "person", "link": "/admin/school/headmastermessage/"},
+                    {"title": "Asst. Headmaster", "icon": "groups", "link": "/admin/school/assistantheadmastermessage/"},
+                ],
+            },
+            {
+                "title": "System Control",
+                "collapsible": True,
+                "items": [
+                    {"title": "User Accounts", "icon": "admin_panel_settings", "link": "/admin/auth/user/"},
+                    {"title": "Visitor Logs", "icon": "visibility", "link": "/admin/school/visitor/"},
+                ],
+            },
+        ],
+    },
 }

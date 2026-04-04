@@ -6,14 +6,15 @@
 
 <!-- Mirrored from pamkc.edu.bd/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 24 Sep 2025 10:28:19 GMT -->
 <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
-<head><title>
-
-</title><link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+<head>
+    <title>{% block title %}{% endblock %}</title>
+<link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
 
 <!-- Custom Layout CSS -->
 <link href="{% static 'css_temp1/layout.css' %}" rel="stylesheet" type="text/css" />
  <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" />
-<style>
+ {% block extra_css %}{% endblock %} 
+ <style>
     /* Navbar wrapper */
 .row2 {
     background-color: #284669; /* main navbar color */
@@ -160,6 +161,17 @@
     color: #4a5568;
 }
 
+.Menu1_2 a.active {
+    background-color: #1f354d;
+    color: yellow !important;
+}
+
+#topnav1 ul li a.active {
+    color: yellow !important;
+    font-weight: bold;
+    border-bottom: 2px solid yellow;
+}
+
 @media (max-width: 768px) {
     .legal-link-group:not(:last-child)::after {
         content: "";
@@ -169,6 +181,8 @@
         margin: 5px 0;
     }
 }
+
+
 
 @keyframes slide {
     0% { transform: translateX(0); }
@@ -196,29 +210,47 @@
                         </td>
                         <td style="text-align: right">
                             <ul>
-
-
-
-                                <li><a href="{% url 'admission_result'%}">
-                                    <span id="llbTopLinkOnlineAdmission"> Admission </span></a></li>
-                                {% comment %} <li><a href="inactivemsg.html">
-                                    <span id="llbTopLinkStudentPortal">Payment Portal</span></a></li> {% endcomment %}
-
-                                <li><a href="{% url 'gallery'%}">
-                                    <span id="llbTopGallery">Photo Gallery</span></a></li>
-
-                                <li><a href="{% url 'exam_result'%}">
-                                    <span id="llbTopLinkResult">Result</span></a></li>
-                                <li><a href="{% url 'teachers'%}">
-                                    <span id="llbTopLinkTeachers">Teachers</span></a>
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name == 'admission_result' %}active{% endif %}" 
+                                       href="{% url 'admission_result'%}">
+                                        <span id="llbTopLinkOnlineAdmission"> Admission </span>
+                                    </a>
                                 </li>
-                                <li><a href="{% url 'management_list'%}">
-                                    <span id="llbTopCommitee">Committee Members</span></a>
+                            
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" 
+                                       href="{% url 'gallery'%}">
+                                        <span id="llbTopGallery">Photo Gallery</span>
+                                    </a>
                                 </li>
-                                <li><a href="{% url 'home'%}">
-                                    <span id="llbHome">Home</span></a>
+                            
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name == 'exam_result' %}active{% endif %}" 
+                                       href="{% url 'exam_result'%}">
+                                        <span id="llbTopLinkResult">Result</span>
+                                    </a>
                                 </li>
-
+                            
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name in 'teachers teacher_detail' %}active{% endif %}" 
+                                    href="{% url 'teachers'%}">
+                                        <span id="llbTopLinkTeachers">Teachers</span>
+                                    </a>
+                                </li>
+                            
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name in 'management_list management_detail' %}active{% endif %}" 
+                                    href="{% url 'management_list'%}">
+                                        <span id="llbTopCommitee">Committee Members</span>
+                                    </a>
+                                </li>
+                            
+                                <li>
+                                    <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                                       href="{% url 'home'%}">
+                                        <span id="llbHome">Home</span>
+                                    </a>
+                                </li>
                             </ul>
                         </td>
 
@@ -283,59 +315,162 @@
             </div>
         </div>
         
- <div class="wrapper row2">
-    <div id="topnav">
-        <ul class="Menu1_2">
-            <li><a class="Menu1_1 Menu1_3" href="{% url 'home'%}">INTRODUCTION</a>
-                <ul>
-                 
-                    <li><a href="{% url 'history'%}">HISTORY</a></li>
-                    <li><a href="{% url 'mv'%}">MISSION AND VISION</a></li>
-                    <li><a href="{% url 'achievements_list'%}">ACHIEVEMENT</a></li>
-                </ul>
-            </li>
-            <li><a class="Menu1_1 Menu1_3" href="#">ACADEMIC</a>
-                <ul>
-                    <li><a href="{% url 'student_list'%}">STUDENT LIST</a></li>
-                    <li><a href="{% url 'class_routine_list'%}">CLASS ROUTINE</a>
-                      
-                    </li>
-                    <li><a href="{% url 'syllabus_view'%}">SYLLABUS</a></li>
-                    <li><a href="{% url 'exam_routine_view'%}">EXAM ROUTINE</a></li>
-                </ul>
-            </li>
-            <li><a class="Menu1_1 Menu1_3" href="{% url 'exam_result'%}">RESULT</a></li>
-            <li><a class="Menu1_1 Menu1_3" href="#">ADMISSION INFORMATION</a>
-                <ul>
-                    <li><a href="{% url 'admission_circular_list'%}">ADMISSION CIRCULAR</a></li>
-                    <li><a href="{% url 'prospectus_list'%}">PROSPECTUS</a></li>
-                    <li><a href="{% url 'admission_result'%}">ADMISSION RESULT</a></li>
-                </ul>
-            </li>
-      <li>
-    <a class="Menu1_1 Menu1_3" href="{% url 'facility_list' %}">FACILITIES</a>
-    <ul>
-        {% for facility in facility_titles %}
-                    <li>
-                        <a href="{% url 'facility_detail' pk=facility.id %}">{{ facility.title }}</a>
-                    </li>
-                {% empty %}
-                    <li><a href="#">No Facilities</a></li>
-                {% endfor %}
+    <div class="wrapper row2">
+        <div id="topnav">
+            <ul class="Menu1_2">
+                
+                <!-- INTRODUCTION -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'home' or active_url == 'history' or active_url == 'mv' or active_url == 'achievements_list' or active_url == 'achievement_detail' %}
+                    active
+                    {% endif %}" 
+                    href="{% url 'home'%}">
+                    INTRODUCTION
+                    </a>
+
+                    <ul>
+                        <li>
+                            <a class="{% if active_url == 'history' %}active{% endif %}" 
+                            href="{% url 'history'%}">
+                            HISTORY
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{% if active_url == 'mv' %}active{% endif %}" 
+                            href="{% url 'mv'%}">
+                            MISSION AND VISION
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{% if active_url == 'achievements_list' or active_url == 'achievement_detail' %}active{% endif %}" 
+                            href="{% url 'achievements_list'%}">
+                            ACHIEVEMENT
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- ACADEMIC -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'student_list' or active_url == 'student_detail' or active_url == 'class_routine_list' or active_url == 'syllabus_view' or active_url == 'exam_routine_view' %}
+                    active
+                    {% endif %}" href="#">
+                    ACADEMIC
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{% if active_url == 'student_list' or active_url == 'student_detail' %}active{% endif %}" 
+                            href="{% url 'student_list'%}">
+                            STUDENT LIST
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'class_routine_list' %}active{% endif %}" 
+                            href="{% url 'class_routine_list'%}">
+                            CLASS ROUTINE
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'syllabus_view' %}active{% endif %}" 
+                            href="{% url 'syllabus_view'%}">
+                            SYLLABUS
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'exam_routine_view' %}active{% endif %}" 
+                            href="{% url 'exam_routine_view'%}">
+                            EXAM ROUTINE
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- RESULT -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 {% if active_url == 'exam_result' %}active{% endif %}" 
+                    href="{% url 'exam_result'%}">
+                    RESULT
+                    </a>
+                </li>
+
+                <!-- ADMISSION -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'admission_circular_list' or active_url == 'prospectus_list' or active_url == 'admission_result' %}
+                    active
+                    {% endif %}" href="#">
+                    ADMISSION INFORMATION
+                    </a>
+                    <ul>
+                        <li><a class="{% if active_url == 'admission_circular_list' %}active{% endif %}" href="{% url 'admission_circular_list'%}">ADMISSION CIRCULAR</a></li>
+                        <li><a class="{% if active_url == 'prospectus_list' %}active{% endif %}" href="{% url 'prospectus_list'%}">PROSPECTUS</a></li>
+                        <li><a class="{% if active_url == 'admission_result' %}active{% endif %}" href="{% url 'admission_result'%}">ADMISSION RESULT</a></li>
+                    </ul>
+                </li>
+
+                <!-- FACILITIES -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'facility_list' or active_url == 'facility_detail' %}
+                    active
+                    {% endif %}" href="{% url 'facility_list' %}">
+                    FACILITIES
+                    </a>
+
+                    <ul>
+                        {% for facility in facility_titles %}
+                            <li>
+                                <a class="{% if active_url == 'facility_detail' and facility.id == request.resolver_match.kwargs.pk %}active{% endif %}"
+                                href="{% url 'facility_detail' pk=facility.id %}">
+                                {{ facility.title }}
+                                </a>
+                            </li>
+                        {% empty %}
+                            <li><a href="#">No Facilities</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                <!-- BOARD -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 {% if active_url == 'board_permission' %}active{% endif %}" 
+                    href="{% url 'board_permission'%}">
+                    BOARD PERMISSION
+                    </a>
+                </li>
+
+                <!-- ALUMNI -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'student_registration' or active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}
+                    active
+                    {% endif %}" href="#">
+                    ALUMNI ASSOCIATION
+                    </a>
+
+                    <ul>
+                        <li>
+                            <a class="{% if active_url == 'student_registration' %}active{% endif %}" 
+                            href="{% url 'student_registration'%}">
+                            REGISTRATION
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="{% if active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}active{% endif %}" 
+                            href="{% url 'registration_students_list'%}">
+                            STUDENT LIST
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             </ul>
-        </li>
-
-            <li><a class="Menu1_1 Menu1_3" href="{% url 'board_permission'%}">BOARD PERMISSION</a></li>
-            <li><a class="Menu1_1 Menu1_3" href="#">ALUMNI ASSOCIATION</a>
-                <ul>
-                    <li><a href="{% url 'student_registration'%}">REGISTRATION</a></li>
-                    <li><a href="{% url 'registration_students_list'%}">STUDENT LIST</a></li>
-                </ul>
-            </li>
-        </ul>
+        </div>
     </div>
-</div>
-
 
 <div class="wrapper row4">
     <div id="maincontainer" class="clear">

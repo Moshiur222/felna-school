@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block content %}
+{% block title %}স্টুডেন্ট লিস্ট{% endblock %} 
+{% block extra_css %}
 <style>
     /* --- আপনার আগের ডিজাইন অপরিবর্তিত --- */
     .table-card {
@@ -116,6 +116,8 @@
         transform: translateY(0);
     }
 </style>
+{% endblock %} 
+{% block content %}
 
 <div class="container-fluid">
     <h3 class="custom-header text-center">Student Registration List</h3>

@@ -1,721 +1,497 @@
 from django.contrib import admin
-from .models import *
 from django.utils.safestring import mark_safe
-from unfold.admin import ModelAdmin as UnfoldAdmin
-from unfold.contrib.forms.widgets import WysiwygWidget
 from django import forms
+from django.utils.html import strip_tags
+from unfold.admin import ModelAdmin as UnfoldAdmin
+from unfold.decorators import display
+from unfold.contrib.forms.widgets import WysiwygWidget
+from .models import *
 
-# Custom form for rich text fields
-class RichTextModelForm(forms.ModelForm):
+# --- কাস্টম রিচ টেক্সট ফরম (সব টেক্সট ফিল্ডের জন্য) ---
+class ProfessionalForm(forms.ModelForm):
     class Meta:
         widgets = {
-            'message': WysiwygWidget(),
-            'content': WysiwygWidget(),
-            'bio': WysiwygWidget(),
-            'description': WysiwygWidget(),
-            'mission': WysiwygWidget(),
-            'vision': WysiwygWidget(),
+            'message': WysiwygWidget(), 'content': WysiwygWidget(),
+            'bio': WysiwygWidget(), 'description': WysiwygWidget(),
+            'mission': WysiwygWidget(), 'vision': WysiwygWidget(),
+            'address': forms.Textarea(attrs={'rows': 2}),
         }
 
-@admin.register(Gallery)
-class GalleryAdmin(UnfoldAdmin):
-    list_display = ('title', 'image_preview', 'created_at')
-    search_fields = ('title',)
-    readonly_fields = ('image_preview',)
-    list_filter = ('created_at',)
-    
-    fieldsets = (
-        ('Gallery Item', {
-            'fields': ('title', 'image', 'image_preview'),
-        }),
-    )
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 100px; max-width: 150px;" />')
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-
-@admin.register(Notice)
-class NoticeAdmin(UnfoldAdmin):
-    list_display = ('title', 'date', 'file_preview', 'created_at')
-    list_filter = ('date', 'created_at')
-    search_fields = ('title',)
-    ordering = ('-date',)
-    readonly_fields = ('file_preview',)
-    
-    fieldsets = (
-        ('Notice Information', {
-            'fields': (
-                'title',
-                'date',
-                'file',
-                'file_preview',
-            )
-        }),
-    )
-    
-    def file_preview(self, obj):
-        if obj.file:
-            return mark_safe(f'<a href="{obj.file.url}" target="_blank">ðŸ“„ View File</a>')
-        return "No File"
-    file_preview.short_description = "File Preview"
-
-
-@admin.register(OurHistory)
-class OurHistoryAdmin(UnfoldAdmin):
-    list_display = ('title', 'created_at', 'updated_at')
-    search_fields = ('title', 'content')
-    ordering = ('-created_at',)
-    form = RichTextModelForm
-    
-    fieldsets = (
-        ('History Content', {
-            'fields': (
-                'title',
-                'content',
-            )
-        }),
-    )
-
-
-@admin.register(AdmissionResult)
-class AdmissionResultAdmin(UnfoldAdmin):
-    list_display = ('exam_track_number', 'student_name', 'class_name', 'year', 'status', 'created_at')
-    list_filter = ('class_name', 'year', 'status', 'created_at')
-    search_fields = ('exam_track_number', 'student_name')
-    ordering = ('-year', 'class_name')
-    
-    fieldsets = (
-        ('Admission Information', {
-            'fields': (
-                'exam_track_number',
-                'student_name',
-                'class_name',
-                'year',
-            )
-        }),
-        ('Result Details', {
-            'fields': (
-                'status',
-            )
-        }),
-    )
-
-
-@admin.register(Slider)
-class SliderAdmin(UnfoldAdmin):
-    list_display = ('headline', 'order', 'is_active', 'image_preview', 'created_at')
-    list_filter = ('is_active', 'created_at')
-    search_fields = ('headline', 'caption')
-    readonly_fields = ('image_preview',)
-    ordering = ('order', '-created_at')
-    
-    fieldsets = (
-        ('Slider Content', {
-            'fields': ('headline', 'caption', 'order', 'is_active'),
-        }),
-        ('Image Upload', {
-            'fields': ('image', 'image_preview'),
-        }),
-    )
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 100px; max-width: 150px;" />')
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-
-@admin.register(MissionVision)
-class MissionVisionAdmin(UnfoldAdmin):
-    list_display = ('created_at',)
-    search_fields = ('mission', 'vision')
-    form = RichTextModelForm
-    
-    fieldsets = (
-        ('Mission & Vision', {
-            'fields': (
-                'mission',
-                'vision',
-            )
-        }),
-    )
-
-
-@admin.register(SchoolProfile)
-class SchoolProfileAdmin(UnfoldAdmin):
-    list_display = ('school_name', 'principal_name', 'contact_number', 'established_date', 'eiin')
-    search_fields = ('school_name', 'principal_name', 'address', 'eiin')
-    
-    fieldsets = (
-        ('Basic Information', {
-            'fields': (
-                'school_name',
-                'principal_name',
-                'established_date',
-                'eiin',
-            )
-        }),
-        ('Contact Information', {
-            'fields': (
-                'address',
-                'contact_number',
-                'fax_number',
-                'email',
-                'web_address',
-            )
-        }),
-        ('Additional Information', {
-            'fields': (
-                'class_room_info',
-                'probable_admission_date',
-            )
-        }),
-    )
-
-
-@admin.register(Founder)
-class FounderAdmin(UnfoldAdmin):
-    list_display = ('name', 'photo_preview', 'created_at')
-    search_fields = ('name', 'description')
-    ordering = ('id',)
-    
-    fieldsets = (
-        ('Founder Information', {
-            'fields': (
-                'name',
-                'photo',
-                'photo_preview',
-                'description',
-            )
-        }),
-    )
-    
-    def photo_preview(self, obj):
-        if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" style="max-height: 100px; max-width: 100px;" />')
-        return "No Photo"
-    photo_preview.short_description = "Photo Preview"
-
-
-@admin.register(Donor)
-class DonorAdmin(UnfoldAdmin):
-    list_display = ('name', 'photo_preview', 'created_at')
-    list_filter = ('created_at',)
-    search_fields = ('name', 'description')
-    ordering = ('id',)
-    
-    fieldsets = (
-        ('Donor Information', {
-            'fields': (
-                'name',
-                'photo',
-                'photo_preview',
-                'description',
-            )
-        }),
-    )
-    
-    def photo_preview(self, obj):
-        if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" style="max-height: 100px; max-width: 100px;" />')
-        return "No Photo"
-    photo_preview.short_description = "Photo Preview"
-
-
-@admin.register(Management)
-class ManagementAdmin(UnfoldAdmin):
-    list_display = ('name', 'photo_preview', 'created_at')
-    search_fields = ('name', 'description')
-    list_per_page = 20
-    
-    fieldsets = (
-        ('Management Member Information', {
-            'fields': (
-                'name',
-                'photo',
-                'photo_preview',
-                'description',
-            )
-        }),
-    )
-    
-    def photo_preview(self, obj):
-        if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" style="max-height: 100px; max-width: 100px;" />')
-        return "No Photo"
-    photo_preview.short_description = "Photo Preview"
-
-
-@admin.register(WelcomeMessage)
-class WelcomeMessageAdmin(UnfoldAdmin):
-    list_display = ('title', 'message_snippet', 'image_preview')
-    readonly_fields = ('image_preview',)
-    form = RichTextModelForm
-    
-    fieldsets = (
-        ('Welcome Message Content', {
-            'fields': ('title', 'message'),
-        }),
-        ('Image Upload', {
-            'fields': ('image', 'image_preview'),
-            'description': 'Image will be automatically resized to 350x200 pixels upon upload.'
-        }),
-    )
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 200px; max-width: 350px;" />')
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-    def message_snippet(self, obj):
-        return obj.message[:50] + "..." if len(obj.message) > 50 else obj.message
-    message_snippet.short_description = "Message"
-
-
-@admin.register(HeadmasterMessage)
-class HeadmasterMessageAdmin(UnfoldAdmin):
-    list_display = ('title', 'message_snippet', 'image_preview')
-    readonly_fields = ('image_preview',)
-    form = RichTextModelForm
-    
-    fieldsets = (
-        ('Headmaster Message Content', {
-            'fields': ('title', 'message'),
-        }),
-        ('Image Upload', {
-            'fields': ('image', 'image_preview'),
-            'description': 'Image will be automatically resized to 200x200 pixels upon upload.'
-        }),
-    )
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 200px; max-width: 200px;" />')
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-    def message_snippet(self, obj):
-        return obj.message[:50] + "..." if len(obj.message) > 50 else obj.message
-    message_snippet.short_description = "Message"
-
-
-@admin.register(AssistantHeadmasterMessage)
-class AssistantHeadmasterMessageAdmin(UnfoldAdmin):
-    list_display = ('title', 'message_snippet', 'image_preview')
-    readonly_fields = ('image_preview',)
-    form = RichTextModelForm
-    
-    fieldsets = (
-        ('Assistant Headmaster Message Content', {
-            'fields': ('title', 'message'),
-        }),
-        ('Image Upload', {
-            'fields': ('image', 'image_preview'),
-            'description': 'Image will be automatically resized to 200x200 pixels upon upload.'
-        }),
-    )
-
-    def image_preview(self, obj):
-        if obj.image:
-            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 200px; max-width: 200px;" />')
-        return "No Image"
-    image_preview.short_description = "Image Preview"
-
-    def message_snippet(self, obj):
-        return obj.message[:50] + "..." if len(obj.message) > 50 else obj.message
-    message_snippet.short_description = "Message"
-
+from django.urls import reverse # ফাইলের শুরুতে এটি ইম্পোর্ট করুন
 
 @admin.register(Teacher)
 class TeacherAdmin(UnfoldAdmin):
-    list_display = ('name', 'designation', 'subject', 'photo_preview', 'join_date', 'is_active')
-    list_filter = ('designation', 'subject', 'gender', 'is_active', 'join_date')
-    search_fields = ('name', 'designation', 'subject', 'phone', 'email')
-    readonly_fields = ('photo_preview',)
-    ordering = ('name',)
-    form = RichTextModelForm
+    form = ProfessionalForm
+    # ১. লিস্ট ভিউ সেটিংস (অ্যাকশন বাটন যোগ করা হয়েছে)
+    list_display = (
+        'display_photo', 
+        'display_teacher', 
+        'subject', 
+        'phone', 
+        'display_status', 
+        'action_buttons' # মডার্ন অ্যাকশন বাটন
+    )
     
+    list_filter = ('designation', 'subject', 'is_active')
+    list_filter_sheet = True # সাইড স্লাইডিং ফিল্টার
+    search_fields = ('name', 'subject', 'phone')
+    ordering = ('name',)
+
+    # ২. নামের নিচে ডেজিগনেশন (Modern Typography)
+    @display(description="Teacher Info", header=True)
+    def display_teacher(self, obj):
+        return obj.name, obj.designation
+
+    # ৩. গোল অবতার ছবি (Avatar)
+    @display(description="Photo")
+    def display_photo(self, obj):
+        if obj.photo:
+            return mark_safe(f'<img src="{obj.photo.url}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid #6366f1;" />')
+        return "—"
+
+    # ৪. রঙিন স্ট্যাটাস ব্যাজ (Badge)
+    @display(description="Status", label={True: "success", False: "danger"})
+    def display_status(self, obj):
+        return obj.is_active
+
+    # ৫. মডার্ন অ্যাকশন বাটনস (Edit & Delete পাশাপাশি)
+    @display(description="Actions")
+    def action_buttons(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+        change_url = reverse(f"admin:{app_label}_{model_name}_change", args=[obj.pk])
+        delete_url = reverse(f"admin:{app_label}_{model_name}_delete", args=[obj.pk])
+        
+        return mark_safe(f"""
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <!-- Manage Button (Indigo) -->
+                <a href="{change_url}" title="Edit Info" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">edit_note</span>
+                </a>
+                
+                <!-- Delete Icon (Red) -->
+                <a href="{delete_url}" title="Delete Teacher" style="background: #ef4444; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                </a>
+            </div>
+        """)
+
+    # ৬. এডিট পেজ ক্লিন রাখার জন্য বাড়তি বাটন হাইড করা
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_delete': False,               # এডিট পেজে ডিলিট বাটন হাইড হবে
+            'show_save_and_add_another': False, 
+            'show_save_and_continue': False,    
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # ৭. আপনার আগের সেই সুন্দর ট্যাব লেআউট (Tabbed Layout)
     fieldsets = (
-        ('Personal Information', {
-            'fields': (
-                'name', 
-                'gender', 
-                'photo', 
-                'photo_preview',
-                'join_date',
-            )
+        ("Personal info", {
+            "fields": (("name", "gender"), "photo", "bio", "join_date"),
+            "classes": ["tab"]
         }),
-        ('Professional Information', {
-            'fields': (
-                'designation',
-                'subject',
-                'phone',
-                'email',
-            )
+        ("Professional info", {
+            "fields": (("designation", "subject"), ("phone", "email")),
+            "classes": ["tab"]
         }),
-        ('Status & Biography', {
-            'fields': (
-                'is_active',
-                'bio',
-            )
+        ("Status", {
+            "fields": ("is_active",),
+            "classes": ["tab"]
         }),
     )
-
-    def photo_preview(self, obj):
-        if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" style="max-height: 100px; max-width: 100px;" />')
-        return "No Photo"
-    photo_preview.short_description = "Photo Preview"
-
 
 @admin.register(Student)
 class StudentAdmin(UnfoldAdmin):
-    list_display = (
-        'name',
-        'class_name',
-        'roll_number',
-        'gender',
-        'guardian_name',
-        'phone',
-        'is_active',
-        'photo_preview',
-    )
-    list_display_links = ('name',)
-    list_filter = ('class_name', 'gender', 'is_active', 'created_at')
-    search_fields = ('name', 'roll_number', 'guardian_name', 'phone')
-    ordering = ('class_name', 'roll_number')
-    readonly_fields = ('photo_preview',)
+    list_display = ('display_photo', 'display_student', 'class_name', 'roll_number', 'display_status')
+    list_filter = ('class_name', 'gender', 'is_active')
+    list_filter_sheet = True
     
-    fieldsets = (
-        ('Personal Information', {
-            'fields': (
-                'name',
-                'roll_number',
-                'class_name',
-                'gender',
-                'date_of_birth',
-                'photo',
-                'photo_preview',
-            )
-        }),
-        ('Guardian Information', {
-            'fields': (
-                'guardian_name',
-                'phone',
-                'address',
-            )
-        }),
-        ('Status', {
-            'fields': (
-                'is_active',
-            )
-        }),
-    )
-    
-    def photo_preview(self, obj):
-        if obj.photo:
-            return mark_safe(f'<img src="{obj.photo.url}" style="max-height: 100px; max-width: 100px;" />')
-        return "No Photo"
-    photo_preview.short_description = "Photo Preview"
+    @display(description="Student", header=True)
+    def display_student(self, obj):
+        return obj.name, f"Roll: {obj.roll_number}"
 
+    @display(description="Photo")
+    def display_photo(self, obj):
+        if obj.photo:
+            return mark_safe(f'<img src="{obj.photo.url}" style="width:40px; height:40px; border-radius:8px; object-fit:cover;" />')
+        return "—"
+
+    @display(description="Status", label={True: "success", False: "danger"})
+    def display_status(self, obj):
+        return obj.is_active
+
+from django.urls import reverse # ফাইলের শুরুতে এটি নিশ্চিত করুন
+
+@admin.register(AdmissionResult)
+class AdmissionResultAdmin(UnfoldAdmin):
+    # ১. লিস্ট ভিউ সেটিংস (Professional & Modern)
+    list_display = (
+        'exam_track_number', 
+        'display_student_info', 
+        'class_name', 
+        'year', 
+        'display_status', 
+        'update_action' # শুধুমাত্র ম্যানেজ বাটন
+    )
+    
+    list_filter = ('status', 'class_name', 'year')
+    list_filter_sheet = True # সাইড ড্রয়ার ফিল্টার
+    search_fields = ('exam_track_number', 'student_name')
+    ordering = ('-year', 'class_name')
+    compressed_fields = True # ফিল্ডগুলোর মাঝের গ্যাপ কমিয়ে স্ট্যান্ডার্ড লুক দেয়
+
+    # ২. স্টুডেন্টের নামের নিচে আইডি (Modern Typography)
+    @display(description="Applicant Details", header=True)
+    def display_student_info(self, obj):
+        return obj.student_name, f"Track ID: #{obj.exam_track_number}"
+
+    # ৩. কালারফুল স্ট্যাটাস ব্যাজ (Passed, Failed, Waiting)
+    @display(description="Result Status", label={
+        "Passed": "success", 
+        "Failed": "danger", 
+        "Waiting": "warning"
+    })
+    def display_status(self, obj):
+        return obj.status
+
+    # ৪. শুধুমাত্র আপডেট বাটন (No Delete Action)
+    @display(description="Action")
+    def update_action(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+        url = reverse(f"admin:{app_label}_{model_name}_change", args=[obj.pk])
+        
+        return mark_safe(f"""
+            <a href="{url}" style="
+                background: #4f46e5; 
+                color: white; 
+                padding: 6px 14px; 
+                border-radius: 8px; 
+                font-size: 11px; 
+                font-weight: 700; 
+                text-decoration: none; 
+                display: inline-flex; 
+                align-items: center; 
+                gap: 6px;
+                box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+            ">
+                <span class="material-symbols-outlined" style="font-size: 16px;">edit_note</span>
+            </a>
+        """)
+
+    # ৫. আপডেট পেজের ফুটার বাটন হাইড করা (No Delete/Extra Buttons)
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_delete': False, 
+            'show_save_and_add_another': False, 
+            'show_save_and_continue': False,
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # ডিলিট পারমিশন হার্ড-স্টপ (নিরাপত্তার জন্য)
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    # ৬. সিঙ্গেল পেজ লেআউট (সব তথ্য এক সেকশনে)
+    fieldsets = (
+        ("Admission Record Details", {
+            "fields": (
+                ("student_name", "exam_track_number"), # এক লাইনে নাম ও আইডি
+                ("class_name", "year"),                # এক লাইনে ক্লাস ও বছর
+                "status",                             # নিচে রেজাল্ট স্ট্যাটাস
+            ),
+        }),
+    )
 
 @admin.register(ExamResult)
 class ExamResultAdmin(UnfoldAdmin):
+    list_display = ('student', 'year', 'subject', 'marks_obtained', 'total_marks')
+    list_filter = ('year', 'subject')
+
+# --- ৩. মিডিয়া ও স্লাইডার ---
+from django.urls import reverse # ফাইলের শুরুতে এটি নিশ্চিত করুন
+
+@admin.register(Slider)
+class SliderAdmin(UnfoldAdmin):
+    # ১. লিস্ট ভিউ সেটিংস (Modern & Professional)
     list_display = (
-        'student_name',
-        'class_name',
-        'roll_number',
-        'year',
-        'subject',
-        'marks_obtained',
-        'total_marks',
+        'display_preview', 
+        'display_headline', 
+        'order', 
+        'is_active', 
+        'action_buttons' # এখানে এডিট এবং ডিলিট বাটন থাকবে
     )
-    list_display_links = ('student_name',)
-    list_filter = ('year', 'student__class_name', 'subject')
-    search_fields = ('student__name', 'student__roll_number', 'subject')
-    ordering = ('-year', 'student__class_name', 'student__roll_number')
     
+    list_editable = ('order', 'is_active') 
+    list_filter = ('is_active',)
+    list_filter_sheet = True 
+    search_fields = ('headline',)
+    ordering = ('order',)
+
+    # ২. ছবির মডার্ন প্রিভিউ (লিস্টের জন্য)
+    @display(description="Slide View")
+    def display_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="width:110px; height:55px; border-radius:10px; object-fit:cover; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 2px solid #f3f4f6;" />')
+        return "—"
+
+    # ৩. হেডলাইন Typography
+    @display(description="Slider Info", header=True)
+    def display_headline(self, obj):
+        return obj.headline, f""
+
+    # ৪. মডার্ন অ্যাকশন বাটনস (Edit & Delete পাশাপাশি)
+    @display(description="Actions")
+    def action_buttons(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+        change_url = reverse(f"admin:{app_label}_{model_name}_change", args=[obj.pk])
+        delete_url = reverse(f"admin:{app_label}_{model_name}_delete", args=[obj.pk])
+        
+        return mark_safe(f"""
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <!-- Edit Button (Indigo) -->
+                <a href="{change_url}" title="Edit Slide" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">edit_note</span>
+                </a>
+                
+                <!-- Delete Button (Red) -->
+                <a href="{delete_url}" title="Delete Slide" style="background: #ef4444; color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span> 
+                </a>
+            </div>
+        """)
+
+    # ৫. ফুটার বাটন কন্ট্রোল (এডিট পেজ ক্লিন রাখার জন্য)
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_delete': False, # এডিট পেজের নিচের ডিলিট বাটন হাইড থাকবে
+            'show_save_and_add_another': False, 
+            'show_save_and_continue': False,    
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # ৬. ডিলিট পারমিশন ট্রু (যাতে লিস্টের ডিলিট বাটন কাজ করে)
+    def has_delete_permission(self, request, obj=None):
+        return True
+
+    # ৭. এডিট পেজ লেআউট (সবকিছু এক সেকশনে)
     fieldsets = (
-        ('Student Information', {
-            'fields': (
-                'student',
-            )
-        }),
-        ('Exam Details', {
-            'fields': (
-                'year',
-                'subject',
-                'marks_obtained',
-                'total_marks',
-            )
+        ("Main Content", {
+            "fields": (
+                ("headline", "order"), 
+                "caption", 
+                "image",
+                "is_active",
+                "active_slide_preview",
+            ),
         }),
     )
 
-    def student_name(self, obj):
-        return obj.student.name
-    student_name.admin_order_field = 'student__name'
-    student_name.short_description = 'Student Name'
-
-    def class_name(self, obj):
-        return obj.student.class_name
-    class_name.admin_order_field = 'student__class_name'
-    class_name.short_description = 'Class'
-
-    def roll_number(self, obj):
-        return obj.student.roll_number
-    roll_number.admin_order_field = 'student__roll_number'
-    roll_number.short_description = 'Roll Number'
+    readonly_fields = ('active_slide_preview',)
+    @display(description="Preview Now")
+    def active_slide_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="max-width: 100%; border-radius: 16px; box-shadow: 0 15px 25px rgba(0,0,0,0.1);" />')
+        return "No image uploaded"
 
 
-@admin.register(ClassRoutine)
-class ClassRoutineAdmin(UnfoldAdmin):
-    list_display = (
-        'day',
-        'class_name',
-        'subject',
-        'teacher_name',
-        'start_time',
-        'end_time',
-        'routine_image_preview',
-    )
-    list_display_links = ('day',)
-    list_filter = ('class_name', 'day', 'teacher')
-    search_fields = ('subject', 'teacher__name')
-    ordering = ('class_name', 'day', 'start_time')
 
+# --- ৪. অ্যাডমিনিস্ট্রেশন ও স্কুল প্রোফাইল ---
+@admin.register(SchoolProfile)
+class SchoolProfileAdmin(UnfoldAdmin):
+    list_display = ('school_name', 'principal_name', 'eiin', 'contact_number')
     fieldsets = (
-        ('Routine Information', {
-            'fields': (
-                'day',
-                'class_name',
-                'subject',
-                'teacher',
-            )
-        }),
-        ('Time Schedule', {
-            'fields': (
-                'start_time',
-                'end_time',
-            )
-        }),
-        ('Routine Image', {
-            'fields': ('image',)
-        }),
+        ("Basic Info", {"fields": (("school_name", "eiin"), ("principal_name", "established_date")), "classes": ["tab"]}),
+        ("Contact Details", {"fields": (("contact_number", "email"), ("address", "web_address")), "classes": ["tab"]}),
+        ("Facilities", {"fields": ("class_room_info", "probable_admission_date"), "classes": ["tab"]}),
     )
 
-    def teacher_name(self, obj):
-        if obj.teacher:
-            return obj.teacher.name
-        return "No Teacher"
-    teacher_name.admin_order_field = 'teacher__name'
-    teacher_name.short_description = 'Teacher'
-
-    def routine_image_preview(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" height="50" style="object-fit: cover;" />'
-        return "No Image"
-    routine_image_preview.allow_tags = True
-    routine_image_preview.short_description = 'Image'
-
-
-@admin.register(SchoolAchievement)
-class SchoolAchievementAdmin(UnfoldAdmin):
-    list_display = (
-        'title',
-        'year',
-        'date_awarded',
-        'awarded_by',
-        'achievement_image',
-    )
-    list_display_links = ('title',)
-    list_filter = ('year', 'awarded_by')
-    search_fields = ('title', 'description', 'awarded_by')
-    ordering = ('-year', '-date_awarded')
-
-    fieldsets = (
-        ('Achievement Details', {
-            'fields': (
-                'title',
-                'description',
-                'awarded_by',
-                'year',
-                'date_awarded',
-            )
-        }),
-        ('Media', {
-            'fields': (
-                'image',
-            )
-        }),
-    )
-
-    def achievement_image(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" style="object-fit:cover;" />'
-        return "No Image"
-    achievement_image.allow_tags = True
-    achievement_image.short_description = 'Image'
-
-
-@admin.register(Syllabus)
-class SyllabusAdmin(admin.ModelAdmin):
-    list_display = ('class_name', 'image_preview', 'created_at')
-    list_filter = ('class_name',)
-    search_fields = ('class_name',)
-    readonly_fields = ('image_preview',)
-
-    def image_preview(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" height="60" style="object-fit:cover;"/>'
-        return "-"
-    image_preview.allow_tags = True
-    image_preview.short_description = "Image Preview"
-
-
-@admin.register(ExamRoutine)
-class ExamRoutineAdmin(admin.ModelAdmin):
-    list_display = ('class_name', 'image_preview', 'created_at')
-    list_filter = ('class_name',)
-    search_fields = ('class_name',)
-    readonly_fields = ('image_preview',)
-
-    def image_preview(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" height="60" style="object-fit:cover;"/>'
-        return "-"
-    image_preview.allow_tags = True
-    image_preview.short_description = "Image Preview"
-
-
-@admin.register(AdmissionCircular)
-class AdmissionCircularAdmin(UnfoldAdmin):
-    list_display = (
-        'title',
-        'class_name',
-        'created_at',
-        'circular_image',
-    )
-    list_display_links = ('title',)
-    list_filter = ('class_name', 'created_at')
-    search_fields = ('title', 'description')
-    ordering = ('-created_at',)
-
-    fieldsets = (
-        ('Circular Details', {
-            'fields': (
-                'title',
-                'description',
-                'class_name',
-                'document',
-            )
-        }),
-        ('Media', {
-            'fields': (
-                'image',
-            )
-        }),
-    )
-
-    def circular_image(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" style="object-fit:cover;" />'
-        return "No Image"
-    circular_image.allow_tags = True
-    circular_image.short_description = 'Image'
-
-
-@admin.register(Prospectus)
-class ProspectusAdmin(UnfoldAdmin):
-    list_display = (
-        'title',
-        'class_name',
-        'year',
-        'prospectus_image',
-        'created_at',
-    )
-    list_display_links = ('title',)
-    list_filter = ('class_name', 'year')
-    search_fields = ('title',)
-    ordering = ('-year', 'class_name', 'title')
-
-    fieldsets = (
-        ('Prospectus Details', {
-            'fields': (
-                'title',
-                'class_name',
-                'year',
-            )
-        }),
-        ('Media', {
-            'fields': (
-                'image',
-                'document',
-            )
-        }),
-    )
-
-    def prospectus_image(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" style="object-fit:cover; border-radius: 4px;" />'
-        return "No Image"
-    prospectus_image.allow_tags = True
-    prospectus_image.short_description = 'Image'
-
-
-@admin.register(Facility)
-class FacilityAdmin(UnfoldAdmin):
-    list_display = (
-        'title',
-        'category',
-        'capacity',
-        'location',
-        'status',
-        'facility_image',
-    )
-    list_display_links = ('title',)
-    list_filter = ('category', 'status')
-    search_fields = ('title', 'description', 'category', 'location')
-    ordering = ('title',)
-
-    fieldsets = (
-        ('Facility Details', {
-            'fields': (
-                'title',
-                'description',
-                'category',
-                'capacity',
-                'location',
-                'status',
-            )
-        }),
-        ('Media', {
-            'fields': ('image',)
-        }),
-    )
-
-    def facility_image(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" width="100" style="object-fit:cover; border-radius:4px;" />'
-        return "No Image"
-    facility_image.allow_tags = True
-    facility_image.short_description = 'Image'
+@admin.register(Notice)
+class NoticeAdmin(UnfoldAdmin):
+    list_display = ('title', 'date', 'display_file')
     
-# Customize admin site
-admin.site.site_header = "School Management System"
-admin.site.site_title = "School Admin Portal"
-admin.site.index_title = "Welcome to School Management System"
+    def display_file(self, obj):
+        if obj.file:
+            return mark_safe(f'<a href="{obj.file.url}" target="_blank">📄 View File</a>')
+        return "No File"
 
+# --- ৫. মেসেজ ও বার্তা (Headmaster/Asst. HM) ---
+@admin.register(WelcomeMessage, HeadmasterMessage, AssistantHeadmasterMessage)
+class MessageAdmin(UnfoldAdmin):
+    form = ProfessionalForm
+    list_display = ('title', 'display_photo', 'display_snippet')
+    
+    @display(description="Photo")
+    def display_photo(self, obj):
+        return mark_safe(f'<img src="{obj.image.url}" width="50" />') if obj.image else "—"
+
+    def display_snippet(self, obj):
+        return strip_tags(obj.message)[:50] + "..."
 
 from django.contrib import admin
-from .models import StudentRegistration, Village
+from unfold.admin import ModelAdmin as UnfoldAdmin
+from unfold.decorators import display
+from django.utils.safestring import mark_safe
+from django.urls import reverse
 
-class StudentRegistrations(admin.ModelAdmin):
-    list_display = ('student_name', 'gender','marrital_status','is_whatsapp', 'batch', 'village', 'current_location', 'bd_no', 'abroad_no', 'occupation', 'last_edu')
-    ordering = ('batch', 'student_name')
+@admin.register(StudentRegistration)
+class StudentRegistrationAdmin(UnfoldAdmin):
+    # --- ১. লিস্ট ভিউ সেটিংস (Ultra Clean & Minimal) ---
+    list_display = ('display_avatar', 'batch', 'display_name_v2', 'gender', 'village', 'action_button')
+    list_filter = ('batch', 'village', 'gender', 'last_edu')
+    list_filter_sheet = True
+    search_fields = ('student_name', 'bd_no')
+    compressed_fields = True 
+    
+    # --- ২. প্রফেশনাল পারমিশন (Read-Only Mode) ---
+    def has_delete_permission(self, request, obj=None): return False
 
-admin.site.register(StudentRegistration, StudentRegistrations)
-admin.site.register(Village)
+    def get_readonly_fields(self, request, obj=None):
+        if obj: # এডিট মোডে সব ফিল্ড লক থাকবে
+            return [f.name for f in self.model._meta.fields] + ['student_hero_card']
+        return self.readonly_fields
+
+    # --- ৩. লিস্ট ভিউ মেথডস ---
+
+    @display(description="Member")
+    def display_avatar(self, obj):
+        photo = obj.student_photo.url if obj.student_photo else f"https://ui-avatars.com/api/?name={obj.student_name}&background=6366f1&color=fff"
+        return mark_safe(f'<img src="{photo}" style="width:42px; height:42px; border-radius:12px; object-fit:cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />')
+
+    @display(description="Student Name", header=True)
+    def display_name_v2(self, obj):
+        # নামের নিচে ছোট করে আইডি দেখাবে
+        return obj.student_name, f""
+
+    @display(description="Action")
+    def action_button(self, obj):
+        url = reverse('admin:school_studentregistration_change', args=[obj.pk])
+        return mark_safe(f'<a href="{url}" style="background: #f3f4f6; color: #4f46e5; padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 800; text-decoration: none; border: 1px solid #e5e7eb;">View</a>')
+
+    # --- ৪. হিরো সেকশন (The Modern Profile Header) ---
+    @display(description="")
+    def student_hero_card(self, obj):
+        if not obj.pk: return "New Student Registration"
+        photo = obj.student_photo.url if obj.student_photo else f"https://ui-avatars.com/api/?name={obj.student_name}&background=fff&color=6366f1"
+        
+        return mark_safe(f"""
+            <div style="background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%); padding: 45px; border-radius: 30px; color: white; position: relative; overflow: hidden; display: flex; align-items: center; gap: 35px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+                <!-- Profile Image -->
+                <img src="{photo}" style="width: 140px; height: 140px; border-radius: 40px; border: 6px solid rgba(255,255,255,0.1); object-fit: cover; z-index: 2;" />
+                
+                <div style="z-index: 2;">
+                    <h1 style="margin: 0; font-size: 38px; font-weight: 900; letter-spacing: -1.5px; line-height: 1.1;">{obj.student_name}</h1>
+                    <p style="margin: 10px 0 20px 0; opacity: 0.8; font-size: 18px; font-weight: 500;">
+                        Batch {obj.batch} <span style="margin: 0 10px; opacity: 0.3;">|</span> {obj.village} Resident
+                    </p>
+                    
+                    <div style="display: flex; gap: 12px;">
+                        <span style="background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                            {obj.get_last_edu_display()}
+                        </span>
+                        <span style="background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 12px; font-size: 13px; font-weight: 600; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                            {obj.get_occupation_display()}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Abstract Decoration -->
+                <div style="position: absolute; top: -50px; right: -50px; width: 250px; height: 250px; background: rgba(255,255,255,0.05); border-radius: 50%;"></div>
+                <div style="position: absolute; bottom: -20px; left: 40%; width: 100px; height: 100px; background: rgba(99, 102, 241, 0.2); border-radius: 50%; filter: blur(30px);"></div>
+            </div>
+        """)
+
+    # --- ৫. হাইড ফুটার বার (Save/Delete Buttons) ---
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_save': False,
+            'show_save_and_continue': False,
+            'show_save_and_add_another': False,
+            'show_delete': False,
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # --- ৬. মডার্ন ট্যাব লেআউট ---
+    fieldsets = (
+        (None, {
+            "fields": ["student_hero_card"],
+        }),
+        ("Identity Details", {
+            "fields": (
+                ("student_name", "gender"), 
+                ("batch", "marrital_status"), 
+                "student_photo"
+            ),
+            "classes": ["tab"],
+        }),
+        ("Contact & Location", {
+            "fields": (
+                ("bd_no", "abroad_no"), 
+                ("is_whatsapp", "village"), 
+                "current_location"
+            ),
+            "classes": ["tab"],
+        }),
+        ("Career & Background", {
+            "fields": (
+                "occupation", "last_edu"
+            ),
+            "classes": ["tab"],
+        }),
+    )
+@admin.register(Visitor)
+class VisitorAdmin(UnfoldAdmin):
+    list_display = ('ip_address', 'visited_at', 'user_agent')
+    readonly_fields = ('ip_address', 'visited_at', 'user_agent', 'session_key')
+
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from unfold.decorators import display
+
+@admin.register(Gallery, OurHistory, MissionVision, Founder, Donor, Management, ClassRoutine, SchoolAchievement, Syllabus, ExamRoutine, AdmissionCircular, Prospectus, Facility, Village)
+class GenericAdmin(UnfoldAdmin):
+    form = ProfessionalForm # আপনার তৈরি করা রিচ টেক্সট ফরম
+    list_per_page = 20
+    list_filter_sheet = True
+
+    # ১. লিস্ট ভিউতে মডার্ন অ্যাকশন বাটনগুলো (Manage ও Delete)
+    @display(description="Actions")
+    def action_buttons(self, obj):
+        app_label = obj._meta.app_label
+        model_name = obj._meta.model_name
+        change_url = reverse(f"admin:{app_label}_{model_name}_change", args=[obj.pk])
+        delete_url = reverse(f"admin:{app_label}_{model_name}_delete", args=[obj.pk])
+        
+        return mark_safe(f"""
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <a href="{change_url}" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">edit_note</span> 
+                </a>
+                <a href="{delete_url}" style="background: #ef4444; color: white; padding: 6px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">delete</span>
+                </a>
+            </div>
+        """)
+
+    list_display = ('__str__', 'action_buttons')
+
+    # ২. আপডেট পেজের নিচের (Footer) বাড়তি বাটনগুলো হাইড করা
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context.update({
+            'show_delete': False,               # ডিলিট বাটন হাইড হবে
+            'show_save_and_add_another': False,   # সেভ অ্যান্ড অ্যাড অ্যানাদার হাইড হবে
+            'show_save_and_continue': False,      # সেভ অ্যান্ড কন্টিনিউ হাইড হবে
+        })
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
+    # ৩. নিরাপত্তাজনিত কারণে এডিট পেজের ভেতরে ডিলিট পারমিশন বন্ধ (লিস্টে বাটন কাজ করবে)
+    # def has_delete_permission(self, request, obj=None):
+    #     return False 
+    # (নোট: যদি লিস্টের ডিলিট বাটন কাজ না করে, তবে উপরের ২ লাইন কমেন্ট করে রাখুন)
+
+# সাইট হেডার কাস্টমাইজেশন
+admin.site.site_header = "Felna High School ERP"
+admin.site.site_title = "Admin Portal"
+admin.site.index_title = "Welcome to Felna Management System"

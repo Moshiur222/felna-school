@@ -1,15 +1,8 @@
 {% extends "base.html" %} 
 {% load static %} 
-{% block title %}শিক্ষার্থী নিবন্ধন | এলিট একাডেমি{% endblock %} 
-{% block content %}
-
+{% block title %}শিক্ষার্থী নিবন্ধন {% endblock %} 
+{% block extra_css %}
 <style>
-  /* ============================================
-       PREMIUM DESIGN SYSTEM - 2024 MODERN
-       SCOPED TO REGISTRATION SECTION ONLY
-       ALL TEXT BASE SIZE: 1.5rem (24px)
-    ============================================ */
-  
   /* Modern CSS Variables - Scoped to registration section */
   .registration-wrapper {
     --primary: #6366f1;
@@ -441,7 +434,7 @@
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
-    padding-left: 125px;
+    padding-left: 90px;
   }
 
   .form-label-phone {
@@ -991,8 +984,74 @@
   transform: translateY(-2px);
 }
 
-</style>
 
+/* CHANGE PHOTO BUTTON STYLES - Add this to your existing CSS */
+.change-photo-btn {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  font-size: 1.3rem !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.change-photo-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+}
+
+.change-photo-btn:active {
+  transform: translateY(0px);
+}
+
+/* Photo preview container adjustments */
+.photo-preview-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.photo-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary-light);
+  box-shadow: var(--shadow-md);
+  background: var(--light);
+  transition: transform 0.3s ease;
+}
+
+.photo-preview:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .change-photo-btn {
+    padding: 0.4rem 1rem;
+    font-size: 1.2rem !important;
+  }
+  
+  .photo-preview {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+</style>
+{% endblock %} 
+{% block content %}
 <!-- Cropper.js CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
@@ -1149,7 +1208,7 @@
                 <div class="whatsapp-radio-section">
                   <div class="whatsapp-radio-wrapper whatsapp-inline">
                     <label class="form-label-phone fw-bold">
-                      এটা কী হোয়াটসঅ্যাপ? <span class="required-star">*</span>
+                      এটা কী হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
                     </label>
                     <div class="gender-radio-group">
                       {% for val, label in is_whatsapp_choices %}
@@ -1177,7 +1236,7 @@
                 <div class="whatsapp-radio-section">
                   <div class="whatsapp-radio-wrapper whatsapp-inline">
                     <label class="form-label-phone fw-bold">
-                      এটা কী হোয়াটসঅ্যাপ?
+                      এটা কী হোয়াটসঅ্যাপ নম্বর ?
                     </label>
                     <div class="gender-radio-group">
                       {% for val, label in is_whatsapp_choices %}
@@ -1230,7 +1289,7 @@
                 </div>
               </div>
 
-              <!-- PHOTO UPLOAD FIELD WITH MANUAL CROP OPTION -->
+              <!-- PHOTO UPLOAD FIELD WITH CHANGE PHOTO OPTION -->
               <div class="form-horizontal-row">
                 <label for="student_photo" class="form-label fw-bold">
                   <i class="fas fa-camera"></i> শিক্ষার্থীর ছবি<span class="required-star">*</span>
@@ -1241,8 +1300,8 @@
                   </div>
                   <div class="photo-preview-container" id="photoPreviewContainer" style="display: none;">
                     <img id="photoPreview" class="photo-preview" src="#" alt="ছবি প্রিভিউ">
-                    <button type="button" id="cropButton" class="btn btn-sm modern-btn" style="padding: 0.5rem 1rem; font-size: 1.2rem !important;">
-                      <i class="fas fa-crop-alt"></i> ক্রপ করুন
+                    <button type="button" id="changePhotoBtn" class="change-photo-btn">
+                      <i class="fas fa-exchange-alt"></i> ছবি পরিবর্তন
                     </button>
                   </div>
                   <div id="cropInfo" class="crop-info" style="display: none;">
@@ -1280,9 +1339,13 @@
     <div class="crop-image-container">
       <img id="cropImage" alt="ক্রপ করার জন্য ছবি">
     </div>
-    <div class="crop-controls">
-      <button class="crop-btn crop-btn-primary" id="confirmCropBtn"><i class="fas fa-check-circle"></i> ক্রপ করুন</button>
-      <button class="crop-btn crop-btn-secondary" id="cancelCropBtn"><i class="fas fa-times-circle"></i> বাতিল করুন</button>
+    <div class="crop-controls d-flex justify-content-center gap-3 mt-4">
+      <button type="button" class="btn btn-danger px-4 py-2 fs-5 rounded-pill" id="cancelCropBtn">
+        <i class="fas fa-times-circle me-1"></i> বাতিল করুন
+      </button>
+      <button type="button" class="btn btn-success px-4 py-2 fs-5 rounded-pill" id="confirmCropBtn">
+        <i class="fas fa-check-circle me-1"></i> ক্রপ করুন
+      </button>
     </div>
   </div>
 </div>
@@ -1479,7 +1542,7 @@
   }
 
   // ============================================
-  // MANUAL CROP FUNCTIONALITY
+  // AUTO CROP FUNCTIONALITY WITH CHANGE PHOTO OPTION
   // ============================================
   let cropper = null;
   let currentImageFile = null;
@@ -1488,14 +1551,55 @@
   const photoInput = document.getElementById('student_photo');
   const previewContainer = document.getElementById('photoPreviewContainer');
   const previewImg = document.getElementById('photoPreview');
-  const cropButton = document.getElementById('cropButton');
+  const changePhotoBtn = document.getElementById('changePhotoBtn');
   const cropModal = document.getElementById('cropModal');
   const cropImage = document.getElementById('cropImage');
   const confirmCropBtn = document.getElementById('confirmCropBtn');
   const cancelCropBtn = document.getElementById('cancelCropBtn');
   const cropInfo = document.getElementById('cropInfo');
   
-  // Handle file selection
+  // Function to open crop modal with a file
+  function openCropModal(file) {
+    if (!file) return;
+    
+    currentImageFile = file;
+    
+    // Show crop info message
+    if (cropInfo) {
+      cropInfo.style.display = 'flex';
+      cropInfo.innerHTML = '<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। ক্রপ করুন...';
+      cropInfo.classList.remove('crop-warning');
+    }
+    
+    // Open crop modal immediately
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      cropImage.src = event.target.result;
+      cropModal.classList.add('show');
+      
+      // Initialize cropper after image loads
+      if (cropper) cropper.destroy();
+      cropper = new Cropper(cropImage, {
+        aspectRatio: 1,
+        viewMode: 1,
+        dragMode: 'move',
+        autoCropArea: 1,
+        restore: false,
+        guides: true,
+        center: true,
+        highlight: true,
+        cropBoxMovable: true,
+        cropBoxResizable: true,
+        toggleDragModeOnDblclick: false,
+        background: true,
+        modal: true,
+        responsive: true
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+  
+  // Handle file selection - OPEN CROP MODAL IMMEDIATELY
   if (photoInput) {
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
@@ -1511,56 +1615,15 @@
         return;
       }
       
-      currentImageFile = file;
-      
-      // Show preview
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        previewImg.src = event.target.result;
-        previewContainer.style.display = 'flex';
-        if (cropInfo) {
-          cropInfo.style.display = 'flex';
-          cropInfo.innerHTML = '<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। "ক্রপ করুন" বাটনে ক্লিক করুন।';
-          cropInfo.classList.remove('crop-warning');
-        }
-      };
-      reader.readAsDataURL(file);
+      openCropModal(file);
     });
   }
   
-  // Open crop modal
-  if (cropButton) {
-    cropButton.addEventListener('click', function() {
-      if (!currentImageFile) {
-        alert('দয়া করে প্রথমে একটি ছবি নির্বাচন করুন');
-        return;
-      }
-      
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        cropImage.src = event.target.result;
-        cropModal.classList.add('show');
-        
-        // Initialize cropper after image loads
-        if (cropper) cropper.destroy();
-        cropper = new Cropper(cropImage, {
-          aspectRatio: 1,
-          viewMode: 1,
-          dragMode: 'move',
-          autoCropArea: 1,
-          restore: false,
-          guides: true,
-          center: true,
-          highlight: true,
-          cropBoxMovable: true,
-          cropBoxResizable: true,
-          toggleDragModeOnDblclick: false,
-          background: true,
-          modal: true,
-          responsive: true
-        });
-      };
-      reader.readAsDataURL(currentImageFile);
+  // Handle change photo button click
+  if (changePhotoBtn) {
+    changePhotoBtn.addEventListener('click', function() {
+      // Trigger file input click
+      photoInput.click();
     });
   }
   
@@ -1594,6 +1657,7 @@
           const reader = new FileReader();
           reader.onload = function(e) {
             previewImg.src = e.target.result;
+            previewContainer.style.display = 'flex';
             if (cropInfo) {
               cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি সফলভাবে ক্রপ করা হয়েছে! (সাইজ: ' + (blob.size / 1024).toFixed(1) + 'KB)';
               setTimeout(() => {
@@ -1624,6 +1688,12 @@
         cropper.destroy();
         cropper = null;
       }
+      // Clear the file input and preview
+      photoInput.value = '';
+      previewContainer.style.display = 'none';
+      if (cropInfo) {
+        cropInfo.style.display = 'none';
+      }
     });
   }
   
@@ -1635,6 +1705,12 @@
         if (cropper) {
           cropper.destroy();
           cropper = null;
+        }
+        // Clear the file input and preview
+        photoInput.value = '';
+        previewContainer.style.display = 'none';
+        if (cropInfo) {
+          cropInfo.style.display = 'none';
         }
       }
     });

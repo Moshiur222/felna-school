@@ -64,3 +64,8 @@ def visitor_stats(request):
         'total_visitors': total_visitors,
         'active_visitors': active_visitors
     }
+
+def active_menu(request):
+    return {
+        'active_url': request.resolver_match.url_name
+    }
