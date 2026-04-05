@@ -1,0 +1,40 @@
+{% extends "unfold/helpers/top_bar.html" %}
+
+{% block user_menu %}
+<div class="ml-auto flex items-center px-4 gap-4" style="display: flex !important; visibility: visible !important;">
+    
+    <!-- ইউজার নাম এবং রোলে (Role) -->
+    <div class="hidden md:flex flex-col items-end mr-2">
+        <span class="text-sm font-bold text-gray-800 leading-none">{{ request.user.username }}</span>
+        <span class="text-[10px] text-indigo-600 font-bold uppercase mt-1">Administrator</span>
+    </div>
+
+    <!-- প্রোফাইল মেনু ড্রপডাউন (এটি টপবারে নিয়ে আসবে) -->
+    <div class="unfold-top-bar-user-menu">
+        {% include "unfold/helpers/user_menu.html" %}
+    </div>
+
+</div>
+
+<style>
+    /* ১. সাইডবারের নিচের প্রোফাইলটি পুরোপুরি মুছে ফেলার জন্য */
+    aside .mt-auto.border-t.border-gray-200, 
+    aside div[class*="mt-auto"] {
+        display: none !important;
+    }
+
+    /* ২. টপবারের ড্রপডাউন মেনু ঠিক করার জন্য */
+    .unfold-top-bar-user-menu button {
+        background-color: #6366f1 !important; /* Indigo Color */
+        color: white !important;
+        border-radius: 50% !important;
+        width: 38px !important;
+        height: 38px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border: 2px solid white !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+</style>
+{% endblock %}

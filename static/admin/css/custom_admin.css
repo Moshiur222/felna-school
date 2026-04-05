@@ -1,0 +1,11 @@
+/* সাইডবারের নিচের প্রোফাইল হাইড করার জন্য */
+aside .mt-auto.border-t.border-gray-200 {
+    display: none !important;
+}
+
+/* টপ বার প্রোফাইল আইকন একটু বড় করার জন্য */
+.unfold-top-bar-user-menu img {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #6366f1;
+}

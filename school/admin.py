@@ -100,6 +100,10 @@ class TeacherAdmin(UnfoldAdmin):
             "classes": ["tab"]
         }),
     )
+    class Media:
+        css = {
+            'all': ('css/custom_admin.css',)
+        }
 
 @admin.register(Student)
 class StudentAdmin(UnfoldAdmin):
@@ -491,7 +495,8 @@ class GenericAdmin(UnfoldAdmin):
     #     return False 
     # (নোট: যদি লিস্টের ডিলিট বাটন কাজ না করে, তবে উপরের ২ লাইন কমেন্ট করে রাখুন)
 
-# সাইট হেডার কাস্টমাইজেশন
+
+# এগুলো আগের মতোই থাকবে
 admin.site.site_header = "Felna High School ERP"
 admin.site.site_title = "Admin Portal"
 admin.site.index_title = "Welcome to Felna Management System"

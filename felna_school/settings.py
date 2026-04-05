@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'school',
     'unfold',
     'unfold.contrib.filters',
     'unfold.contrib.forms',
@@ -42,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'school',
     'django_countries'
 ]
 
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'felna_school.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,10 +140,13 @@ from django.urls import reverse_lazy
 
 UNFOLD = {
     "SITE_TITLE": "Felna High School Admin",
-    "SITE_HEADER": "Felna High School Adminboard_permission",
+    "SITE_HEADER": "Felna High School",
     "SITE_SYMBOL": "school", 
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
+    "SHOW_USERNAME": True,       # টপবারে নাম দেখাবে
+    "SHOW_AVATAR": True,         # টপবারে ছবি দেখাবে
+    
     "COLORS": {
         "primary": {
             "50": "238 242 255", "100": "224 231 255", "200": "199 210 254",
@@ -152,17 +155,31 @@ UNFOLD = {
             "900": "49 46 129", "950": "30 27 75",
         },
     },
+    
+    "USER_MENU": [
+        {
+            "title": "My Profile",
+            "link": "/admin/auth/user/",
+            "icon": "person",
+        },
+        {
+            "title": "Log Out",
+            "link": "/admin/logout/",
+            "icon": "logout",
+        },
+    ],
+        
     "SIDEBAR": {
         "show_search": True,
         "show_all_applications": False, 
         "navigation": [
-            {
-                "title": "Main Dashboard",
-                "separator": True,
-                "items": [
-                    {"title": "Overview", "icon": "dashboard", "link": reverse_lazy("admin:index")},
-                ],
-            },
+            # {
+            #     "title": "Main Dashboard",
+            #     "separator": True,
+            #     "items": [
+            #         {"title": "Overview", "icon": "dashboard", "link": reverse_lazy("admin:index")},
+            #     ],
+            # },
             {
                 "title": "Home Page",
                 "collapsible": True,
@@ -234,14 +251,15 @@ UNFOLD = {
                 "collapsible": True,
                 "separator": True,
                 "items": [
+                    # Add board permission items here if needed
                 ],
             },
             {
-                "title": "Alunmi Associations",
+                "title": "Alumni Associations",
                 "collapsible": True,
                 "separator": True,
                 "items": [
-                    {"title": "Alumni Sudents", "icon": "how_to_reg", "link": "/admin/school/studentregistration/"},
+                    {"title": "Alumni Students", "icon": "how_to_reg", "link": "/admin/school/studentregistration/"},
                     {"title": "Villages", "icon": "location_city", "link": "/admin/school/village/"},
                 ],
             },
