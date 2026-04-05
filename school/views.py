@@ -407,6 +407,7 @@ def get_common_data():
         'gender_choices': [(1, 'পুরুষ'), (2, 'মহিলা'), (3, 'অন্যান্য')],
         'maritalstatus_choices': [(1, 'অবিবাহিত'), (2, 'বিবাহিত'), (3, 'তালাকপ্রাপ্ত')],
         'is_whatsapp_choices': [(1, 'হ্যাঁ'), (2, 'না')],
+        'is_no_hide_choices': [(1, 'হ্যাঁ'), (2, 'না')],
         'countries': list(countries),
     }
 
@@ -433,6 +434,7 @@ def student_registration(request):
                 'gender': int(request.POST.get("gender") or 1),
                 'marrital_status': int(request.POST.get("marital_status") or 1),
                 'is_whatsapp': int(request.POST.get("is_whatsapp_bd") or 1),
+                'is_no_hide': int(request.POST.get("is_no_hide") or 1),  # ADDED THIS LINE
                 'batch': int(request.POST.get("batch") or 2024),
                 'village_id': int(request.POST.get("village")),
                 'current_location': request.POST.get("current_location"),
@@ -462,11 +464,19 @@ def student_registration(request):
             if success:
                 village = Village.objects.get(id=data['village_id'])
                 student = StudentRegistration.objects.create(
-                    student_name=data['student_name'], gender=data['gender'],
-                    marrital_status=data['marrital_status'], is_whatsapp=data['is_whatsapp'],
-                    batch=data['batch'], village=village, current_location=data['current_location'],
-                    bd_no=data['bd_no'], abroad_no=data['abroad_no'],
-                    occupation=data['occupation'], last_edu=data['last_edu'], is_verified=True
+                    student_name=data['student_name'], 
+                    gender=data['gender'],
+                    marrital_status=data['marrital_status'], 
+                    is_whatsapp=data['is_whatsapp'],
+                    is_no_hide=data['is_no_hide'],  # ADDED THIS LINE
+                    batch=data['batch'], 
+                    village=village, 
+                    current_location=data['current_location'],
+                    bd_no=data['bd_no'], 
+                    abroad_no=data['abroad_no'],
+                    occupation=data['occupation'], 
+                    last_edu=data['last_edu'], 
+                    is_verified=True
                 )
                 if data.get('temp_photo_path'):
                     with default_storage.open(data['temp_photo_path'], 'rb') as f:
@@ -494,10 +504,8 @@ def student_registration(request):
         
         elif step == 'change_number':
             new_phone = request.POST.get('new_phone_number')
-            # ফোন নম্বর ক্লিন করা (প্রথম ০ বাদ দেওয়া বা রাখা আপনার সিস্টেম অনুযায়ী)
             if new_phone:
-                request.session['student_phone'] = new_phone # সেশনে আপডেট করা
-                # এখানে নতুন করে ওটিপি জেনারেট করে এসএমএস পাঠানোর কোড লিখুন
+                request.session['student_phone'] = new_phone
                 send_otp(new_phone) 
                 messages.success(request, f"নম্বর পরিবর্তন করে {new_phone}-এ ওটিপি পাঠানো হয়েছে।")
                 return redirect('student_registration')

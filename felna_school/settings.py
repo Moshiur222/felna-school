@@ -144,8 +144,8 @@ UNFOLD = {
     "SITE_SYMBOL": "school", 
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
-    "SHOW_USERNAME": True,       # টপবারে নাম দেখাবে
-    "SHOW_AVATAR": True,         # টপবারে ছবি দেখাবে
+    "SHOW_USERNAME": True,
+    "SHOW_AVATAR": True,
     
     "COLORS": {
         "primary": {
@@ -155,7 +155,7 @@ UNFOLD = {
             "900": "49 46 129", "950": "30 27 75",
         },
     },
-    
+
     "USER_MENU": [
         {
             "title": "My Profile",

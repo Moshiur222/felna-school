@@ -2,6 +2,9 @@
 {% load static %} 
 {% block title %}শিক্ষার্থী নিবন্ধন {% endblock %} 
 {% block extra_css %}
+<!-- Professional Font Stack: Times New Roman (English + Bengali Support) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
   /* Modern CSS Variables - Scoped to registration section */
   .registration-wrapper {
@@ -238,8 +241,46 @@
     position: relative;
     overflow: hidden;
     background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    /* UPDATED FONT FAMILY: Times New Roman */
+    font-family: 'Times New Roman', Times, serif !important;
     font-size: var(--text-base) !important;
+  }
+
+  /* Ensure all nested elements also get Times New Roman */
+  .registration-wrapper,
+  .registration-wrapper *,
+  .registration-wrapper .card,
+  .registration-wrapper .card-body,
+  .registration-wrapper .form-label,
+  .registration-wrapper .form-control,
+  .registration-wrapper .form-select,
+  .registration-wrapper input,
+  .registration-wrapper select,
+  .registration-wrapper button,
+  .registration-wrapper span,
+  .registration-wrapper div,
+  .registration-wrapper p,
+  .registration-wrapper h1,
+  .registration-wrapper h2,
+  .registration-wrapper h3,
+  .registration-wrapper h4,
+  .registration-wrapper h5,
+  .registration-wrapper h6,
+  .registration-wrapper label,
+  .registration-wrapper .alert,
+  .registration-wrapper .card-header p,
+  .registration-wrapper .text-white-50,
+  .registration-wrapper .form-text,
+  .registration-wrapper .placeholder,
+  .registration-wrapper .gender-radio-option span,
+  .registration-wrapper .whatsapp-prefix,
+  .registration-wrapper .input-group-text,
+  .registration-wrapper .modern-btn,
+  .registration-wrapper .verify-otp-btn,
+  .registration-wrapper .otp-timer,
+  .registration-wrapper .resend-section button,
+  .registration-wrapper .captcha-error {
+    font-family: 'Times New Roman', Times, serif !important;
   }
 
   /* Animated Background */
@@ -434,7 +475,6 @@
     align-items: center;
     gap: 1.5rem;
     flex-wrap: wrap;
-    padding-left: 90px;
   }
 
   .form-label-phone {
@@ -1050,6 +1090,7 @@
 }
 
 </style>
+
 {% endblock %} 
 {% block content %}
 <!-- Cropper.js CSS -->
@@ -1091,7 +1132,10 @@
                   <div class="form-field-wrapper">
                     <div class="input-with-icon">
                       <i class="fas fa-user input-icon"></i>
-                      <input type="text" name="student_name" id="student_name" class="form-control form-control-lg modern-input enhanced-input" placeholder="আপনার পূর্ণ নাম লিখুন" value="{{ form_data.student_name|default:'' }}" required />
+                      <input type="text" name="student_name" id="student_name"
+                        class="form-control form-control-lg modern-input enhanced-input"
+                        placeholder="আপনার পূর্ণ নাম লিখুন"
+                        value="{{ form_data.student_name|default:'' }}" required />
                     </div>
                   </div>
                 </div>
@@ -1204,9 +1248,21 @@
                   </div>
                 </div>
 
+
                 <!-- Is WhatsApp Radio Buttons for BD -->
                 <div class="whatsapp-radio-section">
                   <div class="whatsapp-radio-wrapper whatsapp-inline">
+                    <label class="form-label-phone fw-bold">
+                      হাইড রাখতে চান কি ? <span class="required-star">*</span>
+                    </label>
+                    <div class="gender-radio-group">
+                      {% for val, label in is_whatsapp_choices %}
+                        <label class="gender-radio-option">
+                          <input type="radio" name="is_whatsapp_bd" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_bd == val %}checked{% endif %} />
+                          <span>{{ label }}</span>
+                        </label>
+                      {% endfor %}
+                    </div>
                     <label class="form-label-phone fw-bold">
                       এটা কী হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
                     </label>
@@ -1220,6 +1276,7 @@
                     </div>
                   </div>
                 </div>
+
                 
                 <!-- Abroad Number Row -->
                 <div class="phone-number-row" style="margin-top: 1rem;">
@@ -1232,6 +1289,22 @@
                   </div>
                 </div>
 
+                <!-- Is WhatsApp Radio Buttons for Abroad -->
+                <div class="whatsapp-radio-section">
+                  <div class="whatsapp-radio-wrapper whatsapp-inline">
+                    <label class="form-label-phone fw-bold">
+                   হাইড রাখতে চান কি ?
+                    </label>
+                    <div class="gender-radio-group">
+                      {% for val, label in is_whatsapp_choices %}
+                        <label class="gender-radio-option">
+                          <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
+                          <span>{{ label }}</span>
+                        </label>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
                 <!-- Is WhatsApp Radio Buttons for Abroad -->
                 <div class="whatsapp-radio-section">
                   <div class="whatsapp-radio-wrapper whatsapp-inline">
@@ -2212,6 +2285,17 @@
       }
     }
   });
+</script>
+<script>
+document.getElementById("student_name").addEventListener("input", function() {
+    let words = this.value.toLowerCase().split(" ");
+    for (let i = 0; i < words.length; i++) {
+        if (words[i].length > 0) {
+            words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+        }
+    }
+    this.value = words.join(" ");
+});
 </script>
 
 {% endblock %}

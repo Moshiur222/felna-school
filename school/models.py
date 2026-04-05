@@ -595,6 +595,7 @@ class StudentRegistration(models.Model):
     IS_WHATSAPP_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
     OCCUPATION_CHOICES = [(1, 'কৃষক'), (2, 'চাকরি'), (3, 'ব্যবসা'), (4, 'ফ্রিল্যান্সার')]
     EDUCATION_CHOICES = [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')]
+    NUMBER_HIDE_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
 
     student_name = models.CharField(max_length=100)
     student_photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
@@ -608,6 +609,7 @@ class StudentRegistration(models.Model):
     abroad_no = models.CharField(max_length=15, null=True, blank=True)
     occupation = models.IntegerField(choices=OCCUPATION_CHOICES, null=True)
     last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
+    is_no_hide = models.IntegerField(choices=NUMBER_HIDE_CHOICES, null=True)
     is_verified = models.BooleanField(default=False)
 
     def __str__(self): return self.student_name
