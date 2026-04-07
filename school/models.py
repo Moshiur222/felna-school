@@ -1,24 +1,162 @@
 from django.db import models
 from PIL import Image
 from io import BytesIO
+from django.utils.text import slugify
+from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import sys
+import os
+import time
+
 # Define the dimensions for each model
 WELCOME_MESSAGE_SIZE = (350, 200)
 HEADMASTER_MESSAGE_SIZE = (200, 200)
 ASSISTANT_HEADMASTER_MESSAGE_SIZE = (200, 200)
-# Create your models here.
-class Gallery(models.Model):
-    title = models.CharField(max_length=255, default="Image Title")
-    image = models.ImageField(upload_to='gallery/')  # saves in MEDIA_ROOT/gallery/
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['-created_at']  # latest first
+
+# -------------------------------
+# WebP Converter
+# -------------------------------
+def convert_to_webp(image_field, max_size_kb=100):
+    try:
+        img = Image.open(image_field)
+
+        if img.mode in ("RGBA", "P"):
+            img = img.convert("RGB")
+
+        quality = 85
+        output = BytesIO()
+
+        while quality > 10:
+            output.seek(0)
+            output.truncate()
+
+            img.save(
+                output,
+                format="WEBP",
+                quality=quality,
+                method=6
+            )
+
+            size_kb = output.tell() / 1024
+            if size_kb <= max_size_kb:
+                break
+
+            quality -= 5
+
+        output.seek(0)
+        file_name = os.path.splitext(image_field.name)[0] + ".webp"
+
+        return ContentFile(output.read(), name=file_name)
+
+    except Exception:
+        return image_field
+
+
+# -------------------------------
+# Upload Paths
+# -------------------------------
+def album_banner_upload_to(instance, filename):
+    if instance.title:
+        album_folder = slugify(instance.title)
+    else:
+        album_folder = "untitled-album"
+
+    filename = f"{instance.slug}.webp"
+    return os.path.join("Album", album_folder, filename)
+
+
+def photo_upload_to(instance, filename):
+    if instance.album and instance.album.title:
+        album_folder = slugify(instance.album.title)
+    else:
+        album_folder = "uncategorized"
+
+    filename = f"{instance.slug}.webp"
+    return os.path.join("Album", album_folder, filename)
+
+
+# -------------------------------
+# Album Model
+# -------------------------------
+class Album(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True, null=True)
+    slug = models.SlugField(max_length=150, blank=True)
+    banner = models.ImageField(upload_to=album_banner_upload_to)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.title
-    
+
+    def save(self, *args, **kwargs):
+        # Generate unique slug
+        if not self.slug and self.title:
+            base_slug = f"felna-high-school-{slugify(self.title)}"
+            slug = base_slug
+            counter = 1
+
+            while Album.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        # Convert banner to webp
+        if self.banner and not self.banner.name.endswith(".webp"):
+            self.banner = convert_to_webp(self.banner, max_size_kb=100)
+
+        super().save(*args, **kwargs)
+
+
+# -------------------------------
+# Gallery Model
+# -------------------------------
+class Gallery(models.Model):
+    album = models.ForeignKey(
+        Album,
+        on_delete=models.CASCADE,
+        related_name="photos",
+        null=True,
+        blank=True
+    )
+    image = models.ImageField(upload_to=photo_upload_to)
+    slug = models.SlugField(max_length=150, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        if self.album:
+            return f"{self.album.title} - Photo {self.id}"
+        return f"Photo {self.id}"
+
+    def save(self, *args, **kwargs):
+        # Generate unique slug
+        if not self.slug:
+            if self.album:
+                base_slug = f"felna-{slugify(self.album.title)}"
+            else:
+                base_slug = "felna-photo"
+
+            slug = base_slug
+            counter = 1
+
+            while Gallery.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        # Convert image to webp
+        if self.image and not self.image.name.endswith(".webp"):
+            self.image = convert_to_webp(self.image, max_size_kb=150)
+
+        super().save(*args, **kwargs)
     
     
 from django.db import models
@@ -50,13 +188,15 @@ class OurHistory(models.Model):
 
     def __str__(self):
         return self.title
-    
-    
+        
 
-    
-    
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
 
-
+    def __str__(self):
+        return self.name    
+    
 
 class AdmissionResult(models.Model):
     CLASS_CHOICES = [
@@ -190,9 +330,6 @@ class Management(models.Model):
     
 
 class WelcomeMessage(models.Model):
-    """
-    Model for the welcome message, with a large-format image.
-    """
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='welcome_messages/')
     message = models.TextField()
@@ -204,29 +341,38 @@ class WelcomeMessage(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        """
-        Overrides the save method to resize the image to 350x200 pixels.
-        """
-        if self.image:
-            # Open the image using Pillow
-            img = Image.open(self.image)
-            # Resize the image while maintaining aspect ratio
-            img.thumbnail(WELCOME_MESSAGE_SIZE, Image.Resampling.LANCZOS)
+        # যদি ইমেজ থাকে এবং এটি নতুন আপলোড করা হয়
+        if self.image and hasattr(self.image, 'file'):
+            try:
+                img = Image.open(self.image)
+                
+                # ইমেজ ফরম্যাট ঠিক রাখা (RGB তে কনভার্ট করা ভালো যদি PNG/RGBA হয়)
+                if img.mode in ("RGBA", "P"):
+                    img = img.convert("RGB")
 
-            # Create an in-memory file to save the resized image
-            output = BytesIO()
-            img.save(output, format=img.format, quality=90)
-            output.seek(0)
-            
-            # Update the model's image field with the resized version
-            self.image = InMemoryUploadedFile(
-                output,
-                'ImageField',
-                f"{self.image.name.split('.')[0]}.{img.format.lower()}",
-                sys.getsizeof(output),
-                None,
-                None
-            )
+                # রিসাইজ করা (Aspect Ratio বজায় রেখে)
+                img.thumbnail(WELCOME_MESSAGE_SIZE, Image.Resampling.LANCZOS)
+
+                # মেমোরিতে সেভ করা
+                output = BytesIO()
+                img.save(output, format='JPEG', quality=90)
+                output.seek(0)
+                
+                # নতুন ফাইল নেম তৈরি
+                file_name = f"{self.image.name.split('.')[0]}.jpg"
+
+                # InMemoryUploadedFile এ সঠিক সাইজ দেওয়া (len(output.getvalue()))
+                self.image = InMemoryUploadedFile(
+                    output,
+                    'ImageField',
+                    file_name,
+                    'image/jpeg',
+                    len(output.getvalue()), # এটি sys.getsizeof থেকে অনেক বেশি নির্ভরযোগ্য
+                    None
+                )
+            except Exception as e:
+                print(f"Error resizing image: {e}")
+
         super().save(*args, **kwargs)
 
 class HeadmasterMessage(models.Model):
@@ -306,6 +452,7 @@ class Teacher(models.Model):
         ('F', 'Female'),
         ('O', 'Other'),
     )
+    EDUCATION_CHOICES = [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')]
 
     name = models.CharField(max_length=150, verbose_name="Name")
     designation = models.CharField(max_length=100, verbose_name="Designation")
@@ -317,6 +464,7 @@ class Teacher(models.Model):
     bio = models.TextField(verbose_name="Biography", blank=True, null=True)
     join_date = models.DateField(verbose_name="Join Date", blank=True, null=True)
     is_active = models.BooleanField(default=True, verbose_name="Active")
+    last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -592,7 +740,8 @@ class Village(models.Model):
 class StudentRegistration(models.Model):
     GENDER_CHOICES = [(1, 'পুরুষ'), (2, 'মহিলা'), (3, 'অন্যান্য')]
     MARITAL_STATUS_CHOICES = [(1, 'অবিবাহিত'), (2, 'বিবাহিত'), (3, 'তালাকপ্রাপ্ত')]
-    IS_WHATSAPP_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
+    IS_WHATSAPP_BD_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
+    IS_WHATSAPP_ABROAD_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
     OCCUPATION_CHOICES = [(1, 'কৃষক'), (2, 'চাকরি'), (3, 'ব্যবসা'), (4, 'ফ্রিল্যান্সার')]
     EDUCATION_CHOICES = [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')]
     NUMBER_HIDE_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
@@ -601,12 +750,13 @@ class StudentRegistration(models.Model):
     student_photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICES, null=True)
     marrital_status = models.IntegerField(choices=MARITAL_STATUS_CHOICES, null=True)
-    is_whatsapp = models.IntegerField(choices=IS_WHATSAPP_CHOICES, null=True)
     batch = models.IntegerField(choices=batch_years(), null=True)
     village = models.ForeignKey(Village, on_delete=models.SET_NULL, null=True)
     current_location = CountryField(blank_label='Select Country')
     bd_no = models.CharField(max_length=15)
+    is_whatsapp_bd = models.IntegerField(choices=IS_WHATSAPP_BD_CHOICES, null=True)
     abroad_no = models.CharField(max_length=15, null=True, blank=True)
+    is_whatsapp_abroad = models.IntegerField(choices=IS_WHATSAPP_ABROAD_CHOICES, null=True)
     occupation = models.IntegerField(choices=OCCUPATION_CHOICES, null=True)
     last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
     is_no_hide = models.IntegerField(choices=NUMBER_HIDE_CHOICES, null=True)

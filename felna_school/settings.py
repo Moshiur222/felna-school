@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'school',
     'unfold',
     'unfold.contrib.filters',
@@ -46,9 +47,20 @@ INSTALLED_APPS = [
     'django_countries'
 ]
 
+LANGUAGES = (
+    ('en', 'English'),
+    ('bn', 'Bengali'),
+)
+
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -191,11 +203,24 @@ UNFOLD = {
             },
             {
                 "title": "Committe Member",
-                "collapsible": True,
                 "separator": True,  
                 "items": [
                     {"title": "Management", "icon": "manage_accounts", "link": "/admin/school/management/"},
+                ],
+            },
+            {
+                "title": "Teachers",
+                "separator": True,  
+                "items": [
                     {"title": "Teacher's & Staffs", "icon": "person_pin", "link": "/admin/school/teacher/"},
+                ],
+            },
+            {
+                "title": "Gallery",
+                "collapsible": True,
+                "separator": True,  
+                "items": [
+                    {"title": "Album", "icon": "photo_library", "link": "/admin/school/album/"},
                     {"title": "Photo Gallery", "icon": "photo_library", "link": "/admin/school/gallery/"},
                 ],
             },

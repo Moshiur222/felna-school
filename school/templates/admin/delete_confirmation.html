@@ -1,0 +1,335 @@
+{% extends "admin/delete_confirmation.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --danger-50: #fef2f2;
+        --danger-100: #fee2e2;
+        --danger-500: #ef4444;
+        --danger-600: #dc2626;
+        --danger-700: #b91c1c;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 8px;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+    }
+
+    body {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+    }
+
+    #container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    #content {
+        max-width: 680px;
+        margin: 0 auto;
+        background: transparent !important;
+        padding: 0 !important;
+    }
+
+    .delete-confirmation {
+        background: white;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Header Section */
+    .confirmation-header {
+        background: linear-gradient(135deg, var(--danger-500), var(--danger-700));
+        padding: 32px 32px 28px;
+        text-align: center;
+        color: white;
+    }
+
+    .warning-icon {
+        width: 72px;
+        height: 72px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 36px;
+        backdrop-filter: blur(10px);
+    }
+
+    .confirmation-header h1 {
+        font-size: 28px !important;
+        font-weight: 800 !important;
+        margin: 0 0 8px 0 !important;
+        color: white !important;
+        letter-spacing: -0.02em;
+    }
+
+    .confirmation-header p {
+        font-size: 15px;
+        opacity: 0.95;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    /* Content Section */
+    .confirmation-content {
+        padding: 32px;
+    }
+
+    /* Object Info */
+    .object-info {
+        background: var(--gray-50);
+        border: 1px solid var(--gray-100);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .object-info h3 {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--gray-600);
+        margin: 0 0 12px 0;
+    }
+
+    .object-details {
+        font-size: 15px;
+        color: var(--gray-800);
+        line-height: 1.6;
+    }
+
+    .object-details strong {
+        color: var(--gray-900);
+        font-weight: 700;
+    }
+
+    /* Related Objects Section */
+    .related-objects {
+        background: var(--danger-50);
+        border: 1px solid var(--danger-100);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .related-objects h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--danger-700);
+        margin: 0 0 12px 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .related-list {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--gray-700);
+        font-size: 14px;
+    }
+
+    .related-list li {
+        margin: 8px 0;
+    }
+
+    /* Warning Box */
+    .warning-box {
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        padding: 16px;
+        border-radius: var(--radius-sm);
+        margin-bottom: 28px;
+    }
+
+    .warning-box p {
+        margin: 0;
+        font-size: 13px;
+        color: #92400e;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Button Group */
+    .button-group {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .btn {
+        padding: 10px 24px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        border: none;
+        font-family: inherit;
+    }
+
+    .btn-danger {
+        background: var(--danger-500);
+        color: white;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn-danger:hover {
+        background: var(--danger-600);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--gray-700);
+        border: 1px solid var(--gray-200);
+    }
+
+    .btn-secondary:hover {
+        background: var(--gray-50);
+        border-color: var(--gray-300);
+    }
+
+    /* Form Overrides */
+    form {
+        margin: 0;
+    }
+
+    input[type="submit"] {
+        background: var(--danger-500);
+        color: white;
+        border: none;
+        padding: 10px 24px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    input[type="submit"]:hover {
+        background: var(--danger-600);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .cancel-link {
+        background: white;
+        color: var(--gray-700);
+        border: 1px solid var(--gray-200);
+        padding: 10px 24px;
+        border-radius: var(--radius-sm);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .cancel-link:hover {
+        background: var(--gray-50);
+        border-color: var(--gray-300);
+    }
+
+    /* Footer */
+    .confirmation-footer {
+        padding: 20px 32px 28px;
+        border-top: 1px solid var(--gray-100);
+        background: var(--gray-50);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+        .confirmation-header h1 {
+            font-size: 24px !important;
+        }
+        
+        .confirmation-content,
+        .confirmation-header {
+            padding: 24px;
+        }
+        
+        .confirmation-footer {
+            padding: 20px 24px;
+        }
+        
+        .button-group {
+            flex-direction: column-reverse;
+        }
+        
+        .btn, .cancel-link, input[type="submit"] {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="delete-confirmation">
+    <!-- Header Section -->
+    <div class="confirmation-header">
+        <div class="warning-icon">
+            <span>⚠️</span>
+        </div>
+        <h1>Delete Confirmation</h1>
+        <p>This action cannot be undone. Please review carefully.</p>
+    </div>
+
+    <!-- Content Section -->
+    <div class="confirmation-content">
+        {{ block.super }}
+    </div>
+</div>
+{% endblock %}
+
+{% block content_before %}
+<!-- Optional: Add breadcrumb or back navigation -->
+<div style="margin-bottom: 16px;">
+    <a href="{% url 'admin:index' %}" style="color: white; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+        <span>←</span> Back to Dashboard
+    </a>
+</div>
+{% endblock %}

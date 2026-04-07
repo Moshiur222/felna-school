@@ -86,7 +86,7 @@
   .registration-wrapper #abroad_number,
   .registration-wrapper input[name="bangladesh_number"],
   .registration-wrapper input[name="abroad_number"] {
-    font-size: 1.8rem !important;
+    font-size: 2rem !important;
     line-height: 1.3 !important;
   }
 
@@ -233,11 +233,11 @@
 
   /* Remove global body/html styles */
   .registration-wrapper {
-    min-height: 100vh;
+    min-height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 4rem;
     position: relative;
     overflow: hidden;
     background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
@@ -467,7 +467,7 @@
     width: 100%;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
-    padding-left: 24.9rem;
+    padding-left: 33.9rem;
   }
 
   .whatsapp-radio-wrapper.whatsapp-inline {
@@ -1089,6 +1089,26 @@
   }
 }
 
+/* ============================================
+   GLOBAL MESSAGES TOAST - fixed position
+   ============================================ */
+.global-messages-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 99999;
+  min-width: 350px;
+  max-width: 500px;
+}
+
+.global-messages-container .alert {
+  border-radius: 15px !important;
+  font-size: 1.5rem !important;
+  font-family: 'Times New Roman', Times, serif !important;
+  margin-bottom: 10px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
 </style>
 
 {% endblock %} 
@@ -1108,16 +1128,6 @@
               <h2 class="mb-0"><i class="fas fa-graduation-cap me-3"></i>শিক্ষার্থী নিবন্ধন</h2>
             </div>
           </div>
-              <!-- UPDATE FOR MESSAGE DISPLAY (Use this in both sections) -->
-              {% if messages %}
-                {% for message in messages %}
-                  <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show m-3 modern-alert shadow-sm" role="alert" style="border-radius: 15px; font-size: 1.5rem;">
-                    <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
-                    <strong>{{ message }}</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                {% endfor %}
-              {% endif %}
           <div class="card-body">
             <form method="POST" id="registrationForm" enctype="multipart/form-data" action="{% url 'student_registration' %}" novalidate>
               {% csrf_token %}
@@ -1233,95 +1243,95 @@
                 </div>
 
               <!-- CONTACT INFORMATION SECTION -->
-              <div class="mb-4">
-                <label class="form-label fw-bold">
-                  <i class="fas fa-phone-alt"></i> যোগাযোগের তথ্য<span class="required-star">*</span>
-                </label>
-                <!-- Bangladesh Number Row -->
-                <div class="phone-number-row">
-                  <label class="form-label fw-bold">
-                    <i class="fas fa-phone-alt"></i> বাংলাদেশ নম্বর <span class="required-star">*</span>
-                  </label>
-                  <div class="input-group enhanced-whatsapp-group">
-                    <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +88</span>
-                    <input type="tel" name="bangladesh_number" id="bangladesh_number" class="form-control form-control-lg modern-input enhanced-whatsapp-input" pattern="[0-9]{10,11}" placeholder="বাংলাদেশি নম্বর লিখুন" value="{{ form_data.bangladesh_number|default:'' }}" />
+                <div class="mb-4">
+                  <div class="phone-row-wrapper" style="display: flex; align-items: center; gap: 35px; flex-wrap: wrap; margin-bottom: 15px;">
+    
+                      <!-- প্রধান লেবেল -->
+                      <label class="form-label fw-bold" style="margin-bottom: 0; white-space: nowrap;">
+                          <i class="fas fa-phone-alt"></i> মোবাইল নম্বর <span class="required-star">*</span>
+                      </label>
+
+                      <!-- হাইড লেবেল এবং রেডিও গ্রুপকে এক সাথে রাখার জন্য একটি ডিভ -->
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                          <label class="form-label-phone fw-bold" style="margin-bottom: 0; white-space: nowrap;">আপনি কি আপনার ফোন নম্বর ওয়েবসাইটে দেখাতে চান ? <span class="required-star">*</span></label>
+                          
+                          <div class="gender-radio-group" style="display: flex; gap: 15px; margin-bottom: 0;">
+                              {% for val, label in is_no_hide_choices %}
+                                  <label class="gender-radio-option" style="display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0;">
+                                      <input type="radio" name="is_no_hide_bd" value="{{ val }}" 
+                                            {% if form_data.is_no_hide_bd == val %}checked{% endif %} required />
+                                      <span style="font-size: 1.5rem;">{{ label }}</span>
+                                  </label>
+                              {% endfor %}
+                          </div>
+                      </div>
+
                   </div>
-                </div>
-
-
-                <!-- Is WhatsApp Radio Buttons for BD -->
-                <div class="whatsapp-radio-section">
-                  <div class="whatsapp-radio-wrapper whatsapp-inline">
-                    <label class="form-label-phone fw-bold">
-                      হাইড রাখতে চান কি ? <span class="required-star">*</span>
+                  
+                  <!-- Bangladesh Number Row -->
+                  <div class="phone-number-row">
+                    <label class="form-label fw-bold">
+                      <i class="fas fa-phone-alt"></i> বাংলাদেশ নম্বর <span class="required-star">*</span>
                     </label>
-                    <div class="gender-radio-group">
-                      {% for val, label in is_whatsapp_choices %}
-                        <label class="gender-radio-option">
-                          <input type="radio" name="is_whatsapp_bd" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_bd == val %}checked{% endif %} />
-                          <span>{{ label }}</span>
-                        </label>
-                      {% endfor %}
-                    </div>
-                    <label class="form-label-phone fw-bold">
-                      এটা কী হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
-                    </label>
-                    <div class="gender-radio-group">
-                      {% for val, label in is_whatsapp_choices %}
-                        <label class="gender-radio-option">
-                          <input type="radio" name="is_whatsapp_bd" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_bd == val %}checked{% endif %} />
-                          <span>{{ label }}</span>
-                        </label>
-                      {% endfor %}
+                    <div class="input-group enhanced-whatsapp-group">
+                      <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +88</span>
+                      <input type="tel" name="bangladesh_number" id="bangladesh_number" 
+                            class="form-control form-control-lg modern-input enhanced-whatsapp-input" 
+                            pattern="[0-9]{10,11}" placeholder="বাংলাদেশি নম্বর লিখুন" 
+                            value="{{ form_data.bangladesh_number|default:'' }}" required />
                     </div>
                   </div>
-                </div>
 
-                
-                <!-- Abroad Number Row -->
-                <div class="phone-number-row" style="margin-top: 1rem;">
-                  <label class="form-label fw-bold">
-                    <i class="fas fa-globe"></i> বিদেশি নম্বর
-                  </label>
-                  <div class="input-group enhanced-whatsapp-group">
-                    <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +</span>
-                    <input type="tel" name="abroad_number" id="abroad_number" class="form-control form-control-lg modern-input enhanced-whatsapp-input" pattern="[0-9]{7,15}" placeholder="বিদেশি নম্বর লিখুন" value="{{ form_data.abroad_number|default:'' }}" />
+                  <!-- Is WhatsApp Radio Buttons for BD -->
+                  <div class="whatsapp-radio-section">
+                    <div class="whatsapp-radio-wrapper whatsapp-inline">
+                      <label class="form-label-phone fw-bold">
+                        এটা কি হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
+                      </label>
+                      <div class="gender-radio-group">
+                        {% for val, label in is_whatsapp_choices %}
+                          <label class="gender-radio-option">
+                            <input type="radio" name="is_whatsapp_bd" value="{{ val }}" 
+                                  {% if form_data.is_whatsapp_bd == val %}checked{% endif %} required />
+                            <span>{{ label }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                <!-- Is WhatsApp Radio Buttons for Abroad -->
-                <div class="whatsapp-radio-section">
-                  <div class="whatsapp-radio-wrapper whatsapp-inline">
-                    <label class="form-label-phone fw-bold">
-                   হাইড রাখতে চান কি ?
+                  
+                  <!-- Abroad Number Row -->
+                  <div class="phone-number-row" style="margin-top: 1rem;">
+                    <label class="form-label fw-bold">
+                      <i class="fas fa-globe"></i> বিদেশি নম্বর
                     </label>
-                    <div class="gender-radio-group">
-                      {% for val, label in is_whatsapp_choices %}
-                        <label class="gender-radio-option">
-                          <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
-                          <span>{{ label }}</span>
-                        </label>
-                      {% endfor %}
+                    <div class="input-group enhanced-whatsapp-group">
+                      <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +</span>
+                      <input type="tel" name="abroad_number" id="abroad_number" 
+                            class="form-control form-control-lg modern-input enhanced-whatsapp-input" 
+                            pattern="[0-9]{7,15}" placeholder="বিদেশি নম্বর লিখুন" 
+                            value="{{ form_data.abroad_number|default:'' }}" />
+                    </div>
+                  </div>
+
+                  <!-- Is WhatsApp Radio Buttons for Abroad -->
+                  <div class="whatsapp-radio-section" style="padding-left: 353px">
+                    <div class="whatsapp-radio-wrapper whatsapp-inline">
+                      <label class="form-label-phone fw-bold">
+                        এটা কি হোয়াটসঅ্যাপ নম্বর ?
+                      </label>
+                      <div class="gender-radio-group">
+                        {% for val, label in is_whatsapp_choices %}
+                          <label class="gender-radio-option">
+                            <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
+                                  {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
+                            <span>{{ label }}</span>
+                          </label>
+                        {% endfor %}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <!-- Is WhatsApp Radio Buttons for Abroad -->
-                <div class="whatsapp-radio-section">
-                  <div class="whatsapp-radio-wrapper whatsapp-inline">
-                    <label class="form-label-phone fw-bold">
-                      এটা কী হোয়াটসঅ্যাপ নম্বর ?
-                    </label>
-                    <div class="gender-radio-group">
-                      {% for val, label in is_whatsapp_choices %}
-                        <label class="gender-radio-option">
-                          <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" class="gender-radio" {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
-                          <span>{{ label }}</span>
-                        </label>
-                      {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <!-- PROFESSIONAL INFORMATION SECTION -->
               <div class="mb-4">
@@ -1437,38 +1447,27 @@
             </div>
           </div>
           <div class="card-body">
-            {% if messages %}
-              {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show modern-alert text-center" role="alert" style="font-size: 1.5rem;">
-                  <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
-                  {{ message }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-              {% endfor %}
-            {% endif %}
-
-            <div class="text-center mb-4">
+          <div class="text-center mb-4">
               <div class="otp-icon-wrapper mb-3">
-                <i class="fab fa-whatsapp" style="font-size: 70px; color: #25d366"></i>
+                  <i class="fab fa-whatsapp" style="font-size: 70px; color: #25d366"></i>
               </div>
               <h4 class="mt-3 fw-bold mb-2">ওটিপি যাচাই</h4>
               <p class="text-muted mt-2">
-                আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে
+                  আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে
               </p>
-              
               <!-- Change Number Link -->
               <div class="change-number-section mt-2">
-                <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn" style="color: var(--primary); text-decoration: none; font-size: 1.4rem !important;">
-                  <i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন
-                </button>
+                  <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn">
+                      <i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন
+                  </button>
               </div>
               
               <div class="otp-timer">
-                <i class="fas fa-clock me-2"></i>
-                <span id="timer">05:00</span>
-                <span class="ms-2">বাকি সময়</span>
+                  <i class="fas fa-clock me-2"></i>
+                  <span id="timer">05:00</span>
+                  <span class="ms-2">বাকি সময়</span>
               </div>
-            </div>
+          </div>
 
             <!-- Change Number Modal (Functionality Fixed) -->
             <div id="changeNumberModal" class="crop-modal" style="display: none;">
@@ -1608,6 +1607,9 @@
         dropdown.classList.remove('show');
         dropdownItems.forEach(i => i.classList.remove('selected'));
         this.classList.add('selected');
+        
+        const changeEvent = new Event('change', { bubbles: true });
+        hiddenInput.dispatchEvent(changeEvent);
       });
     });
     
@@ -1615,7 +1617,7 @@
   }
 
   // ============================================
-  // AUTO CROP FUNCTIONALITY WITH CHANGE PHOTO OPTION
+  // AUTO CROP FUNCTIONALITY
   // ============================================
   let cropper = null;
   let currentImageFile = null;
@@ -1631,26 +1633,22 @@
   const cancelCropBtn = document.getElementById('cancelCropBtn');
   const cropInfo = document.getElementById('cropInfo');
   
-  // Function to open crop modal with a file
   function openCropModal(file) {
     if (!file) return;
     
     currentImageFile = file;
     
-    // Show crop info message
     if (cropInfo) {
       cropInfo.style.display = 'flex';
       cropInfo.innerHTML = '<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। ক্রপ করুন...';
       cropInfo.classList.remove('crop-warning');
     }
     
-    // Open crop modal immediately
     const reader = new FileReader();
     reader.onload = function(event) {
       cropImage.src = event.target.result;
       cropModal.classList.add('show');
       
-      // Initialize cropper after image loads
       if (cropper) cropper.destroy();
       cropper = new Cropper(cropImage, {
         aspectRatio: 1,
@@ -1672,13 +1670,11 @@
     reader.readAsDataURL(file);
   }
   
-  // Handle file selection - OPEN CROP MODAL IMMEDIATELY
   if (photoInput) {
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
       
-      // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
         alert('শুধুমাত্র ছবির ফাইল আপলোড করুন (.jpg, .jpeg, .png, .webp)');
@@ -1692,41 +1688,33 @@
     });
   }
   
-  // Handle change photo button click
   if (changePhotoBtn) {
     changePhotoBtn.addEventListener('click', function() {
-      // Trigger file input click
       photoInput.click();
     });
   }
   
-  // Confirm crop
   if (confirmCropBtn) {
     confirmCropBtn.addEventListener('click', function() {
       if (cropper) {
-        // Get cropped canvas
         const canvas = cropper.getCroppedCanvas({
           width: 500,
           height: 500,
           imageSmoothingQuality: 'high'
         });
         
-        // Convert canvas to blob
         canvas.toBlob(function(blob) {
           croppedBlob = blob;
           
-          // Create new file from cropped blob
           const croppedFile = new File([blob], currentImageFile.name, {
             type: 'image/jpeg',
             lastModified: Date.now()
           });
           
-          // Replace the file in input
           const dataTransfer = new DataTransfer();
           dataTransfer.items.add(croppedFile);
           photoInput.files = dataTransfer.files;
           
-          // Update preview
           const reader = new FileReader();
           reader.onload = function(e) {
             previewImg.src = e.target.result;
@@ -1742,7 +1730,6 @@
           
           currentImageFile = croppedFile;
           
-          // Close modal
           cropModal.classList.remove('show');
           if (cropper) {
             cropper.destroy();
@@ -1753,7 +1740,6 @@
     });
   }
   
-  // Cancel crop
   if (cancelCropBtn) {
     cancelCropBtn.addEventListener('click', function() {
       cropModal.classList.remove('show');
@@ -1761,7 +1747,6 @@
         cropper.destroy();
         cropper = null;
       }
-      // Clear the file input and preview
       photoInput.value = '';
       previewContainer.style.display = 'none';
       if (cropInfo) {
@@ -1770,7 +1755,6 @@
     });
   }
   
-  // Close modal when clicking outside
   if (cropModal) {
     cropModal.addEventListener('click', function(e) {
       if (e.target === cropModal) {
@@ -1779,7 +1763,6 @@
           cropper.destroy();
           cropper = null;
         }
-        // Clear the file input and preview
         photoInput.value = '';
         previewContainer.style.display = 'none';
         if (cropInfo) {
@@ -1790,9 +1773,9 @@
   }
 
   // ============================================
-  // IMAGE COMPRESSION FUNCTION (after crop)
+  // IMAGE COMPRESSION FUNCTION
   // ============================================
-  const MAX_FILE_SIZE = 50 * 1024; // 50KB
+  const MAX_FILE_SIZE = 50 * 1024;
   
   async function compressImage(file) {
     if (file.size <= MAX_FILE_SIZE) return file;
@@ -1840,7 +1823,6 @@
     });
   }
   
-  // Auto compress before form submit
   const registrationForm = document.getElementById('registrationForm');
   if (registrationForm && photoInput) {
     registrationForm.addEventListener('submit', async function(e) {
@@ -1863,7 +1845,6 @@
               cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি কম্প্রেস সম্পন্ন! (' + (compressedFile.size / 1024).toFixed(1) + 'KB)';
             }
             
-            // Submit form after compression
             setTimeout(() => {
               registrationForm.submit();
             }, 500);
@@ -1885,13 +1866,13 @@
   // ============================================
   let captchaVerified = false;
 
-  function onCaptchaSuccess() {
+  window.onCaptchaSuccess = function() {
     captchaVerified = true;
     const captchaError = document.getElementById("captchaError");
     if (captchaError) captchaError.classList.remove("show");
   }
 
-  function onCaptchaExpired() {
+  window.onCaptchaExpired = function() {
     captchaVerified = false;
     const captchaError = document.getElementById("captchaError");
     if (captchaError) captchaError.classList.remove("show");
@@ -1909,10 +1890,10 @@
   }
 
   // ============================================
-  // OTP FUNCTIONS - FIXED TIMER
+  // OTP FUNCTIONS
   // ============================================
   let timerInterval;
-  let timeLeft = 300; // 5 minutes in seconds
+  let timeLeft = 300;
   let isTimerExpired = false;
   let resendAttempts = 0;
   const MAX_RESEND_ATTEMPTS = 2;
@@ -1923,26 +1904,15 @@
     const otpInput = document.getElementById("otp_code");
     const resendBtn = document.getElementById("resendBtn");
 
-    // Check if timer element exists (only in OTP form)
     if (!timerElement) return false;
-
-    // Clear any existing interval
     if (timerInterval) clearInterval(timerInterval);
     
-    // Don't start timer if modal is open
     const modal = document.getElementById("changeNumberModal");
-    if (modal && modal.style.display === "flex") {
-      return false;
-    }
+    if (modal && modal.style.display === "flex") return false;
     
-    // Reset time left if starting fresh
-    if (timeLeft === 0 || timeLeft === undefined) {
-      timeLeft = 300;
-    }
+    if (timeLeft === 0 || timeLeft === undefined) timeLeft = 300;
     
     isTimerExpired = false;
-    
-    // Hide resend button initially
     if (resendBtn) resendBtn.style.display = "none";
 
     timerInterval = setInterval(() => {
@@ -1965,7 +1935,6 @@
           verifyBtn.innerHTML = '<i class="fas fa-clock me-2"></i>মেয়াদ শেষ';
         }
 
-        // Show resend button only if attempts left
         if (resendBtn && resendAttempts < MAX_RESEND_ATTEMPTS) {
           resendBtn.style.display = "inline-block";
         }
@@ -2011,33 +1980,129 @@
       verifyBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন';
     }
 
-    if (resendBtn) {
-      resendBtn.style.display = "none";
-    }
+    if (resendBtn) resendBtn.style.display = "none";
 
     startTimer();
   }
+
+ // ============================================
+// CHANGE NUMBER MODAL FUNCTIONALITY (COMPLETELY FIXED)
+// ============================================
+function setupChangeNumberModal() {
+    const changeNumberBtn = document.getElementById("changeNumberBtn");
+    const changeNumberModal = document.getElementById("changeNumberModal");
+    const closeChangeNumberModal = document.getElementById("closeChangeNumberModal");
+    const changeNumberForm = document.getElementById("changeNumberForm");
+    const displayPhoneNumber = document.getElementById("displayPhoneNumber");
+    const newPhoneInput = document.getElementById("newPhoneNumber");
+    const currentNumberHint = document.getElementById("currentNumberHint");
+
+    if (!changeNumberBtn || !changeNumberModal) return;
+
+    // Open modal - pre-populate with current number
+    changeNumberBtn.addEventListener("click", function() {
+        // Get current phone number from display
+        const currentPhone = displayPhoneNumber ? displayPhoneNumber.textContent : '';
+        if (newPhoneInput && currentPhone) {
+            newPhoneInput.value = currentPhone;
+            newPhoneInput.placeholder = "১০ বা ১১ ডিজিট লিখুন";
+        }
+        changeNumberModal.style.display = "flex";
+        if (timerInterval) clearInterval(timerInterval);
+    });
+    
+    // Close modal
+    if (closeChangeNumberModal) {
+        closeChangeNumberModal.addEventListener("click", function() {
+            changeNumberModal.style.display = "none";
+            if (!isTimerExpired && timeLeft > 0) startTimer();
+        });
+    }
+    
+    // Close on outside click
+    changeNumberModal.addEventListener("click", function(e) {
+        if (e.target === changeNumberModal) {
+            changeNumberModal.style.display = "none";
+            if (!isTimerExpired && timeLeft > 0) startTimer();
+        }
+    });
+    
+    // Handle form submission
+    if (changeNumberForm) {
+        changeNumberForm.addEventListener("submit", function(e) {
+            const newNumber = newPhoneInput ? newPhoneInput.value.trim() : '';
+            
+            // Validation
+            if (!newNumber) {
+                e.preventDefault();
+                alert("দয়া করে নম্বর লিখুন।");
+                return false;
+            }
+            
+            if (newNumber.length < 10 || newNumber.length > 11) {
+                e.preventDefault();
+                alert("দয়া করে সঠিক ১০-১১ অঙ্কের বাংলাদেশ নম্বর লিখুন।");
+                return false;
+            }
+            
+            if (!/^01[0-9]{8,9}$/.test(newNumber)) {
+                e.preventDefault();
+                alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)");
+                return false;
+            }
+            
+            // Update display immediately for better UX
+            if (displayPhoneNumber) {
+                displayPhoneNumber.textContent = newNumber;
+            }
+            if (currentNumberHint) {
+                currentNumberHint.innerHTML = '<i class="fas fa-info-circle"></i> বর্তমান নম্বর: ' + newNumber;
+            }
+            
+            // Reset timer and attempts
+            resendAttempts = 0;
+            timeLeft = 300;
+            isTimerExpired = false;
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            // Close modal
+            changeNumberModal.style.display = "none";
+            
+            // Show loading state on submit button
+            const submitBtn = changeNumberForm.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ওটিপি পাঠানো হচ্ছে...';
+                submitBtn.disabled = true;
+            }
+            
+            // Let the form submit normally
+            return true;
+        });
+    }
+}
 
   // ============================================
   // DOM CONTENT LOADED
   // ============================================
   document.addEventListener("DOMContentLoaded", function () {
-    // Initialize searchable dropdowns (only if elements exist)
-    if (document.getElementById('batchSearch')) {
-      initializeSearchableDropdown('batchSearch', 'batchDropdown', 'batchHidden');
-    }
-    if (document.getElementById('villageSearch')) {
-      initializeSearchableDropdown('villageSearch', 'villageDropdown', 'villageHidden');
-    }
-    if (document.getElementById('currentLocationSearch')) {
-      initializeSearchableDropdown('currentLocationSearch', 'currentLocationDropdown', 'currentLocationHidden');
-    }
-    if (document.getElementById('occupationSearch')) {
-      initializeSearchableDropdown('occupationSearch', 'occupationDropdown', 'occupationHidden');
-    }
-    if (document.getElementById('lastEduSearch')) {
-      initializeSearchableDropdown('lastEduSearch', 'lastEduDropdown', 'lastEduHidden');
-    }
+    // Initialize searchable dropdowns
+    const dropdownConfigs = [
+      { search: 'batchSearch', dropdown: 'batchDropdown', hidden: 'batchHidden' },
+      { search: 'villageSearch', dropdown: 'villageDropdown', hidden: 'villageHidden' },
+      { search: 'currentLocationSearch', dropdown: 'currentLocationDropdown', hidden: 'currentLocationHidden' },
+      { search: 'occupationSearch', dropdown: 'occupationDropdown', hidden: 'occupationHidden' },
+      { search: 'lastEduSearch', dropdown: 'lastEduDropdown', hidden: 'lastEduHidden' }
+    ];
+    
+    dropdownConfigs.forEach(config => {
+      if (document.getElementById(config.search)) {
+        initializeSearchableDropdown(config.search, config.dropdown, config.hidden);
+      }
+    });
+    
+    // Setup change number modal
+    setupChangeNumberModal();
     
     // OTP Form Elements
     const otpInput = document.getElementById("otp_code");
@@ -2046,18 +2111,10 @@
     const resendBtn = document.getElementById("resendBtn");
     const timerElement = document.getElementById("timer");
 
-    // Only initialize OTP functionality if we're in OTP form
+    // Initialize OTP functionality
     if (timerElement && otpForm) {
-      console.log("OTP Form detected, initializing timer...");
+      startTimer();
       
-      // Start the timer
-      const timerStarted = startTimer();
-      
-      if (!timerStarted) {
-        console.error("Failed to start timer");
-      }
-      
-      // Resend button functionality
       if (resendBtn) {
         resendBtn.addEventListener('click', function() {
           if (resendAttempts >= MAX_RESEND_ATTEMPTS) {
@@ -2078,12 +2135,10 @@
     if (otpInput) {
       otpInput.addEventListener("input", function () {
         this.value = this.value.replace(/[^0-9]/g, "").slice(0, 6);
-        const otpSuccess = document.getElementById("otpSuccess");
         this.classList.remove("is-valid", "is-invalid");
 
         if (this.value.length === 6 && !isTimerExpired) {
           this.classList.add("is-valid");
-          if (otpSuccess) otpSuccess.style.display = "block";
           if (verifyBtn) {
             verifyBtn.disabled = false;
             verifyBtn.style.opacity = "1";
@@ -2094,13 +2149,11 @@
             verifyBtn.disabled = true;
             verifyBtn.style.opacity = "0.6";
           }
-          if (otpSuccess) otpSuccess.style.display = "none";
         } else {
           if (verifyBtn && !isTimerExpired) {
             verifyBtn.disabled = true;
             verifyBtn.style.opacity = "0.6";
           }
-          if (otpSuccess) otpSuccess.style.display = "none";
         }
       });
     }
@@ -2136,6 +2189,7 @@
     if (form) {
       form.addEventListener("submit", function (event) {
         let isValid = true;
+        
         const studentName = document.getElementById("student_name");
         const batchHidden = document.getElementById("batchHidden");
         const villageHidden = document.getElementById("villageHidden");
@@ -2143,6 +2197,9 @@
         const occupationHidden = document.getElementById("occupationHidden");
         const lastEduHidden = document.getElementById("lastEduHidden");
         const photoFile = document.getElementById("student_photo");
+        const isWhatsappBd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
+        const isNoHideBd = document.querySelector('input[name="is_no_hide_bd"]:checked');
+        const bangladeshNumber = document.getElementById("bangladesh_number");
         
         if (studentName && !studentName.value.trim()) {
           studentName.classList.add("is-invalid");
@@ -2196,8 +2253,30 @@
           if (lastEduSearch) lastEduSearch.classList.remove("is-invalid");
         }
         
-        if (photoFile && (!photoFile.files || !photoFile.files[0])) {
+        if (photoFile && (!photoFile.files || !photoFile.files.length)) {
           alert("শিক্ষার্থীর ছবি আপলোড করুন");
+          isValid = false;
+        }
+        
+        if (bangladeshNumber && !bangladeshNumber.value.trim()) {
+          bangladeshNumber.classList.add("is-invalid");
+          alert("বাংলাদেশ নম্বর দিন");
+          isValid = false;
+        } else if (bangladeshNumber && !/^01[0-9]{8,9}$/.test(bangladeshNumber.value.trim())) {
+          bangladeshNumber.classList.add("is-invalid");
+          alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)");
+          isValid = false;
+        } else if (bangladeshNumber) {
+          bangladeshNumber.classList.remove("is-invalid");
+        }
+        
+        if (!isWhatsappBd) {
+          alert("দয়া করে হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন");
+          isValid = false;
+        }
+        
+        if (!isNoHideBd) {
+          alert("দয়া করে নম্বর হাইড কিনা নির্বাচন করুন");
           isValid = false;
         }
 
@@ -2212,89 +2291,22 @@
         }
       });
     }
-
-    // Change Number Modal Functionality
-    const changeNumberBtn = document.getElementById("changeNumberBtn");
-    const changeNumberModal = document.getElementById("changeNumberModal");
-    const closeChangeNumberModal = document.getElementById("closeChangeNumberModal");
-    const changeNumberForm = document.getElementById("changeNumberForm");
-    const displayPhoneNumber = document.getElementById("displayPhoneNumber");
-
-    if (changeNumberBtn && changeNumberModal) {
-      // Open modal
-      changeNumberBtn.addEventListener("click", function() {
-        changeNumberModal.style.display = "flex";
-        // Pause timer while modal is open
-        if (timerInterval) {
-          clearInterval(timerInterval);
-        }
-      });
-      
-      // Close modal
-      if (closeChangeNumberModal) {
-        closeChangeNumberModal.addEventListener("click", function() {
-          changeNumberModal.style.display = "none";
-          // Resume timer if not expired
-          if (!isTimerExpired && timeLeft > 0) {
-            startTimer();
-          }
-        });
-      }
-      
-      // Close modal when clicking outside
-      changeNumberModal.addEventListener("click", function(e) {
-        if (e.target === changeNumberModal) {
-          changeNumberModal.style.display = "none";
-          if (!isTimerExpired && timeLeft > 0) {
-            startTimer();
-          }
-        }
-      });
-      
-      // Handle form submission
-      if (changeNumberForm) {
-        changeNumberForm.addEventListener("submit", function(e) {
-          const newNumber = document.getElementById("newPhoneNumber").value;
-          if (!newNumber || newNumber.length < 10 || newNumber.length > 11) {
-            e.preventDefault();
-            alert("দয়া করে সঠিক ১০-১১ অঙ্কের বাংলাদেশ নম্বর লিখুন।");
-            return false;
-          }
-          
-          // Update display phone number
-          if (displayPhoneNumber) {
-            displayPhoneNumber.textContent = newNumber;
-          }
-          
-          // Reset timer and attempts for new number
-          resendAttempts = 0;
-          timeLeft = 300;
-          isTimerExpired = false;
-          
-          if (timerInterval) clearInterval(timerInterval);
-          
-          // Show loading state
-          const submitBtn = changeNumberForm.querySelector('button[type="submit"]');
-          if (submitBtn) {
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ওটিপি পাঠানো হচ্ছে...';
-            submitBtn.disabled = true;
-          }
-          
-          return true;
-        });
-      }
-    }
   });
-</script>
-<script>
-document.getElementById("student_name").addEventListener("input", function() {
-    let words = this.value.toLowerCase().split(" ");
-    for (let i = 0; i < words.length; i++) {
+
+// Auto capitalize student name
+document.addEventListener("DOMContentLoaded", function() {
+  const studentNameInput = document.getElementById("student_name");
+  if (studentNameInput) {
+    studentNameInput.addEventListener("input", function() {
+      let words = this.value.toLowerCase().split(" ");
+      for (let i = 0; i < words.length; i++) {
         if (words[i].length > 0) {
-            words[i] = words[i][0].toUpperCase() + words[i].substring(1);
+          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
         }
-    }
-    this.value = words.join(" ");
+      }
+      this.value = words.join(" ");
+    });
+  }
 });
 </script>
 

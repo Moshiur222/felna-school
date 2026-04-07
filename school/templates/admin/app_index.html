@@ -1,0 +1,16 @@
+{% extends "admin/app_index.html" %}
+{% load i18n static %}
+
+{% block content_title %}
+<h1>{{ app_label|title }} Management Dashboard</h1>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div style="background: #e0e7ff; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+        <h2>📊 {{ app_label|title }} Overview</h2>
+        <p>Manage all {{ app_label }} related data from this dashboard.</p>
+    </div>
+    {{ block.super }}
+</div>
+{% endblock %}

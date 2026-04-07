@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
-
 from .models import Notice
 from .models import ExamResult
 from .models import AdmissionResult
@@ -23,7 +22,7 @@ def home(request):
     welcome_message = WelcomeMessage.objects.first()
 
     # Teacher list
-    teachers = Teacher.objects.all().order_by('name')  # or any ordering you prefer
+    teachers = Teacher.objects.all().order_by('-id')  # or any ordering you prefer
 
     # Active students
     students = Student.objects.filter(is_active=True).order_by('class_name', 'roll_number')
@@ -173,8 +172,15 @@ def teacher_list(request):
     """
     View to display all teachers with their details.
     """
+    # ডাটাবেস থেকে শুধুমাত্র একটি কুয়েরিতে ডেটা আনা হচ্ছে
     teachers = Teacher.objects.filter(is_active=True).order_by('name')
-    return render(request, 'teacher_list.html', {'teachers': teachers})
+    
+    context = {
+        'teachers': teachers,
+        'title': 'Faculty Directory'
+    }
+    
+    return render(request, 'teacher_list.html', context)
 
 
 def founder_detail(request, pk):
@@ -387,26 +393,25 @@ def board_permission(request):
     
     return render(request, 'board_permission.html')
 
-
-
-import os, datetime
+import os
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
+from school.models import StudentRegistration, Village
 from django_countries import countries
-from .models import StudentRegistration, Village
-from .utils import send_otp, verify_otp
+from .utils import *
 
 def get_common_data():
     return {
         'villages': Village.objects.all(),
         'batch_years': [year for year in range(2000, datetime.datetime.now().year + 1)],
         'occupation_choices': [(1, 'কৃষক'), (2, 'চাকরি'), (3, 'ব্যবসা'), (4, 'ফ্রিল্যান্সার')],
-        'education_choices' : [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')],
+        'education_choices': [(1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')],
         'gender_choices': [(1, 'পুরুষ'), (2, 'মহিলা'), (3, 'অন্যান্য')],
         'maritalstatus_choices': [(1, 'অবিবাহিত'), (2, 'বিবাহিত'), (3, 'তালাকপ্রাপ্ত')],
-        'is_whatsapp_choices': [(1, 'হ্যাঁ'), (2, 'না')],
+        'is_whatsapp_bd_choices': [(1, 'হ্যাঁ'), (2, 'না')],
+        'is_whatsapp_abroad_choices': [(1, 'হ্যাঁ'), (2, 'না')],
         'is_no_hide_choices': [(1, 'হ্যাঁ'), (2, 'না')],
         'countries': list(countries),
     }
@@ -416,104 +421,225 @@ def student_registration(request):
     
     if request.method == "POST":
         step = request.POST.get("step")
-
+        
         # STEP 1: INITIAL SUBMISSION
-        if not step:
+        if not step or step == "":
             bd_no = request.POST.get("bangladesh_number", "").strip()
+            
             if StudentRegistration.objects.filter(bd_no=bd_no).exists():
                 messages.error(request, 'এই নম্বরটি ইতিমধ্যে নিবন্ধিত।')
-                return redirect('student_registration')
+                context['form_data'] = request.POST
+                context['show_otp_form'] = False
+                return render(request, 'student_registration.html', context)
+
+            try:
+                is_no_hide_value = request.POST.get("is_no_hide_bd")
+                if not is_no_hide_value:
+                    is_no_hide_value = 2
+                else:
+                    is_no_hide_value = int(is_no_hide_value)
+                
+                is_whatsapp_value = request.POST.get("is_whatsapp_bd")
+                if not is_whatsapp_value:
+                    is_whatsapp_value = 2
+                else:
+                    is_whatsapp_value = int(is_whatsapp_value)
+                
+                student_data = {
+                    'student_name': request.POST.get("student_name", "").strip(),
+                    'gender': int(request.POST.get("gender", 1)),
+                    'marrital_status': int(request.POST.get("marital_status", 1)),
+                    'is_whatsapp': is_whatsapp_value,
+                    'is_no_hide': is_no_hide_value,
+                    'batch': int(request.POST.get("batch", 2024)),
+                    'village_id': int(request.POST.get("village", 0)),
+                    'current_location': request.POST.get("current_location", ""),
+                    'bd_no': bd_no,
+                    'abroad_no': request.POST.get("abroad_number", "").strip() or None,
+                    'occupation': int(request.POST.get("occupation", 1)),
+                    'last_edu': int(request.POST.get("last_edu", 1)),
+                }
+                
+                if not student_data['student_name']:
+                    messages.error(request, 'শিক্ষার্থীর নাম দিন')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                    
+                if not student_data['village_id'] or student_data['village_id'] == 0:
+                    messages.error(request, 'গ্রাম নির্বাচন করুন')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                    
+                if not student_data['current_location']:
+                    messages.error(request, 'বর্তমান অবস্থান নির্বাচন করুন')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                    
+                if not bd_no or not bd_no.startswith('01') or len(bd_no) < 10 or len(bd_no) > 11:
+                    messages.error(request, 'সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                    
+            except (ValueError, TypeError) as e:
+                messages.error(request, f'ডেটা সাবমিশনে সমস্যা: {str(e)}')
+                context['form_data'] = request.POST
+                context['show_otp_form'] = False
+                return render(request, 'student_registration.html', context)
 
             photo = request.FILES.get('student_photo')
             temp_path = None
             if photo:
                 temp_path = default_storage.save(f"temp/{bd_no}_{photo.name}", ContentFile(photo.read()))
 
-            request.session['pending_student'] = {
-                'student_name': request.POST.get("student_name"),
-                'gender': int(request.POST.get("gender") or 1),
-                'marrital_status': int(request.POST.get("marital_status") or 1),
-                'is_whatsapp': int(request.POST.get("is_whatsapp_bd") or 1),
-                'is_no_hide': int(request.POST.get("is_no_hide") or 1),  # ADDED THIS LINE
-                'batch': int(request.POST.get("batch") or 2024),
-                'village_id': int(request.POST.get("village")),
-                'current_location': request.POST.get("current_location"),
-                'bd_no': bd_no,
-                'abroad_no': request.POST.get("abroad_number"),
-                'occupation': int(request.POST.get("occupation") or 1),
-                'last_edu': int(request.POST.get("last_edu") or 1),
-                'temp_photo_path': temp_path
-            }
+            request.session['pending_student'] = student_data
+            request.session['pending_student']['temp_photo_path'] = temp_path
             request.session['pending_phone'] = bd_no
             
             success, result = send_otp(bd_no)
             if success:
                 context['show_otp_form'] = True
                 context['phone_number'] = bd_no
+                messages.info(request, f'{bd_no} নম্বরে OTP পাঠানো হয়েছে।')
                 return render(request, 'student_registration.html', context)
             else:
-                messages.error(request, result)
-                return redirect('student_registration')
+                messages.error(request, f'OTP পাঠাতে ব্যর্থ: {result}')
+                context['form_data'] = request.POST
+                context['show_otp_form'] = False
+                return render(request, 'student_registration.html', context)
 
         # STEP 2: VERIFY OTP
         elif step == "verify_otp":
             phone = request.session.get('pending_phone')
             data = request.session.get('pending_student')
+            
+            if not phone or not data:
+                messages.error(request, 'সেশন এক্সপায়ার্ড হয়েছে। আবার চেষ্টা করুন।')
+                context['show_otp_form'] = False
+                return render(request, 'student_registration.html', context)
+                
             success, msg = verify_otp(phone, request.POST.get("otp_code"))
             
             if success:
-                village = Village.objects.get(id=data['village_id'])
-                student = StudentRegistration.objects.create(
-                    student_name=data['student_name'], 
-                    gender=data['gender'],
-                    marrital_status=data['marrital_status'], 
-                    is_whatsapp=data['is_whatsapp'],
-                    is_no_hide=data['is_no_hide'],  # ADDED THIS LINE
-                    batch=data['batch'], 
-                    village=village, 
-                    current_location=data['current_location'],
-                    bd_no=data['bd_no'], 
-                    abroad_no=data['abroad_no'],
-                    occupation=data['occupation'], 
-                    last_edu=data['last_edu'], 
-                    is_verified=True
-                )
-                if data.get('temp_photo_path'):
-                    with default_storage.open(data['temp_photo_path'], 'rb') as f:
-                        student.student_photo.save(os.path.basename(data['temp_photo_path']), ContentFile(f.read()))
-                    default_storage.delete(data['temp_photo_path'])
-                
-                request.session.flush()
-                messages.success(request, 'নিবন্ধন সফল হয়েছে!')
-                return redirect('student_registration')
+                try:
+                    village = Village.objects.get(id=data['village_id'])
+                    
+                    student = StudentRegistration.objects.create(
+                        student_name=data['student_name'],
+                        gender=data['gender'],
+                        marrital_status=data['marrital_status'],
+                        is_whatsapp=data['is_whatsapp'],
+                        is_no_hide=data['is_no_hide'],
+                        batch=data['batch'],
+                        village=village,
+                        current_location=data['current_location'],
+                        bd_no=data['bd_no'],
+                        abroad_no=data.get('abroad_no'),
+                        occupation=data['occupation'],
+                        last_edu=data['last_edu'],
+                        is_verified=True
+                    )
+                    
+                    if data.get('temp_photo_path'):
+                        if default_storage.exists(data['temp_photo_path']):
+                            with default_storage.open(data['temp_photo_path'], 'rb') as f:
+                                student.student_photo.save(
+                                    os.path.basename(data['temp_photo_path']), 
+                                    ContentFile(f.read())
+                                )
+                            default_storage.delete(data['temp_photo_path'])
+                    
+                    request.session.flush()
+                    messages.success(request, '🎉 আপনার নিবন্ধন সফল হয়েছে! ধন্যবাদ।')
+                    return redirect('student_registration')
+                    
+                except Exception as e:
+                    messages.error(request, f'নিবন্ধন সংরক্ষণে সমস্যা: {str(e)}')
+                    context['show_otp_form'] = True
+                    context['phone_number'] = phone
+                    return render(request, 'student_registration.html', context)
             else:
                 messages.error(request, msg)
                 context['show_otp_form'] = True
                 context['phone_number'] = phone
                 return render(request, 'student_registration.html', context)
                 
-        # STEP 3: RESEND
+        # STEP 3: RESEND OTP
         elif step == "resend_otp":
             phone = request.session.get('pending_phone')
+            if not phone:
+                messages.error(request, 'সেশন এক্সপায়ার্ড হয়েছে।')
+                context['show_otp_form'] = False
+                return render(request, 'student_registration.html', context)
+                
             success, msg = send_otp(phone)
-            if success: messages.success(request, "নতুন ওটিপি পাঠানো হয়েছে।")
-            else: messages.error(request, msg)
+            if success:
+                messages.success(request, "নতুন OTP পাঠানো হয়েছে।")
+            else:
+                messages.error(request, msg)
+                
             context['show_otp_form'] = True
             context['phone_number'] = phone
             return render(request, 'student_registration.html', context)
         
+        # STEP 4: CHANGE NUMBER
         elif step == 'change_number':
-            new_phone = request.POST.get('new_phone_number')
-            if new_phone:
-                request.session['student_phone'] = new_phone
-                send_otp(new_phone) 
-                messages.success(request, f"নম্বর পরিবর্তন করে {new_phone}-এ ওটিপি পাঠানো হয়েছে।")
-                return redirect('student_registration')
-
+            new_phone = request.POST.get('new_phone_number', '').strip()
+            
+            if not new_phone:
+                messages.error(request, "নম্বর দিন")
+                context['show_otp_form'] = True
+                context['phone_number'] = request.session.get('pending_phone', '')
+                return render(request, 'student_registration.html', context)
+            
+            if len(new_phone) < 10 or len(new_phone) > 11:
+                messages.error(request, "সঠিক ১০-১১ অঙ্কের নম্বর দিন")
+                context['show_otp_form'] = True
+                context['phone_number'] = request.session.get('pending_phone', '')
+                return render(request, 'student_registration.html', context)
+            
+            if not new_phone.startswith('01') or not new_phone.isdigit():
+                messages.error(request, "সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01xxxxxxxxx)")
+                context['show_otp_form'] = True
+                context['phone_number'] = request.session.get('pending_phone', '')
+                return render(request, 'student_registration.html', context)
+            
+            pending_phone = request.session.get('pending_phone', '')
+            if new_phone != pending_phone and StudentRegistration.objects.filter(bd_no=new_phone).exists():
+                messages.error(request, "এই নম্বরটি ইতিমধ্যে নিবন্ধিত")
+                context['show_otp_form'] = True
+                context['phone_number'] = pending_phone
+                return render(request, 'student_registration.html', context)
+            
+            # CRITICAL: Update session with new number
+            request.session['pending_phone'] = new_phone
+            request.session.modified = True  # Force session save
+            
+            if 'pending_student' in request.session:
+                pending = request.session['pending_student']
+                pending['bd_no'] = new_phone
+                request.session['pending_student'] = pending
+            
+            # Send OTP to new number
+            success, msg = send_otp(new_phone)
+            
+            if success:
+                messages.success(request, f"নম্বর পরিবর্তন করে {new_phone} নম্বরে OTP পাঠানো হয়েছে।")
+            else:
+                messages.error(request, msg)
+            
+            # CRITICAL: Create fresh context with new number
+            context = get_common_data()
+            context['show_otp_form'] = True
+            context['phone_number'] = new_phone
+            return render(request, 'student_registration.html', context)
+    
+    # GET request
+    context['show_otp_form'] = False
     return render(request, 'student_registration.html', context)
-
-from django.shortcuts import render
-from .models import StudentRegistration
 
 def registration_students_list(request):
     """Display list of registered students with filters and search"""
@@ -554,7 +680,18 @@ def registration_students_list(request):
 
 def registration_student_detail(request, id):
     student = get_object_or_404(StudentRegistration, id=id)
+    bd_no_display = student.bd_no
+    if student.is_no_hide == 1 and student.bd_no: 
+        bd_len = len(student.bd_no)
+        if bd_len >= 11:
+            # For 11-digit numbers (e.g., 01712345678 -> 017*****678)
+            bd_no_display = student.bd_no[:3] + '*****' + student.bd_no[8:11]
+        elif bd_len >= 7:
+            # For shorter numbers (e.g., 0171234 -> 017****4)
+            bd_no_display = student.bd_no[:3] + '****' + student.bd_no[6:]
+    
     context = {
-        'student': student
+        'student': student,
+        'bd_no_display': bd_no_display,  # This will be masked if is_no_hide=1
     }
     return render(request, 'registration_students_details.html', context)

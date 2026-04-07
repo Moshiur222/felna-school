@@ -265,13 +265,18 @@
                         <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.get_occupation_display }}</span>
                     </div>
                 </div>
-
                 <!-- Group 3: Contact -->
                 <span class="info-group-title">Contact Information</span>
                 <div class="data-grid">
                     <div class="data-item">
                         <span class="data-label">Mobile Number (BD)</span>
-                        <span class="data-value"><i class="fa fa-phone"></i> {{ student.bd_no }}</span>
+                        <span class="data-value"><i class="fa fa-phone"></i> 
+                            {% if student.is_no_hide == 1 %}
+                                {{ bd_no_display }}  <!-- Shows masked number (017****5678) -->
+                            {% else %}
+                                {{ student.bd_no }}  <!-- Shows full number (01712345678) -->
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="data-item">
                         <span class="data-label">Mobile Number (Abroad)</span>
@@ -288,9 +293,7 @@
                         </span>
                     </div>
                 </div>
-
             </div> <!-- End Right Section -->
-
         </div>
     </div>
 </div>

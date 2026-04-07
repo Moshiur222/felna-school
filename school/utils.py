@@ -43,6 +43,35 @@ def send_otp(mobile):
     except:
         return False, "এসএমএস পাঠানো সম্ভব হয়নি।"
 
+# def send_otp(mobile):
+#     normalized = normalize_phone(mobile)
+#     if not normalized:
+#         return False, "সঠিক মোবাইল নম্বর দিন।"
+
+#     otp_count_key = f"otp_count:{normalized}"
+#     otp_count = cache.get(otp_count_key, 0)
+
+#     if otp_count >= 2:
+#         return False, "আপনি ২৪ ঘণ্টায় সর্বোচ্চ ২ বার ওটিপি নিতে পারবেন।"
+
+#     # Generate OTP
+#     otp_raw = str(random.randint(100000, 999999))
+#     otp_display = f"{otp_raw[:3]}-{otp_raw[3:]}"
+
+#     # Save OTP hash
+#     cache.set(f"otp:{normalized}", hash_otp(otp_raw), timeout=300)
+#     cache.set(otp_count_key, otp_count + 1, timeout=86400)
+
+#     # Terminal এ OTP দেখাবে
+#     print("\n========== OTP TEST MODE ==========")
+#     print("Mobile:", normalized)
+#     print("OTP:", otp_raw)
+#     print("Display OTP:", otp_display)
+#     print("Expire: 5 Minutes")
+#     print("====================================\n")
+
+#     return True, "OTP Sent (Test Mode - Terminal)"
+
 def verify_otp(mobile, user_otp):
     normalized = normalize_phone(mobile)
     if not normalized: return False, "মোবাইল নম্বর সঠিক নয়।"

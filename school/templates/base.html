@@ -1,73 +1,54 @@
-
-
 <!DOCTYPE html>
 {% load static %}
+{% load i18n %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<!-- Mirrored from pamkc.edu.bd/ by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 24 Sep 2025 10:28:19 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
-    <title>{% block title %}ফেলনা উচ্চ বিদ্যালয়{% endblock %}</title>
+    <title>{% block title %}ফেলনা উচ্চ বিদ্যালয়{% endblock %}</title>
 <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
-
-<!-- Custom Layout CSS -->
 <link href="{% static 'css_temp1/layout.css' %}" rel="stylesheet" type="text/css" />
- <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" />
- {% block extra_css %}{% endblock %} 
- <style>
-    /* Navbar wrapper */
+<link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" />
+{% block extra_css %}{% endblock %} 
+<style>
 .row2 {
-    background-color: #284669; /* main navbar color */
+    background-color: #284669;
     font-family: Arial, sans-serif;
 }
-
-/* Main menu */
 .Menu1_2 {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
 }
-
-/* Top-level menu items */
 .Menu1_2 > li {
     position: relative;
 }
-
 .Menu1_2 > li > a.Menu1_1.Menu1_3 {
     display: block;
     padding: 12px 20px;
-    color: #FFFFFF; /* white text */
+    color: #FFFFFF;
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s, background-color 0.3s;
 }
-
-/* Hover effect for top-level links */
 .Menu1_2 > li:hover > a.Menu1_1.Menu1_3 {
-    color: yellow; /* text turns yellow on hover */
-    background-color: #1f354d; /* slightly darker background on hover */
+    color: yellow;
+    background-color: #1f354d;
 }
-
-/* Dropdown menu */
 .Menu1_2 li ul {
-    display: none; /* hide by default */
+    display: none;
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #284669; /* dropdown same color as navbar */
+    background-color: #284669;
     padding: 0;
     list-style: none;
     min-width: 200px;
     z-index: 999;
 }
-
-/* Show dropdown on hover */
 .Menu1_2 li:hover > ul {
     display: block;
 }
-
-/* Dropdown links */
 .Menu1_2 li ul li a {
     display: block;
     padding: 10px 15px;
@@ -75,28 +56,21 @@
     text-decoration: none;
     transition: color 0.3s, background-color 0.3s;
 }
-
-/* Dropdown hover effect */
 .Menu1_2 li ul li a:hover {
-    color: yellow; /* text turns yellow on hover */
-    background-color: #1f354d; /* slightly darker on hover */
+    color: yellow;
+    background-color: #1f354d;
 }
-
-/* Nested dropdowns (3rd level) */
 .Menu1_2 li ul li ul {
     top: 0;
     left: 100%;
 }
-
-/* Optional: arrow indicator for nested menus */
 .Menu1_2 li > ul li > a::after {
     content: "▶";
     float: right;
     margin-left: 5px;
 }
-
 .Menu1_2 li > ul li > a:only-child::after {
-    content: ""; /* remove arrow if no submenu */
+    content: "";
 }
 @media (max-width: 767.98px) {
     .col-md-3[style*="padding-left:31px"] {
@@ -104,74 +78,58 @@
         padding-right: 15px !important;
         margin-top: 15px;
     }
-    
-    /* Fix for the marquee elements on mobile */
     marquee {
         overflow-x: auto;
         white-space: nowrap;
     }
 }
-
-
-/* Footer Bottom Styles */
 .footer-bottom {
-    background-color: #00264d;; /* Dark navy background from image */
+    background-color: #00264d;
     color: #ffffff;
     padding: 20px 0;
     font-family: Arial, sans-serif;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.1);
 }
-
 .footer-bottom-content {
     max-width: 1200px;
     margin: 0 auto;
 }
-
 .copyright-text {
     display: block;
     font-size: 14px;
     margin-bottom: 10px;
 }
-
 .info-row {
     font-size: 12px;
-    color: #cbd5e0; /* Slightly muted white for the bottom links */
+    color: #cbd5e0;
 }
-
 .legal-link-group {
     display: inline-block;
     margin: 0 10px;
 }
-
 .legal-link-group a {
     color: #ffffff;
     text-decoration: none;
     font-weight: normal;
 }
-
 .legal-link-group a:hover {
     text-decoration: underline;
 }
-
-/* Vertical separator | */
 .legal-link-group:not(:last-child)::after {
     content: "|";
     margin-left: 20px;
     color: #4a5568;
 }
-
 .Menu1_2 a.active {
     background-color: #1f354d;
     color: yellow !important;
 }
-
 #topnav1 ul li a.active {
     color: yellow !important;
     font-weight: bold;
     border-bottom: 2px solid yellow;
 }
-
 @media (max-width: 768px) {
     .legal-link-group:not(:last-child)::after {
         content: "";
@@ -181,122 +139,148 @@
         margin: 5px 0;
     }
 }
-
-
-
-@keyframes slide {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+@keyframes scrollLeftToRight {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
 
+.slider-wrapper:hover .slider-track {
+    animation-play-state: paused;
+}
+@keyframes slideInRight {
+    from { transform: translateX(120%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
 </style>
 <link href="{% static 'css_temp1/sty.css' %}" rel="stylesheet" type="text/css" />
 </head>
 <body id="top">
-   
 
-
+{% if messages %}
+<div id="global-messages-wrapper" style="position: fixed; top: 230px; right: 800px; z-index: 999999; min-width: 320px; max-width: 480px;">
+  {% for message in messages %}
+    <div style="
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: {% if message.tags == 'error' %}#fee2e2{% elif message.tags == 'success' %}#dcfce7{% elif message.tags == 'warning' %}#fef9c3{% else %}#dbeafe{% endif %};
+      border-left: 5px solid {% if message.tags == 'error' %}#ef4444{% elif message.tags == 'success' %}#10b981{% elif message.tags == 'warning' %}#f59e0b{% else %}#3b82f6{% endif %};
+      color: #1e293b;
+      padding: 1rem 1.2rem;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 15px;
+      font-family: Arial, sans-serif;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      animation: slideInRight 0.4s ease;
+    ">
+      <span style="flex: 1;">{{ message }}</span>
+      <span onclick="this.parentElement.remove()" style="cursor:pointer; font-size:20px; line-height:1; color:#64748b; margin-left:8px;">&times;</span>
+    </div>
+  {% endfor %}
+</div>
+<script>
+  setTimeout(function() {
+    var wrapper = document.getElementById('global-messages-wrapper');
+    if (wrapper) {
+      wrapper.style.transition = 'opacity 0.5s ease';
+      wrapper.style.opacity = '0';
+      setTimeout(function() { wrapper.remove(); }, 500);
+    }
+  }, 5000);
+</script>
+{% endif %}
 
         <div class="wrapper row6">
             <div id="topnav1">
-
                 <table border="0" style="width: 100%">
                     <tr>
                         <td style="padding-left: 10px;">
-                           <input type="button" value="Software Login" onclick="window.open('https://edutech-erp.com/Login.aspx', '_blank');" id="lnksoftware" class="butn" />
-
+                            <input type="button" value="Software Login" onclick="window.open('https://edutech-erp.com/Login.aspx', '_blank');" id="lnksoftware" class="butn" />
                             <input type="button" value="Web Admin" onclick="window.open('{% url 'admin:index' %}', '_blank');" id="lnkadmin" class="butn" />
-
                         </td>
                         <td style="text-align: right">
                             <ul>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'admission_result' %}active{% endif %}" 
                                        href="{% url 'admission_result'%}">
-                                        <span id="llbTopLinkOnlineAdmission"> Admission </span>
+                                        <span id="llbTopLinkOnlineAdmission">{% trans "Admission" %}</span>
                                     </a>
                                 </li>
-                            
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" 
                                        href="{% url 'gallery'%}">
-                                        <span id="llbTopGallery">Photo Gallery</span>
+                                        <span id="llbTopGallery">{% trans "Photo Gallery" %}</span>
                                     </a>
                                 </li>
-                            
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'exam_result' %}active{% endif %}" 
                                        href="{% url 'exam_result'%}">
-                                        <span id="llbTopLinkResult">Result</span>
+                                        <span id="llbTopLinkResult">{% trans "Result" %}</span>
                                     </a>
                                 </li>
-                            
                                 <li>
                                     <a class="{% if request.resolver_match.url_name in 'teachers teacher_detail' %}active{% endif %}" 
                                     href="{% url 'teachers'%}">
-                                        <span id="llbTopLinkTeachers">Teachers</span>
+                                        <span id="llbTopLinkTeachers">{% trans "Teachers" %}</span>
                                     </a>
                                 </li>
-                            
                                 <li>
                                     <a class="{% if request.resolver_match.url_name in 'management_list management_detail' %}active{% endif %}" 
                                     href="{% url 'management_list'%}">
-                                        <span id="llbTopCommitee">Committee Members</span>
+                                        <span id="llbTopCommitee">{% trans "Committee Members" %}</span>
                                     </a>
                                 </li>
-                            
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
                                        href="{% url 'home'%}">
-                                        <span id="llbHome">Home</span>
+                                        <span id="llbHome">{% trans "Home" %}</span>
                                     </a>
                                 </li>
                             </ul>
                         </td>
 
-                        <td style="text-align: center; width: 110px; padding-right: 15px;">
-                            <a id="LinkButton2" class="version" href="javascript:__doPostBack(&#39;ctl00$LinkButton2&#39;,&#39;&#39;)">Bangla Version</a>
+                        <td style="text-align: center; width: 130px; padding-right: 15px;">
+                            <form action="{% url 'set_language' %}" method="post" id="lang-form">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                                {% if request.LANGUAGE_CODE == 'en' %}
+                                    <input name="language" type="hidden" value="bn">
+                                    <a href="javascript:void(0)" onclick="document.getElementById('lang-form').submit();" class="version">
+                                        Bangla Version
+                                    </a>
+                                {% else %}
+                                    <input name="language" type="hidden" value="en">
+                                    <a href="javascript:void(0)" onclick="document.getElementById('lang-form').submit();" class="version">
+                                        English Version
+                                    </a>
+                                {% endif %}
+                            </form>
                         </td>
                     </tr>
                 </table>
-
-
                 <div class="clear"></div>
             </div>
         </div>
-
-
-
 
     <div class="clear"></div>
         <div class="wrapper row1">
             <div id="header" class="clear">
                 <div class="fl_left">
- <img src="{% static 'img/logo.png' %}" class="img-responsive img-circle" style="height: 120px; padding: 5px;">
-                 </div>
+                    <img src="{% static 'img/logo.png' %}" class="img-responsive img-circle" style="height: 120px; padding: 5px;">
+                </div>
                 <div class="fl_left" style="padding-left: 10px; text-align: left; width: 850px">
                     <h1>
-                        <span id="llbHeaderSchoolName" style="color: #090c89; font-weight: bold; font-family: Cooper; font-size: 38px">ফেলনা উচ্চ বিদ্যালয়</span></h1>
+                        <span id="llbHeaderSchoolName" style="color: #090c89; font-weight: bold; font-family: Cooper; font-size: 38px">{% trans "ফেলনা উচ্চ বিদ্যালয়" %}</span>
+                    </h1>
                     <p>
                         <span id="llbslogan" style="color: #1417ae; font-size: 18px; font-weight: bold; font-family: Cooper; font-size: 22px">Khironshal, Chouddagram, Comilla. ESTD: 1993</span>
                     </p>
-                    {% comment %} <p>
-                        <span id="llbadditional" style="color: #4d4c4c; font-size: 18px; font-weight: bold; font-family: Arial; font-size: 14px">Dim Pagla - ডিম পাগলা</span>
-                    </p> {% endcomment %}
                 </div>
-                <div class="fl_left" style="vertical-align: middle;text-align:right">
-                    <table style="width: 220px;display:none">
-                        <tr>
-                            <td style="padding:8px">
-                                <img id="Image1" src="images/1.png" style="width:100px;" />
-                            </td>
-                            <td style="padding:8px">
-                                <img id="Image2" src="images/2.png" style="width:100px;" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
                 <div class="fl_right" style="display: none">
                     <div class="row">
                         <div class="col-md-12">
@@ -305,13 +289,12 @@
                                     <input name="ctl00$txtsearch" type="text" id="txtsearch" class="form-control input-sm" placeholder="Enter Text Here" style="font-family: Arial!important" />
                                     <div class="input-group-btn">
                                         <input type="submit" name="ctl00$btnsearch" value="Search" id="btnsearch" class="btn btn-warning btn-sm" style="font-family: Arial!important" />
-                                             </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         
@@ -326,28 +309,25 @@
                     active
                     {% endif %}" 
                     href="{% url 'home'%}">
-                    INTRODUCTION
+                    {% trans "INTRODUCTION" %}
                     </a>
-
                     <ul>
                         <li>
                             <a class="{% if active_url == 'history' %}active{% endif %}" 
                             href="{% url 'history'%}">
-                            HISTORY
+                            {% trans "HISTORY" %}
                             </a>
                         </li>
-
                         <li>
                             <a class="{% if active_url == 'mv' %}active{% endif %}" 
                             href="{% url 'mv'%}">
-                            MISSION AND VISION
+                            {% trans "MISSION AND VISION" %}
                             </a>
                         </li>
-
                         <li>
                             <a class="{% if active_url == 'achievements_list' or active_url == 'achievement_detail' %}active{% endif %}" 
                             href="{% url 'achievements_list'%}">
-                            ACHIEVEMENT
+                            {% trans "ACHIEVEMENT" %}
                             </a>
                         </li>
                     </ul>
@@ -359,31 +339,31 @@
                     {% if active_url == 'student_list' or active_url == 'student_detail' or active_url == 'class_routine_list' or active_url == 'syllabus_view' or active_url == 'exam_routine_view' %}
                     active
                     {% endif %}" href="#">
-                    ACADEMIC
+                    {% trans "ACADEMIC" %}
                     </a>
                     <ul>
                         <li>
                             <a class="{% if active_url == 'student_list' or active_url == 'student_detail' %}active{% endif %}" 
                             href="{% url 'student_list'%}">
-                            STUDENT LIST
+                            {% trans "STUDENT LIST" %}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'class_routine_list' %}active{% endif %}" 
                             href="{% url 'class_routine_list'%}">
-                            CLASS ROUTINE
+                            {% trans "CLASS ROUTINE" %}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'syllabus_view' %}active{% endif %}" 
                             href="{% url 'syllabus_view'%}">
-                            SYLLABUS
+                            {% trans "SYLLABUS" %}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'exam_routine_view' %}active{% endif %}" 
                             href="{% url 'exam_routine_view'%}">
-                            EXAM ROUTINE
+                            {% trans "EXAM ROUTINE" %}
                             </a>
                         </li>
                     </ul>
@@ -393,7 +373,7 @@
                 <li>
                     <a class="Menu1_1 Menu1_3 {% if active_url == 'exam_result' %}active{% endif %}" 
                     href="{% url 'exam_result'%}">
-                    RESULT
+                    {% trans "RESULT" %}
                     </a>
                 </li>
 
@@ -403,12 +383,27 @@
                     {% if active_url == 'admission_circular_list' or active_url == 'prospectus_list' or active_url == 'admission_result' %}
                     active
                     {% endif %}" href="#">
-                    ADMISSION INFORMATION
+                    {% trans "ADMISSION INFORMATION" %}
                     </a>
                     <ul>
-                        <li><a class="{% if active_url == 'admission_circular_list' %}active{% endif %}" href="{% url 'admission_circular_list'%}">ADMISSION CIRCULAR</a></li>
-                        <li><a class="{% if active_url == 'prospectus_list' %}active{% endif %}" href="{% url 'prospectus_list'%}">PROSPECTUS</a></li>
-                        <li><a class="{% if active_url == 'admission_result' %}active{% endif %}" href="{% url 'admission_result'%}">ADMISSION RESULT</a></li>
+                        <li>
+                            <a class="{% if active_url == 'admission_circular_list' %}active{% endif %}" 
+                            href="{% url 'admission_circular_list'%}">
+                            {% trans "ADMISSION CIRCULAR" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'prospectus_list' %}active{% endif %}" 
+                            href="{% url 'prospectus_list'%}">
+                            {% trans "PROSPECTUS" %}
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'admission_result' %}active{% endif %}" 
+                            href="{% url 'admission_result'%}">
+                            {% trans "ADMISSION RESULT" %}
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
@@ -418,9 +413,8 @@
                     {% if active_url == 'facility_list' or active_url == 'facility_detail' %}
                     active
                     {% endif %}" href="{% url 'facility_list' %}">
-                    FACILITIES
+                    {% trans "FACILITIES" %}
                     </a>
-
                     <ul>
                         {% for facility in facility_titles %}
                             <li>
@@ -430,15 +424,16 @@
                                 </a>
                             </li>
                         {% empty %}
-                            <li><a href="#">No Facilities</a></li>
+                            <li><a href="#">{% trans "No Facilities" %}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
+
                 <!-- BOARD -->
                 <li>
                     <a class="Menu1_1 Menu1_3 {% if active_url == 'board_permission' %}active{% endif %}" 
                     href="{% url 'board_permission'%}">
-                    BOARD PERMISSION
+                    {% trans "BOARD PERMISSION" %}
                     </a>
                 </li>
 
@@ -448,21 +443,19 @@
                     {% if active_url == 'student_registration' or active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}
                     active
                     {% endif %}" href="#">
-                    ALUMNI ASSOCIATION
+                    {% trans "ALUMNI ASSOCIATION" %}
                     </a>
-
                     <ul>
                         <li>
                             <a class="{% if active_url == 'student_registration' %}active{% endif %}" 
                             href="{% url 'student_registration'%}">
-                            REGISTRATION
+                            {% trans "REGISTRATION" %}
                             </a>
                         </li>
-
                         <li>
                             <a class="{% if active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}active{% endif %}" 
                             href="{% url 'registration_students_list'%}">
-                            STUDENT LIST
+                            {% trans "STUDENT LIST" %}
                             </a>
                         </li>
                     </ul>
@@ -474,15 +467,12 @@
 
 <div class="wrapper row4">
     <div id="maincontainer" class="clear">
-
         <div class="clear"></div>
         <div class="clear"></div>
-
         <div class="wrapper row7">
             <div id="container" class="clear">
 
                 {% if request.resolver_match.url_name == 'home' %}
-                    <!-- Top News -->
                     <table style="width: 100%; margin-top: 2px; margin-bottom: 30px">
                         <tbody>
                             <tr>
@@ -491,13 +481,11 @@
                                         <tbody>
                                             <tr>
                                                 <td style="font-size: 16px; font-weight: bold; background-color: #f5edb3; padding: 8px; border: 1px solid #F68B1F; width: 120px; text-align: center; color: #292e8e" class="topnew">
-                                                    <span id="ContentPlaceHolder1_llbnewsCaption">শীর্ষ সংবাদ!</span>
+                                                    <span id="ContentPlaceHolder1_llbnewsCaption">{% trans "শীর্ষ সংবাদ!" %}</span>
                                                 </td>
                                                 <td style="font-size: 16px; font-weight: bold; padding: 6px; border: 1px solid #F68B1F; text-align: center" class="newsbody">
                                                     <marquee direction="left" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="70">
-                                                        <table>
-                                                            <tbody><tr><td></td></tr></tbody>
-                                                        </table>
+                                                        <table><tbody><tr><td></td></tr></tbody></table>
                                                     </marquee>
                                                 </td>
                                             </tr>
@@ -516,10 +504,10 @@
                                 <td style="vertical-align: top; width: 300px; padding-top: 10px">
                                     <!-- Notice Board -->
                                     <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center">
-                                        Notices
+                                        {% trans "Notices" %}
                                     </div>
                                     <div style="background-color: white; border-top: 5px solid #F4A024; border-bottom: 1px solid #F4A024; height: 410px; overflow-y: hidden; padding-top: 8px; -ms-overflow-style: none; scrollbar-width: none;">
-                                        <marquee direction="up" behavior="scroll" scrollamount="2" height="400" onmouseover="this.stop();" onmouseout="this.start();">
+                                        <marquee direction="down" behavior="scroll" scrollamount="2" height="400" onmouseover="this.stop();" onmouseout="this.start();">
                                             <table class="table table-striped table-bordered table-condensed custom-table table-hover" cellspacing="0" style="width:100%; border-collapse:collapse; border:0;">
                                                 {% if notices %}
                                                     {% for notice in notices %}
@@ -537,7 +525,7 @@
                                                     {% endfor %}
                                                 {% else %}
                                                     <tr>
-                                                        <td>No notices found.</td>
+                                                        <td>{% trans "No notices found." %}</td>
                                                     </tr>
                                                 {% endif %}
                                             </table>
@@ -545,71 +533,70 @@
                                     </div>
 
                                     <!-- Headmaster Message -->
-                                  <table cellspacing="0" style="width:100%; border-collapse:collapse; margin-top: 15px;">
-    {% if headmaster_message %}
-    <tr>
-        <td>
-            <table cellpadding="0" cellspacing="0" style="width:100%; background-color: #DBDFE3; margin-bottom: 10px;">
-                <tr>
-                    <td>
-                        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                            MESSAGES OF HEADMASTER
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: center; padding: 10px 25px;">
-                        {% if headmaster_message.image %}
-                            <img class="img-thumbnail" src="{{ headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ headmaster_message.title }}">
-                        {% endif %}
-                        <p style="padding-top: 6px; text-align: justify;">
-                            {{ headmaster_message.message|truncatewords:20 }}
-                        </p>
-                        <div style="text-align: right;">
-                            <a href="{% url 'headmaster_message_detail' headmaster_message.id %}" class="btn btn-danger btn-sm">Read more</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    {% endif %}
+                                    <table cellspacing="0" style="width:100%; border-collapse:collapse; margin-top: 15px;">
+                                        {% if headmaster_message %}
+                                        <tr>
+                                            <td>
+                                                <table cellpadding="0" cellspacing="0" style="width:100%; background-color: #DBDFE3; margin-bottom: 10px;">
+                                                    <tr>
+                                                        <td>
+                                                            <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
+                                                                {% trans "MESSAGES OF HEADMASTER" %}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align: center; padding: 10px 25px;">
+                                                            {% if headmaster_message.image %}
+                                                                <img class="img-thumbnail" src="{{ headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ headmaster_message.title }}">
+                                                            {% endif %}
+                                                            <p style="padding-top: 6px; text-align: justify;">
+                                                                {{ headmaster_message.message|truncatewords:20 }}
+                                                            </p>
+                                                            <div style="text-align: right;">
+                                                                <a href="{% url 'headmaster_message_detail' headmaster_message.id %}" class="btn btn-danger btn-sm">{% trans "Read more" %}</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
 
-    {% if assistant_headmaster_message %}
-    <tr>
-        <td>
-            <table cellpadding="0" cellspacing="0" style="width:100%; background-color: #DBDFE3; margin-bottom: 10px;">
-                <tr>
-                    <td>
-                        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                            MESSAGES OF ASSISTANT HEADMASTER
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="text-align: center; padding: 10px 25px;">
-                        {% if assistant_headmaster_message.image %}
-                            <img class="img-thumbnail" src="{{ assistant_headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ assistant_headmaster_message.title }}">
-                        {% endif %}
-                        <p style="padding-top: 6px; text-align: justify;">
-                            {{ assistant_headmaster_message.message|truncatewords:20 }}
-                        </p>
-                        <div style="text-align: right;">
-                            <a href="{% url 'assistant_headmaster_message_detail' assistant_headmaster_message.id %}" class="btn btn-danger btn-sm">Read more</a>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    {% endif %}
-</table>
-
+                                        {% if assistant_headmaster_message %}
+                                        <tr>
+                                            <td>
+                                                <table cellpadding="0" cellspacing="0" style="width:100%; background-color: #DBDFE3; margin-bottom: 10px;">
+                                                    <tr>
+                                                        <td>
+                                                            <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
+                                                                {% trans "MESSAGES OF ASSISTANT HEADMASTER" %}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align: center; padding: 10px 25px;">
+                                                            {% if assistant_headmaster_message.image %}
+                                                                <img class="img-thumbnail" src="{{ assistant_headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ assistant_headmaster_message.title }}">
+                                                            {% endif %}
+                                                            <p style="padding-top: 6px; text-align: justify;">
+                                                                {{ assistant_headmaster_message.message|truncatewords:20 }}
+                                                            </p>
+                                                            <div style="text-align: right;">
+                                                                <a href="{% url 'assistant_headmaster_message_detail' assistant_headmaster_message.id %}" class="btn btn-danger btn-sm">{% trans "Read more" %}</a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    </table>
 
                                     <!-- Facebook Page -->
                                     <div style="background-color: #DBDFE3; margin-top: 15px; width: 100%;">
                                         <div style="font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                                            Our Facebook Page
+                                            {% trans "Our Facebook Page" %}
                                         </div>
                                         <div style="text-align: center; padding: 6px;">
                                             <div id="fb-root"></div>
@@ -635,179 +622,135 @@
                     </table>
 
                 {% else %}
-                    <!-- Non-home pages: full width content -->
                     <div class="col-12" style="padding: 0px;">
                         {% block content %}{% endblock content %}
                     </div>
                 {% endif %}
 
-            <!-- Auto Scrolling Photo Gallery -->
-            <div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
-                <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">Photo Gallery</h4>
-
-                <div class="slider-wrapper" style="overflow: hidden; width: 100%;">
-                    <div class="slider-track" style="display: flex; width: max-content; animation: slide 20s linear infinite;">
-                        {% for image in gallery_images %}
-                            <div style="flex: 0 0 auto; margin-right: 10px;">
-                                <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
-                            </div>
-                        {% endfor %}
-                        <!-- Duplicate images for seamless infinite scroll -->
-                        {% for image in gallery_images %}
-                            <div style="flex: 0 0 auto; margin-right: 10px;">
-                                <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
-                            </div>
-                        {% endfor %}
-                    </div>
+<!-- Auto Scrolling Photo Gallery - Left to Right -->
+<div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
+    <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{% trans "Photo Gallery" %}</h4>
+    <div class="slider-wrapper" style="overflow: hidden; width: 100%; position: relative;">
+        <div class="slider-track" style="display: flex; width: max-content; animation: scrollLeftToRight 20s linear infinite;">
+            {% for image in gallery_images %}
+                <div style="flex: 0 0 auto; margin-right: 10px;">
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
                 </div>
-            </div>
-
-
+            {% endfor %}
+            {% for image in gallery_images %}
+                <div style="flex: 0 0 auto; margin-right: 10px;">
+                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
             </div>
         </div>
-
     </div>
 </div>
 
-
-
-        <!-- ####################################################################################################### -->
         <div class="wrapper row5">
             <div id="footer" class="clear">
-                <!-- ####################################################################################################### -->
                 <div class="foot_contact">
                     <h3>
-                        <span id="llbschoolnamefooter" style="color:White;font-family:Cooper;">ফেলনা উচ্চ বিদ্যালয়</span></h3>
+                        <span id="llbschoolnamefooter" style="color:White;font-family:Cooper;">{% trans "ফেলনা উচ্চ বিদ্যালয়" %}</span>
+                    </h3>
                     <address>
                         <span id="llbaddress1">Khironshal, Chouddagram, Comilla. ESTD: 1993</span><br />
-                        {% comment %} <span id="llbaddress2">Paruara, Burichong, Cumilla</span><br /> {% endcomment %}
-
                     </address>
                     <ul>
-                        <li>
-                            <span id="llbphone">Phone No -01817-116082</span></li>
-                       
-                        <li class="last">
-                            <span id="llbEmail">Email -info@felnahs.edu.bd</span></li>
+                        <li><span id="llbphone">{% trans "Phone No" %} -01817-116082</span></li>
+                        <li class="last"><span id="llbEmail">{% trans "Email" %} -info@felnahs.edu.bd</span></li>
                     </ul>
-
-                    
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1604.1045469108833!2d91.28070684282874!3d23.21815175098383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x37537c9a38e439a3%3A0x2e41e32ca712cd4c!2sFelna+High+School!5e1!3m2!1sbn!2sbd!4v1479299332386" id="map" style="height: 180px; width: 300px"></iframe>
-
                 </div>
-<div class="footbox">
-    <h2><span id="llbLinkAdministration">Administration</span></h2>
-    <ul>
-        <li><a href="{% url 'management_list' %}"><span id="llblinkCommitee">Committee Members</span></a></li>
-        <li><a href="{% url 'teachers' %}"><span id="llbLinkTeacher">Teachers</span></a></li>
-        <li><a href="{% url 'gallery' %}"><span id="llbLinkGallery">Photo Gallery</span></a></li>
-        <li><a href="#"><span id="llbLinkAlumni">Alumni</span></a></li>
-        <li><a href="#"><span id="llbLinkDownload">Download</span></a></li>
-        <li><a href="#"><span id="llbLinkMagazine">Magazine</span></a></li>
-        <li><a href="#"><span id="llbLinkAnnualReport">Annual Report</span></a></li>
-        <li><a href="{% url 'class_routine_list' %}"><span id="llbLinkClassRoutine">Class Routine</span></a></li>
-        <li><a href="{% url 'exam_routine_view' %}"><span id="llbLinkExamRoutine">Exam Routine</span></a></li>
-        <li><a href="#"><span id="llbLinkAcademicCal">Academic Calendar</span></a></li>
-        <li><a href="#"><span id="llbLinkStudentPortal">Payment Portal</span></a></li>
-        <li><a href="#"><span id="llbLinkJobVacancies">Job Vacancies</span></a></li>
-    </ul>
-</div>
 
-<div class="footbox">
-    <h2><span id="llblinkblock1">Important Links</span></h2>
-    <div>
-        <table cellspacing="0" cellpadding="0" style="border-collapse:collapse; border:0;">
-            <tr>
-                <td><a href="https://www.comillaeducationboard.gov.bd/">Comilla Education Board</a></td>
-            </tr>
-            <tr>
-                <td><a href="https://dshe.gov.bd/">Directorate of Secondary and Higher Education (DSHE)</a></td>
-            </tr>
-            <tr>
-                <td><a href="https://shed.gov.bd/">Secondary and Higher Education Division</a></td>
-            </tr>
-            <tr>
-                <td><a href="https://www.nu.edu.bd/">National University</a></td>
-            </tr>
-        </table>
-    </div>
-</div>
+                <div class="footbox">
+                    <h2><span id="llbLinkAdministration">{% trans "Administration" %}</span></h2>
+                    <ul>
+                        <li><a href="{% url 'management_list' %}"><span>{% trans "Committee Members" %}</span></a></li>
+                        <li><a href="{% url 'teachers' %}"><span>{% trans "Teachers" %}</span></a></li>
+                        <li><a href="{% url 'gallery' %}"><span>{% trans "Photo Gallery" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Alumni" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Download" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Magazine" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Annual Report" %}</span></a></li>
+                        <li><a href="{% url 'class_routine_list' %}"><span>{% trans "Class Routine" %}</span></a></li>
+                        <li><a href="{% url 'exam_routine_view' %}"><span>{% trans "Exam Routine" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Academic Calendar" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Payment Portal" %}</span></a></li>
+                        <li><a href="#"><span>{% trans "Job Vacancies" %}</span></a></li>
+                    </ul>
+                </div>
+
+                <div class="footbox">
+                    <h2><span>{% trans "Important Links" %}</span></h2>
+                    <div>
+                        <table cellspacing="0" cellpadding="0" style="border-collapse:collapse; border:0;">
+                            <tr><td><a href="https://www.comillaeducationboard.gov.bd/">Comilla Education Board</a></td></tr>
+                            <tr><td><a href="https://dshe.gov.bd/">Directorate of Secondary and Higher Education (DSHE)</a></td></tr>
+                            <tr><td><a href="https://shed.gov.bd/">Secondary and Higher Education Division</a></td></tr>
+                            <tr><td><a href="https://www.nu.edu.bd/">National University</a></td></tr>
+                        </table>
+                    </div>
+                </div>
 
                 <div class="footbox last">
-                    <h2>
-                        <span id="llbcontactwithus">CONTACT WITH US</span></h2>
+                    <h2><span>{% trans "CONTACT WITH US" %}</span></h2>
                     <ul>
                         <li>
-                         <table border="0" cellpadding="0" cellspacing="0" style="border:0 !important;">
-    <tr>
-        <td style="border:0 !important;">
-            <a href="https://www.facebook.com" target="_blank">
-                <img src="{% static 'media_images/iconfinder_Colored_Facebook3_svg_5365678.png' %}" alt="Facebook" style="height:40px; width:40px;">
-            </a>
-        </td>
-        <td style="border:0 !important; padding-left:8px;">
-            <a href="https://www.twitter.com" target="_blank">
-                <img src="{% static 'media_images/iconfinder_1_Twitter3_colored_svg_5296516.png' %}" alt="Twitter" style="height:40px; width:40px;">
-            </a>
-        </td>
-        <td style="border:0 !important; padding-left:8px;">
-            <a href="https://www.linkedin.com" target="_blank">
-                <img src="{% static 'media_images/iconfinder_1_Linkedin_unofficial_colored_svg_5296501 (1).png' %}" alt="LinkedIn" style="height:40px; width:40px;">
-            </a>
-        </td>
-    </tr>
-    <tr>
-        <td style="border:0 !important;">
-            <a href="https://www.whatsapp.com" target="_blank">
-                <img src="{% static 'media_images/iconfinder_1_Whatsapp2_colored_svg_5296520.png' %}" alt="WhatsApp" style="height:40px; width:40px;">
-            </a>
-        </td>
-        <td style="border:0 !important; padding-left:8px;">
-            <a href="https://www.youtube.com" target="_blank">
-                <img src="{% static 'media_images/iconfinder_1_Youtube_colored_svg_5296521.png' %}" alt="YouTube" style="height:40px; width:40px;">
-            </a>
-        </td>
-        <td style="border:0 !important;"></td>
-    </tr>
-</table>
-
-                    
-    <li style="text-decoration: none; font-weight: bold; padding-top: 20px; font-size: 20px">
-        <span>Website Visitors :</span>
-    </li>
-    <li>Today Visitors: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_today }}</span>
-    </li>
-    <li>Visitors in this Week: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_week }}</span>
-    </li>
-    <li>Visitors in this Month: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_month }}</span>
-    </li>
-    <li>Visitors in this Year: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_year }}</span>
-    </li>
-    <li>Total Visitors: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_total }}</span>
-    </li>
-    <li>Active Visitors: 
-        <span style="color:#FFFF99;font-weight:bold;">{{ visitors_active }}</span>
-    </li>
-</ul>
-
-
+                            <table border="0" cellpadding="0" cellspacing="0" style="border:0 !important;">
+                                <tr>
+                                    <td style="border:0 !important;">
+                                        <a href="https://www.facebook.com" target="_blank">
+                                            <img src="{% static 'media_images/iconfinder_Colored_Facebook3_svg_5365678.png' %}" alt="Facebook" style="height:40px; width:40px;">
+                                        </a>
+                                    </td>
+                                    <td style="border:0 !important; padding-left:8px;">
+                                        <a href="https://www.twitter.com" target="_blank">
+                                            <img src="{% static 'media_images/iconfinder_1_Twitter3_colored_svg_5296516.png' %}" alt="Twitter" style="height:40px; width:40px;">
+                                        </a>
+                                    </td>
+                                    <td style="border:0 !important; padding-left:8px;">
+                                        <a href="https://www.linkedin.com" target="_blank">
+                                            <img src="{% static 'media_images/iconfinder_1_Linkedin_unofficial_colored_svg_5296501 (1).png' %}" alt="LinkedIn" style="height:40px; width:40px;">
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:0 !important;">
+                                        <a href="https://www.whatsapp.com" target="_blank">
+                                            <img src="{% static 'media_images/iconfinder_1_Whatsapp2_colored_svg_5296520.png' %}" alt="WhatsApp" style="height:40px; width:40px;">
+                                        </a>
+                                    </td>
+                                    <td style="border:0 !important; padding-left:8px;">
+                                        <a href="https://www.youtube.com" target="_blank">
+                                            <img src="{% static 'media_images/iconfinder_1_Youtube_colored_svg_5296521.png' %}" alt="YouTube" style="height:40px; width:40px;">
+                                        </a>
+                                    </td>
+                                    <td style="border:0 !important;"></td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li style="text-decoration: none; font-weight: bold; padding-top: 20px; font-size: 20px">
+                            <span>{% trans "Website Visitors" %} :</span>
+                        </li>
+                        <li>{% trans "Today Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_today }}</span></li>
+                        <li>{% trans "Visitors in this Week" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_week }}</span></li>
+                        <li>{% trans "Visitors in this Month" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_month }}</span></li>
+                        <li>{% trans "Visitors in this Year" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_year }}</span></li>
+                        <li>{% trans "Total Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_total }}</span></li>
+                        <li>{% trans "Active Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_active }}</span></li>
+                    </ul>
                 </div>
-                <!-- ####################################################################################################### -->
             </div>
         </div>
-        <!-- ####################################################################################################### -->
 
-
-<!-- Footer Bottom (unchanged) -->
   <div class="footer-bottom">
     <div class="footer-inner-container">
       <div class="footer-bottom-content">
-        <span class="copyright-text">Copyright &copy; {% now "Y" %} ফেলনা উচ্চ বিদ্যালয়. All Rights Reserved</span>
+        <span class="copyright-text">Copyright &copy; {% now "Y" %} ফেলনা উচ্চ বিদ্যালয়. All Rights Reserved</span>
         <div class="info-row">
           <span class="legal-link-group">
             <a href="https://iglweb.com/web/domains-services.php" target="_blank">Domain Registration</a> by: <a href="https://iglweb.com/web/domains-services.php" target="_blank">IGL Web Ltd.</a>
@@ -822,23 +765,11 @@
       </div>
     </div>
   </div>
-</footer>
-
-    
-
-
 
 <script src="{% static 'plugins/jQuery/jQuery-2.1.3.min.js' %}"></script>
-
-<!-- Nivo Slider -->
 <script src="{% static 'plugins/JS/jquery.nivo.slider.js' %}" type="text/javascript"></script>
-
-<!-- Bootstrap -->
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
-
-<!-- Bootstrap Combined -->
 <script src="{% static 'plugins/JS/bootstrap-combined.min.js' %}" type="text/javascript"></script>
 {% block extra_js %}{% endblock %}
 </body>
-
 </html>

@@ -1,0 +1,261 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <!-- DataTables CSS & JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* --- DESIGN TOKENS --- */
+    :root {
+        --bg-canvas: #f8fafc;
+        --bg-card: #ffffff;
+        --brand-primary: #0f172a;
+        --brand-accent: #3b82f6;
+        --text-main: #1e293b;
+        --text-sub: #64748b;
+        --border: #e2e8f0;
+        --radius: 12px;
+    }
+
+    body { font-family: 'Plus Jakarta Sans', sans-serif !important; background: var(--bg-canvas) !important; }
+
+    /* Hide standard Django elements to let DataTables take over */
+    #toolbar, .paginator, .xfull { display: none !important; }
+    #changelist-search { margin-bottom: 0 !important; }
+
+    #content { padding: 40px !important; }
+
+    /* --- DASHBOARD HEADER --- */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+    .dashboard-title h1 { font-size: 24px !important; font-weight: 700 !important; color: var(--brand-primary); margin: 0; }
+
+    /* --- DATATABLES WRAPPER OVERHAUL --- */
+    .dataTables_wrapper {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px 0;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    }
+
+    /* Search Input Styling - LEFT ALIGNED */
+    .dataTables_filter {
+        float: left !important;
+        text-align: left !important;
+        padding: 0 24px 20px 24px;
+        width: auto !important;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 15px;
+    }
+    .dataTables_filter label {
+        font-weight: 500;
+        color: var(--text-sub);
+    }
+    .dataTables_filter input {
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+        width: 300px !important;
+        margin-left: 10px !important;
+        background: #f9fafb !important;
+        transition: all 0.3s ease;
+    }
+    .dataTables_filter input:focus {
+        outline: none;
+        border-color: var(--brand-accent) !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    /* Buttons stay on the right */
+    .dt-buttons {
+        float: right !important;
+        margin-right: 24px;
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
+    .dt-button {
+        background: #fff !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        color: var(--text-main) !important;
+        padding: 8px 16px !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .dt-button:hover {
+        background: var(--brand-primary) !important;
+        color: white !important;
+        border-color: var(--brand-primary) !important;
+    }
+
+    /* Clearfix for the top section */
+    .dt-top:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    /* Table Styling */
+    table.dataTable.no-footer { border-bottom: 1px solid var(--border) !important; }
+    #result_list { width: 100% !important; margin: 0 !important; border-collapse: collapse; }
+    #result_list thead th {
+        background: #f8fafc !important;
+        padding: 14px 24px !important;
+        color: var(--text-sub) !important;
+        font-weight: 600 !important;
+        font-size: 12px !important;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border) !important;
+        letter-spacing: 0.5px;
+    }
+    #result_list tbody td { padding: 16px 24px !important; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-main); }
+    #result_list tbody tr:hover { background: #f1f5f9 !important; }
+
+    /* Pagination Buttons */
+    .dataTables_paginate { 
+        padding: 20px 24px 0 24px !important;
+        float: right !important;
+    }
+    .paginate_button {
+        border-radius: 6px !important;
+        border: 1px solid var(--border) !important;
+        background: #fff !important;
+        font-weight: 600 !important;
+        margin: 0 3px !important;
+        padding: 6px 12px !important;
+        transition: all 0.3s ease;
+    }
+    .paginate_button:hover {
+        background: var(--brand-primary) !important;
+        color: white !important;
+        border-color: var(--brand-primary) !important;
+    }
+    .paginate_button.current {
+        background: var(--brand-primary) !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    /* Info text */
+    .dataTables_info {
+        padding: 20px 24px 0 24px !important;
+        float: left !important;
+        font-size: 13px;
+        color: var(--text-sub);
+    }
+
+    /* Action Bar (Delete selected etc) */
+    .actions {
+        padding: 15px 24px !important;
+        background: #f8fafc !important;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+    }
+    
+    /* Action button styling */
+    .actions button {
+        background: #ef4444 !important;
+        border: none !important;
+        border-radius: 6px !important;
+        padding: 6px 12px !important;
+        color: white !important;
+        font-weight: 500 !important;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .actions button:hover {
+        background: #dc2626 !important;
+    }
+
+</style>
+{% endblock %}
+
+{% block content_title %}
+<div class="dashboard-header">
+    <div class="dashboard-title">
+        <h1>{{ cl.opts.verbose_name_plural|capfirst }}</h1>
+        <p>Manage and export your school records efficiently.</p>
+    </div>
+    <div class="object-tools">
+        {% block object-tools-items %}
+            {% change_list_object_tools %}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
+
+{% block result_list %}
+    <div class="results">
+        {{ block.super }}
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Target the default Django Admin Table
+            var table = $('#result_list').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "pageLength": 10,
+                "dom": '<"dt-top"fB>rt<"dt-bottom"ip>', // Search (f) and Buttons (B) on top, table (t), info (i) and paging (p) on bottom
+                "buttons": [
+                    {
+                        extend: 'excelHtml5',
+                        text: '📊 Export Excel',
+                        className: 'btn-export',
+                        title: '{{ cl.opts.verbose_name_plural|capfirst }}'
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '📄 Export CSV',
+                        className: 'btn-export',
+                        title: '{{ cl.opts.verbose_name_plural|capfirst }}'
+                    }
+                ],
+                "language": {
+                    "search": "🔍 Search:",
+                    "searchPlaceholder": "Type to search...",
+                    "paginate": {
+                        "next": "Next →",
+                        "previous": "← Prev"
+                    },
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "infoEmpty": "No entries found",
+                    "emptyTable": "No data available"
+                },
+                "columnDefs": [
+                    { "orderable": false, "targets": 0 } // Disable ordering on the checkbox column
+                ],
+                "order": [], // Disable default sorting
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]]
+            });
+
+            // Move the Action bar (Django's checkboxes logic) above the table
+            $(".actions").prependTo(".dataTables_wrapper");
+            
+            // Style the search input placeholder
+            $('.dataTables_filter input').attr('placeholder', 'Search by any field...');
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    /* ─── Design Tokens ─────────────────────────────────────── */
+    :root {
+        --bg:           #f4f6f9;
+        --surface:      #ffffff;
+        --surface-sub:  #f8f9fc;
+        --border:       #e4e8ef;
+        --border-focus: #5b6af3;
+        --ink:          #141928;
+        --ink-2:        #4b5470;
+        --ink-3:        #8f97b2;
+        --accent:       #5b6af3;
+        --accent-light: rgba(91, 106, 243, 0.08);
+        --accent-hover: #4454e0;
+        --green:        #12b76a;
+        --red:          #f04438;
+        --red-light:    #fef3f2;
+        --radius:       10px;
+        --radius-lg:    16px;
+        --shadow:       0 2px 8px rgba(20,25,40,0.08), 0 0 0 1px rgba(20,25,40,0.04);
+        --font:         'DM Sans', system-ui, sans-serif;
+        --transition:   all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ─── Reset & Layout ────────────────────────────────────── */
+    body {
+        font-family: var(--font) !important;
+        background-color: var(--bg) !important;
+        color: var(--ink) !important;
+    }
+
+    #content {
+        max-width: 1080px !important;
+        margin: 0 auto !important;
+        padding: 30px 40px 100px !important;
+    }
+
+    /* ─── Breadcrumbs ───────────────────────────────────────── */
+    .breadcrumbs {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 0 20px !important;
+        font-size: 13px !important;
+        color: var(--ink-3) !important;
+    }
+    .breadcrumbs a { color: var(--accent) !important; font-weight: 500; text-decoration: none; }
+
+    /* ─── Card / Module ─────────────────────────────────────── */
+    .module {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-lg) !important;
+        box-shadow: var(--shadow) !important;
+        margin-bottom: 24px !important;
+        overflow: hidden !important;
+    }
+
+    .module h2 {
+        background: var(--surface-sub) !important;
+        border-bottom: 1px solid var(--border) !important;
+        color: var(--ink-3) !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        padding: 14px 24px !important;
+    }
+
+    /* ─── Form Rows ─────────────────────────────────────────── */
+    .form-row {
+        padding: 20px 24px !important;
+        border-bottom: 1px solid #f0f2f7 !important;
+        display: grid !important;
+        grid-template-columns: 220px 1fr !important;
+        gap: 16px !important;
+        align-items: start !important;
+    }
+
+    .aligned label {
+        float: none !important;
+        width: auto !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: var(--ink-2) !important;
+        margin-top: 10px;
+    }
+
+    /* ─── Inputs ────────────────────────────────────────────── */
+    .aligned input[type="text"], .aligned input[type="number"], 
+    .aligned input[type="email"], .aligned textarea, .aligned select, .vTextField {
+        font-family: var(--font) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius) !important;
+        padding: 10px 14px !important;
+        width: 100% !important;
+        max-width: 520px !important;
+        transition: var(--transition) !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+    }
+
+    .aligned input:focus, .aligned textarea:focus, .aligned select:focus {
+        border-color: var(--border-focus) !important;
+        box-shadow: 0 0 0 4px rgba(91,106,243,0.1) !important;
+        outline: none !important;
+    }
+
+    /* ─── Sticky Submit Row (THE FIX) ───────────────────────── */
+    .submit-row {
+        position: sticky !important;
+        bottom: 20px !important;
+        z-index: 1000 !important;
+        margin: 40px 0 0 0 !important;
+        padding: 16px 24px !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-lg) !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        display: flex !important;
+        flex-direction: row-reverse !important; /* Standard modern UX: Save on right */
+        gap: 12px !important;
+        float: none !important;
+    }
+
+    /* Style the actual buttons generated by Django */
+    .submit-row input, .submit-row a.deletelink {
+        height: 42px !important;
+        padding: 0 24px !important;
+        border-radius: var(--radius) !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        cursor: pointer !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: var(--transition) !important;
+        border: none !important;
+        text-decoration: none !important;
+    }
+
+    /* Save Button (Primary) */
+    .submit-row input[name="_save"] {
+        background: var(--accent) !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(91,106,243,0.25) !important;
+    }
+
+    .submit-row input[name="_save"]:hover {
+        background: var(--accent-hover) !important;
+        transform: translateY(-1px);
+    }
+
+    /* Secondary Buttons */
+    .submit-row input[name="_continue"], .submit-row input[name="_addanother"] {
+        background: white !important;
+        color: var(--ink-2) !important;
+        border: 1px solid var(--border) !important;
+    }
+
+    .submit-row input:hover { opacity: 0.9; }
+
+    /* Delete Button */
+    .submit-row a.deletelink {
+        background: var(--red-light) !important;
+        color: var(--red) !important;
+        margin-right: auto !important; /* Pushes delete button to the left */
+        border: 1px solid rgba(240, 68, 56, 0.1) !important;
+    }
+
+    /* ─── Status Badge ──────────────────────────────────────── */
+    .cf-status-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+    .cf-badge {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--green);
+        background: rgba(18, 183, 106, 0.1);
+        padding: 6px 14px;
+        border-radius: 30px;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .cf-badge::before {
+        content: "";
+        width: 8px; height: 8px;
+        background: var(--green);
+        border-radius: 50%;
+    }
+
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-sub: #334155;
+            --border: #334155;
+            --ink: #f8fafc;
+            --ink-2: #94a3b8;
+        }
+        .submit-row { background: rgba(30, 41, 59, 0.9) !important; }
+        .aligned input, .aligned textarea, .aligned select { background: #0f172a !important; color: white !important; }
+    }
+</style>
+{% endblock %}
+
+{% block form_top %}
+<div class="cf-status-bar">
+    <div class="cf-badge">
+        {% if add %}{% trans "New Entry" %}{% else %}{% trans "Editing Mode" %}{% endif %}
+    </div>
+    <div style="font-size: 13px; color: var(--ink-3);">
+        Felna High School ERP &bull; <strong>{% trans "Secure Session" %}</strong>
+    </div>
+</div>
+{% endblock %}
+
+{% block submit_buttons_bottom %}
+    {% submit_row %}
+{% endblock %}
