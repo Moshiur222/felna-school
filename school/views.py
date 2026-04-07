@@ -112,13 +112,19 @@ def admission_result_view(request):
     }
     return render(request, 'admission_result.html', context)
 
+from django.db.models import Count
 
+# সব অ্যালবাম দেখানোর জন্য
 def gallery_view(request):
-    gallery_list = Gallery.objects.all()
-    paginator = Paginator(gallery_list, 12)  # 12 images per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return render(request, 'gallery.html', {'page_obj': page_obj})
+    # প্রতিটি অ্যালবামের সাথে তার মধ্যে কয়টি ছবি আছে তা গণনা করা হচ্ছে
+    albums = Album.objects.annotate(photo_count=Count('photos')).order_by('-id')
+    return render(request, 'gallery.html', {'albums': albums})
+
+# একটি নির্দিষ্ট অ্যালবামের ছবি দেখানোর জন্য
+def album_detail_view(request, slug):
+    album = get_object_or_404(Album, slug=slug)
+    photos = album.photos.all().order_by('-created_at') # related_name="photos" ব্যবহার করে
+    return render(request, 'album_detail.html', {'album': album, 'photos': photos})
 
 
 

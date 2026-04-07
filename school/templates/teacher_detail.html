@@ -14,14 +14,14 @@
         --bg-light: #f8fafc;
         --text-dark: #0f172a;
         --text-light: #475569;
-        --base-font-size: 1.9rem; /* Standardized size */
+        --base-font-size: 1.9rem; 
     }
 
     body {
         font-family: 'Inter', sans-serif;
         background-color: #ffffff;
         color: var(--text-dark);
-        font-size: var(--base-font-size);
+        font-size: var(--base-font-size); 
         line-height: 1.7;
         margin: 0;
         padding: 0;
@@ -36,17 +36,17 @@
     /* Standard Two-Column Layout */
     .profile-header-grid {
         display: grid;
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: 320px 1fr;
         gap: 60px;
         align-items: start;
         border-bottom: 3px solid var(--primary-blue);
-        padding-bottom: 50px;
-        margin-bottom: 50px;
+        margin-bottom: 10px;
     }
 
-    /* Photo - Sharp and Formal Institutional Style */
+    /* Photo Container - Updated height to 79% */
     .photo-container {
         width: 100%;
+        height: 79%; 
         aspect-ratio: 3 / 4;
         background: var(--bg-light);
         border: 1px solid var(--border-gray);
@@ -61,18 +61,19 @@
         object-fit: cover;
     }
 
-    /* Typography Hierarchy */
+    /* Typography Hierarchy - All >= 1.5rem */
     .name-heading {
         font-family: 'Merriweather', serif;
-        font-size: 3.2rem;
+        font-size: 3.5rem; 
         font-weight: 700;
         color: var(--text-dark);
         margin: 0 0 10px 0;
         letter-spacing: -0.02em;
+        line-height: 1.2;
     }
 
     .designation-subtext {
-        font-size: 1.4rem;
+        font-size: 1.7rem; 
         font-weight: 500;
         color: var(--primary-blue);
         margin-bottom: 35px;
@@ -81,21 +82,22 @@
         letter-spacing: 0.05em;
     }
 
-    /* Contact Details Grid-Style - Aligned & Clear */
+    /* Contact Details Grid-Style */
     .contact-info-list {
         margin-bottom: 30px;
     }
 
     .contact-row {
         display: grid;
-        grid-template-columns: 180px 1fr;
+        grid-template-columns: 220px 1fr; 
         padding: 15px 0;
         border-bottom: 1px solid var(--border-gray);
+        align-items: baseline;
     }
 
     .contact-label {
         font-weight: 700;
-        font-size: 0.9rem;
+        font-size: 1.5rem; /* Min allowed */
         text-transform: uppercase;
         color: var(--text-light);
         letter-spacing: 1px;
@@ -105,7 +107,7 @@
         font-weight: 600;
         color: var(--text-dark);
         text-decoration: none;
-        font-size: 1.25rem;
+        font-size: 1.6rem; 
     }
 
     a.contact-data:hover {
@@ -113,9 +115,9 @@
         text-decoration: underline;
     }
 
-    /* Content Sections - Sharp Headers */
+    /* Content Sections */
     .section-title {
-        font-size: 1.2rem;
+        font-size: 1.8rem; 
         font-weight: 800;
         text-transform: uppercase;
         color: var(--primary-blue);
@@ -135,11 +137,11 @@
     .bio-paragraph {
         color: var(--text-light);
         text-align: justify;
-        font-size: 1.3rem;
+        font-size: 1.7rem; 
         max-width: 900px;
     }
 
-    /* Action Buttons - Solid and Boxy */
+    /* Action Buttons */
     .btn-group {
         margin-top: 50px;
         display: flex;
@@ -147,8 +149,8 @@
     }
 
     .btn-std {
-        padding: 12px 28px;
-        font-size: 1rem;
+        padding: 14px 30px;
+        font-size: 1.5rem; /* Min allowed */
         font-weight: 700;
         border-radius: 4px;
         cursor: pointer;
@@ -166,20 +168,10 @@
         border: 1px solid var(--primary-blue);
     }
 
-    .btn-primary:hover {
-        background: #1e40af;
-    }
-
     .btn-outline {
         background: white;
         border: 1px solid var(--border-gray);
         color: var(--text-light);
-    }
-
-    .btn-outline:hover {
-        background: var(--bg-light);
-        border-color: var(--primary-blue);
-        color: var(--primary-blue);
     }
 
     /* Mobile Responsive Adjustments */
@@ -187,29 +179,18 @@
         .profile-header-grid {
             grid-template-columns: 1fr;
             text-align: center;
-            gap: 30px;
+            gap: 10px;
         }
         .photo-container { 
-            max-width: 280px; 
+            max-width: 320px; 
+            height: auto; /* Allow auto height on mobile for better fit */
             margin: 0 auto; 
         }
         .contact-row { 
             grid-template-columns: 1fr; 
             gap: 5px; 
+            text-align: left;
         }
-        .contact-label { 
-            font-size: 0.8rem; 
-        }
-        .btn-group { 
-            justify-content: center; 
-        }
-    }
-
-    @media print {
-        .no-print { display: none !important; }
-        .profile-wrapper { margin: 0; width: 100%; }
-        .profile-header-grid { border-bottom: 2px solid black; }
-        .section-title { color: black; border: none; }
     }
 </style>
 {% endblock %}
@@ -272,6 +253,5 @@
             {% endif %}
         </div>
     </section>
-
 </main>
 {% endblock content %}
