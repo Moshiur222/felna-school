@@ -1,22 +1,22 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Board Permission{% endblock %}
+{% block title %}{{ t.board_permission_title }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4" style="background: whitesmoke; padding: 15px; border-radius: 4px;">
     <h3 style="background-color: #203C5C; color: white; padding: 10px; border-radius: 4px;">
-        Board Permission
+        {{ t.board_permission }}
     </h3>
 
     <p class="text-center text-muted mt-4">
-        This page displays all board members and their permissions.
+        {{ t.board_permission_description }}
     </p>
 
     <!-- Optional placeholder for future table or cards -->
     <div class="row mt-3">
         <div class="col-md-12 text-center">
-            <p>No data available at the moment.</p>
+            <p>{{ t.no_data_available }}</p>
         </div>
     </div>
 </div>

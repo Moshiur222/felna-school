@@ -1,49 +1,49 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Our Facilities{% endblock %}
+{% block title %}{{ t.our_facilities_title }}{% endblock %}
 
 {% block content %}
 
 <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
    <h4 class="mb-3" style="font-size: 18px; font-weight: bold; background: #203C5C; padding: 10px; color: #fff; border-radius: 4px;">
-      Our Facilities
-    </h4>
-    <div class="row">
+    {{ t.our_facilities }}
+</h4>
+<div class="row">
 
-    <!-- Filter Form (Optional: by Category) -->
-    <form method="get" class="row mb-3">
-        <div class="col-md-4">
-            <label for="category">Category:</label>
-            <select name="category" class="form-control">
-                <option value="">All Categories</option>
-                {% for cat in categories %}
-                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
-                {% endfor %}
-            </select>
-        </div>
+<!-- Filter Form (Optional: by Category) -->
+<form method="get" class="row mb-3">
+    <div class="col-md-4">
+        <label for="category">{{ t.category_label }}:</label>
+        <select name="category" class="form-control">
+            <option value="">{{ t.all_categories }}</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
 
-        <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
-        </div>
-    </form>
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">{{ t.filter }}</button>
+    </div>
+</form>
 
     <!-- Facilities Table -->
     {% if facilities %}
     <div class="table-responsive">
         <table class="table table-bordered table-striped text-center">
             <thead class="thead-dark">
-                <tr>
-                    <th>SL</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Capacity</th>
-                    <th>Location</th>
-                    <th>Status</th>
-                    <th>Image</th>
-                    <th>Action</th>
-                </tr>
+            <tr>
+                <th>{{ t.sl }}</th>
+                <th>{{ t.title_label }}</th>
+                <th>{{ t.description_label }}</th>
+                <th>{{ t.category_label }}</th>
+                <th>{{ t.capacity_label }}</th>
+                <th>{{ t.location_label }}</th>
+                <th>{{ t.status_label }}</th>
+                <th>{{ t.image_label }}</th>
+                <th>{{ t.action_label }}</th>
+            </tr>
             </thead>
             <tbody>
                 {% for facility in facilities %}
@@ -63,7 +63,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'facility_detail' facility.id %}" class="btn btn-primary btn-sm">View Details</a>
+                        <a href="{% url 'facility_detail' facility.id %}" class="btn btn-primary btn-sm">{{ t.view_details }}</a>
                     </td>
                 </tr>
                 {% endfor %}

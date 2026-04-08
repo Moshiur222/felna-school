@@ -284,6 +284,41 @@ def get_translations(request):
             'admission_status': 'ভর্তির অবস্থা',
             'no_results_found_message': 'আপনার মানদণ্ডের সাথে মিলে এমন কোনো ফলাফল পাওয়া যায়নি। অনুগ্রহ করে আপনার ট্র্যাক নম্বর এবং নির্বাচন যাচাই করুন।',
 
+            
+            # bn ডিকশনারিতে যোগ করুন (বাংলা)
+            'no_image_available': 'কোন ছবি উপলব্ধ নেই',
+            'title_label': 'শিরোনাম',
+            'description_label': 'বিবরণ',
+            'category_label': 'বিভাগ',
+            'capacity_label': 'ধারণক্ষমতা',
+            'location_label': 'অবস্থান',
+            'status_label': 'স্থিতি',
+            'created_at_label': 'তৈরির তারিখ',
+            'updated_at_label': 'হালনাগাদের তারিখ',
+            'back_to_facilities': 'সুবিধাসমূহে ফিরে যান',
+            
+            # bn ডিকশনারিতে যোগ করুন (বাংলা)
+            'our_facilities_title': 'আমাদের সুবিধাসমূহ',
+            'our_facilities': 'আমাদের সুবিধাসমূহ',
+            'category_label': 'বিভাগ',
+            'all_categories': 'সব বিভাগ',
+            'filter': 'ফিল্টার',
+            'sl': 'ক্রমিক নং',
+            'title_label': 'শিরোনাম',
+            'description_label': 'বিবরণ',
+            'capacity_label': 'ধারণক্ষমতা',
+            'location_label': 'অবস্থান',
+            'status_label': 'স্থিতি',
+            'image_label': 'ছবি',
+            'action_label': 'অ্যাকশন',
+            'view_details': 'বিস্তারিত দেখুন',
+            'no_facilities_found': 'নির্বাচিত বিভাগের জন্য কোনো সুবিধা পাওয়া যায়নি।',
+            
+            # bn ডিকশনারিতে (বাংলা)
+            'board_permission_title': 'বোর্ড অনুমতি',
+            'board_permission': 'বোর্ড অনুমতি',
+            'board_permission_description': 'এই পৃষ্ঠাটি সমস্ত বোর্ড সদস্য এবং তাদের অনুমতি প্রদর্শন করে।',
+            'no_data_available': 'বর্তমানে কোনো তথ্য উপলব্ধ নেই।',
         },
         'en': {
             # Top menu keys
@@ -522,6 +557,41 @@ def get_translations(request):
             'admission_status': 'Admission Status',
             'no_results_found_message': 'No results were found matching your criteria. Please double-check your track number and selection.',
 
+            # en ডিকশনারিতে যোগ করুন (ইংরেজি)
+            'no_image_available': 'No image available',
+            'title_label': 'Title',
+            'description_label': 'Description',
+            'category_label': 'Category',
+            'capacity_label': 'Capacity',
+            'location_label': 'Location',
+            'status_label': 'Status',
+            'created_at_label': 'Created At',
+            'updated_at_label': 'Updated At',
+            'back_to_facilities': 'Back to Facilities',
+            
+
+            # en ডিকশনারিতে যোগ করুন (ইংরেজি)
+            'our_facilities_title': 'Our Facilities',
+            'our_facilities': 'Our Facilities',
+            'category_label': 'Category',
+            'all_categories': 'All Categories',
+            'filter': 'Filter',
+            'sl': 'SL',
+            'title_label': 'Title',
+            'description_label': 'Description',
+            'capacity_label': 'Capacity',
+            'location_label': 'Location',
+            'status_label': 'Status',
+            'image_label': 'Image',
+            'action_label': 'Action',
+            'view_details': 'View Details',
+            'no_facilities_found': 'No facilities found for the selected category.',
+            
+            # en ডিকশনারিতে (ইংরেজি)
+            'board_permission_title': 'Board Permission',
+            'board_permission': 'Board Permission',
+            'board_permission_description': 'This page displays all board members and their permissions.',
+            'no_data_available': 'No data available at the moment.',
         }
     }
     
