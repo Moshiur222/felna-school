@@ -20,7 +20,6 @@
         font-family: 'Roboto', sans-serif;
         padding: 60px 0;
         min-height: 100vh;
-        /* বেস টেক্সট সাইজ ১.৫ রেম */
         font-size: 1.5rem; 
     }
 
@@ -32,7 +31,7 @@
 
     /* Left Sidebar */
     .profile-sidebar-card {
-        flex: 0 0 380px; /* সাইডবার একটু বড় করা হয়েছে বড় টেক্সটের জন্য */
+        flex: 0 0 380px;
         background: #ffffff;
         border-radius: 20px;
         padding: 50px 25px;
@@ -63,16 +62,9 @@
         color: white;
         padding: 10px 25px;
         border-radius: 30px;
-        font-size: 1.5rem; /* Minimum 1.5rem */
+        font-size: 1.5rem;
         font-weight: 700;
         display: inline-block;
-    }
-
-    .id-text {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: var(--brand-navy);
-        margin-top: 25px;
     }
 
     /* Right Section Details */
@@ -95,16 +87,10 @@
     }
 
     .detail-header h1 {
-        font-size: 3.5rem; /* বড় হেডার */
+        font-size: 3.5rem;
         font-weight: 800;
         color: var(--brand-navy);
         margin: 0;
-    }
-
-    .detail-header p {
-        font-size: 1.8rem;
-        color: var(--text-muted);
-        margin-top: 10px;
     }
 
     .btn-back-professional {
@@ -114,7 +100,7 @@
         padding: 12px 24px;
         border-radius: 12px;
         font-weight: 600;
-        font-size: 1.5rem; /* Minimum 1.5rem */
+        font-size: 1.5rem;
         text-decoration: none !important;
         transition: 0.3s;
     }
@@ -126,7 +112,7 @@
 
     /* Info Groups */
     .info-group-title {
-        font-size: 1.8rem; /* গ্রুপ টাইটেল বড় */
+        font-size: 1.8rem;
         font-weight: 800;
         color: var(--brand-orange);
         text-transform: uppercase;
@@ -150,17 +136,18 @@
     }
 
     .data-label {
-        font-size: 1.8rem; /* Minimum 1.5rem */
+        font-size: 1.6rem;
         color: var(--text-muted);
         margin-bottom: 8px;
         font-weight: 500;
     }
 
     .data-value {
-        font-size: 1.8rem; /* ভ্যালু আরও বড় */
+        font-size: 1.7rem;
         color: var(--text-dark);
         font-weight: 700;
-        align-items: left;
+        display: flex;
+        align-items: center;
         gap: 12px;
     }
 
@@ -178,21 +165,36 @@
         color: #16a34a;
         padding: 8px 20px;
         border-radius: 10px;
-        font-size: 1.5rem; /* Minimum 1.5rem */
+        font-size: 1.5rem;
         font-weight: 700;
         border: 2px solid #dcfce7;
     }
 
     .verification-ribbon {
         margin-top: 25px;
-        font-size: 1.5rem; /* Minimum 1.5rem */
+        font-size: 1.5rem;
         font-weight: 800;
         color: #16a34a;
     }
-
-    .status-text {
-        font-size: 1.7rem;
-        font-weight: 700;
+    
+    .whatsapp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+    
+    .whatsapp-available {
+        background: #dcfce7;
+        color: #166534;
+    }
+    
+    .whatsapp-not-available {
+        background: #fee2e2;
+        color: #991b1b;
     }
 
     @media (max-width: 992px) {
@@ -217,6 +219,19 @@
                 </div>
                 
                 <span class="batch-label">BATCH {{ student.batch }}</span>
+                
+                <!-- Verification Status -->
+                <div class="verification-ribbon mt-4">
+                    {% if student.is_verified %}
+                        <span class="whatsapp-status">
+                            <i class="fas fa-check-circle"></i> Verified Student
+                        </span>
+                    {% else %}
+                        <span class="whatsapp-status" style="background: #fef3c7; color: #d97706;">
+                            <i class="fas fa-clock"></i> Pending Verification
+                        </span>
+                    {% endif %}
+                </div>
             </div>
 
             <!-- Details Area (Right) -->
@@ -253,7 +268,7 @@
                     </div>
                 </div>
 
-                <!-- Group 2: Career -->
+                <!-- Group 2: Career & Education -->
                 <span class="info-group-title">Career & Education</span>
                 <div class="data-grid">
                     <div class="data-item">
@@ -265,36 +280,65 @@
                         <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.get_occupation_display }}</span>
                     </div>
                 </div>
-                <!-- Group 3: Contact -->
+                
+                <!-- Group 3: Contact Information -->
                 <span class="info-group-title">Contact Information</span>
                 <div class="data-grid">
                     <div class="data-item">
                         <span class="data-label">Mobile Number (BD)</span>
                         <span class="data-value"><i class="fa fa-phone"></i> 
                             {% if student.is_no_hide == 1 %}
-                                {{ bd_no_display }}  <!-- Shows masked number (017****5678) -->
+                                {{ bd_no_display }}
                             {% else %}
-                                {{ student.bd_no }}  <!-- Shows full number (01712345678) -->
+                                {{ student.bd_no }}
                             {% endif %}
                         </span>
                     </div>
+                    
+                    <div class="data-item">
+                        <span class="data-label">WhatsApp (BD Number)</span>
+                        <span class="data-value">
+                            {% if student.is_whatsapp_bd == 1 %}
+                                <span class="whatsapp-badge whatsapp-available">
+                                    <i class="fab fa-whatsapp"></i> Available
+                                </span>
+                            {% else %}
+                                <span class="whatsapp-badge whatsapp-not-available">
+                                    <i class="fab fa-whatsapp"></i> Not Available
+                                </span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    
                     <div class="data-item">
                         <span class="data-label">Mobile Number (Abroad)</span>
-                        <span class="data-value"><i class="fa fa-globe"></i> {{ student.abroad_no|default:"N/A" }}</span>
+                        <span class="data-value"><i class="fa fa-globe"></i> {{ student.abroad_no|default:"Not Provided" }}</span>
                     </div>
+                    
                     <div class="data-item">
-                        <span class="data-label">WhatsApp Availability</span>
-                        <span class="data-value status-text">
-                            {% if student.is_whatsapp == 1 %}
-                                <span class="text-success">Available</span>
+                        <span class="data-label">WhatsApp (Abroad Number)</span>
+                        <span class="data-value">
+                            {% if student.is_whatsapp_abroad == 1 %}
+                                <span class="whatsapp-badge whatsapp-available">
+                                    <i class="fab fa-whatsapp"></i> Available
+                                </span>
+                            {% elif student.abroad_no %}
+                                <span class="whatsapp-badge whatsapp-not-available">
+                                    <i class="fab fa-whatsapp"></i> Not Available
+                                </span>
                             {% else %}
-                                <span class="text-danger">Not Available</span>
+                                <span class="whatsapp-badge whatsapp-not-available">
+                                    <i class="fas fa-minus-circle"></i> No Number
+                                </span>
                             {% endif %}
                         </span>
                     </div>
-                </div>
+                </div>    
             </div> <!-- End Right Section -->
         </div>
     </div>
 </div>
+
+
+
 {% endblock %}

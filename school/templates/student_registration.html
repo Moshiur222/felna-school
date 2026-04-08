@@ -1289,7 +1289,7 @@
                         এটা কি হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
                       </label>
                       <div class="gender-radio-group">
-                        {% for val, label in is_whatsapp_choices %}
+                        {% for val, label in is_whatsapp_bd_choices %}
                           <label class="gender-radio-option">
                             <input type="radio" name="is_whatsapp_bd" value="{{ val }}" 
                                   {% if form_data.is_whatsapp_bd == val %}checked{% endif %} required />
@@ -1299,7 +1299,6 @@
                       </div>
                     </div>
                   </div>
-                  
                   <!-- Abroad Number Row -->
                   <div class="phone-number-row" style="margin-top: 1rem;">
                     <label class="form-label fw-bold">
@@ -1314,25 +1313,23 @@
                     </div>
                   </div>
 
-                  <!-- Is WhatsApp Radio Buttons for Abroad -->
-                  <div class="whatsapp-radio-section" style="padding-left: 353px">
-                    <div class="whatsapp-radio-wrapper whatsapp-inline">
-                      <label class="form-label-phone fw-bold">
-                        এটা কি হোয়াটসঅ্যাপ নম্বর ?
+              <!-- Is WhatsApp Radio Buttons for Abroad -->
+              <div class="whatsapp-radio-section" style="padding-left: 353px">
+                <div class="whatsapp-radio-wrapper whatsapp-inline">
+                  <label class="form-label-phone fw-bold">
+                    এটা কি হোয়াটসঅ্যাপ নম্বর ?
+                  </label>
+                  <div class="gender-radio-group">
+                    {% for val, label in is_whatsapp_abroad_choices %}
+                      <label class="gender-radio-option">
+                        <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
+                              {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
+                        <span>{{ label }}</span>
                       </label>
-                      <div class="gender-radio-group">
-                        {% for val, label in is_whatsapp_choices %}
-                          <label class="gender-radio-option">
-                            <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
-                                  {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
-                            <span>{{ label }}</span>
-                          </label>
-                        {% endfor %}
-                      </div>
-                    </div>
+                    {% endfor %}
                   </div>
                 </div>
-
+              </div>
               <!-- PROFESSIONAL INFORMATION SECTION -->
               <div class="mb-4">
                 <!-- Occupation - Searchable Dropdown -->

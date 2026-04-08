@@ -1,21 +1,86 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}{{ member.name }} - Management{% endblock %}
+{% block title %}{{ member.name }} - Management Team{% endblock %}
+
+{% block extra_css %}
+<style>
+    .detail-container {
+        background: whitesmoke;
+        margin-bottom: 30px;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .detail-header {
+        font-size: 22px;
+        font-weight: bold;
+        background: #1d1836;
+        padding: 12px 20px;
+        color: #fff;
+        margin-top: 0;
+        margin-bottom: 25px;
+        border-radius: 4px;
+    }
+    .profile-img {
+        width: 100%;
+        border-radius: 4px;
+        margin-bottom: 20px;
+    }
+    .description-text {
+        text-align: justify;
+        line-height: 1.8;
+        font-size: 16px;
+        color: #333;
+    }
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #1d1836;
+        color: #fff !important;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: opacity 0.3s;
+    }
+    .back-link:hover {
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-
-        <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
-            <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
-                {{ member.name }}
-            </h4>
-            <div class="col-md-4">
-                <img src="{{ member.photo.url }}" class="img-responsive img-thumbnail" alt="{{ member.name }}">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="detail-container">
+                <h4 class="detail-header">
+                    {{ member.name }}
+                </h4>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        {% if member.photo %}
+                            <img src="{{ member.photo.url }}" class="img-responsive img-thumbnail profile-img" alt="{{ member.name }}">
+                        {% else %}
+                            <img src="{% static 'img/default.jpg' %}" class="img-responsive img-thumbnail profile-img" alt="Default Image">
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <div class="description-text">
+                            {# If using a Rich Text Editor (like CKEditor), use |safe #}
+                            {# If using plain text, use |linebreaks to preserve paragraphs #}
+                            {{ member.description|safe }}
+                        </div>
+                        
+                        <a href="{% url 'management_list' %}" class="back-link">
+                            <i class="fa fa-arrow-left"></i> Back to Management Team
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-8">
-                <p style="text-align: justify; line-height: 25px;">
-                    {{ member.description }}
-                </p>
-            </div>
-   
+        </div>
+    </div>
 </div>
 {% endblock content %}

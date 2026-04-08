@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_countries'
+    'django_countries',
+    'django_extended_makemessages',
+    'dj_translation'
 ]
 
 LANGUAGES = (
@@ -87,7 +89,7 @@ TEMPLATES = [
                 'school.context_processors.facility_titles',
                 'school.context_processors.visitor_stats',
                 'school.context_processors.active_menu',
-         
+                'school.context_processors.get_translations',
             ],
         },
     },
@@ -136,6 +138,11 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+# JSON Translation Settings
+TRANSLATION_STORAGE = 'dj_translation.storage.JSONStorage'
+TRANSLATION_JSON_PATH = BASE_DIR / 'translations'
 
 
 # Static files (CSS, JavaScript, Images)

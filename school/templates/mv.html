@@ -1,33 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Mission & Vision{% endblock %}
+{% block title %}{{ t.mission_and_vision_title }}{% endblock %}
 
 {% block content %}
-         
 
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
+        {{ t.our_mission }}
+    </h4>
+    <p style="text-align: justify">
+        {{ mission_vision.mission|safe }}
+    </p>
+</div>
 
-            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
-                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
-                    Our Mission
-                </h4>
-                <p style="text-align: justify">
-                    {{ mission_vision.mission }}
-                </p>
-            </div>
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
+        {{ t.our_vision }}
+    </h4>
+    <p style="text-align: justify">
+        {{ mission_vision.vision|safe }}
+    </p>
+</div>
 
-            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
-                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
-                    Our Vision
-                </h4>
-                <p style="text-align: justify">
-                    {{ mission_vision.vision }}
-                </p>
-            </div>
-
- 
-
-
-
-     
 {% endblock %}

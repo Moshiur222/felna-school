@@ -1,77 +1,277 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Admission Circulars{% endblock %}
+{% block title %}{{ t.admission_circulars_registry_title }}{% endblock %}
 
 {% block content %}
+<style>
+    :root {
+        --academic-navy: #1d1836;
+        --academic-gold: #c5a059;
+        --academic-bg: #f8fafc;
+        --text-main: #334155;
+    }
 
-<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
-   <h4 class="mb-3" style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 10px; color: #fff; border-radius: 4px;">
-      Admission Circulars
-    </h4>
-    <div class="row">
+    .registry-wrapper {
+        background-color: var(--academic-bg);
+        padding: 60px 0;
+        min-height: 80vh;
+    }
 
-    <!-- Filter Form -->
-    <form method="get" class="row mb-3">
-        <div class="col-md-4">
-            <label for="class_name">Class:</label>
-            <select name="class" class="form-control">
-                <option value="">All Classes</option>
-                {% for code, name in class_choices %}
-                    <option value="{{ code }}" {% if selected_class == code %}selected{% endif %}>{{ name }}</option>
-                {% endfor %}
-            </select>
+    /* Page Branding - Subtle */
+    .registry-section-title {
+        color: var(--academic-navy);
+        font-weight: 800;
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+        border-left: 6px solid var(--academic-gold);
+        padding-left: 20px;
+    }
+
+    /* Modern Filter Action Bar */
+    .filter-action-bar {
+        background: #fff;
+        border-radius: 12px;
+        padding: 25px 30px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        margin-bottom: 40px;
+        border: 1px solid #e2e8f0;
+    }
+
+    .filter-form-flex {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .filter-label-inline {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--academic-navy);
+        text-transform: uppercase;
+        white-space: nowrap;
+        margin-bottom: 0;
+    }
+
+    .academic-select-refined {
+        font-size: 1.5rem !important; /* Standard Data Size */
+        font-weight: 600 !important;
+        color: var(--academic-navy) !important;
+        height: 55px !important;
+        border: 2px solid #edf2f7 !important;
+        background-color: #f8fafc !important;
+        border-radius: 8px !important;
+        padding: 0 40px 0 20px !important;
+        flex-grow: 1;
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231d1836' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 15px center;
+        background-size: 18px;
+    }
+
+    .btn-academic-filter {
+        background: var(--academic-navy);
+        color: white;
+        height: 55px;
+        padding: 0 40px;
+        font-size: 1.3rem;
+        font-weight: 700;
+        border-radius: 8px;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-academic-filter:hover {
+        background: var(--academic-gold);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Data Table Styling */
+    .table-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border: 1px solid #e2e8f0;
+    }
+
+    .school-registry-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+    }
+
+    .school-registry-table thead th {
+        background-color: var(--academic-navy);
+        color: white;
+        padding: 22px;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        border: none;
+        text-align: center;
+    }
+
+    .school-registry-table tbody td {
+        padding: 25px 20px;
+        font-size: 1.5rem; /* Core requirement: 1.5rem for data */
+        color: var(--text-main);
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+        text-align: center;
+    }
+
+    .school-registry-table tbody tr:hover {
+        background-color: #f9fbff;
+    }
+
+    .title-cell {
+        text-align: left !important;
+        font-weight: 700;
+        color: var(--academic-navy);
+    }
+
+    .meta-date {
+        font-size: 1.1rem;
+        color: #64748b;
+        font-weight: 400;
+        display: block;
+        margin-top: 4px;
+    }
+
+    /* Action Buttons */
+    .btn-download-academic {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: var(--academic-navy);
+        border: 2px solid var(--academic-navy);
+        border-radius: 6px;
+        text-decoration: none !important;
+        font-weight: 700;
+        font-size: 1.3rem;
+        transition: 0.2s;
+    }
+
+    .btn-download-academic:hover {
+        background-color: var(--academic-navy);
+        color: #fff;
+    }
+
+    .img-preview {
+        width: 90px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        transition: transform 0.2s;
+    }
+
+    .img-preview:hover {
+        transform: scale(1.1);
+    }
+
+    .badge-class {
+        background-color: #eef2f7;
+        color: var(--academic-navy);
+        padding: 6px 14px;
+        border-radius: 4px;
+        font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+        .filter-form-flex { flex-direction: column; align-items: stretch; }
+        .academic-select-refined { width: 100%; }
+        .btn-academic-filter { width: 100%; }
+        .school-registry-table td { font-size: 1.2rem; }
+    }
+</style>
+
+<div class="registry-wrapper">
+    <div class="container">
+        
+        <h2 class="registry-section-title">{{ t.admission_circulars }}</h2>
+
+        <!-- Sleek Filter Action Bar -->
+        <div class="filter-action-bar">
+            <form method="get" class="filter-form-flex">
+                <div class="d-flex align-items-center">
+                    <label class="filter-label-inline"><i class="fas fa-filter mr-2"></i> {{ t.class_selection }}:</label>
+                </div>
+                
+                <select name="class" class="academic-select-refined">
+                    <option value="">{{ t.all_academic_classes }}</option>
+                    {% for code, name in class_choices %}
+                        <option value="{{ code }}" {% if selected_class == code %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit" class="btn-academic-filter">
+                    <i class="fas fa-search mr-2"></i> {{ t.filter_records }}
+                </button>
+            </form>
         </div>
 
-        <div class="col-md-4 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        <!-- Results Registry -->
+        <div class="table-card table-responsive">
+            <table class="school-registry-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">{{ t.sl }}</th>
+                        <th style="text-align: left;">{{ t.circular_title_and_date }}</th>
+                        <th>{{ t.class_label }}</th>
+                        <th>{{ t.preview }}</th>
+                        <th>{{ t.document }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for circular in circulars %}
+                    <tr>
+                        <td style="color: var(--academic-gold); font-weight: 800;">{{ forloop.counter }}</td>
+                        <td class="title-cell">
+                            {{ circular.title }}
+                            <span class="meta-date"><i class="far fa-calendar-alt mr-1"></i> {{ t.published }}: {{ circular.created_at|date:"d M Y" }}</span>
+                        </td>
+                        <td>
+                            <span class="badge-class">{{ circular.get_class_name_display }}</span>
+                        </td>
+                        <td>
+                            {% if circular.image %}
+                                <img src="{{ circular.image.url }}" class="img-preview" alt="{{ t.preview_image }}">
+                            {% else %}
+                                <span class="text-muted" style="font-size: 1.1rem;">{{ t.not_available }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if circular.document %}
+                                <a href="{{ circular.document.url }}" class="btn-download-academic" download>
+                                    <i class="fas fa-file-pdf mr-2"></i> {{ t.download_pdf }}
+                                </a>
+                            {% else %}
+                                <span class="text-muted" style="font-size: 1.1rem;">{{ t.no_file }}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-5">
+                            <p style="font-size: 1.6rem; color: #999;">{{ t.no_circulars_found_official }}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </form>
 
-    <!-- Circulars Table -->
-    {% if circulars %}
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped text-center">
-            <thead class="thead-dark">
-                <tr>
-                    <th>SL</th>
-                    <th>Title</th>
-                    <th>Class</th>
-                    <th>Date</th>
-                    <th>Image</th>
-                    <th>Document</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for circular in circulars %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ circular.title }}</td>
-                    <td>{{ circular.get_class_name_display }}</td>
-                    <td>{{ circular.created_at|date:"d M Y" }}</td>
-                    <td>
-                        {% if circular.image %}
-                            <img src="{{ circular.image.url }}" alt="{{ circular.title }}" style="width: 100px; height: 60px; object-fit: cover; border-radius: 4px;">
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if circular.document %}
-                            <a href="{{ circular.document.url }}" class="btn btn-success btn-sm" download>Download</a>
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
-    {% else %}
-        <p class="text-center text-muted mt-4">No circulars found for the selected class.</p>
-    {% endif %}
-
-</div>
 </div>
 {% endblock %}

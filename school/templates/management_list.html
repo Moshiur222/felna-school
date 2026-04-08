@@ -3,35 +3,100 @@
 
 {% block title %}Our Management Team - Felna High School{% endblock %}
 
+{% block extra_css %}
+<style>
+    .management-container {
+        background: #f8f9fa;
+        margin-bottom: 30px;
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .management-header {
+        font-size: 20px;
+        font-weight: bold;
+        background: #1d1836;
+        padding: 12px 15px;
+        color: #fff;
+        margin-bottom: 25px;
+        border-radius: 4px;
+    }
+    .member-card {
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+        height: 100%; /* Ensures all cards in a row have equal height */
+    }
+    .member-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .member-img {
+        width: 100%;
+        height: 250px; /* Consistent height */
+        object-fit: cover; /* Prevents image stretching */
+        object-position: top;
+    }
+    .member-caption {
+        padding: 15px;
+    }
+    .member-name {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .member-name a {
+        color: #1d1836;
+        text-decoration: none;
+    }
+    .member-description {
+        font-size: 0.9em;
+        color: #666;
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* Shows exactly 3 lines then adds ... */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
-    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
-        Our Management Team
-    </h4>
-    <div class="row">
-        {% for member in members %}
-            <div class="col-sm-4 col-xs-6 col-md-3 col-lg-3" style="margin-bottom: 15px;">
-                <div class="thumbnail">
-                    {% if member.photo %}
+<div class="container">
+    <div class="management-container">
+        <h4 class="management-header">Our Management Team</h4>
+        
+        <div class="row">
+            {% for member in members %}
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="member-card">
                         <a href="{% url 'management_detail' member.pk %}">
-                            <img src="{{ member.photo.url }}" class="img-responsive" style="height: 200px;" alt="{{ member.name }}">
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" class="member-img" alt="{{ member.name }}">
+                            {% else %}
+                                <img src="{% static 'img/default.jpg' %}" class="member-img" alt="Default Image">
+                            {% endif %}
                         </a>
-                    {% else %}
-                        <img src="{% static 'img/default.jpg' %}" class="img-responsive" style="height: 200px;" alt="Default Image">
-                    {% endif %}
-                    <div class="caption text-center">
-                        <h5>
-                            <a href="{% url 'management_detail' member.pk %}">{{ member.name }}</a>
-                        </h5>
-                        <p style="text-align: justify; max-height: 100px; overflow: hidden;">
-                            {{ member.description }}
-                        </p>
+                        
+                        <div class="member-caption text-center">
+                            <h5 class="member-name">
+                                <a href="{% url 'management_detail' member.pk %}">{{ member.name }}</a>
+                            </h5>
+                            <div class="member-description">
+                                {# Using truncatewords to keep the UI clean #}
+                                {{ member.description|striptags|truncatewords:20 }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <p>No management members found.</p>
-        {% endfor %}
+            {% empty %}
+                <div class="col-md-12">
+                    <p class="alert alert-info">No management members found at this time.</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock content %}

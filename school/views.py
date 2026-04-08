@@ -400,7 +400,8 @@ def board_permission(request):
     return render(request, 'board_permission.html')
 
 import os
-from django.shortcuts import render, redirect
+import datetime
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
@@ -411,14 +412,14 @@ from .utils import *
 def get_common_data():
     return {
         'villages': Village.objects.all(),
-        'batch_years': [year for year in range(2000, datetime.datetime.now().year + 1)],
-        'occupation_choices': [(1, 'কৃষক'), (2, 'চাকরি'), (3, 'ব্যবসা'), (4, 'ফ্রিল্যান্সার')],
-        'education_choices': [(1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')],
-        'gender_choices': [(1, 'পুরুষ'), (2, 'মহিলা'), (3, 'অন্যান্য')],
-        'maritalstatus_choices': [(1, 'অবিবাহিত'), (2, 'বিবাহিত'), (3, 'তালাকপ্রাপ্ত')],
-        'is_whatsapp_bd_choices': [(1, 'হ্যাঁ'), (2, 'না')],
-        'is_whatsapp_abroad_choices': [(1, 'হ্যাঁ'), (2, 'না')],
-        'is_no_hide_choices': [(1, 'হ্যাঁ'), (2, 'না')],
+        'batch_years': [(year) for year in range(2000, datetime.datetime.now().year + 1)],
+        'occupation_choices': StudentRegistration.OCCUPATION_CHOICES,
+        'education_choices': StudentRegistration.EDUCATION_CHOICES,
+        'gender_choices': StudentRegistration.GENDER_CHOICES,
+        'maritalstatus_choices': StudentRegistration.MARITAL_STATUS_CHOICES,
+        'is_whatsapp_bd_choices': StudentRegistration.IS_WHATSAPP_BD_CHOICES,
+        'is_whatsapp_abroad_choices': StudentRegistration.IS_WHATSAPP_ABROAD_CHOICES,
+        'is_no_hide_choices': StudentRegistration.NUMBER_HIDE_CHOICES,
         'countries': list(countries),
     }
 
@@ -439,33 +440,47 @@ def student_registration(request):
                 return render(request, 'student_registration.html', context)
 
             try:
-                is_no_hide_value = request.POST.get("is_no_hide_bd")
+                # Handle checkbox values (convert empty to 2 which means 'না')
+                is_whatsapp_bd_value = request.POST.get("is_whatsapp_bd")
+                if not is_whatsapp_bd_value:
+                    is_whatsapp_bd_value = 2
+                else:
+                    is_whatsapp_bd_value = int(is_whatsapp_bd_value)
+                
+                is_whatsapp_abroad_value = request.POST.get("is_whatsapp_abroad")
+                if not is_whatsapp_abroad_value:
+                    is_whatsapp_abroad_value = 2
+                else:
+                    is_whatsapp_abroad_value = int(is_whatsapp_abroad_value)
+                
+                is_no_hide_value = request.POST.get("is_no_hide")
                 if not is_no_hide_value:
                     is_no_hide_value = 2
                 else:
                     is_no_hide_value = int(is_no_hide_value)
                 
-                is_whatsapp_value = request.POST.get("is_whatsapp_bd")
-                if not is_whatsapp_value:
-                    is_whatsapp_value = 2
-                else:
-                    is_whatsapp_value = int(is_whatsapp_value)
+                # Get abroad number (handle empty string)
+                abroad_no = request.POST.get("abroad_number", "").strip()
+                if not abroad_no:
+                    abroad_no = None
                 
                 student_data = {
                     'student_name': request.POST.get("student_name", "").strip(),
-                    'gender': int(request.POST.get("gender", 1)),
-                    'marrital_status': int(request.POST.get("marital_status", 1)),
-                    'is_whatsapp': is_whatsapp_value,
+                    'gender': int(request.POST.get("gender", 1)) if request.POST.get("gender") else None,
+                    'marrital_status': int(request.POST.get("marital_status", 1)) if request.POST.get("marital_status") else None,
+                    'is_whatsapp_bd': is_whatsapp_bd_value,
+                    'is_whatsapp_abroad': is_whatsapp_abroad_value,
                     'is_no_hide': is_no_hide_value,
-                    'batch': int(request.POST.get("batch", 2024)),
-                    'village_id': int(request.POST.get("village", 0)),
+                    'batch': int(request.POST.get("batch", datetime.datetime.now().year)),
+                    'village_id': int(request.POST.get("village", 0)) if request.POST.get("village") else None,
                     'current_location': request.POST.get("current_location", ""),
                     'bd_no': bd_no,
-                    'abroad_no': request.POST.get("abroad_number", "").strip() or None,
-                    'occupation': int(request.POST.get("occupation", 1)),
-                    'last_edu': int(request.POST.get("last_edu", 1)),
+                    'abroad_no': abroad_no,
+                    'occupation': int(request.POST.get("occupation", 1)) if request.POST.get("occupation") else None,
+                    'last_edu': int(request.POST.get("last_edu", 1)) if request.POST.get("last_edu") else None,
                 }
                 
+                # Validation
                 if not student_data['student_name']:
                     messages.error(request, 'শিক্ষার্থীর নাম দিন')
                     context['form_data'] = request.POST
@@ -496,15 +511,18 @@ def student_registration(request):
                 context['show_otp_form'] = False
                 return render(request, 'student_registration.html', context)
 
+            # Handle photo upload
             photo = request.FILES.get('student_photo')
             temp_path = None
             if photo:
                 temp_path = default_storage.save(f"temp/{bd_no}_{photo.name}", ContentFile(photo.read()))
 
+            # Store in session
             request.session['pending_student'] = student_data
             request.session['pending_student']['temp_photo_path'] = temp_path
             request.session['pending_phone'] = bd_no
             
+            # Send OTP
             success, result = send_otp(bd_no)
             if success:
                 context['show_otp_form'] = True
@@ -531,24 +549,30 @@ def student_registration(request):
             
             if success:
                 try:
-                    village = Village.objects.get(id=data['village_id'])
+                    # Get village instance
+                    village = None
+                    if data.get('village_id'):
+                        village = Village.objects.get(id=data['village_id'])
                     
+                    # Create student registration
                     student = StudentRegistration.objects.create(
                         student_name=data['student_name'],
-                        gender=data['gender'],
-                        marrital_status=data['marrital_status'],
-                        is_whatsapp=data['is_whatsapp'],
-                        is_no_hide=data['is_no_hide'],
-                        batch=data['batch'],
+                        gender=data.get('gender'),
+                        marrital_status=data.get('marrital_status'),
+                        is_whatsapp_bd=data.get('is_whatsapp_bd'),
+                        is_whatsapp_abroad=data.get('is_whatsapp_abroad'),
+                        is_no_hide=data.get('is_no_hide'),
+                        batch=data.get('batch'),
                         village=village,
-                        current_location=data['current_location'],
+                        current_location=data.get('current_location'),
                         bd_no=data['bd_no'],
                         abroad_no=data.get('abroad_no'),
-                        occupation=data['occupation'],
-                        last_edu=data['last_edu'],
+                        occupation=data.get('occupation'),
+                        last_edu=data.get('last_edu'),
                         is_verified=True
                     )
                     
+                    # Handle photo if exists
                     if data.get('temp_photo_path'):
                         if default_storage.exists(data['temp_photo_path']):
                             with default_storage.open(data['temp_photo_path'], 'rb') as f:
@@ -558,10 +582,16 @@ def student_registration(request):
                                 )
                             default_storage.delete(data['temp_photo_path'])
                     
+                    # Clear session
                     request.session.flush()
                     messages.success(request, '🎉 আপনার নিবন্ধন সফল হয়েছে! ধন্যবাদ।')
                     return redirect('student_registration')
                     
+                except Village.DoesNotExist:
+                    messages.error(request, 'গ্রামটি পাওয়া যায়নি।')
+                    context['show_otp_form'] = True
+                    context['phone_number'] = phone
+                    return render(request, 'student_registration.html', context)
                 except Exception as e:
                     messages.error(request, f'নিবন্ধন সংরক্ষণে সমস্যা: {str(e)}')
                     context['show_otp_form'] = True
@@ -613,6 +643,7 @@ def student_registration(request):
                 context['phone_number'] = request.session.get('pending_phone', '')
                 return render(request, 'student_registration.html', context)
             
+            # Check if number already exists
             pending_phone = request.session.get('pending_phone', '')
             if new_phone != pending_phone and StudentRegistration.objects.filter(bd_no=new_phone).exists():
                 messages.error(request, "এই নম্বরটি ইতিমধ্যে নিবন্ধিত")
@@ -620,9 +651,9 @@ def student_registration(request):
                 context['phone_number'] = pending_phone
                 return render(request, 'student_registration.html', context)
             
-            # CRITICAL: Update session with new number
+            # Update session with new number
             request.session['pending_phone'] = new_phone
-            request.session.modified = True  # Force session save
+            request.session.modified = True
             
             if 'pending_student' in request.session:
                 pending = request.session['pending_student']
@@ -637,7 +668,7 @@ def student_registration(request):
             else:
                 messages.error(request, msg)
             
-            # CRITICAL: Create fresh context with new number
+            # Create fresh context with new number
             context = get_common_data()
             context['show_otp_form'] = True
             context['phone_number'] = new_phone
@@ -647,57 +678,87 @@ def student_registration(request):
     context['show_otp_form'] = False
     return render(request, 'student_registration.html', context)
 
+
 def registration_students_list(request):
     """Display list of registered students with filters and search"""
-    students = StudentRegistration.objects.all().order_by('batch', 'student_name')
+    students = StudentRegistration.objects.filter(is_verified=True).order_by('-batch', 'student_name')
     
-    # 1. Get filter parameters from the GET request
+    # Get filter parameters
     selected_batch = request.GET.get('batch', '')
     selected_gender = request.GET.get('gender', '')
     selected_occupation = request.GET.get('occupation', '')
     selected_name = request.GET.get('student_name', '').strip()
     
-    # 2. Apply Backend Filters (These happen before the page loads)
-    if selected_batch:
-        students = students.filter(batch=selected_batch)
-    if selected_gender:
-        students = students.filter(gender=selected_gender)
-    if selected_occupation:
-        students = students.filter(occupation=selected_occupation)
-  
-
-    # 3. Prepare Dropdown Choices
-    batch_choices = StudentRegistration.objects.values_list('batch', flat=True).distinct().order_by('-batch')
-    gender_choices = StudentRegistration.GENDER_CHOICES
-    occupation_choices = StudentRegistration.OCCUPATION_CHOICES # Ensure this exists in your Model
+    # Apply filters
+    if selected_batch and selected_batch.isdigit():
+        students = students.filter(batch=int(selected_batch))
+    if selected_gender and selected_gender.isdigit():
+        students = students.filter(gender=int(selected_gender))
+    if selected_occupation and selected_occupation.isdigit():
+        students = students.filter(occupation=int(selected_occupation))
+    if selected_name:
+        students = students.filter(student_name__icontains=selected_name)
+    
+    # Prepare dropdown choices
+    batch_choices = StudentRegistration.objects.filter(is_verified=True).values_list('batch', flat=True).distinct().order_by('-batch')
     
     context = {
         'students': students,
         'batch_choices': batch_choices,
-        'gender_choices': gender_choices,
-        'occupation_choices': occupation_choices, # Added this
+        'gender_choices': StudentRegistration.GENDER_CHOICES,
+        'occupation_choices': StudentRegistration.OCCUPATION_CHOICES,
         'selected_batch': selected_batch,
         'selected_gender': selected_gender,
-        'selected_occupation': selected_occupation, # Added this
+        'selected_occupation': selected_occupation,
         'selected_name': selected_name,
         'total_students': students.count(),
     }
     return render(request, 'registration_students_list.html', context)
 
+
 def registration_student_detail(request, id):
-    student = get_object_or_404(StudentRegistration, id=id)
+    student = get_object_or_404(StudentRegistration, id=id, is_verified=True)
+    
+    # Mask phone number if hide option is selected
     bd_no_display = student.bd_no
-    if student.is_no_hide == 1 and student.bd_no: 
-        bd_len = len(student.bd_no)
-        if bd_len >= 11:
-            # For 11-digit numbers (e.g., 01712345678 -> 017*****678)
-            bd_no_display = student.bd_no[:3] + '*****' + student.bd_no[8:11]
-        elif bd_len >= 7:
-            # For shorter numbers (e.g., 0171234 -> 017****4)
-            bd_no_display = student.bd_no[:3] + '****' + student.bd_no[6:]
+    if student.bd_no:
+        # Check if user wants to hide the number (is_no_hide == 1 means HIDE)
+        if student.is_no_hide == 1:
+            bd_len = len(student.bd_no)
+            
+            # Different masking patterns based on number length
+            if bd_len == 11:
+                # For 11-digit numbers (e.g., 01712345678 -> 017*****678)
+                bd_no_display = student.bd_no[:3] + '*****' + student.bd_no[8:11]
+            elif bd_len == 10:
+                # For 10-digit numbers (e.g., 1712345678 -> 171****678)
+                bd_no_display = student.bd_no[:3] + '****' + student.bd_no[7:10]
+            elif bd_len > 6:
+                # For other lengths, mask the middle
+                hide_start = bd_len // 3
+                hide_end = bd_len - 4
+                bd_no_display = student.bd_no[:hide_start] + '****' + student.bd_no[hide_end:]
+            else:
+                # For very short numbers
+                bd_no_display = '****' + student.bd_no[-4:]
     
     context = {
         'student': student,
-        'bd_no_display': bd_no_display,  # This will be masked if is_no_hide=1
+        'bd_no_display': bd_no_display,
     }
     return render(request, 'registration_students_details.html', context)
+
+# school/views.py (আপনার বিদ্যমান views.py-তে যোগ করুন)
+from django.shortcuts import redirect
+from django.views.decorators.http import require_http_methods
+
+@require_http_methods(["POST"])
+def switch_language(request):
+    """ভাষা পরিবর্তন করার জন্য ভিউ"""
+    next_url = request.POST.get('next', '/')
+    language = request.POST.get('language', 'bn')
+    
+    if language in ['bn', 'en']:
+        request.session['language'] = language
+    
+    return redirect(next_url)

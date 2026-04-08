@@ -1,27 +1,175 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ achievement.title }}{% endblock %}
+{% block title %}{{ achievement.title }} - Achievements{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --school-primary: #1d1836;
+        --school-gold: #c5a059;
+        --text-dark: #2d2d2d;
+    }
+
+    /* Main Section Spacing */
+    .achievement-detail-section {
+        padding: 60px 0;
+        background-color: #ffffff;
+    }
+
+    /* The "Header" Bar - made more elegant */
+    .achievement-top-bar {
+        background: var(--school-primary);
+        padding: 40px;
+        border-radius: 8px 8px 0 0;
+        margin-bottom: 0;
+    }
+
+    .achievement-top-bar h1 {
+        color: #ffffff;
+        font-size: 2.8rem; /* Large, professional title */
+        font-weight: 800;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    /* Content Card */
+    .detail-card {
+        background: #fff;
+        border: 1px solid #eee;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .detail-body {
+        padding: 50px; /* Generous padding for high-end feel */
+    }
+
+    /* Image Styling */
+    .img-container {
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .achievement-img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.5s ease;
+    }
+
+    /* Description Styling - 1.5rem Minimum */
+    .achievement-desc {
+        font-size: 1.5rem; /* As requested */
+        line-height: 1.8;
+        color: var(--text-dark);
+        text-align: justify;
+    }
+
+    .achievement-desc p {
+        margin-bottom: 25px;
+    }
+
+    /* Category Tag */
+    .achievement-badge {
+        display: inline-block;
+        background-color: var(--school-gold);
+        color: white;
+        padding: 5px 15px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+    }
+
+    /* Back Button - Scaled up for professionalism */
+    .back-btn-wrapper {
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid #f0f0f0;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 30px;
+        background-color: var(--school-primary);
+        text-decoration: none !important;
+        font-size: 1.3rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .back-link:hover {
+        background-color: #332d54;
+        transform: translateX(-8px);
+    }
+
+    .back-sign {
+        margin-right: 12px;
+        font-size: 1.5rem;
+    }
+
+    /* Mobile Adjustments */
+    @media (max-width: 991px) {
+        .detail-body { padding: 30px; }
+        .achievement-top-bar h1 { font-size: 2rem; }
+        .achievement-desc { font-size: 1.3rem; } /* Slightly smaller for mobile readability */
+    }
+    #container h1{
+        background-color: transparent;
+        color: White;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="container achievement-detail-section">
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+            
+            <div class="detail-card">
+                <!-- Achievement Title Header -->
+                <header class="achievement-top-bar">
+                    <h1>{{ achievement.title }}</h1>
+                </header>
 
-<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
-    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
-        {{ achievement.title }}
-    </h4>
+                <div class="detail-body">
+                    <div class="row g-5">
+                        <!-- Image Column -->
+                        <div class="col-lg-6">
+                            <div class="img-container">
+                                {% if achievement.image %}
+                                    <img src="{{ achievement.image.url }}" class="achievement-img" alt="{{ achievement.title }}">
+                                {% else %}
+                                    <img src="{% static 'img/default-achievement.jpg' %}" class="achievement-img" alt="Default Image">
+                                {% endif %}
+                            </div>
+                        </div>
 
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-6" style="padding: 0px;">
-                <img src="{{ achievement.image.url }}" class="img-responsive" alt="{{ achievement.title }}">
-            </div>
-            <div class="col-md-6" style="padding: 0px;">
-                <p style="text-align: justify">
-                    {{ achievement.description }}
-                </p>
-            </div>
+                        <!-- Description Column -->
+                        <div class="col-lg-6">
+                            <div class="achievement-desc">
+                                {{ achievement.description|safe }}
+                            </div>
+                            
+                            <!-- Back Button -->
+                            <div class="back-btn-wrapper">
+                                <a href="{% url 'achievements_list' %}" class="back-link">
+                                    <span class="back-sign">&larr;</span> {{ t.back_to_achievements }}
+                                </a>
+                            </div>
+                        </div>
+                    </div> <!-- End Row -->
+                </div> <!-- End Body -->
+            </div> <!-- End Card -->
+            
         </div>
     </div>
 </div>
-
 {% endblock %}

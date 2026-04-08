@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ t.syllabus_title }}{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-md-12">
-        <h3 style="background-color: #203C5C; color:white; padding:10px;">Syllabus</h3>
+        <h3 style="background-color: #203C5C; color:white; padding:10px;">{{ t.syllabus }}</h3>
         
         <div class="mb-3">
             <form method="get" class="form-inline">
                 <select name="class" class="form-control mr-2">
-                    <option value="">All Classes</option>
+                    <option value="">{{ t.all_classes }}</option>
                     {% for class_val, class_name in class_choices %}
                         <option value="{{ class_val }}" {% if selected_class == class_val %}selected{% endif %}>
                             {{ class_name }}
                         </option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn btn-primary">{{ t.filter }}</button>
             </form>
         </div>
 <br>
@@ -24,15 +26,15 @@
             {% for syllabus in syllabuses %}
             <div class="col-md-4 text-center mb-3">
                 {% if syllabus.image %}
-                    <img src="{{ syllabus.image.url }}" alt="Syllabus" 
+                    <img src="{{ syllabus.image.url }}" alt="{{ t.syllabus_image }}" 
                          style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px;">
                 {% else %}
-                    <p>No Image</p>
+                    <p>{{ t.no_image }}</p>
                 {% endif %}
                 <p class="mt-1"><strong>{{ syllabus.get_class_name_display }}</strong></p>
             </div>
             {% empty %}
-                <div class="col-md-12 text-center text-muted">No syllabus found.</div>
+                <div class="col-md-12 text-center text-muted">{{ t.no_syllabus_found }}</div>
             {% endfor %}
         </div>
     </div>

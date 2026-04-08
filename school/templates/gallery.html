@@ -16,22 +16,11 @@
         --min-font: 1.5rem; /* Enforced Minimum */
     }
 
-    body {
-        background-color: #ffffff;
-        font-family: 'Inter', sans-serif;
-        color: var(--text-main);
-        font-size: var(--min-font); /* Baseline set to 1.5rem */
-        line-height: 1.6;
-    }
 
     .gallery-section {
-        padding: 100px 0;
+        padding: 10px 0;
     }
 
-    /* Minimalist Header */
-    .section-header {
-        margin-bottom: 80px;
-    }
 
     /* Archive Label */
     .label-caps {
@@ -43,14 +32,19 @@
         margin-bottom: 1rem;
     }
 
+    .section-header {
+        text-align: center;
+    }
+    
     .section-header .line {
         width: 60px;
         height: 3px;
         background: var(--accent);
-        margin: 30px 0;
+        margin: 30px auto;
     }
 
     .display-title {
+        text-align: center;
         font-family: 'Playfair Display', serif;
         font-size: 4.5rem; /* Increased to maintain scale */
         font-weight: 700;
@@ -167,31 +161,31 @@
         <!-- Professional Header -->
         <div class="row section-header">
             <div class="col-12">
-                <span class="label-caps text-muted">Archive</span>
                 <h1 class="display-title">Photo Albums</h1>
                 <div class="line"></div>
-                <p class="header-description">A curated visual journey through our latest captures and storytelling photography.</p>
             </div>
         </div>
 
+        <!-- অ্যালবামের গ্রিড শুরু -->
         <div class="row gx-5">
             {% for album in albums %}
             <div class="col-lg-4 col-md-6">
+                <!-- লিঙ্কে ক্লিক করলে নির্দিষ্ট অ্যালবামের ফটো পেজে নিয়ে যাবে -->
                 <a href="{% url 'photos' album.slug %}" class="text-decoration-none">
                     <div class="album-item">
-                        {% with album.photos.last as last_photo %}
-                            {% if last_photo %}
-                                <img src="{{ last_photo.image.url }}" alt="{{ album.title }}" class="album-image" loading="lazy">
-                            {% else %}
-                                <img src="{% static 'images/default.jpg' %}" class="album-image">
-                            {% endif %}
-                        {% endwith %}
+                        <!-- ব্যানার চেক করা হচ্ছে -->
+                        {% if album.banner %}
+                            <img src="{{ album.banner.url }}" alt="{{ album.title }}" class="album-image" loading="lazy">
+                        {% else %}
+                            <img src="{% static 'images/default.jpg' %}" class="album-image">
+                        {% endif %}
                         
                         <div class="album-overlay">
                             <div class="album-content">
                                 <span class="album-category">Collection</span>
                                 <h3 class="album-title">{{ album.title }}</h3>
-                                <span class="photo-count">{{ album.photo_count }} Captures</span>
+                                <!-- আপনার মডেলে related_name='photos' থাকলে নিচের লাইনটি কাজ করবে -->
+                                <span class="photo-count">{{ album.photos.count }} Photos</span>
                             </div>
                         </div>
                     </div>

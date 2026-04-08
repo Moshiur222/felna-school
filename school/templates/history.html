@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}History Of Felna High School{% endblock %}
+{% block title %}{{ history.title }}{% endblock %}
 
 {% block content %}
 
@@ -10,11 +11,10 @@
     </h4>
     <div class="col-md-12 img-thumbnail" style="padding: 15px; height: auto;">                      
         <p style="text-align: justify; line-height: 25px;">
-            {{ history.content|linebreaks }}
+            {{ history.content|safe|linebreaks }}
         </p>
         <strong>
-            For more details, please visit our 
-            <a href="">Profile</a>
+            {{ t.for_more_details }} <a href="">{{ t.profile }}</a>
         </strong>
     </div>
 </div>

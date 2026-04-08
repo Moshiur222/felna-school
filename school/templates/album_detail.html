@@ -1,51 +1,182 @@
 {% extends "base.html" %}
-{% block title %}{{ album.title }} - Gallery{% endblock %}
+{% load static %}
+{% block title %}{{ album.title }} | Gallery Collection{% endblock %}
 
 {% block extra_css %}
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<!-- GLightbox CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+
 <style>
-    .gallery-item {
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 20px;
-        height: 200px;
+    :root {
+        --accent-color: #000;
+        --text-muted: #6b7280;
+        --bg-light: #f9fafb;
+        --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .gallery-item img {
+
+    body {
+        background-color: #fff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .album-header {
+        padding: 5px 0 5px;
+        text-align: center;
+    }
+
+    .back-link {
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: var(--text-muted);
+        text-decoration: none;
+        transition: var(--transition);
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .back-link:hover {
+        color: var(--accent-color);
+        transform: translateX(-5px);
+    }
+
+    .display-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #111;
+    }
+
+    .album-meta {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Modern Gallery Grid */
+    .gallery-grid {
+        padding-bottom: 100px;
+    }
+
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 30px;
+        background: #eee;
+        aspect-ratio: 1 / 1; /* স্কয়ার শেপ - মডার্ন দেখায় */
+        cursor: pointer;
+    }
+
+    .gallery-img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: 0.4s;
+        transition: var(--transition);
+        filter: grayscale(20%);
     }
-    .gallery-item:hover img {
-        transform: scale(1.1);
+
+    /* Hover Overlay */
+    .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .view-icon {
+        color: white;
+        font-size: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.5);
+        padding: 10px 20px;
+        transform: translateY(20px);
+        transition: var(--transition);
+    }
+
+    .gallery-item:hover .gallery-img {
+        transform: scale(1.08);
+        filter: grayscale(0%);
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+    }
+
+    .gallery-item:hover .view-icon {
+        transform: translateY(0);
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 100px 0;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+        .display-title { font-size: 2.5rem; }
+        .album-header { padding: 50px 0 30px; }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="gallery-title">{{ album.title }}</h2>
-        <a href="{% url 'gallery' %}" class="btn btn-outline-dark btn-sm">Back to Albums</a>
-    </div>
+<main class="gallery-container">
+    <a href="{% url 'gallery' %}" class="back-link">
+        <i class="bi bi-arrow-left"></i> ← Back 
+    </a>
+    <!-- Header Section -->
+    <header class="album-header">
+        <div class="container">
+            <h1 class="display-title">{{ album.title }}</h1>
+        </div>
+    </header>
 
-    <div class="row">
-        {% for photo in photos %}
-        <div class="col-lg-3 col-md-4 col-6">
-            <div class="gallery-item">
-                <a href="{{ photo.image.url }}" class="glightbox" data-glightbox="title: {{ album.title }}">
-                    <img src="{{ photo.image.url }}" alt="Photo" class="img-fluid">
-                </a>
+    <!-- Photo Grid -->
+    <section class="gallery-grid">
+        <div class="container">
+            <div class="row g-4"> <!-- g-4 adds consistent spacing -->
+                {% for photo in photos %}
+                <div class="col-lg-4 col-md-6 col-12">
+                    <a href="{{ photo.image.url }}" class="glightbox" data-glightbox="title: {{ album.title }}; description: Photo #{{ forloop.counter }}">
+                        <div class="gallery-item">
+                            <img src="{{ photo.image.url }}" alt="{{ album.title }}" class="gallery-img" loading="lazy">
+                            <div class="gallery-overlay">
+                                <span class="view-icon">VIEW</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center empty-state">
+                    <p>This album is currently being curated. Check back soon.</p>
+                </div>
+                {% endfor %}
             </div>
         </div>
-        {% empty %}
-        <p class="text-center">This album has no photos.</p>
-        {% endfor %}
-    </div>
-</div>
+    </section>
+</main>
 {% endblock %}
 
 {% block extra_js %}
+<!-- GLightbox JS -->
 <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
-<script>const lightbox = GLightbox({ selector: '.glightbox' });</script>
+<script>
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        touchNavigation: true,
+        loop: true,
+        zoomable: true,
+        autoplayVideos: true
+    });
+</script>
 {% endblock %}

@@ -1,76 +1,284 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Admission Result{% endblock %}
+{% block title %}{{ t.ADMISSION_RESULT }} - {{ t.official_portal }}{% endblock %}
 
 {% block content %}
+<style>
+    :root {
+        --school-navy: #1d1836;
+        --school-gold: #c5a059;
+        --school-bg: #f8fafc;
+        --text-dark: #1e293b;
+    }
 
-            <div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
-                <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
-                    Admission Result
-                </h4>
+    .result-portal-wrapper {
+        background-color: var(--school-bg);
+        padding: 60px 0;
+        min-height: 80vh;
+    }
 
-                <!-- Search Form -->
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="exam_track_number">Exam Track:</label>
-                            <input type="text" name="exam_track_number" class="form-control"
-                                   placeholder="Enter Your Exam Track Number"
-                                   value="{{ request.POST.exam_track_number }}">
-                            <label for="class_name">Class:</label>
-                            <select name="class_name" class="form-control" required>
-                                <option value="" selected>Select Class</option>
-                                {% for code, name in class_choices %}
-                                    <option value="{{ code }}" {% if request.POST.class_name == code %}selected{% endif %}>{{ name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+    /* Page Branding */
+    .portal-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .portal-header h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        color: var(--school-navy);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .portal-divider {
+        width: 100px;
+        height: 5px;
+        background: var(--school-gold);
+        margin: 0 auto 20px;
+    }
+
+    /* Search Form Card */
+    .search-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border-top: 8px solid var(--school-navy);
+        max-width: 900px;
+        margin: 0 auto 50px;
+    }
+
+    .form-section-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--school-navy);
+        text-transform: uppercase;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .form-section-title i {
+        margin-right: 15px;
+        color: var(--school-gold);
+    }
+
+    /* Professional Inputs - 1.5rem Font */
+    .academic-label {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--school-navy);
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .academic-input {
+        font-size: 1.5rem !important;
+        height: 60px !important;
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 8px !important;
+        padding: 0 20px !important;
+        background-color: #fbfcfd !important;
+        color: var(--text-dark) !important;
+        width: 100%;
+        margin-bottom: 25px;
+        transition: 0.3s;
+    }
+
+    .academic-input:focus {
+        border-color: var(--school-gold) !important;
+        background-color: #fff !important;
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.1) !important;
+    }
+
+    .btn-view-result {
+        background: var(--school-navy);
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+        height: 65px;
+        width: 100%;
+        border-radius: 8px;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        margin-top: 10px;
+    }
+
+    .btn-view-result:hover {
+        background: var(--school-gold);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    /* Result Display Card */
+    .result-display-card {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        border: 1px solid #e2e8f0;
+    }
+
+    .result-summary-bar {
+        background: #f8fafc;
+        padding: 20px 30px;
+        border-bottom: 2px solid #e2e8f0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--school-navy);
+    }
+
+    .school-result-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .school-result-table th {
+        background-color: var(--school-navy);
+        color: white;
+        padding: 20px;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .school-result-table td {
+        padding: 25px 20px;
+        font-size: 1.5rem;
+        color: var(--text-dark);
+        border-bottom: 1px solid #f1f5f9;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    /* Status Badge Colors */
+    .status-badge {
+        display: inline-block;
+        padding: 6px 20px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+    }
+
+    .status-selected { background: #dcfce7; color: #166534; }
+    .status-waiting { background: #fef9c3; color: #854d0e; }
+    .status-other { background: #f1f5f9; color: #475569; }
+
+    @media (max-width: 768px) {
+        .search-card { padding: 25px; }
+        .school-result-table td { font-size: 1.2rem; }
+    }
+</style>
+
+<div class="result-portal-wrapper">
+    <div class="container">
+        
+        <!-- Header Section -->
+        <div class="portal-header">
+            <h1>{{ t.ADMISSION_RESULT }}</h1>
+            <div class="portal-divider"></div>
+        </div>
+
+        <!-- Professional Search Form -->
+        <div class="search-card">
+            <h4 class="form-section-title">
+                <i class="fas fa-search-plus"></i> {{ t.result_search_criteria }}
+            </h4>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="academic-label">{{ t.exam_track_number }}:</label>
+                        <input type="text" name="exam_track_number" class="academic-input"
+                               placeholder="{{ t.track_number_placeholder }}"
+                               value="{{ request.POST.exam_track_number }}" required>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="year">Year:</label>
-                            <select name="year" class="form-control" required>
-                                <option value="" selected>Select Passing Year</option>
-                                {% for y in years %}
-                                    <option value="{{ y }}" {% if request.POST.year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <input style="margin-top: 10px;" type="submit" class="form-control btn-primary pull-right" value="View Result">
+                        <label class="academic-label">{{ t.class_label }}:</label>
+                        <select name="class_name" class="academic-input" required>
+                            <option value="">-- {{ t.select_class }} --</option>
+                            {% for code, name in class_choices %}
+                                <option value="{{ code }}" {% if request.POST.class_name == code %}selected{% endif %}>{{ name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </form>
 
-                <!-- Result Table -->
-                {% if results %}
-                    <div class="col-md-12 mt-4">
-                        <h5>Result for Track Number: {{ results.0.exam_track_number }}, Class: {{ results.0.class_name }}, Year: {{ results.0.year }}</h5>
-                        <table class="table table-bordered table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th>SL</th>
-                                    <th>Student Name</th>
-                                    <th>Status</th>
-                                    <th>Exam Track</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for result in results %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ result.student_name }}</td>
-                                    <td>{{ result.status }}</td>
-                                    <td>{{ result.exam_track_number }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <div class="col-md-6">
+                        <label class="academic-label">{{ t.year_label }}:</label>
+                        <select name="year" class="academic-input" required>
+                            <option value="">-- {{ t.select_year }} --</option>
+                            {% for y in years %}
+                                <option value="{{ y }}" {% if request.POST.year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                {% elif results is not None %}
-                    <p>No results found for the given criteria.</p>
-                {% endif %}
+
+                    <div class="col-12 text-right">
+                        <button type="submit" class="btn-view-result">
+                            <i class="fas fa-file-invoice mr-2"></i> {{ t.search_result }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Result Display Section -->
+        {% if results %}
+        <div class="result-display-card table-responsive">
+            <div class="result-summary-bar">
+                {{ t.result_details_for_track }} <span style="color: var(--school-gold);">#{{ results.0.exam_track_number }}</span>
             </div>
-      
+            
+            <table class="school-result-table">
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">{{ t.sl }}</th>
+                        <th style="text-align: left;">{{ t.applicant_name }}</th>
+                        <th>{{ t.exam_track }}</th>
+                        <th>{{ t.admission_status }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td style="font-weight: 800; color: var(--school-gold);">{{ forloop.counter }}</td
+                        <td style="text-align: left; font-weight: 700;">{{ result.student_name }}</td
+                        <td>{{ result.exam_track_number }}</td
+                        <td>
+                            <span class="status-badge 
+                                {% if 'Selected' in result.status %}status-selected
+                                {% elif 'Waiting' in result.status %}status-waiting
+                                {% else %}status-other{% endif %}">
+                                {% if current_language == 'bn' %}
+                                    {% if 'Selected' in result.status %}নির্বাচিত
+                                    {% elif 'Waiting' in result.status %}অপেক্ষমান
+                                    {% else %}{{ result.status }}{% endif %}
+                                {% else %}
+                                    {{ result.status }}
+                                {% endif %}
+                            </span>
+                        </td
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% elif results is not None %}
+        <div class="text-center p-5" style="background: #fff; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <i class="fas fa-exclamation-circle fa-3x mb-3" style="color: #cbd5e1;"></i>
+            <p style="font-size: 1.6rem; color: #64748b;">{{ t.no_results_found_message }}</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
 {% endblock %}

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% load i18n %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -208,66 +207,69 @@
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'admission_result' %}active{% endif %}" 
                                        href="{% url 'admission_result'%}">
-                                        <span id="llbTopLinkOnlineAdmission">{% trans "Admission" %}</span>
+                                        <span id="llbTopLinkOnlineAdmission">{{t.admission}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'gallery' %}active{% endif %}" 
                                        href="{% url 'gallery'%}">
-                                        <span id="llbTopGallery">{% trans "Photo Gallery" %}</span>
+                                        <span id="llbTopGallery">{{t.photo_gallery}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'exam_result' %}active{% endif %}" 
                                        href="{% url 'exam_result'%}">
-                                        <span id="llbTopLinkResult">{% trans "Result" %}</span>
+                                        <span id="llbTopLinkResult">{{t.result}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name in 'teachers teacher_detail' %}active{% endif %}" 
                                     href="{% url 'teachers'%}">
-                                        <span id="llbTopLinkTeachers">{% trans "Teachers" %}</span>
+                                        <span id="llbTopLinkTeachers">{{t.teachers}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name in 'management_list management_detail' %}active{% endif %}" 
                                     href="{% url 'management_list'%}">
-                                        <span id="llbTopCommitee">{% trans "Committee Members" %}</span>
+                                        <span id="llbTopCommitee">{{t.committee_members}}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
                                        href="{% url 'home'%}">
-                                        <span id="llbHome">{% trans "Home" %}</span>
+                                        <span id="llbHome">{{t.home}}</span>
                                     </a>
                                 </li>
                             </ul>
                         </td>
 
                         <td style="text-align: center; width: 130px; padding-right: 15px;">
-                            <form action="{% url 'set_language' %}" method="post" id="lang-form">
+                        {% if current_language == 'en' %}
+                            <form action="{% url 'switch_language' %}" method="post" id="lang-form-bn" style="display: inline;">
                                 {% csrf_token %}
                                 <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                {% if request.LANGUAGE_CODE == 'en' %}
-                                    <input name="language" type="hidden" value="bn">
-                                    <a href="javascript:void(0)" onclick="document.getElementById('lang-form').submit();" class="version">
-                                        Bangla Version
-                                    </a>
-                                {% else %}
-                                    <input name="language" type="hidden" value="en">
-                                    <a href="javascript:void(0)" onclick="document.getElementById('lang-form').submit();" class="version">
-                                        English Version
-                                    </a>
-                                {% endif %}
+                                <input name="language" type="hidden" value="bn">
+                                <a href="javascript:void(0)" onclick="document.getElementById('lang-form-bn').submit();" class="version">
+                                    বাংলা ভার্সন
+                                </a>
                             </form>
-                        </td>
+                        {% else %}
+                            <form action="{% url 'switch_language' %}" method="post" id="lang-form-en" style="display: inline;">
+                                {% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                                <input name="language" type="hidden" value="en">
+                                <a href="javascript:void(0)" onclick="document.getElementById('lang-form-en').submit();" class="version">
+                                    English Version
+                                </a>
+                            </form>
+                        {% endif %}
+                    </td>
                     </tr>
                 </table>
                 <div class="clear"></div>
             </div>
         </div>
-
-    <div class="clear"></div>
+ <div class="clear"></div>
         <div class="wrapper row1">
             <div id="header" class="clear">
                 <div class="fl_left">
@@ -275,7 +277,7 @@
                 </div>
                 <div class="fl_left" style="padding-left: 10px; text-align: left; width: 850px">
                     <h1>
-                        <span id="llbHeaderSchoolName" style="color: #090c89; font-weight: bold; font-family: Cooper; font-size: 38px">{% trans "ফেলনা উচ্চ বিদ্যালয়" %}</span>
+                        <span id="llbHeaderSchoolName" style="color: #090c89; font-weight: bold; font-family: Cooper; font-size: 38px">ফেলনা উচ্চ বিদ্যালয়"</span>
                     </h1>
                     <p>
                         <span id="llbslogan" style="color: #1417ae; font-size: 18px; font-weight: bold; font-family: Cooper; font-size: 22px">Khironshal, Chouddagram, Comilla. ESTD: 1993</span>
@@ -309,25 +311,25 @@
                     active
                     {% endif %}" 
                     href="{% url 'home'%}">
-                    {% trans "INTRODUCTION" %}
+                    {{t.INTRODUCTION}}
                     </a>
                     <ul>
                         <li>
                             <a class="{% if active_url == 'history' %}active{% endif %}" 
                             href="{% url 'history'%}">
-                            {% trans "HISTORY" %}
+                            {{t.HISTORY}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'mv' %}active{% endif %}" 
                             href="{% url 'mv'%}">
-                            {% trans "MISSION AND VISION" %}
+                            {{t.MISSION_AND_VISION}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'achievements_list' or active_url == 'achievement_detail' %}active{% endif %}" 
                             href="{% url 'achievements_list'%}">
-                            {% trans "ACHIEVEMENT" %}
+                            {{t.ACHIEVEMENT}}
                             </a>
                         </li>
                     </ul>
@@ -339,31 +341,31 @@
                     {% if active_url == 'student_list' or active_url == 'student_detail' or active_url == 'class_routine_list' or active_url == 'syllabus_view' or active_url == 'exam_routine_view' %}
                     active
                     {% endif %}" href="#">
-                    {% trans "ACADEMIC" %}
+                    {{t.ACADEMIC}}
                     </a>
                     <ul>
                         <li>
                             <a class="{% if active_url == 'student_list' or active_url == 'student_detail' %}active{% endif %}" 
                             href="{% url 'student_list'%}">
-                            {% trans "STUDENT LIST" %}
+                            {{t.STUDENT_LIST}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'class_routine_list' %}active{% endif %}" 
                             href="{% url 'class_routine_list'%}">
-                            {% trans "CLASS ROUTINE" %}
+                            {{t.CLASS_ROUTINE}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'syllabus_view' %}active{% endif %}" 
                             href="{% url 'syllabus_view'%}">
-                            {% trans "SYLLABUS" %}
+                            {{t.SYLLABUS}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'exam_routine_view' %}active{% endif %}" 
                             href="{% url 'exam_routine_view'%}">
-                            {% trans "EXAM ROUTINE" %}
+                            {{t.EXAM_ROUTINE}}
                             </a>
                         </li>
                     </ul>
@@ -373,7 +375,7 @@
                 <li>
                     <a class="Menu1_1 Menu1_3 {% if active_url == 'exam_result' %}active{% endif %}" 
                     href="{% url 'exam_result'%}">
-                    {% trans "RESULT" %}
+                    {{t.RESULT}}
                     </a>
                 </li>
 
@@ -383,25 +385,25 @@
                     {% if active_url == 'admission_circular_list' or active_url == 'prospectus_list' or active_url == 'admission_result' %}
                     active
                     {% endif %}" href="#">
-                    {% trans "ADMISSION INFORMATION" %}
+                    {{t.ADMISSION_INFORMATION}}
                     </a>
                     <ul>
                         <li>
                             <a class="{% if active_url == 'admission_circular_list' %}active{% endif %}" 
                             href="{% url 'admission_circular_list'%}">
-                            {% trans "ADMISSION CIRCULAR" %}
+                            {{t.ADMISSION_CIRCULAR}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'prospectus_list' %}active{% endif %}" 
                             href="{% url 'prospectus_list'%}">
-                            {% trans "PROSPECTUS" %}
+                            {{t.PROSPECTUS}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'admission_result' %}active{% endif %}" 
                             href="{% url 'admission_result'%}">
-                            {% trans "ADMISSION RESULT" %}
+                            {{t.ADMISSION_RESULT}}
                             </a>
                         </li>
                     </ul>
@@ -413,7 +415,7 @@
                     {% if active_url == 'facility_list' or active_url == 'facility_detail' %}
                     active
                     {% endif %}" href="{% url 'facility_list' %}">
-                    {% trans "FACILITIES" %}
+                    {{t.FACILITIES}}
                     </a>
                     <ul>
                         {% for facility in facility_titles %}
@@ -424,7 +426,7 @@
                                 </a>
                             </li>
                         {% empty %}
-                            <li><a href="#">{% trans "No Facilities" %}</a></li>
+                            <li><a href="#">{{t.No_Facilities}}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -433,7 +435,7 @@
                 <li>
                     <a class="Menu1_1 Menu1_3 {% if active_url == 'board_permission' %}active{% endif %}" 
                     href="{% url 'board_permission'%}">
-                    {% trans "BOARD PERMISSION" %}
+                    {{t.BOARD_PERMISSION}}
                     </a>
                 </li>
 
@@ -443,19 +445,19 @@
                     {% if active_url == 'student_registration' or active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}
                     active
                     {% endif %}" href="#">
-                    {% trans "ALUMNI ASSOCIATION" %}
+                    {{t.ALUMNI_ASSOCIATION}}
                     </a>
                     <ul>
                         <li>
                             <a class="{% if active_url == 'student_registration' %}active{% endif %}" 
                             href="{% url 'student_registration'%}">
-                            {% trans "REGISTRATION" %}
+                            {{t.REGISTRATION}}
                             </a>
                         </li>
                         <li>
                             <a class="{% if active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}active{% endif %}" 
                             href="{% url 'registration_students_list'%}">
-                            {% trans "STUDENT LIST" %}
+                            {{t.STUDENT_LIST}}
                             </a>
                         </li>
                     </ul>
@@ -481,7 +483,7 @@
                                         <tbody>
                                             <tr>
                                                 <td style="font-size: 16px; font-weight: bold; background-color: #f5edb3; padding: 8px; border: 1px solid #F68B1F; width: 120px; text-align: center; color: #292e8e" class="topnew">
-                                                    <span id="ContentPlaceHolder1_llbnewsCaption">{% trans "শীর্ষ সংবাদ!" %}</span>
+                                                    <span id="ContentPlaceHolder1_llbnewsCaption">শীর্ষ সংবাদ!</span>
                                                 </td>
                                                 <td style="font-size: 16px; font-weight: bold; padding: 6px; border: 1px solid #F68B1F; text-align: center" class="newsbody">
                                                     <marquee direction="left" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="70">
@@ -504,7 +506,7 @@
                                 <td style="vertical-align: top; width: 300px; padding-top: 10px">
                                     <!-- Notice Board -->
                                     <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center">
-                                        {% trans "Notices" %}
+                                        {{t.notices}}
                                     </div>
                                     <div style="background-color: white; border-top: 5px solid #F4A024; border-bottom: 1px solid #F4A024; height: 410px; overflow-y: hidden; padding-top: 8px; -ms-overflow-style: none; scrollbar-width: none;">
                                         <marquee direction="down" behavior="scroll" scrollamount="2" height="400" onmouseover="this.stop();" onmouseout="this.start();">
@@ -525,7 +527,7 @@
                                                     {% endfor %}
                                                 {% else %}
                                                     <tr>
-                                                        <td>{% trans "No notices found." %}</td>
+                                                        <td>{{t.No_notices_found}}</td>
                                                     </tr>
                                                 {% endif %}
                                             </table>
@@ -541,7 +543,7 @@
                                                     <tr>
                                                         <td>
                                                             <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                                                                {% trans "MESSAGES OF HEADMASTER" %}
+                                                                {{t.MESSAGES_OF_HEADMASTER}}
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -551,10 +553,10 @@
                                                                 <img class="img-thumbnail" src="{{ headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ headmaster_message.title }}">
                                                             {% endif %}
                                                             <p style="padding-top: 6px; text-align: justify;">
-                                                                {{ headmaster_message.message|truncatewords:20 }}
+                                                                {{ headmaster_message.message|safe|truncatewords:20 }}
                                                             </p>
                                                             <div style="text-align: right;">
-                                                                <a href="{% url 'headmaster_message_detail' headmaster_message.id %}" class="btn btn-danger btn-sm">{% trans "Read more" %}</a>
+                                                                <a href="{% url 'headmaster_message_detail' headmaster_message.id %}" class="btn btn-danger btn-sm">{{t.read_more}}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -570,7 +572,7 @@
                                                     <tr>
                                                         <td>
                                                             <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                                                                {% trans "MESSAGES OF ASSISTANT HEADMASTER" %}
+                                                                {{t.MESSAGES_OF_ASSISTANT_HEADMASTER}}
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -583,7 +585,7 @@
                                                                 {{ assistant_headmaster_message.message|truncatewords:20 }}
                                                             </p>
                                                             <div style="text-align: right;">
-                                                                <a href="{% url 'assistant_headmaster_message_detail' assistant_headmaster_message.id %}" class="btn btn-danger btn-sm">{% trans "Read more" %}</a>
+                                                                <a href="{% url 'assistant_headmaster_message_detail' assistant_headmaster_message.id %}" class="btn btn-danger btn-sm">{{t.read_more}}</a>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -596,7 +598,7 @@
                                     <!-- Facebook Page -->
                                     <div style="background-color: #DBDFE3; margin-top: 15px; width: 100%;">
                                         <div style="font-size: 20px; background-color: #203C5C; color: white; text-align: center; border-bottom: 5px solid #F4A024;">
-                                            {% trans "Our Facebook Page" %}
+                                            {{t.Our_Facebook_Page}}
                                         </div>
                                         <div style="text-align: center; padding: 6px;">
                                             <div id="fb-root"></div>
@@ -629,7 +631,7 @@
 
 <!-- Auto Scrolling Photo Gallery - Left to Right -->
 <div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
-    <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{% trans "Photo Gallery" %}</h4>
+    <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{{t.photo_gallery}}</h4>
     <div class="slider-wrapper" style="overflow: hidden; width: 100%; position: relative;">
         <div class="slider-track" style="display: flex; width: max-content; animation: scrollLeftToRight 20s linear infinite;">
             {% for image in gallery_images %}
@@ -654,50 +656,58 @@
             <div id="footer" class="clear">
                 <div class="foot_contact">
                     <h3>
-                        <span id="llbschoolnamefooter" style="color:White;font-family:Cooper;">{% trans "ফেলনা উচ্চ বিদ্যালয়" %}</span>
+                        <span id="llbschoolnamefooter" style="color:White;font-family:Cooper;">ফেলনা উচ্চ বিদ্যালয়"</span>
                     </h3>
                     <address>
                         <span id="llbaddress1">Khironshal, Chouddagram, Comilla. ESTD: 1993</span><br />
                     </address>
                     <ul>
-                        <li><span id="llbphone">{% trans "Phone No" %} -01817-116082</span></li>
-                        <li class="last"><span id="llbEmail">{% trans "Email" %} -info@felnahs.edu.bd</span></li>
+                        <li><span id="llbphone">{{t.Phone_No}} -01817-116082</span></li>
+                        <li class="last"><span id="llbEmail">{{t.Email}} -info@felnahs.edu.bd</span></li>
                     </ul>
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1604.1045469108833!2d91.28070684282874!3d23.21815175098383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x37537c9a38e439a3%3A0x2e41e32ca712cd4c!2sFelna+High+School!5e1!3m2!1sbn!2sbd!4v1479299332386" id="map" style="height: 180px; width: 300px"></iframe>
                 </div>
 
                 <div class="footbox">
-                    <h2><span id="llbLinkAdministration">{% trans "Administration" %}</span></h2>
+                    <h2><span id="llbLinkAdministration">{{t.Administration}}</span></h2>
                     <ul>
-                        <li><a href="{% url 'management_list' %}"><span>{% trans "Committee Members" %}</span></a></li>
-                        <li><a href="{% url 'teachers' %}"><span>{% trans "Teachers" %}</span></a></li>
-                        <li><a href="{% url 'gallery' %}"><span>{% trans "Photo Gallery" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Alumni" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Download" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Magazine" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Annual Report" %}</span></a></li>
-                        <li><a href="{% url 'class_routine_list' %}"><span>{% trans "Class Routine" %}</span></a></li>
-                        <li><a href="{% url 'exam_routine_view' %}"><span>{% trans "Exam Routine" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Academic Calendar" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Payment Portal" %}</span></a></li>
-                        <li><a href="#"><span>{% trans "Job Vacancies" %}</span></a></li>
+                        <li><a href="{% url 'management_list' %}"><span>{{t.committee_members}}</span></a></li>
+                        <li><a href="{% url 'teachers' %}"><span>{{t.teachers}}</span></a></li>
+                        <li><a href="{% url 'gallery' %}"><span>{{t.photo_gallery}}</span></a></li>
+                        <li><a href="#"><span>{{t.alumni}}</span></a></li>
+                        <li><a href="#"><span>{{t.download}}</span></a></li>
+                        <li><a href="#"><span>{{t.magazine}}</span></a></li>
+                        <li><a href="#"><span>{{t.annual_Report}}</span></a></li>
+                        <li><a href="{% url 'class_routine_list' %}"><span>{{t.class_routine}}</span></a></li>
+                        <li><a href="{% url 'exam_routine_view' %}"><span>{{t.exam_routine}}</span></a></li>
+                        <li><a href="#"><span>{{t.academic_calendar}}</span></a></li>
+                        <li><a href="#"><span>{{t.payment.portal}}</span></a></li>
+                        <li><a href="#"><span>{{t.job_vacancies}}</span></a></li>
                     </ul>
                 </div>
 
                 <div class="footbox">
-                    <h2><span>{% trans "Important Links" %}</span></h2>
+                    <h2><span>{{t.important_links}}</span></h2>
                     <div>
                         <table cellspacing="0" cellpadding="0" style="border-collapse:collapse; border:0;">
-                            <tr><td><a href="https://www.comillaeducationboard.gov.bd/">Comilla Education Board</a></td></tr>
-                            <tr><td><a href="https://dshe.gov.bd/">Directorate of Secondary and Higher Education (DSHE)</a></td></tr>
-                            <tr><td><a href="https://shed.gov.bd/">Secondary and Higher Education Division</a></td></tr>
-                            <tr><td><a href="https://www.nu.edu.bd/">National University</a></td></tr>
+                            <tr>
+                                <td><a href="https://www.comillaeducationboard.gov.bd/">{{t.comilla_education_board}}</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://dshe.gov.bd/">{{t.dshe}}</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://shed.gov.bd/">{{t.shed}}</a></td>
+                            </tr>
+                            <tr>
+                                <td><a href="https://www.nu.edu.bd/">{{t.national_university}}</a></td>
+                            </tr>
                         </table>
                     </div>
                 </div>
 
                 <div class="footbox last">
-                    <h2><span>{% trans "CONTACT WITH US" %}</span></h2>
+                    <h2><span>{{t.CONTACT_WITH_US}}</span></h2>
                     <ul>
                         <li>
                             <table border="0" cellpadding="0" cellspacing="0" style="border:0 !important;">
@@ -734,14 +744,14 @@
                             </table>
                         </li>
                         <li style="text-decoration: none; font-weight: bold; padding-top: 20px; font-size: 20px">
-                            <span>{% trans "Website Visitors" %} :</span>
+                            <span>{{t.website_visitors}} :</span>
                         </li>
-                        <li>{% trans "Today Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_today }}</span></li>
-                        <li>{% trans "Visitors in this Week" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_week }}</span></li>
-                        <li>{% trans "Visitors in this Month" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_month }}</span></li>
-                        <li>{% trans "Visitors in this Year" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_year }}</span></li>
-                        <li>{% trans "Total Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_total }}</span></li>
-                        <li>{% trans "Active Visitors" %}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_active }}</span></li>
+                        <li>{{t.today_visitors}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_today }}</span></li>
+                        <li>{{t.Visitors_in_this_Week}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_week }}</span></li>
+                        <li>{{t.Visitors_in_this_Month}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_month }}</span></li>
+                        <li>{{t.Visitors_in_this_Year}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_year }}</span></li>
+                        <li>{{t.total_visitors}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_total }}</span></li>
+                        <li>{{t.active_visitors}}: <span style="color:#FFFF99;font-weight:bold;">{{ visitors_active }}</span></li>
                     </ul>
                 </div>
             </div>
@@ -765,7 +775,6 @@
       </div>
     </div>
   </div>
-
 <script src="{% static 'plugins/jQuery/jQuery-2.1.3.min.js' %}"></script>
 <script src="{% static 'plugins/JS/jquery.nivo.slider.js' %}" type="text/javascript"></script>
 <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>

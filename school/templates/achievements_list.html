@@ -1,32 +1,197 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}School Achievements{% endblock %}
+{% block title %}{{ t.achievements_title }}{% endblock %}
 
 {% block content %}
+<style>
+    :root {
+        --school-primary: #1d1836; 
+        --school-accent: #e6b800;  
+    }
 
-<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px;">
-    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff">
-        Our School Achievements
-    </h4>
+    .achievements-section {
+        background-color: #f8f9fa;
+    }
 
-    {% for achievement in achievements %}
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-6" style="padding: 0px;">
-                <img src="{{ achievement.image.url }}" class="img-responsive" alt="{{ achievement.title }}">
+    /* Header styling */
+    .page-header {
+        text-align: center;
+        position: relative;
+    }
+
+    .page-header h2 {
+        font-size: 3rem; /* Increased size */
+        font-weight: 800;
+        color: var(--school-primary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    .page-header p {
+        font-size: 1.5rem; /* Increased size */
+    }
+
+    .page-header h2::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 5px;
+        background: var(--school-accent);
+        margin: 10px auto 0;
+    }
+
+    #container h3{
+        background-color: transparent;
+        color: #000
+    }
+
+    /* Card Design */
+    .achievement-card {
+        background: #fff;
+        border: none;
+        border-radius: 0; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease-in-out;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .achievement-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    /* Image container */
+    .img-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 65%; 
+        background: #eee;
+    }
+
+    .img-wrapper img {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+    }
+
+    .achievement-card:hover .img-wrapper img {
+        transform: scale(1.1);
+    }
+
+    /* Content Area */
+    .achievement-body {
+        padding: 30px; /* Increased padding for larger text */
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .achievement-date {
+        font-size: 1.1rem; /* Increased size */
+        color: #888;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: block;
+        font-weight: 600;
+    }
+
+    .achievement-title {
+        font-size: 2rem; /* Increased size to stand out from 1.5rem body */
+        font-weight: 700;
+        color: var(--school-primary);
+        margin-bottom: 15px;
+        line-height: 1.2;
+    }
+
+    .achievement-text {
+        font-size: 1.5rem; /* Set to 1.5rem as requested */
+        color: #444;
+        line-height: 1.6;
+        margin-bottom: 25px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .btn-read-more {
+        margin-top: auto;
+        color: var(--school-primary);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.3rem; /* Increased size */
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        transition: color 0.2s;
+    }
+    
+    .btn-read-more i {
+        margin-left: 10px;
+        transition: transform 0.2s;
+    }
+    
+    #container a{
+        background-color: transparent;
+    }
+
+    .btn-read-more:hover {
+        color: var(--school-accent);
+    }
+
+    .btn-read-more:hover i {
+        transform: translateX(5px);
+    }
+
+    /* Adjust Grid for larger text on smaller screens */
+    @media (max-width: 768px) {
+        .page-header h2 { font-size: 2.2rem; }
+        .achievement-title { font-size: 1.7rem; }
+    }
+</style>
+
+<section class="achievements-section">
+    <div class="container">
+        <!-- Modern Header -->
+        <div class="page-header">
+            <h2>{{ t.our_school_achievements }}</h2>
+        </div>
+
+        <div class="row g-5"> <!-- Increased gap (g-5) to allow more room for large text -->
+            {% for achievement in achievements %}
+            <div class="col-lg-4 col-md-6">
+                <article class="achievement-card">
+                    <div class="img-wrapper">
+                        <img src="{{ achievement.image.url }}" alt="{{ achievement.title }}">
+                    </div>
+                    <div class="achievement-body">
+                        
+                        <h3 class="achievement-title">{{ achievement.title }}</h3>
+                        
+                        <p class="achievement-text">
+                            {{ achievement.short_description }}
+                        </p>
+                        
+                        <a href="{% url 'achievement_detail' achievement.id %}" class="btn-read-more">
+                            {{ t.read_more }} <i>&rarr;</i>
+                        </a>
+                    </div>
+                </article>
             </div>
-            <div class="col-md-6" style="padding: 0px;">
-                <h5>{{ achievement.title }}</h5>
-                <p style="text-align: justify">
-                    {{ achievement.short_description }}
-                </p>
-                <a href="{% url 'achievement_detail' achievement.id %}">Read More</a>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="achievement-text text-muted">No achievements recorded yet.</p>
             </div>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
-
-</div>
-
+</section>
 {% endblock %}
