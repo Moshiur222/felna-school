@@ -3,55 +3,47 @@
 
 {% block slider %}
 <style>
-    .marquee-left-to-right {
-        width: 100%;
-        overflow: hidden;
-        position: relative;
-        height: 400px;
-        background: #000;
+.marquee-left-to-right {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 400px;
+    background: #000;
+}
+
+.marquee-left-to-right .marquee-content {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: scrollRightToLeft 20s linear infinite;  /* Changed animation name */
+    white-space: nowrap;
+    height: 100%;
+}
+
+.marquee-left-to-right .marquee-content img {
+    height: 400px;
+    width: auto;  /* Changed from 100% to auto to maintain aspect ratio */
+    object-fit: cover;
+}
+
+/* Keyframes for RIGHT TO LEFT scrolling */
+@keyframes scrollRightToLeft {
+    0% {
+        transform: translateX(0);
     }
-    
-    .marquee-left-to-right .marquee-content {
-        display: flex;
-        position: absolute;
-        left: 0;
-        top: 0;
-        animation: leftToRight 20s linear infinite;
-        white-space: nowrap;
-        height: 100%;
+    100% {
+        transform: translateX(-50%);
     }
-    
-    .marquee-left-to-right .marquee-content img {
-        height: 400px;
-        width: 100%;
-        object-fit: cover;
-    }
-    
-    @keyframes leftToRight {
-        0% {
-            transform: translateX(-100%);
-        }
-        100% {
-            transform: translateX(0);
-        }
-    }
-    
-    /* Pause on hover */
-    .marquee-left-to-right:hover .marquee-content {
-        animation-play-state: paused;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-        .marquee-left-to-right,
-        .marquee-left-to-right .marquee-content img {
-            height: 250px;
-        }
-    }
+}
+
 </style>
 
 <div class="marquee-left-to-right">
     <div class="marquee-content">
+        {% for slider in sliders %}
+            <img src="{{ slider.image.url }}" alt="Slide {{ forloop.counter }}">
+        {% endfor %}
         {% for slider in sliders %}
             <img src="{{ slider.image.url }}" alt="Slide {{ forloop.counter }}">
         {% endfor %}
@@ -82,7 +74,7 @@
             <span>{{t.teachers_staffs}}</span>
         </div>
         <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-            <marquee direction="right" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
+            <marquee direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
                 <table>
                     <tr>
                         {% for teacher in teachers %}
@@ -126,7 +118,7 @@
             <span>{{t.meritorious_students}}</span>
         </div>
         <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-             <marquee direction="right" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();">
+             <marquee direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();">
                 <table>
                     <tr>
                         {% for student in students %}

@@ -127,7 +127,7 @@
         <form method="get" id="filterForm" class="form-row align-items-center">
             <div class="col-md-2 my-1">
                 <select name="batch" class="form-control form-control-sm filter-select">
-                    <option value="">All Batches</option>
+                    <option value="">{{ t.all_batches }}</option>
                     {% for batch in batch_choices %}
                         <option value="{{ batch }}" {% if selected_batch|stringformat:"s" == batch|stringformat:"s" %}selected{% endif %}>{{ batch }}</option>
                     {% endfor %}
@@ -135,7 +135,7 @@
             </div>
             <div class="col-md-2 my-1">
                 <select name="gender" class="form-control form-control-sm filter-select">
-                    <option value="">All Genders</option>
+                    <option value="">{{ t.all_genders }}</option>
                     {% for code, name in gender_choices %}
                         <option value="{{ code }}" {% if selected_gender|stringformat:"s" == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
                     {% endfor %}
@@ -143,17 +143,17 @@
             </div>
             <div class="col-md-2 my-1">
                 <select name="occupation" class="form-control form-control-sm filter-select">
-                    <option value="">All Occupations</option>
+                    <option value="">{{ t.all_occupations }}</option>
                     {% for code, name in occupation_choices %}
                         <option value="{{ code }}" {% if selected_occupation|stringformat:"s" == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-md-1 my-1">
-                <button type="submit" class="btn btn-primary btn-sm btn-block">Filter</button>
+                <button type="submit" class="btn btn-primary btn-sm btn-block">{{ t.filter }}</button>
             </div>
             <div class="col-md-1 my-1">
-                <a href="{% url 'registration_students_list' %}" class="btn btn-secondary btn-sm btn-block">Reset</a>
+                <a href="{% url 'registration_students_list' %}" class="btn btn-secondary btn-sm btn-block">{{ t.reset }}</a>
             </div>
         </form>
     </div>
@@ -165,7 +165,7 @@
         <div class="top-controls">
             <div id="entries_wrapper"></div> <!-- এটি বাম দিকে থাকবে -->
             <div class="search-wrapper">
-                <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="🔍 Search...">
+                <input type="text" id="customSearchInput" class="form-control form-control-sm" placeholder="{{ t.search_placeholder }}">
             </div>
         </div>
         
@@ -173,13 +173,13 @@
             <table id="studentTable" class="table table-hover table-bordered w-100">
                 <thead>
                     <tr>
-                        <th>SL</th>
-                        <th>Batch</th>
-                        <th>Student Name</th>
-                        <th>Location</th>
-                        <th>Occupation</th>
-                        <th>Education</th>
-                        <th>Actions</th>
+                        <th>{{ t.sl }}</th>
+                        <th>{{ t.batch }}</th>
+                        <th>{{ t.student_name }}</th>
+                        <th>{{ t.location }}</th>
+                        <th>{{ t.occupation }}</th>
+                        <th>{{ t.education }}</th>
+                        <th>{{ t.actions }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -192,7 +192,7 @@
                         <td>{{ student.get_occupation_display }}</td>
                         <td>{{ student.get_last_edu_display }}</td>
                         <td>
-                            <a href="{% url 'registration_student_detail' student.id %}" class="view_btn">View</a>
+                            <a href="{% url 'registration_student_detail' student.id %}" class="view_btn">{{ t.view }}</a>
                         </td>
                     </tr>
                     {% endfor %}

@@ -681,7 +681,7 @@ def student_registration(request):
 
 def registration_students_list(request):
     """Display list of registered students with filters and search"""
-    students = StudentRegistration.objects.filter(is_verified=True).order_by('-batch', 'student_name')
+    students = StudentRegistration.objects.filter(is_verified=True).order_by('batch', 'student_name')
     
     # Get filter parameters
     selected_batch = request.GET.get('batch', '')
@@ -719,28 +719,30 @@ def registration_students_list(request):
 def registration_student_detail(request, id):
     student = get_object_or_404(StudentRegistration, id=id, is_verified=True)
     
-    # Mask phone number if hide option is selected
-    bd_no_display = student.bd_no
+    bd_no_display = "নাই"
+    
     if student.bd_no:
-        # Check if user wants to hide the number (is_no_hide == 1 means HIDE)
-        if student.is_no_hide == 1:
-            bd_len = len(student.bd_no)
-            
-            # Different masking patterns based on number length
-            if bd_len == 11:
-                # For 11-digit numbers (e.g., 01712345678 -> 017*****678)
-                bd_no_display = student.bd_no[:3] + '*****' + student.bd_no[8:11]
-            elif bd_len == 10:
-                # For 10-digit numbers (e.g., 1712345678 -> 171****678)
-                bd_no_display = student.bd_no[:3] + '****' + student.bd_no[7:10]
-            elif bd_len > 6:
-                # For other lengths, mask the middle
-                hide_start = bd_len // 3
-                hide_end = bd_len - 4
-                bd_no_display = student.bd_no[:hide_start] + '****' + student.bd_no[hide_end:]
-            else:
-                # For very short numbers
-                bd_no_display = '****' + student.bd_no[-4:]
+        # Clean the number
+        clean_number = ''.join(filter(str.isdigit, student.bd_no))
+        
+        # For 11-digit number starting with 01 (e.g., 01705260033)
+        if len(clean_number) == 11 and clean_number[:2] == '01':
+            if student.is_no_hide == 2:  # Hide/Mask
+                # Show: +880-17**-****33
+                bd_no_display = f"+880-{clean_number[1:3]}**-****{clean_number[-2:]}"
+            else:  # Show full
+                # Show: +880-1705-260033
+                bd_no_display = f"+880-{clean_number[1:5]}-{clean_number[5:]}"
+        
+        # For 10-digit number starting with 1 (e.g., 1705260033)
+        elif len(clean_number) == 10 and clean_number[:1] == '1':
+            if student.is_no_hide == 2:  # Hide/Mask
+                bd_no_display = f"+880-{clean_number[:2]}**-****{clean_number[-2:]}"
+            else:  # Show full
+                bd_no_display = f"+880-{clean_number[:4]}-{clean_number[4:]}"
+        
+        else:
+            bd_no_display = student.bd_no
     
     context = {
         'student': student,

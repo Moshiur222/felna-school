@@ -1149,6 +1149,36 @@
                     </div>
                   </div>
                 </div>
+                <!-- Student Name -->
+                <div class="form-horizontal-row">
+                  <label for="student_name" class="form-label fw-bold">
+                    <i class="fas fa-user-graduate"></i> আপনার বায়ো (bio)
+                  </label>
+                  <div class="form-field-wrapper">
+                    <div class="input-with-icon">
+                      <i class="fas fa-user input-icon"></i>
+                      <input type="text" name="student_name" id="student_name"
+                        class="form-control form-control-lg modern-input enhanced-input"
+                        placeholder="আপনার বায়ো"
+                        value="{{ form_data.student_name|default:'' }}" />
+                    </div>
+                  </div>
+                </div>
+                <!-- Student Name -->
+                <div class="form-horizontal-row">
+                  <label for="facebook_profile" class="form-label fw-bold">
+                    <i class="fas fa-user-graduate"></i>আপনার ফেসবুক প্রোফাইল
+                  </label>
+                  <div class="form-field-wrapper">
+                    <div class="input-with-icon">
+                      <i class="fas fa-user input-icon"></i>
+                      <input type="text" name="facebook_profile" id="facebook_profile"
+                        class="form-control form-control-lg modern-input enhanced-input"
+                        placeholder="আপনার ফেসবুক প্রোফাইল"
+                        value="{{ form_data.facebook_profile|default:'' }}"/>
+                    </div>
+                  </div>
+                </div>
 
                 <!-- Gender -->
                 <div class="form-horizontal-row">
@@ -1258,7 +1288,7 @@
                           <div class="gender-radio-group" style="display: flex; gap: 15px; margin-bottom: 0;">
                               {% for val, label in is_no_hide_choices %}
                                   <label class="gender-radio-option" style="display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0;">
-                                      <input type="radio" name="is_no_hide_bd" value="{{ val }}" 
+                                      <input type="radio" name="is_no_hide" value="{{ val }}" 
                                             {% if form_data.is_no_hide_bd == val %}checked{% endif %} required />
                                       <span style="font-size: 1.5rem;">{{ label }}</span>
                                   </label>
@@ -2188,6 +2218,8 @@ function setupChangeNumberModal() {
         let isValid = true;
         
         const studentName = document.getElementById("student_name");
+        const studentbio = document.getElementById("student_bio");
+        const facebookprofile = document.getElementById("facebook_profile");
         const batchHidden = document.getElementById("batchHidden");
         const villageHidden = document.getElementById("villageHidden");
         const currentLocationHidden = document.getElementById("currentLocationHidden");
@@ -2195,7 +2227,7 @@ function setupChangeNumberModal() {
         const lastEduHidden = document.getElementById("lastEduHidden");
         const photoFile = document.getElementById("student_photo");
         const isWhatsappBd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
-        const isNoHideBd = document.querySelector('input[name="is_no_hide_bd"]:checked');
+        const isNoHideBd = document.querySelector('input[name="is_no_hide"]:checked');
         const bangladeshNumber = document.getElementById("bangladesh_number");
         
         if (studentName && !studentName.value.trim()) {

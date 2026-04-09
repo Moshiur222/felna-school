@@ -85,7 +85,6 @@
 .footer-bottom {
     background-color: #00264d;
     color: #ffffff;
-    padding: 20px 0;
     font-family: Arial, sans-serif;
     text-align: center;
     border-top: 1px solid rgba(255,255,255,0.1);
@@ -138,22 +137,34 @@
         margin: 5px 0;
     }
 }
-@keyframes scrollLeftToRight {
+@keyframes scrollRightToLeft {
     0% {
-        transform: translateX(-50%);
+        transform: translateX(0);
     }
     100% {
-        transform: translateX(0);
+        transform: translateX(-50%);
     }
 }
 
-.slider-wrapper:hover .slider-track {
-    animation-play-state: paused;
-}
 @keyframes slideInRight {
     from { transform: translateX(120%); opacity: 0; }
     to   { transform: translateX(0);    opacity: 1; }
 }
+
+@media (max-width: 768px) {
+    .legal-link-group:not(:last-child)::after {
+        content: "";
+    }
+    .legal-link-group {
+        display: block;
+        margin: 5px 0;
+    }
+}
+
+.footer-inner-container{
+    padding-bottom: 50px;
+    }
+
 </style>
 <link href="{% static 'css_temp1/sty.css' %}" rel="stylesheet" type="text/css" />
 </head>
@@ -483,11 +494,25 @@
                                         <tbody>
                                             <tr>
                                                 <td style="font-size: 16px; font-weight: bold; background-color: #f5edb3; padding: 8px; border: 1px solid #F68B1F; width: 120px; text-align: center; color: #292e8e" class="topnew">
-                                                    <span id="ContentPlaceHolder1_llbnewsCaption">শীর্ষ সংবাদ!</span>
+                                                    <span id="ContentPlaceHolder1_llbnewsCaption">{{ t.top_news }}</span>
                                                 </td>
                                                 <td style="font-size: 16px; font-weight: bold; padding: 6px; border: 1px solid #F68B1F; text-align: center" class="newsbody">
                                                     <marquee direction="left" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="70">
-                                                        <table><tbody><tr><td></td></tr></tbody></table>
+                                                        {% if notices %}
+                                                            {% for notice in notices %}
+                                                                {% if notice.file %}
+                                                                    <a href="{{ notice.file.url }}" target="_blank">
+                                                                        *** {{ notice.date|date:"Y-m-d" }}, {{ notice.title }} ***
+                                                                    </a>
+                                                                    {% if not forloop.last %} &nbsp;&nbsp; | &nbsp;&nbsp; {% endif %}
+                                                                {% else %}
+                                                                    *** {{ notice.date|date:"Y-m-d" }}, {{ notice.title }} ***
+                                                                    {% if not forloop.last %} &nbsp;&nbsp; | &nbsp;&nbsp; {% endif %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            {{t.No_notices_found}}
+                                                        {% endif %}
                                                     </marquee>
                                                 </td>
                                             </tr>
@@ -509,7 +534,7 @@
                                         {{t.notices}}
                                     </div>
                                     <div style="background-color: white; border-top: 5px solid #F4A024; border-bottom: 1px solid #F4A024; height: 410px; overflow-y: hidden; padding-top: 8px; -ms-overflow-style: none; scrollbar-width: none;">
-                                        <marquee direction="down" behavior="scroll" scrollamount="2" height="400" onmouseover="this.stop();" onmouseout="this.start();">
+                                        <marquee direction="up" behavior="scroll" scrollamount="2" height="400" onmouseover="this.stop();" onmouseout="this.start();">
                                             <table class="table table-striped table-bordered table-condensed custom-table table-hover" cellspacing="0" style="width:100%; border-collapse:collapse; border:0;">
                                                 {% if notices %}
                                                     {% for notice in notices %}
@@ -582,7 +607,7 @@
                                                                 <img class="img-thumbnail" src="{{ assistant_headmaster_message.image.url }}" style="height:270px;width:250px;" alt="{{ assistant_headmaster_message.title }}">
                                                             {% endif %}
                                                             <p style="padding-top: 6px; text-align: justify;">
-                                                                {{ assistant_headmaster_message.message|truncatewords:20 }}
+                                                                {{ assistant_headmaster_message.message|safe|truncatewords:20 }}
                                                             </p>
                                                             <div style="text-align: right;">
                                                                 <a href="{% url 'assistant_headmaster_message_detail' assistant_headmaster_message.id %}" class="btn btn-danger btn-sm">{{t.read_more}}</a>
@@ -629,30 +654,30 @@
                     </div>
                 {% endif %}
 
-<!-- Auto Scrolling Photo Gallery - Left to Right -->
-<div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
-    <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{{t.photo_gallery}}</h4>
-    <div class="slider-wrapper" style="overflow: hidden; width: 100%; position: relative;">
-        <div class="slider-track" style="display: flex; width: max-content; animation: scrollLeftToRight 20s linear infinite;">
-            {% for image in gallery_images %}
-                <div style="flex: 0 0 auto; margin-right: 10px;">
-                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
+                <div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
+                    <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{{t.photo_gallery}}</h4>
+                    <div class="slider-wrapper" style="overflow: hidden; width: 100%; position: relative;">
+                        <div class="slider-track" style="display: flex; width: max-content; animation: scrollRightToLeft 20s linear infinite;">
+                            {% for image in gallery_images %}
+                                <div style="flex: 0 0 auto; margin-right: 10px;">
+                                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
+                                </div>
+                            {% endfor %}
+                            {% for image in gallery_images %}
+                                <div style="flex: 0 0 auto; margin-right: 10px;">
+                                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
-            {% for image in gallery_images %}
-                <div style="flex: 0 0 auto; margin-right: 10px;">
-                    <img src="{{ image.image.url }}" alt="{{ image.title }}" style="width: 200px; height: 200px; object-fit: cover; border-radius: 5px;">
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
             </div>
         </div>
     </div>
 </div>
 
-        <div class="wrapper row5">
+  <div class="footer-bottom">
+    <div class="wrapper row5">
             <div id="footer" class="clear">
                 <div class="foot_contact">
                     <h3>
@@ -756,8 +781,6 @@
                 </div>
             </div>
         </div>
-
-  <div class="footer-bottom">
     <div class="footer-inner-container">
       <div class="footer-bottom-content">
         <span class="copyright-text">Copyright &copy; {% now "Y" %} ফেলনা উচ্চ বিদ্যালয়. All Rights Reserved</span>

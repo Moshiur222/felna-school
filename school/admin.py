@@ -186,26 +186,6 @@ class VisitorAdmin(UnfoldAdmin):
 
 
 
-from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
-from .models import Product
-
-@admin.register(Product)
-class ProductAdmin(TranslationAdmin):
-    # এর ফলে অ্যাডমিনে ইংরেজি এবং বাংলার জন্য আলাদা বক্স আসবে
-    class Media:
-        js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
-            'modeltranslation/js/tabbed_translation_fields.js',
-        )
-        css = {
-            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
-        }
-
-
-
-
 # সাইট সেটিংস
 admin.site.site_header = "Felna High School"
 admin.site.site_title = "Admin Portal"

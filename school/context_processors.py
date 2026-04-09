@@ -319,9 +319,46 @@ def get_translations(request):
             'board_permission': 'বোর্ড অনুমতি',
             'board_permission_description': 'এই পৃষ্ঠাটি সমস্ত বোর্ড সদস্য এবং তাদের অনুমতি প্রদর্শন করে।',
             'no_data_available': 'বর্তমানে কোনো তথ্য উপলব্ধ নেই।',
+
+            # bn ডিকশনারিতে (বাংলা)
+            'sl': 'ক্রমিক নং',
+            'batch': 'ব্যাচ',
+            'student_name': 'শিক্ষার্থীর নাম',
+            'location': 'অবস্থান',
+            'occupation': 'পেশা',
+            'education': 'শিক্ষাগত যোগ্যতা',
+            'actions': 'অ্যাকশন',
+
+            # bn ডিকশনারিতে (বাংলা)
+            'search_placeholder': '🔍 খুঁজুন...',
+
+            
+            # bn ডিকশনারিতে (বাংলা)
+            'all_occupations': 'সব পেশা',
+            'all_batches': 'সব ব্যাচ',
+            'all_genders': 'সব লিঙ্গ',
+
+            # bn ডিকশনারিতে (বাংলা)
+            'filter': 'ফিল্টার',
+            'reset': 'রিসেট',
+
+            # bn ডিকশনারিতে (বাংলা)
+            'top_news': 'শীর্ষ সংবাদ!',
+
+            # bn ডিকশনারিতে (বাংলা)
+            'faculty_profile': 'শিক্ষক প্রোফাইল',
+            'directory': 'তালিকা',
+            'faculty_portrait': 'শিক্ষকের প্রতিকৃতি',
+            'department': 'বিভাগ',
+            'education': 'শিক্ষাগত যোগ্যতা',
+            'email_label': 'ইমেইল',
+            'direct_line': 'সরাসরি ফোন',
+            'default_department': 'বিজ্ঞান অনুষদ',
+            'advanced_degree': 'উচ্চতর ডিগ্রি',
         },
         'en': {
             # Top menu keys
+            'top_news': 'Top News!',
             'home': 'Home',
             'committee_members': 'Committee Members',
             'teachers': 'Teachers',
@@ -592,6 +629,39 @@ def get_translations(request):
             'board_permission': 'Board Permission',
             'board_permission_description': 'This page displays all board members and their permissions.',
             'no_data_available': 'No data available at the moment.',
+
+            # en ডিকশনারিতে (ইংরেজি)
+            'sl': 'SL',
+            'batch': 'Batch',
+            'student_name': 'Student Name',
+            'location': 'Location',
+            'occupation': 'Occupation',
+            'education': 'Education',
+            'actions': 'Actions',
+
+            # en ডিকশনারিতে (ইংরেজি)
+            'search_placeholder': '🔍 Search...',
+
+            # en ডিকশনারিতে (ইংরেজি)
+            'all_occupations': 'All Occupations',
+            'all_batches': 'All Batches',
+            'all_genders': 'All Genders',
+
+            # en ডিকশনারিতে (ইংরেজি)
+            'filter': 'Filter',
+            'reset': 'Reset',
+
+            
+            # en ডিকশনারিতে (ইংরেজি)
+            'faculty_profile': 'Faculty Profile',
+            'directory': 'Directory',
+            'faculty_portrait': 'Faculty portrait',
+            'department': 'Department',
+            'education': 'Education',
+            'email_label': 'Email',
+            'direct_line': 'Direct Line',
+            'default_department': 'Faculty of Science',
+            'advanced_degree': 'Advanced Degree',
         }
     }
     

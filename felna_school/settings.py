@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'modeltranslation',
     'school',
     'unfold',
     'unfold.contrib.filters',
@@ -45,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_countries',
-    'django_extended_makemessages',
-    'dj_translation'
+    'dj_translation', # শুধু এটুকুই যথেষ্ট
 ]
 
 LANGUAGES = (

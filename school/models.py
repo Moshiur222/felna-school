@@ -747,6 +747,8 @@ class StudentRegistration(models.Model):
     NUMBER_HIDE_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
 
     student_name = models.CharField(max_length=100)
+    facebook_profile = models.CharField(max_length=1000, null=True, blank=True)
+    student_bio = models.TextField(max_length=1000, null=True, blank=True)
     student_photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
     gender = models.IntegerField(choices=GENDER_CHOICES, null=True)
     marrital_status = models.IntegerField(choices=MARITAL_STATUS_CHOICES, null=True)

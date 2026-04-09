@@ -202,6 +202,65 @@
         .profile-sidebar-card { flex: 0 0 100%; }
         .detail-header { flex-direction: column; align-items: flex-start; gap: 20px; }
     }
+    .info-group-title {
+        display: block;
+        font-size: 18px;
+        font-weight: bold;
+        margin: 20px 0 10px;
+        color: #2c3e50;
+    }
+    
+    .data-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 15px;
+    }
+    
+    .data-item {
+        background: #ffffff;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .data-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: #555;
+    }
+    
+    .data-value {
+        font-size: 15px;
+        color: #333;
+    }
+    
+    .whatsapp-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+    
+    .whatsapp-available {
+        background-color: #25D366;
+        color: #ffffff;
+    }
+    
+    .whatsapp-not-available {
+        background-color: #e0e0e0;
+        color: #555;
+    }
+    
+    .whatsapp-badge i {
+        margin-right: 5px;
+    }
+    
+    .whatsapp-badge:hover {
+        opacity: 0.9;
+    }
 </style>
 
 <div class="profile-main-wrapper">
@@ -284,23 +343,29 @@
                 <!-- Group 3: Contact Information -->
                 <span class="info-group-title">Contact Information</span>
                 <div class="data-grid">
+                
+                    <!-- Mobile Number (BD) -->
                     <div class="data-item">
                         <span class="data-label">Mobile Number (BD)</span>
-                        <span class="data-value"><i class="fa fa-phone"></i> 
-                            {% if student.is_no_hide == 1 %}
-                                {{ bd_no_display }}
-                            {% else %}
-                                {{ student.bd_no }}
-                            {% endif %}
+                        <span class="data-value">
+                            <i class="fa fa-phone"></i> 
+                            {{ bd_no_display }}
                         </span>
                     </div>
-                    
+                
+                    <!-- WhatsApp (BD Number) -->
                     <div class="data-item">
                         <span class="data-label">WhatsApp (BD Number)</span>
                         <span class="data-value">
-                            {% if student.is_whatsapp_bd == 1 %}
-                                <span class="whatsapp-badge whatsapp-available">
-                                    <i class="fab fa-whatsapp"></i> Available
+                            {% if student.is_whatsapp_bd == 1 and student.bd_no and student.is_no_hide != 2 %}
+                                <a href="https://wa.me/{{ student.bd_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')' }}"
+                                   target="_blank"
+                                   class="whatsapp-badge whatsapp-available">
+                                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                                </a>
+                            {% elif student.is_whatsapp_bd == 1 and student.is_no_hide == 2 %}
+                                <span class="whatsapp-badge whatsapp-not-available">
+                                    <i class="fas fa-user-secret"></i> Available
                                 </span>
                             {% else %}
                                 <span class="whatsapp-badge whatsapp-not-available">
@@ -309,18 +374,33 @@
                             {% endif %}
                         </span>
                     </div>
-                    
+                
+                    <!-- Mobile Number (Abroad) -->
                     <div class="data-item">
                         <span class="data-label">Mobile Number (Abroad)</span>
-                        <span class="data-value"><i class="fa fa-globe"></i> {{ student.abroad_no|default:"Not Provided" }}</span>
+                        <span class="data-value">
+                            <i class="fa fa-globe"></i> 
+                            {% if student.abroad_no %}
+                                {{ student.abroad_no }}
+                            {% else %}
+                                Not Provided
+                            {% endif %}
+                        </span>
                     </div>
-                    
+                
+                    <!-- WhatsApp (Abroad Number) -->
                     <div class="data-item">
                         <span class="data-label">WhatsApp (Abroad Number)</span>
                         <span class="data-value">
-                            {% if student.is_whatsapp_abroad == 1 %}
-                                <span class="whatsapp-badge whatsapp-available">
-                                    <i class="fab fa-whatsapp"></i> Available
+                            {% if student.is_whatsapp_abroad == 1 and student.abroad_no and student.is_no_hide != 2 %}
+                                <a href="https://wa.me/{{ student.abroad_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')' }}"
+                                   target="_blank"
+                                   class="whatsapp-badge whatsapp-available">
+                                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                                </a>
+                            {% elif student.is_whatsapp_abroad == 1 and student.is_no_hide == 2 %}
+                                <span class="whatsapp-badge whatsapp-not-available">
+                                    <i class="fas fa-user-secret"></i> Available
                                 </span>
                             {% elif student.abroad_no %}
                                 <span class="whatsapp-badge whatsapp-not-available">
@@ -333,7 +413,8 @@
                             {% endif %}
                         </span>
                     </div>
-                </div>    
+                
+                </div>
             </div> <!-- End Right Section -->
         </div>
     </div>
