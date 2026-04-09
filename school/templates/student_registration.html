@@ -32,18 +32,15 @@
     --border-radius: 1rem;
     --border-radius-lg: 1.5rem;
     --border-radius-xl: 2rem;
-    /* BASE TEXT SIZE - 1.5rem (24px) for all text */
     --text-base: 1.5rem;
   }
 
-  /* Reset only for registration section - don't affect global */
   .registration-wrapper * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
 
-  /* GLOBAL TEXT SIZE RULE - ALL TEXT IN REGISTRATION SECTION = 1.5rem */
   .registration-wrapper,
   .registration-wrapper *,
   .registration-wrapper .card,
@@ -81,7 +78,6 @@
     line-height: 1.4 !important;
   }
 
-  /* Special handling for phone numbers - size 1.8rem */
   .registration-wrapper #bangladesh_number,
   .registration-wrapper #abroad_number,
   .registration-wrapper input[name="bangladesh_number"],
@@ -90,7 +86,6 @@
     line-height: 1.3 !important;
   }
 
-  /* Special handling for headings - slightly larger but maintain hierarchy */
   .registration-wrapper .card-header h2 {
     font-size: 2.2rem !important;
     font-weight: 700;
@@ -107,7 +102,6 @@
     color: #fff;
   }
 
-  /* OTP specific text */
   .registration-wrapper .otp-input-field {
     font-size: 2rem !important;
     font-weight: bold;
@@ -115,7 +109,6 @@
     letter-spacing: 0.5rem !important;
   }
 
-  /* OTP Timer Styling */
   .otp-timer {
     display: inline-flex;
     align-items: center;
@@ -141,7 +134,6 @@
     color: var(--primary-dark);
   }
 
-  /* OTP Input Container */
   .otp-input-container {
     display: flex;
     justify-content: center;
@@ -181,7 +173,6 @@
     background-color: #fef2f2;
   }
 
-  /* OTP Actions */
   .otp-actions {
     display: flex;
     flex-direction: column;
@@ -216,14 +207,6 @@
     text-decoration: underline !important;
   }
 
-  .resend-hint {
-    display: block;
-    font-size: 1.2rem !important;
-    color: var(--gray);
-    margin-top: 0.5rem;
-  }
-
-  /* Required field star styling */
   .required-star {
     color: #ef4444 !important;
     font-weight: bold;
@@ -231,7 +214,6 @@
     margin-left: 0.25rem;
   }
 
-  /* Remove global body/html styles */
   .registration-wrapper {
     min-height: auto;
     display: flex;
@@ -241,12 +223,10 @@
     position: relative;
     overflow: hidden;
     background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
-    /* UPDATED FONT FAMILY: Times New Roman */
     font-family: 'Times New Roman', Times, serif !important;
     font-size: var(--text-base) !important;
   }
 
-  /* Ensure all nested elements also get Times New Roman */
   .registration-wrapper,
   .registration-wrapper *,
   .registration-wrapper .card,
@@ -283,7 +263,6 @@
     font-family: 'Times New Roman', Times, serif !important;
   }
 
-  /* Animated Background */
   .registration-wrapper::before {
     content: '';
     position: absolute;
@@ -325,9 +304,6 @@
     width: 100%;
   }
 
-  /* ============================================
-       REDUCED CARD BODY WIDTH (UPDATED)
-    ============================================ */
   .col-md-10, .col-lg-8 {
     width: 100%;
     max-width: 860px;
@@ -340,9 +316,6 @@
     }
   }
 
-  /* ============================================
-       FORM STRUCTURE - IMPROVED SAME LINE ALIGNMENT
-    ============================================ */
   .input-with-icon {
     position: relative;
     width: 100%;
@@ -374,7 +347,6 @@
     position: relative;
   }
 
-  /* Searchable dropdown styles */
   .searchable-dropdown {
     position: relative;
     width: 100%;
@@ -442,7 +414,6 @@
     border-radius: 10px;
   }
 
-  /* Phone number specific row */
   .phone-number-row {
     display: flex;
     align-items: center;
@@ -525,7 +496,6 @@
     }
   }
 
-  /* TYPOGRAPHY */
   .registration-wrapper .form-label {
     font-weight: 600;
     margin-bottom: 0.5rem !important;
@@ -568,7 +538,6 @@
     color: #ef4444 !important;
   }
 
-  /* MODERN INPUTS */
   .modern-input, .modern-select {
     border: 2px solid rgba(203, 213, 225, 0.6);
     border-radius: 20px;
@@ -610,7 +579,6 @@
     width: 100%;
   }
 
-  /* WHATSAPP GROUP */
   .enhanced-whatsapp-group {
     border-radius: 20px;
     overflow: hidden;
@@ -652,7 +620,6 @@
     font-size: var(--text-base) !important;
   }
 
-  /* GENDER & RADIO GROUPS */
   .gender-radio-group {
     display: flex;
     gap: 2rem;
@@ -695,7 +662,6 @@
     font-size: var(--text-base) !important;
   }
 
-  /* CARD */
   .registration-wrapper .card {
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -753,7 +719,6 @@
     }
   }
 
-  /* BUTTON */
   .modern-btn {
     border-radius: 50px;
     padding: 1rem 2.5rem;
@@ -777,7 +742,6 @@
     width: 100%;
   }
 
-  /* CAPTCHA */
   .captcha-container {
     margin: 2rem 0;
     display: flex;
@@ -810,7 +774,6 @@
     display: block;
   }
 
-  /* PHOTO INPUT & PREVIEW STYLES */
   .photo-preview-container {
     margin-top: 1rem;
     display: flex;
@@ -862,7 +825,6 @@
     font-weight: 600;
   }
 
-  /* Crop Modal Styles */
   .crop-modal {
     display: none;
     position: fixed;
@@ -911,31 +873,6 @@
     justify-content: center;
   }
 
-  .crop-btn {
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-size: 1.5rem !important;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .crop-btn-primary {
-    background: #64748b;
-    color: white;
-  }
-
-  .crop-btn-secondary {
-    background: #64748b;
-    color: white;
-  }
-
-  .crop-btn-primary:hover, .crop-btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-
   .crop-info {
     color: var(--success);
     font-size: 1.3rem !important;
@@ -968,155 +905,122 @@
     }
   }
 
+  .change-number-section {
+    margin-top: 0.5rem;
+  }
 
-  /* Change Number Styles */
-.change-number-section {
-  margin-top: 0.5rem;
-}
+  .change-number-btn {
+    font-size: 1.4rem !important;
+    color: var(--primary) !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(99, 102, 241, 0.1);
+  }
 
-.change-number-btn {
-  font-size: 1.4rem !important;
-  color: var(--primary) !important;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  background: rgba(99, 102, 241, 0.1);
-}
+  .change-number-btn:hover {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--primary-dark) !important;
+    text-decoration: none !important;
+    transform: translateY(-1px);
+  }
 
-.change-number-btn:hover {
-  background: rgba(99, 102, 241, 0.2);
-  color: var(--primary-dark) !important;
-  text-decoration: none !important;
-  transform: translateY(-1px);
-}
+  #changeNumberModal .crop-container {
+    max-width: 500px;
+    width: 90%;
+    margin: auto;
+    padding: 2rem;
+  }
 
-/* Modal customization */
-#changeNumberModal .crop-container {
-  max-width: 500px;
-  width: 90%;
-  margin: auto;
-  padding: 2rem;
-}
+  #changeNumberModal h3 {
+    color: var(--gray-dark);
+    margin-bottom: 1.5rem;
+  }
 
-#changeNumberModal h3 {
-  color: var(--gray-dark);
-  margin-bottom: 1.5rem;
-}
+  #changeNumberModal .form-label {
+    font-size: 1.5rem !important;
+    font-weight: 600;
+    color: var(--gray-dark);
+  }
 
-#changeNumberModal .form-label {
-  font-size: 1.5rem !important;
-  font-weight: 600;
-  color: var(--gray-dark);
-}
+  #changeNumberModal .modern-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.5rem !important;
+  }
 
-#changeNumberModal .modern-btn {
-  padding: 0.8rem 1.5rem;
-  font-size: 1.5rem !important;
-}
+  #changeNumberModal .btn-secondary {
+    background: #64748b;
+  }
 
-#changeNumberModal .btn-secondary {
-  background: #64748b;
-}
+  #changeNumberModal .btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+  }
 
-#changeNumberModal .btn-secondary:hover {
-  background: #475569;
-  transform: translateY(-2px);
-}
-
-
-/* CHANGE PHOTO BUTTON STYLES - Add this to your existing CSS */
-.change-photo-btn {
-  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-  color: white;
-  border: none;
-  padding: 0.5rem 1.2rem;
-  border-radius: 50px;
-  font-size: 1.3rem !important;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.change-photo-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  background: linear-gradient(135deg, #475569 0%, #334155 100%);
-}
-
-.change-photo-btn:active {
-  transform: translateY(0px);
-}
-
-/* Photo preview container adjustments */
-.photo-preview-container {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.photo-preview {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--primary-light);
-  box-shadow: var(--shadow-md);
-  background: var(--light);
-  transition: transform 0.3s ease;
-}
-
-.photo-preview:hover {
-  transform: scale(1.05);
-}
-
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
   .change-photo-btn {
-    padding: 0.4rem 1rem;
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    font-size: 1.3rem !important;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .change-photo-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  }
+
+  .change-photo-btn:active {
+    transform: translateY(0px);
+  }
+
+  @media (max-width: 768px) {
+    .change-photo-btn {
+      padding: 0.4rem 1rem;
+      font-size: 1.2rem !important;
+    }
+    .photo-preview {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  .global-messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999;
+    min-width: 350px;
+    max-width: 500px;
+  }
+
+  .global-messages-container .alert {
+    border-radius: 15px !important;
+    font-size: 1.5rem !important;
+    font-family: 'Times New Roman', Times, serif !important;
+    margin-bottom: 10px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+  }
+
+  .form-text {
     font-size: 1.2rem !important;
+    color: #6c757d;
+    margin-top: 0.5rem;
   }
-  
-  .photo-preview {
-    width: 80px;
-    height: 80px;
-  }
-}
-
-/* ============================================
-   GLOBAL MESSAGES TOAST - fixed position
-   ============================================ */
-.global-messages-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 99999;
-  min-width: 350px;
-  max-width: 500px;
-}
-
-.global-messages-container .alert {
-  border-radius: 15px !important;
-  font-size: 1.5rem !important;
-  font-family: 'Times New Roman', Times, serif !important;
-  margin-bottom: 10px !important;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-}
-
 </style>
-
 {% endblock %} 
 {% block content %}
-<!-- Cropper.js CSS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
-<!-- Registration Form -->
 {% if not show_otp_form %}
 <div class="registration-wrapper">
   <div class="container-custom">
@@ -1132,9 +1036,8 @@
             <form method="POST" id="registrationForm" enctype="multipart/form-data" action="{% url 'student_registration' %}" novalidate>
               {% csrf_token %}
 
-              <!-- PERSONAL INFORMATION SECTION -->
               <div class="mb-4">
-                <!-- Student Name -->
+                <!-- Student Name - English Only -->
                 <div class="form-horizontal-row">
                   <label for="student_name" class="form-label fw-bold">
                     <i class="fas fa-user-graduate"></i> শিক্ষার্থীর নাম <span class="required-star">*</span>
@@ -1144,37 +1047,42 @@
                       <i class="fas fa-user input-icon"></i>
                       <input type="text" name="student_name" id="student_name"
                         class="form-control form-control-lg modern-input enhanced-input"
-                        placeholder="আপনার পূর্ণ নাম লিখুন"
-                        value="{{ form_data.student_name|default:'' }}" required />
+                        placeholder="শুধুমাত্র ইংরেজি অক্ষরে আপনার নাম লিখুন (যেমন: John Doe)"
+                        value="{{ form_data.student_name|default:'' }}" 
+                        required 
+                        pattern="[A-Za-z\s\.\-]+"
+                        title="শুধুমাত্র ইংরেজি অক্ষর, স্পেস, ডট (.) এবং হাইফেন (-) ব্যবহার করুন" />
                     </div>
                   </div>
                 </div>
-                <!-- Student Name -->
+
+                <!-- Student Bio -->
                 <div class="form-horizontal-row">
-                  <label for="student_name" class="form-label fw-bold">
-                    <i class="fas fa-user-graduate"></i> আপনার বায়ো (bio)
+                  <label for="student_bio" class="form-label fw-bold">
+                    <i class="fas fa-align-left"></i> আপনার বায়ো (bio)
                   </label>
                   <div class="form-field-wrapper">
                     <div class="input-with-icon">
-                      <i class="fas fa-user input-icon"></i>
-                      <input type="text" name="student_name" id="student_name"
-                        class="form-control form-control-lg modern-input enhanced-input"
-                        placeholder="আপনার বায়ো"
-                        value="{{ form_data.student_name|default:'' }}" />
+                      <i class="fas fa-info-circle input-icon"></i>
+                      <textarea name="student_bio" id="student_bio"
+                        class="form-control modern-input enhanced-input"
+                        rows="3"
+                        placeholder="আপনার সম্পর্কে সংক্ষেপে লিখুন">{{ form_data.student_bio|default:'' }}</textarea>
                     </div>
                   </div>
                 </div>
-                <!-- Student Name -->
+
+                <!-- Facebook Profile -->
                 <div class="form-horizontal-row">
                   <label for="facebook_profile" class="form-label fw-bold">
-                    <i class="fas fa-user-graduate"></i>আপনার ফেসবুক প্রোফাইল
+                    <i class="fab fa-facebook"></i> আপনার ফেসবুক প্রোফাইল
                   </label>
                   <div class="form-field-wrapper">
                     <div class="input-with-icon">
-                      <i class="fas fa-user input-icon"></i>
-                      <input type="text" name="facebook_profile" id="facebook_profile"
+                      <i class="fab fa-facebook input-icon"></i>
+                      <input type="url" name="facebook_profile" id="facebook_profile"
                         class="form-control form-control-lg modern-input enhanced-input"
-                        placeholder="আপনার ফেসবুক প্রোফাইল"
+                        placeholder="https://facebook.com/your.profile"
                         value="{{ form_data.facebook_profile|default:'' }}"/>
                     </div>
                   </div>
@@ -1190,7 +1098,7 @@
                       <div class="gender-radio-group">
                         {% for val, label in gender_choices %}
                           <label class="gender-radio-option">
-                            <input type="radio" name="gender" value="{{ val }}" class="gender-radio" {% if form_data.gender == val %}checked{% endif %} {% if forloop.first %}required{% endif %} />
+                            <input type="radio" name="gender" value="{{ val }}" class="gender-radio" {% if form_data.gender == val %}checked{% endif %} required />
                             <span>{{ label }}</span>
                           </label>
                         {% endfor %}
@@ -1209,7 +1117,7 @@
                       <div class="gender-radio-group">
                         {% for val, label in maritalstatus_choices %}
                           <label class="gender-radio-option">
-                            <input type="radio" name="marital_status" value="{{ val }}" class="gender-radio" {% if form_data.marital_status == val %}checked{% endif %} {% if forloop.first %}required{% endif %} />
+                            <input type="radio" name="marital_status" value="{{ val }}" class="gender-radio" {% if form_data.marital_status == val %}checked{% endif %} required />
                             <span>{{ label }}</span>
                           </label>
                         {% endfor %}
@@ -1218,15 +1126,15 @@
                   </div>
                 </div>
 
-                <!-- Batch Year - Searchable Dropdown -->
+                <!-- Batch Year -->
                 <div class="form-horizontal-row">
                   <label for="batch" class="form-label fw-bold">
                     <i class="fas fa-calendar-alt"></i> ব্যাচের বছর <span class="required-star">*</span>
                   </label>
                   <div class="form-field-wrapper">
                     <div class="searchable-dropdown" data-field="batch">
-                      <input type="text" id="batchSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="ব্যাচের বছর অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{{ form_data.batch|default:'' }}">
-                      <input type="hidden" name="batch" id="batchHidden" value="{{ form_data.batch|default:'' }}">
+                      <input type="text" id="batchSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="ব্যাচের বছর অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{{ form_data.batch|default:'' }}" required>
+                      <input type="hidden" name="batch" id="batchHidden" value="{{ form_data.batch|default:'' }}" required>
                       <div id="batchDropdown" class="dropdown-list">
                         {% for year in batch_years %}
                           <div class="dropdown-item" data-value="{{ year }}">{{ year }}</div>
@@ -1236,15 +1144,15 @@
                   </div>
                 </div>
 
-                <!-- Village - Searchable Dropdown -->
+                <!-- Village -->
                 <div class="form-horizontal-row">
                   <label for="village" class="form-label fw-bold">
                     <i class="fas fa-home"></i> আপনার গ্রাম <span class="required-star">*</span>
                   </label>
                   <div class="form-field-wrapper">
                     <div class="searchable-dropdown" data-field="village">
-                      <input type="text" id="villageSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="গ্রাম অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for village in villages %}{% if form_data.village_id == village.id %}{{ village.name }}{% endif %}{% endfor %}">
-                      <input type="hidden" name="village" id="villageHidden" value="{{ form_data.village_id|default:'' }}">
+                      <input type="text" id="villageSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="গ্রাম অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for village in villages %}{% if form_data.village_id == village.id %}{{ village.name }}{% endif %}{% endfor %}" required>
+                      <input type="hidden" name="village" id="villageHidden" value="{{ form_data.village_id|default:'' }}" required>
                       <div id="villageDropdown" class="dropdown-list">
                         {% for village in villages %}
                           <div class="dropdown-item" data-value="{{ village.id }}" data-text="{{ village.name }}">{{ village.name }}</div>
@@ -1254,15 +1162,15 @@
                   </div>
                 </div>
 
-                <!-- Current Location - Searchable Dropdown -->
+                <!-- Current Location -->
                 <div class="form-horizontal-row">
                   <label for="current_location" class="form-label fw-bold">
                     <i class="fas fa-globe-americas"></i> বর্তমান অবস্থান <span class="required-star">*</span>
                   </label>
                   <div class="form-field-wrapper">
                     <div class="searchable-dropdown" data-field="current_location">
-                      <input type="text" id="currentLocationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="দেশ অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for code, name in countries %}{% if form_data.current_location == code %}{{ name }}{% endif %}{% endfor %}">
-                      <input type="hidden" name="current_location" id="currentLocationHidden" value="{{ form_data.current_location|default:'' }}">
+                      <input type="text" id="currentLocationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="দেশ অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" required value="{% for code, name in countries %}{% if form_data.current_location == code %}{{ name }}{% endif %}{% endfor %}">
+                      <input type="hidden" name="current_location" id="currentLocationHidden" value="{{ form_data.current_location|default:'' }}" required>
                       <div id="currentLocationDropdown" class="dropdown-list">
                         {% for code, name in countries %}
                           <div class="dropdown-item" data-value="{{ code }}" data-text="{{ name }}">{{ name }}</div>
@@ -1272,33 +1180,26 @@
                   </div>
                 </div>
 
-              <!-- CONTACT INFORMATION SECTION -->
+                <!-- CONTACT INFORMATION SECTION -->
                 <div class="mb-4">
                   <div class="phone-row-wrapper" style="display: flex; align-items: center; gap: 35px; flex-wrap: wrap; margin-bottom: 15px;">
-    
-                      <!-- প্রধান লেবেল -->
-                      <label class="form-label fw-bold" style="margin-bottom: 0; white-space: nowrap;">
-                          <i class="fas fa-phone-alt"></i> মোবাইল নম্বর <span class="required-star">*</span>
-                      </label>
-
-                      <!-- হাইড লেবেল এবং রেডিও গ্রুপকে এক সাথে রাখার জন্য একটি ডিভ -->
-                      <div style="display: flex; align-items: center; gap: 10px;">
-                          <label class="form-label-phone fw-bold" style="margin-bottom: 0; white-space: nowrap;">আপনি কি আপনার ফোন নম্বর ওয়েবসাইটে দেখাতে চান ? <span class="required-star">*</span></label>
-                          
-                          <div class="gender-radio-group" style="display: flex; gap: 15px; margin-bottom: 0;">
-                              {% for val, label in is_no_hide_choices %}
-                                  <label class="gender-radio-option" style="display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0;">
-                                      <input type="radio" name="is_no_hide" value="{{ val }}" 
-                                            {% if form_data.is_no_hide_bd == val %}checked{% endif %} required />
-                                      <span style="font-size: 1.5rem;">{{ label }}</span>
-                                  </label>
-                              {% endfor %}
-                          </div>
+                    <label class="form-label fw-bold" style="margin-bottom: 0; white-space: nowrap;">
+                      <i class="fas fa-phone-alt"></i> মোবাইল নম্বর <span class="required-star">*</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      <label class="form-label-phone fw-bold" style="margin-bottom: 0; white-space: nowrap;">আপনি কি আপনার ফোন নম্বর ওয়েবসাইটে দেখাতে চান ? <span class="required-star">*</span></label>
+                      <div class="gender-radio-group" style="display: flex; gap: 15px; margin-bottom: 0;">
+                        {% for val, label in is_no_hide_choices %}
+                          <label class="gender-radio-option" style="display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0;">
+                            <input type="radio" name="is_no_hide" value="{{ val }}" {% if form_data.is_no_hide == val %}checked{% endif %} required />
+                            <span style="font-size: 1.5rem;">{{ label }}</span>
+                          </label>
+                        {% endfor %}
                       </div>
-
+                    </div>
                   </div>
                   
-                  <!-- Bangladesh Number Row -->
+                  <!-- Bangladesh Number -->
                   <div class="phone-number-row">
                     <label class="form-label fw-bold">
                       <i class="fas fa-phone-alt"></i> বাংলাদেশ নম্বর <span class="required-star">*</span>
@@ -1312,7 +1213,7 @@
                     </div>
                   </div>
 
-                  <!-- Is WhatsApp Radio Buttons for BD -->
+                  <!-- Is WhatsApp BD -->
                   <div class="whatsapp-radio-section">
                     <div class="whatsapp-radio-wrapper whatsapp-inline">
                       <label class="form-label-phone fw-bold">
@@ -1329,7 +1230,8 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Abroad Number Row -->
+
+                  <!-- Abroad Number -->
                   <div class="phone-number-row" style="margin-top: 1rem;">
                     <label class="form-label fw-bold">
                       <i class="fas fa-globe"></i> বিদেশি নম্বর
@@ -1343,97 +1245,99 @@
                     </div>
                   </div>
 
-              <!-- Is WhatsApp Radio Buttons for Abroad -->
-              <div class="whatsapp-radio-section" style="padding-left: 353px">
-                <div class="whatsapp-radio-wrapper whatsapp-inline">
-                  <label class="form-label-phone fw-bold">
-                    এটা কি হোয়াটসঅ্যাপ নম্বর ?
-                  </label>
-                  <div class="gender-radio-group">
-                    {% for val, label in is_whatsapp_abroad_choices %}
-                      <label class="gender-radio-option">
-                        <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
-                              {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
-                        <span>{{ label }}</span>
+                  <!-- Is WhatsApp Abroad -->
+                  <div class="whatsapp-radio-section" style="padding-left: 353px">
+                    <div class="whatsapp-radio-wrapper whatsapp-inline">
+                      <label class="form-label-phone fw-bold">
+                        এটা কি হোয়াটসঅ্যাপ নম্বর ?
                       </label>
-                    {% endfor %}
-                  </div>
-                </div>
-              </div>
-              <!-- PROFESSIONAL INFORMATION SECTION -->
-              <div class="mb-4">
-                <!-- Occupation - Searchable Dropdown -->
-                <div class="form-horizontal-row">
-                  <label for="occupation" class="form-label fw-bold">
-                    <i class="fas fa-briefcase"></i> পেশা <span class="required-star">*</span>
-                  </label>
-                  <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="occupation">
-                      <input type="text" id="occupationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="পেশা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in occupation_choices %}{% if form_data.occupation == val %}{{ label }}{% endif %}{% endfor %}">
-                      <input type="hidden" name="occupation" id="occupationHidden" value="{{ form_data.occupation|default:'' }}">
-                      <div id="occupationDropdown" class="dropdown-list">
-                        {% for val, label in occupation_choices %}
-                          <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
+                      <div class="gender-radio-group">
+                        {% for val, label in is_whatsapp_abroad_choices %}
+                          <label class="gender-radio-option">
+                            <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
+                                  {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
+                            <span>{{ label }}</span>
+                          </label>
                         {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- PROFESSIONAL INFORMATION SECTION -->
+                  <div class="mb-4">
+                    <!-- Occupation -->
+                    <div class="form-horizontal-row">
+                      <label for="occupation" class="form-label fw-bold">
+                        <i class="fas fa-briefcase"></i> পেশা <span class="required-star">*</span>
+                      </label>
+                      <div class="form-field-wrapper">
+                        <div class="searchable-dropdown" data-field="occupation">
+                          <input type="text" id="occupationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="পেশা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in occupation_choices %}{% if form_data.occupation == val %}{{ label }}{% endif %}{% endfor %}" required>
+                          <input type="hidden" name="occupation" id="occupationHidden" value="{{ form_data.occupation|default:'' }}" required>
+                          <div id="occupationDropdown" class="dropdown-list">
+                            {% for val, label in occupation_choices %}
+                              <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Last Education -->
+                    <div class="form-horizontal-row">
+                      <label for="last_edu" class="form-label fw-bold">
+                        <i class="fas fa-graduation-cap"></i> সর্বশেষ শিক্ষাগত যোগ্যতা <span class="required-star">*</span>
+                      </label>
+                      <div class="form-field-wrapper">
+                        <div class="searchable-dropdown" data-field="last_edu">
+                          <input type="text" id="lastEduSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="শিক্ষাগত যোগ্যতা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in education_choices %}{% if form_data.last_edu == val %}{{ label }}{% endif %}{% endfor %}" required>
+                          <input type="hidden" name="last_edu" id="lastEduHidden" value="{{ form_data.last_edu|default:'' }}" required>
+                          <div id="lastEduDropdown" class="dropdown-list">
+                            {% for val, label in education_choices %}
+                              <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Photo Upload -->
+                  <div class="form-horizontal-row">
+                    <label for="student_photo" class="form-label fw-bold">
+                      <i class="fas fa-camera"></i> শিক্ষার্থীর ছবি<span class="required-star">*</span>
+                    </label>
+                    <div class="form-field-wrapper">
+                      <div class="file-input-wrapper">
+                        <input type="file" name="student_photo" id="student_photo" class="form-control form-control-lg modern-input" accept="image/jpeg,image/png,image/jpg,image/webp" required>
+                      </div>
+                      <div class="photo-preview-container" id="photoPreviewContainer" style="display: none;">
+                        <img id="photoPreview" class="photo-preview" src="#" alt="ছবি প্রিভিউ">
+                        <button type="button" id="changePhotoBtn" class="change-photo-btn">
+                          <i class="fas fa-exchange-alt"></i> ছবি পরিবর্তন
+                        </button>
+                      </div>
+                      <div id="cropInfo" class="crop-info" style="display: none;">
+                        <i class="fas fa-magic"></i> ছবি সিলেক্ট করুন...
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Last Education - Searchable Dropdown -->
-                <div class="form-horizontal-row">
-                  <label for="last_edu" class="form-label fw-bold">
-                    <i class="fas fa-graduation-cap"></i> সর্বশেষ শিক্ষাগত যোগ্যতা <span class="required-star">*</span>
-                  </label>
-                  <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="last_edu">
-                      <input type="text" id="lastEduSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="শিক্ষাগত যোগ্যতা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in education_choices %}{% if form_data.last_edu == val %}{{ label }}{% endif %}{% endfor %}">
-                      <input type="hidden" name="last_edu" id="lastEduHidden" value="{{ form_data.last_edu|default:'' }}">
-                      <div id="lastEduDropdown" class="dropdown-list">
-                        {% for val, label in education_choices %}
-                          <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
+                <!-- CAPTCHA -->
+                <div class="captcha-container">
+                  <div class="g-recaptcha" data-sitekey="6LfrTpssAAAAABo3slHE9MGypqF6IiVzTlYeFeQ_" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
                 </div>
-              </div>
-
-              <!-- PHOTO UPLOAD FIELD WITH CHANGE PHOTO OPTION -->
-              <div class="form-horizontal-row">
-                <label for="student_photo" class="form-label fw-bold">
-                  <i class="fas fa-camera"></i> শিক্ষার্থীর ছবি<span class="required-star">*</span>
-                </label>
-                <div class="form-field-wrapper">
-                  <div class="file-input-wrapper">
-                    <input type="file" name="student_photo" id="student_photo" class="form-control form-control-lg modern-input" accept="image/jpeg,image/png,image/jpg,image/webp">
-                  </div>
-                  <div class="photo-preview-container" id="photoPreviewContainer" style="display: none;">
-                    <img id="photoPreview" class="photo-preview" src="#" alt="ছবি প্রিভিউ">
-                    <button type="button" id="changePhotoBtn" class="change-photo-btn">
-                      <i class="fas fa-exchange-alt"></i> ছবি পরিবর্তন
-                    </button>
-                  </div>
-                  <div id="cropInfo" class="crop-info" style="display: none;">
-                    <i class="fas fa-magic"></i> ছবি সিলেক্ট করুন...
-                  </div>
+                <div class="captcha-error" id="captchaError">
+                  <i class="fas fa-exclamation-circle me-2"></i> অনুগ্রহ করে reCAPTCHA যাচাই সম্পূর্ণ করুন
                 </div>
-              </div>
-            </div>
 
-              <!-- CAPTCHA SECTION -->
-              <div class="captcha-container">
-                <div class="g-recaptcha" data-sitekey="6LfrTpssAAAAABo3slHE9MGypqF6IiVzTlYeFeQ_" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
-              </div>
-              <div class="captcha-error" id="captchaError">
-                <i class="fas fa-exclamation-circle me-2"></i> অনুগ্রহ করে reCAPTCHA যাচাই সম্পূর্ণ করুন
-              </div>
-
-              <!-- FORM ACTIONS -->
-              <div class="wrapper_submit">
-                <button type="submit" class="btn btn-primary btn-lg modern-btn" id="submitBtn">
-                  <i class="fas fa-paper-plane me-2"></i>নিবন্ধন করুন
-                </button>
+                <!-- Submit Button -->
+                <div class="wrapper_submit">
+                  <button type="submit" class="btn btn-primary btn-lg modern-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane me-2"></i>নিবন্ধন করুন
+                  </button>
+                </div>
               </div>
             </form>
           </div>
@@ -1474,33 +1378,30 @@
             </div>
           </div>
           <div class="card-body">
-          <div class="text-center mb-4">
+            <div class="text-center mb-4">
               <div class="otp-icon-wrapper mb-3">
-                  <i class="fab fa-whatsapp" style="font-size: 70px; color: #25d366"></i>
+                <i class="fab fa-whatsapp" style="font-size: 70px; color: #25d366"></i>
               </div>
               <h4 class="mt-3 fw-bold mb-2">ওটিপি যাচাই</h4>
               <p class="text-muted mt-2">
-                  আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে
+                আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে
               </p>
-              <!-- Change Number Link -->
               <div class="change-number-section mt-2">
-                  <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn">
-                      <i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন
-                  </button>
+                <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn">
+                  <i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন
+                </button>
               </div>
-              
               <div class="otp-timer">
-                  <i class="fas fa-clock me-2"></i>
-                  <span id="timer">05:00</span>
-                  <span class="ms-2">বাকি সময়</span>
+                <i class="fas fa-clock me-2"></i>
+                <span id="timer">05:00</span>
+                <span class="ms-2">বাকি সময়</span>
               </div>
-          </div>
+            </div>
 
-            <!-- Change Number Modal (Functionality Fixed) -->
+            <!-- Change Number Modal -->
             <div id="changeNumberModal" class="crop-modal" style="display: none;">
               <div class="crop-container" style="max-width: 500px; margin: auto;">
                 <h3 class="mb-4 text-center" style="font-size: 1.8rem;">নম্বর পরিবর্তন করুন</h3>
-                <!-- Fixed: Action points back to registration URL -->
                 <form id="changeNumberForm" method="POST" action="{% url 'student_registration' %}">
                   {% csrf_token %}
                   <input type="hidden" name="step" value="change_number" />
@@ -1536,12 +1437,10 @@
                   </div>
                 </div>
               </div>
-
               <div class="otp-actions">
                 <button type="submit" class="btn btn-primary btn-lg verify-otp-btn" id="verifyBtn" disabled style="opacity: 0.6;">
                   <i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন
                 </button>
-
                 <div class="resend-section">
                   <button type="button" class="btn btn-link resend-otp-btn" id="resendBtn">
                     <i class="fas fa-redo-alt me-1"></i>ওটিপি পুনরায় পাঠান
@@ -1549,7 +1448,6 @@
                 </div>
               </div>
             </form>
-
             <form method="POST" id="resendForm" style="display: none;" action="{% url 'student_registration' %}">
               {% csrf_token %}
               <input type="hidden" name="step" value="resend_otp" />
@@ -1565,14 +1463,9 @@
 {% endblock content %}
 
 {% block extra_js %}
-
-<!-- Cropper.js JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js?hl=bn" async defer></script>
 <script>
-  // ============================================
-  // SEARCHABLE DROPDOWN FUNCTION
-  // ============================================
   function initializeSearchableDropdown(searchInputId, dropdownId, hiddenInputId) {
     const searchInput = document.getElementById(searchInputId);
     const hiddenInput = document.getElementById(hiddenInputId);
@@ -1643,12 +1536,8 @@
     filterDropdown();
   }
 
-  // ============================================
-  // AUTO CROP FUNCTIONALITY
-  // ============================================
   let cropper = null;
   let currentImageFile = null;
-  let croppedBlob = null;
   
   const photoInput = document.getElementById('student_photo');
   const previewContainer = document.getElementById('photoPreviewContainer');
@@ -1662,20 +1551,16 @@
   
   function openCropModal(file) {
     if (!file) return;
-    
     currentImageFile = file;
-    
     if (cropInfo) {
       cropInfo.style.display = 'flex';
       cropInfo.innerHTML = '<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। ক্রপ করুন...';
       cropInfo.classList.remove('crop-warning');
     }
-    
     const reader = new FileReader();
     reader.onload = function(event) {
       cropImage.src = event.target.result;
       cropModal.classList.add('show');
-      
       if (cropper) cropper.destroy();
       cropper = new Cropper(cropImage, {
         aspectRatio: 1,
@@ -1701,7 +1586,6 @@
     photoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       if (!file) return;
-      
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
       if (!allowedTypes.includes(file.type)) {
         alert('শুধুমাত্র ছবির ফাইল আপলোড করুন (.jpg, .jpeg, .png, .webp)');
@@ -1710,7 +1594,6 @@
         if (cropInfo) cropInfo.style.display = 'none';
         return;
       }
-      
       openCropModal(file);
     });
   }
@@ -1724,44 +1607,25 @@
   if (confirmCropBtn) {
     confirmCropBtn.addEventListener('click', function() {
       if (cropper) {
-        const canvas = cropper.getCroppedCanvas({
-          width: 500,
-          height: 500,
-          imageSmoothingQuality: 'high'
-        });
-        
+        const canvas = cropper.getCroppedCanvas({ width: 500, height: 500, imageSmoothingQuality: 'high' });
         canvas.toBlob(function(blob) {
-          croppedBlob = blob;
-          
-          const croppedFile = new File([blob], currentImageFile.name, {
-            type: 'image/jpeg',
-            lastModified: Date.now()
-          });
-          
+          const croppedFile = new File([blob], currentImageFile.name, { type: 'image/jpeg', lastModified: Date.now() });
           const dataTransfer = new DataTransfer();
           dataTransfer.items.add(croppedFile);
           photoInput.files = dataTransfer.files;
-          
           const reader = new FileReader();
           reader.onload = function(e) {
             previewImg.src = e.target.result;
             previewContainer.style.display = 'flex';
             if (cropInfo) {
-              cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি সফলভাবে ক্রপ করা হয়েছে! (সাইজ: ' + (blob.size / 1024).toFixed(1) + 'KB)';
-              setTimeout(() => {
-                if (cropInfo) cropInfo.style.opacity = '0.7';
-              }, 2000);
+              cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি সফলভাবে ক্রপ করা হয়েছে!';
+              setTimeout(() => { if (cropInfo) cropInfo.style.opacity = '0.7'; }, 2000);
             }
           };
           reader.readAsDataURL(croppedFile);
-          
           currentImageFile = croppedFile;
-          
           cropModal.classList.remove('show');
-          if (cropper) {
-            cropper.destroy();
-            cropper = null;
-          }
+          if (cropper) { cropper.destroy(); cropper = null; }
         }, 'image/jpeg', 0.9);
       }
     });
@@ -1770,43 +1634,16 @@
   if (cancelCropBtn) {
     cancelCropBtn.addEventListener('click', function() {
       cropModal.classList.remove('show');
-      if (cropper) {
-        cropper.destroy();
-        cropper = null;
-      }
+      if (cropper) { cropper.destroy(); cropper = null; }
       photoInput.value = '';
       previewContainer.style.display = 'none';
-      if (cropInfo) {
-        cropInfo.style.display = 'none';
-      }
+      if (cropInfo) cropInfo.style.display = 'none';
     });
   }
   
-  if (cropModal) {
-    cropModal.addEventListener('click', function(e) {
-      if (e.target === cropModal) {
-        cropModal.classList.remove('show');
-        if (cropper) {
-          cropper.destroy();
-          cropper = null;
-        }
-        photoInput.value = '';
-        previewContainer.style.display = 'none';
-        if (cropInfo) {
-          cropInfo.style.display = 'none';
-        }
-      }
-    });
-  }
-
-  // ============================================
-  // IMAGE COMPRESSION FUNCTION
-  // ============================================
   const MAX_FILE_SIZE = 50 * 1024;
-  
   async function compressImage(file) {
     if (file.size <= MAX_FILE_SIZE) return file;
-    
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -1814,26 +1651,17 @@
         const img = new Image();
         img.src = event.target.result;
         img.onload = () => {
-          let width = img.width;
-          let height = img.height;
-          let attempts = 0;
+          let width = img.width, height = img.height, attempts = 0;
           const maxAttempts = 8;
-          
           function attemptCompress() {
             attempts++;
             const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = width; canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
-            
             canvas.toBlob((blob) => {
               if (blob.size <= MAX_FILE_SIZE || attempts >= maxAttempts) {
-                const compressedFile = new File([blob], file.name, {
-                  type: 'image/jpeg',
-                  lastModified: Date.now()
-                });
-                resolve(compressedFile);
+                resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
               } else {
                 width = Math.floor(width * 0.85);
                 height = Math.floor(height * 0.85);
@@ -1841,7 +1669,6 @@
               }
             }, 'image/jpeg', 0.85);
           }
-          
           attemptCompress();
         };
         img.onerror = reject;
@@ -1861,26 +1688,15 @@
             cropInfo.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ছবি কম্প্রেস করা হচ্ছে...';
             cropInfo.style.display = 'flex';
           }
-          
           try {
             const compressedFile = await compressImage(file);
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(compressedFile);
             photoInput.files = dataTransfer.files;
-            
-            if (cropInfo) {
-              cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি কম্প্রেস সম্পন্ন! (' + (compressedFile.size / 1024).toFixed(1) + 'KB)';
-            }
-            
-            setTimeout(() => {
-              registrationForm.submit();
-            }, 500);
+            if (cropInfo) cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি কম্প্রেস সম্পন্ন!';
+            setTimeout(() => registrationForm.submit(), 500);
           } catch (error) {
             console.error('Compression error:', error);
-            if (cropInfo) {
-              cropInfo.innerHTML = '<i class="fas fa-exclamation-triangle"></i> কম্প্রেস করতে সমস্যা, মূল ছবি ব্যবহার হবে';
-              cropInfo.classList.add('crop-warning');
-            }
             registrationForm.submit();
           }
         }
@@ -1888,93 +1704,39 @@
     });
   }
 
-  // ============================================
-  // CAPTCHA HANDLERS
-  // ============================================
   let captchaVerified = false;
-
-  window.onCaptchaSuccess = function() {
-    captchaVerified = true;
-    const captchaError = document.getElementById("captchaError");
-    if (captchaError) captchaError.classList.remove("show");
-  }
-
-  window.onCaptchaExpired = function() {
-    captchaVerified = false;
-    const captchaError = document.getElementById("captchaError");
-    if (captchaError) captchaError.classList.remove("show");
-  }
-
+  window.onCaptchaSuccess = function() { captchaVerified = true; document.getElementById("captchaError")?.classList.remove("show"); }
+  window.onCaptchaExpired = function() { captchaVerified = false; document.getElementById("captchaError")?.classList.remove("show"); }
   function validateCaptcha() {
-    const captchaError = document.getElementById("captchaError");
-    if (!captchaVerified) {
-      if (captchaError) captchaError.classList.add("show");
-      return false;
-    } else {
-      if (captchaError) captchaError.classList.remove("show");
-      return true;
-    }
+    if (!captchaVerified) { document.getElementById("captchaError")?.classList.add("show"); return false; }
+    else { document.getElementById("captchaError")?.classList.remove("show"); return true; }
   }
 
-  // ============================================
-  // OTP FUNCTIONS
-  // ============================================
-  let timerInterval;
-  let timeLeft = 300;
-  let isTimerExpired = false;
-  let resendAttempts = 0;
+  let timerInterval, timeLeft = 300, isTimerExpired = false, resendAttempts = 0;
   const MAX_RESEND_ATTEMPTS = 2;
 
   function startTimer() {
-    const timerElement = document.getElementById("timer");
-    const verifyBtn = document.getElementById("verifyBtn");
-    const otpInput = document.getElementById("otp_code");
-    const resendBtn = document.getElementById("resendBtn");
-
+    const timerElement = document.getElementById("timer"), verifyBtn = document.getElementById("verifyBtn"), otpInput = document.getElementById("otp_code"), resendBtn = document.getElementById("resendBtn");
     if (!timerElement) return false;
     if (timerInterval) clearInterval(timerInterval);
-    
-    const modal = document.getElementById("changeNumberModal");
-    if (modal && modal.style.display === "flex") return false;
-    
     if (timeLeft === 0 || timeLeft === undefined) timeLeft = 300;
-    
     isTimerExpired = false;
     if (resendBtn) resendBtn.style.display = "none";
-
     timerInterval = setInterval(() => {
       if (timeLeft <= 0) {
         clearInterval(timerInterval);
         timerElement.textContent = "00:00";
         isTimerExpired = true;
-
-        if (otpInput) {
-          otpInput.disabled = true;
-          otpInput.classList.remove("is-valid", "is-invalid");
-          otpInput.value = "";
-          otpInput.placeholder = "মেয়াদ শেষ";
-        }
-
-        if (verifyBtn) {
-          verifyBtn.disabled = true;
-          verifyBtn.style.opacity = "0.5";
-          verifyBtn.style.cursor = "not-allowed";
-          verifyBtn.innerHTML = '<i class="fas fa-clock me-2"></i>মেয়াদ শেষ';
-        }
-
-        if (resendBtn && resendAttempts < MAX_RESEND_ATTEMPTS) {
-          resendBtn.style.display = "inline-block";
-        }
-        
+        if (otpInput) { otpInput.disabled = true; otpInput.value = ""; otpInput.placeholder = "মেয়াদ শেষ"; }
+        if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.5"; verifyBtn.innerHTML = '<i class="fas fa-clock me-2"></i>মেয়াদ শেষ'; }
+        if (resendBtn && resendAttempts < MAX_RESEND_ATTEMPTS) resendBtn.style.display = "inline-block";
         timerElement.style.color = "#dc3545";
       } else {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
+        const minutes = Math.floor(timeLeft / 60), seconds = timeLeft % 60;
         timerElement.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
         timeLeft--;
       }
     }, 1000);
-    
     return true;
   }
 
@@ -1982,138 +1744,43 @@
     clearInterval(timerInterval);
     timeLeft = 300;
     isTimerExpired = false;
-    
-    const timerElement = document.getElementById("timer");
-    const verifyBtn = document.getElementById("verifyBtn");
-    const otpInput = document.getElementById("otp_code");
-    const resendBtn = document.getElementById("resendBtn");
-
-    if (timerElement) {
-      timerElement.textContent = "05:00";
-      timerElement.style.color = "";
-    }
-
-    if (otpInput) {
-      otpInput.disabled = false;
-      otpInput.value = "";
-      otpInput.placeholder = "••••••";
-      otpInput.classList.remove("is-valid", "is-invalid");
-      otpInput.focus();
-    }
-
-    if (verifyBtn) {
-      verifyBtn.disabled = true;
-      verifyBtn.style.opacity = "0.6";
-      verifyBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন';
-    }
-
+    const timerElement = document.getElementById("timer"), verifyBtn = document.getElementById("verifyBtn"), otpInput = document.getElementById("otp_code"), resendBtn = document.getElementById("resendBtn");
+    if (timerElement) { timerElement.textContent = "05:00"; timerElement.style.color = ""; }
+    if (otpInput) { otpInput.disabled = false; otpInput.value = ""; otpInput.placeholder = "••••••"; otpInput.classList.remove("is-valid", "is-invalid"); otpInput.focus(); }
+    if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; verifyBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন'; }
     if (resendBtn) resendBtn.style.display = "none";
-
     startTimer();
   }
 
- // ============================================
-// CHANGE NUMBER MODAL FUNCTIONALITY (COMPLETELY FIXED)
-// ============================================
-function setupChangeNumberModal() {
-    const changeNumberBtn = document.getElementById("changeNumberBtn");
-    const changeNumberModal = document.getElementById("changeNumberModal");
-    const closeChangeNumberModal = document.getElementById("closeChangeNumberModal");
-    const changeNumberForm = document.getElementById("changeNumberForm");
-    const displayPhoneNumber = document.getElementById("displayPhoneNumber");
-    const newPhoneInput = document.getElementById("newPhoneNumber");
-    const currentNumberHint = document.getElementById("currentNumberHint");
-
+  function setupChangeNumberModal() {
+    const changeNumberBtn = document.getElementById("changeNumberBtn"), changeNumberModal = document.getElementById("changeNumberModal"), closeChangeNumberModal = document.getElementById("closeChangeNumberModal"), changeNumberForm = document.getElementById("changeNumberForm"), displayPhoneNumber = document.getElementById("displayPhoneNumber"), newPhoneInput = document.getElementById("newPhoneNumber");
     if (!changeNumberBtn || !changeNumberModal) return;
-
-    // Open modal - pre-populate with current number
     changeNumberBtn.addEventListener("click", function() {
-        // Get current phone number from display
-        const currentPhone = displayPhoneNumber ? displayPhoneNumber.textContent : '';
-        if (newPhoneInput && currentPhone) {
-            newPhoneInput.value = currentPhone;
-            newPhoneInput.placeholder = "১০ বা ১১ ডিজিট লিখুন";
-        }
-        changeNumberModal.style.display = "flex";
-        if (timerInterval) clearInterval(timerInterval);
+      const currentPhone = displayPhoneNumber ? displayPhoneNumber.textContent : '';
+      if (newPhoneInput && currentPhone) newPhoneInput.value = currentPhone;
+      changeNumberModal.style.display = "flex";
+      if (timerInterval) clearInterval(timerInterval);
     });
-    
-    // Close modal
     if (closeChangeNumberModal) {
-        closeChangeNumberModal.addEventListener("click", function() {
-            changeNumberModal.style.display = "none";
-            if (!isTimerExpired && timeLeft > 0) startTimer();
-        });
+      closeChangeNumberModal.addEventListener("click", function() { changeNumberModal.style.display = "none"; if (!isTimerExpired && timeLeft > 0) startTimer(); });
     }
-    
-    // Close on outside click
-    changeNumberModal.addEventListener("click", function(e) {
-        if (e.target === changeNumberModal) {
-            changeNumberModal.style.display = "none";
-            if (!isTimerExpired && timeLeft > 0) startTimer();
-        }
-    });
-    
-    // Handle form submission
+    changeNumberModal.addEventListener("click", function(e) { if (e.target === changeNumberModal) { changeNumberModal.style.display = "none"; if (!isTimerExpired && timeLeft > 0) startTimer(); } });
     if (changeNumberForm) {
-        changeNumberForm.addEventListener("submit", function(e) {
-            const newNumber = newPhoneInput ? newPhoneInput.value.trim() : '';
-            
-            // Validation
-            if (!newNumber) {
-                e.preventDefault();
-                alert("দয়া করে নম্বর লিখুন।");
-                return false;
-            }
-            
-            if (newNumber.length < 10 || newNumber.length > 11) {
-                e.preventDefault();
-                alert("দয়া করে সঠিক ১০-১১ অঙ্কের বাংলাদেশ নম্বর লিখুন।");
-                return false;
-            }
-            
-            if (!/^01[0-9]{8,9}$/.test(newNumber)) {
-                e.preventDefault();
-                alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)");
-                return false;
-            }
-            
-            // Update display immediately for better UX
-            if (displayPhoneNumber) {
-                displayPhoneNumber.textContent = newNumber;
-            }
-            if (currentNumberHint) {
-                currentNumberHint.innerHTML = '<i class="fas fa-info-circle"></i> বর্তমান নম্বর: ' + newNumber;
-            }
-            
-            // Reset timer and attempts
-            resendAttempts = 0;
-            timeLeft = 300;
-            isTimerExpired = false;
-            
-            if (timerInterval) clearInterval(timerInterval);
-            
-            // Close modal
-            changeNumberModal.style.display = "none";
-            
-            // Show loading state on submit button
-            const submitBtn = changeNumberForm.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>ওটিপি পাঠানো হচ্ছে...';
-                submitBtn.disabled = true;
-            }
-            
-            // Let the form submit normally
-            return true;
-        });
+      changeNumberForm.addEventListener("submit", function(e) {
+        const newNumber = newPhoneInput ? newPhoneInput.value.trim() : '';
+        if (!newNumber) { e.preventDefault(); alert("দয়া করে নম্বর লিখুন।"); return false; }
+        if (newNumber.length < 10 || newNumber.length > 11) { e.preventDefault(); alert("দয়া করে সঠিক ১০-১১ অঙ্কের বাংলাদেশ নম্বর লিখুন।"); return false; }
+        if (!/^01[0-9]{8,9}$/.test(newNumber)) { e.preventDefault(); alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)"); return false; }
+        if (displayPhoneNumber) displayPhoneNumber.textContent = newNumber;
+        resendAttempts = 0; timeLeft = 300; isTimerExpired = false;
+        if (timerInterval) clearInterval(timerInterval);
+        changeNumberModal.style.display = "none";
+        return true;
+      });
     }
-}
+  }
 
-  // ============================================
-  // DOM CONTENT LOADED
-  // ============================================
   document.addEventListener("DOMContentLoaded", function () {
-    // Initialize searchable dropdowns
     const dropdownConfigs = [
       { search: 'batchSearch', dropdown: 'batchDropdown', hidden: 'batchHidden' },
       { search: 'villageSearch', dropdown: 'villageDropdown', hidden: 'villageHidden' },
@@ -2121,105 +1788,70 @@ function setupChangeNumberModal() {
       { search: 'occupationSearch', dropdown: 'occupationDropdown', hidden: 'occupationHidden' },
       { search: 'lastEduSearch', dropdown: 'lastEduDropdown', hidden: 'lastEduHidden' }
     ];
+    dropdownConfigs.forEach(config => { if (document.getElementById(config.search)) initializeSearchableDropdown(config.search, config.dropdown, config.hidden); });
     
-    dropdownConfigs.forEach(config => {
-      if (document.getElementById(config.search)) {
-        initializeSearchableDropdown(config.search, config.dropdown, config.hidden);
-      }
-    });
-    
-    // Setup change number modal
     setupChangeNumberModal();
     
-    // OTP Form Elements
-    const otpInput = document.getElementById("otp_code");
-    const otpForm = document.getElementById("otpForm");
-    const verifyBtn = document.getElementById("verifyBtn");
-    const resendBtn = document.getElementById("resendBtn");
-    const timerElement = document.getElementById("timer");
-
-    // Initialize OTP functionality
+    // English-only validation for student name with auto-capitalization
+    const studentNameInput = document.getElementById('student_name');
+    if (studentNameInput) {
+      function validateEnglishName() {
+        let value = studentNameInput.value;
+        // Remove any non-English characters (allow A-Z, a-z, space, dot, hyphen)
+        value = value.replace(/[^A-Za-z\s\.\-]/g, '');
+        // Capitalize first letter of each word
+        value = value.replace(/\b\w/g, char => char.toUpperCase());
+        studentNameInput.value = value;
+        
+        if (value.trim() && !/^[A-Za-z\s\.\-]+$/.test(value)) {
+          studentNameInput.classList.add('is-invalid');
+          return false;
+        } else if (value.trim()) {
+          studentNameInput.classList.remove('is-invalid');
+          return true;
+        }
+        return true;
+      }
+      studentNameInput.addEventListener('input', validateEnglishName);
+      studentNameInput.addEventListener('blur', validateEnglishName);
+    }
+    
+    const otpInput = document.getElementById("otp_code"), otpForm = document.getElementById("otpForm"), verifyBtn = document.getElementById("verifyBtn"), resendBtn = document.getElementById("resendBtn"), timerElement = document.getElementById("timer");
     if (timerElement && otpForm) {
       startTimer();
-      
       if (resendBtn) {
         resendBtn.addEventListener('click', function() {
-          if (resendAttempts >= MAX_RESEND_ATTEMPTS) {
-            alert("আপনি সর্বোচ্চ ২ বার ওটিপি পুনরায় পাঠাতে পারেন।");
-            return;
-          }
-          
-          if (confirm("একটি নতুন ওটিপি কোডের অনুরোধ করবেন?")) {
-            resendAttempts++;
-            resetTimer();
-            document.getElementById("resendForm").submit();
-          }
+          if (resendAttempts >= MAX_RESEND_ATTEMPTS) { alert("আপনি সর্বোচ্চ ২ বার ওটিপি পুনরায় পাঠাতে পারেন।"); return; }
+          if (confirm("একটি নতুন ওটিপি কোডের অনুরোধ করবেন?")) { resendAttempts++; resetTimer(); document.getElementById("resendForm").submit(); }
         });
       }
     }
-
-    // OTP Input validation
+    
     if (otpInput) {
       otpInput.addEventListener("input", function () {
         this.value = this.value.replace(/[^0-9]/g, "").slice(0, 6);
         this.classList.remove("is-valid", "is-invalid");
-
-        if (this.value.length === 6 && !isTimerExpired) {
-          this.classList.add("is-valid");
-          if (verifyBtn) {
-            verifyBtn.disabled = false;
-            verifyBtn.style.opacity = "1";
-          }
-        } else if (this.value.length > 0) {
-          this.classList.add("is-invalid");
-          if (verifyBtn && !isTimerExpired) {
-            verifyBtn.disabled = true;
-            verifyBtn.style.opacity = "0.6";
-          }
-        } else {
-          if (verifyBtn && !isTimerExpired) {
-            verifyBtn.disabled = true;
-            verifyBtn.style.opacity = "0.6";
-          }
-        }
+        if (this.value.length === 6 && !isTimerExpired) { this.classList.add("is-valid"); if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.style.opacity = "1"; } }
+        else if (this.value.length > 0) { this.classList.add("is-invalid"); if (verifyBtn && !isTimerExpired) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; } }
+        else { if (verifyBtn && !isTimerExpired) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; } }
       });
     }
-
-    // OTP Form submission
+    
     if (otpForm) {
       otpForm.addEventListener("submit", function (event) {
         const otpValue = otpInput ? otpInput.value : "";
-        if (isTimerExpired) {
-          event.preventDefault();
-          alert("ওটিপির মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে একটি নতুন কোডের অনুরোধ করুন।");
-          return false;
-        }
-        if (!otpValue || otpValue.length !== 6) {
-          event.preventDefault();
-          if (otpInput) {
-            otpInput.classList.add("is-invalid");
-            otpInput.focus();
-          }
-          alert("দয়া করে ৬-অঙ্কের সঠিক ওটিপি কোড লিখুন।");
-          return false;
-        }
-        if (verifyBtn) {
-          verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> যাচাই করা হচ্ছে...';
-          verifyBtn.disabled = true;
-        }
+        if (isTimerExpired) { event.preventDefault(); alert("ওটিপির মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে একটি নতুন কোডের অনুরোধ করুন।"); return false; }
+        if (!otpValue || otpValue.length !== 6) { event.preventDefault(); if (otpInput) { otpInput.classList.add("is-invalid"); otpInput.focus(); } alert("দয়া করে ৬-অঙ্কের সঠিক ওটিপি কোড লিখুন।"); return false; }
+        if (verifyBtn) { verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> যাচাই করা হচ্ছে...'; verifyBtn.disabled = true; }
         return true;
       });
     }
-
-    // Registration Form Validation
+    
     const form = document.getElementById("registrationForm");
     if (form) {
       form.addEventListener("submit", function (event) {
         let isValid = true;
-        
         const studentName = document.getElementById("student_name");
-        const studentbio = document.getElementById("student_bio");
-        const facebookprofile = document.getElementById("facebook_profile");
         const batchHidden = document.getElementById("batchHidden");
         const villageHidden = document.getElementById("villageHidden");
         const currentLocationHidden = document.getElementById("currentLocationHidden");
@@ -2227,116 +1859,31 @@ function setupChangeNumberModal() {
         const lastEduHidden = document.getElementById("lastEduHidden");
         const photoFile = document.getElementById("student_photo");
         const isWhatsappBd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
-        const isNoHideBd = document.querySelector('input[name="is_no_hide"]:checked');
+        const isNoHide = document.querySelector('input[name="is_no_hide"]:checked');
         const bangladeshNumber = document.getElementById("bangladesh_number");
+        const gender = document.querySelector('input[name="gender"]:checked');
+        const maritalStatus = document.querySelector('input[name="marital_status"]:checked');
         
-        if (studentName && !studentName.value.trim()) {
-          studentName.classList.add("is-invalid");
-          isValid = false;
-        } else if (studentName) {
-          studentName.classList.remove("is-invalid");
-        }
+        if (!studentName || !studentName.value.trim()) { if (studentName) studentName.classList.add("is-invalid"); isValid = false; alert("শিক্ষার্থীর নাম দিন"); }
+        else if (studentName && !/^[A-Za-z\s\.\-]+$/.test(studentName.value.trim())) { studentName.classList.add("is-invalid"); isValid = false; alert("শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন"); }
         
-        if (batchHidden && !batchHidden.value.trim()) {
-          const batchSearch = document.getElementById("batchSearch");
-          if (batchSearch) batchSearch.classList.add("is-invalid");
-          isValid = false;
-        } else {
-          const batchSearch = document.getElementById("batchSearch");
-          if (batchSearch) batchSearch.classList.remove("is-invalid");
-        }
-        
-        if (villageHidden && !villageHidden.value.trim()) {
-          const villageSearch = document.getElementById("villageSearch");
-          if (villageSearch) villageSearch.classList.add("is-invalid");
-          isValid = false;
-        } else {
-          const villageSearch = document.getElementById("villageSearch");
-          if (villageSearch) villageSearch.classList.remove("is-invalid");
-        }
-        
-        if (currentLocationHidden && !currentLocationHidden.value.trim()) {
-          const currentLocationSearch = document.getElementById("currentLocationSearch");
-          if (currentLocationSearch) currentLocationSearch.classList.add("is-invalid");
-          isValid = false;
-        } else {
-          const currentLocationSearch = document.getElementById("currentLocationSearch");
-          if (currentLocationSearch) currentLocationSearch.classList.remove("is-invalid");
-        }
-        
-        if (occupationHidden && !occupationHidden.value.trim()) {
-          const occupationSearch = document.getElementById("occupationSearch");
-          if (occupationSearch) occupationSearch.classList.add("is-invalid");
-          isValid = false;
-        } else {
-          const occupationSearch = document.getElementById("occupationSearch");
-          if (occupationSearch) occupationSearch.classList.remove("is-invalid");
-        }
-        
-        if (lastEduHidden && !lastEduHidden.value.trim()) {
-          const lastEduSearch = document.getElementById("lastEduSearch");
-          if (lastEduSearch) lastEduSearch.classList.add("is-invalid");
-          isValid = false;
-        } else {
-          const lastEduSearch = document.getElementById("lastEduSearch");
-          if (lastEduSearch) lastEduSearch.classList.remove("is-invalid");
-        }
-        
-        if (photoFile && (!photoFile.files || !photoFile.files.length)) {
-          alert("শিক্ষার্থীর ছবি আপলোড করুন");
-          isValid = false;
-        }
-        
-        if (bangladeshNumber && !bangladeshNumber.value.trim()) {
-          bangladeshNumber.classList.add("is-invalid");
-          alert("বাংলাদেশ নম্বর দিন");
-          isValid = false;
-        } else if (bangladeshNumber && !/^01[0-9]{8,9}$/.test(bangladeshNumber.value.trim())) {
-          bangladeshNumber.classList.add("is-invalid");
-          alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)");
-          isValid = false;
-        } else if (bangladeshNumber) {
-          bangladeshNumber.classList.remove("is-invalid");
-        }
-        
-        if (!isWhatsappBd) {
-          alert("দয়া করে হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন");
-          isValid = false;
-        }
-        
-        if (!isNoHideBd) {
-          alert("দয়া করে নম্বর হাইড কিনা নির্বাচন করুন");
-          isValid = false;
-        }
-
+        if (!gender) { alert("লিঙ্গ নির্বাচন করুন"); isValid = false; }
+        if (!maritalStatus) { alert("বৈবাহিক অবস্থা নির্বাচন করুন"); isValid = false; }
+        if (!batchHidden || !batchHidden.value.trim()) { alert("ব্যাচের বছর নির্বাচন করুন"); isValid = false; }
+        if (!villageHidden || !villageHidden.value.trim()) { alert("গ্রাম নির্বাচন করুন"); isValid = false; }
+        if (!currentLocationHidden || !currentLocationHidden.value.trim()) { alert("বর্তমান অবস্থান নির্বাচন করুন"); isValid = false; }
+        if (!occupationHidden || !occupationHidden.value.trim()) { alert("পেশা নির্বাচন করুন"); isValid = false; }
+        if (!lastEduHidden || !lastEduHidden.value.trim()) { alert("শিক্ষাগত যোগ্যতা নির্বাচন করুন"); isValid = false; }
+        if (!photoFile || !photoFile.files || !photoFile.files.length) { alert("শিক্ষার্থীর ছবি আপলোড করুন"); isValid = false; }
+        if (!bangladeshNumber || !bangladeshNumber.value.trim()) { alert("বাংলাদেশ নম্বর দিন"); isValid = false; }
+        else if (!/^01[0-9]{8,9}$/.test(bangladeshNumber.value.trim())) { alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)"); isValid = false; }
+        if (!isWhatsappBd) { alert("দয়া করে হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন"); isValid = false; }
+        if (!isNoHide) { alert("দয়া করে নম্বর হাইড কিনা নির্বাচন করুন"); isValid = false; }
         if (!validateCaptcha()) isValid = false;
-
-        if (!isValid) {
-          event.preventDefault();
-          const firstInvalid = form.querySelector(".is-invalid");
-          if (firstInvalid) {
-            firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        }
+        
+        if (!isValid) { event.preventDefault(); const firstInvalid = form.querySelector(".is-invalid"); if (firstInvalid) firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" }); }
       });
     }
   });
-
-// Auto capitalize student name
-document.addEventListener("DOMContentLoaded", function() {
-  const studentNameInput = document.getElementById("student_name");
-  if (studentNameInput) {
-    studentNameInput.addEventListener("input", function() {
-      let words = this.value.toLowerCase().split(" ");
-      for (let i = 0; i < words.length; i++) {
-        if (words[i].length > 0) {
-          words[i] = words[i][0].toUpperCase() + words[i].substring(1);
-        }
-      }
-      this.value = words.join(" ");
-    });
-  }
-});
 </script>
-
 {% endblock %}

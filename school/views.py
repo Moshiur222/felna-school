@@ -400,6 +400,7 @@ def board_permission(request):
     return render(request, 'board_permission.html')
 
 import os
+import re
 import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -429,7 +430,6 @@ def student_registration(request):
     if request.method == "POST":
         step = request.POST.get("step")
         
-        # STEP 1: INITIAL SUBMISSION
         if not step or step == "":
             bd_no = request.POST.get("bangladesh_number", "").strip()
             
@@ -440,7 +440,6 @@ def student_registration(request):
                 return render(request, 'student_registration.html', context)
 
             try:
-                # Handle checkbox values (convert empty to 2 which means 'না')
                 is_whatsapp_bd_value = request.POST.get("is_whatsapp_bd")
                 if not is_whatsapp_bd_value:
                     is_whatsapp_bd_value = 2
@@ -459,51 +458,92 @@ def student_registration(request):
                 else:
                     is_no_hide_value = int(is_no_hide_value)
                 
-                # Get abroad number (handle empty string)
                 abroad_no = request.POST.get("abroad_number", "").strip()
                 if not abroad_no:
                     abroad_no = None
                 
+                student_bio = request.POST.get("student_bio", "").strip()
+                if not student_bio:
+                    student_bio = None
+                
+                facebook_profile = request.POST.get("facebook_profile", "").strip()
+                if not facebook_profile:
+                    facebook_profile = None
+                
+                student_name = request.POST.get("student_name", "").strip()
+                
+                # Validate English only for student name
+                if student_name and not re.match(r'^[A-Za-z\s\.\-]+$', student_name):
+                    messages.error(request, 'শিক্ষার্থীর নাম শুধুমাত্র ইংরেজি অক্ষরে হতে হবে (Only English letters allowed)')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                
+                gender = request.POST.get("gender")
+                marital_status = request.POST.get("marital_status")
+                batch = request.POST.get("batch", "").strip()
+                village_id = request.POST.get("village", "").strip()
+                current_location = request.POST.get("current_location", "").strip()
+                occupation = request.POST.get("occupation", "").strip()
+                last_edu = request.POST.get("last_edu", "").strip()
+                photo = request.FILES.get('student_photo')
+                
+                # Validation
+                errors = []
+                if not student_name:
+                    errors.append("শিক্ষার্থীর নাম প্রয়োজন")
+                elif not re.match(r'^[A-Za-z\s\.\-]+$', student_name):
+                    errors.append("শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন")
+                
+                if not gender:
+                    errors.append("লিঙ্গ নির্বাচন করুন")
+                if not marital_status:
+                    errors.append("বৈবাহিক অবস্থা নির্বাচন করুন")
+                if not batch:
+                    errors.append("ব্যাচের বছর নির্বাচন করুন")
+                if not village_id or village_id == "0":
+                    errors.append("গ্রাম নির্বাচন করুন")
+                if not current_location:
+                    errors.append("বর্তমান অবস্থান নির্বাচন করুন")
+                if not occupation:
+                    errors.append("পেশা নির্বাচন করুন")
+                if not last_edu:
+                    errors.append("শিক্ষাগত যোগ্যতা নির্বাচন করুন")
+                if not bd_no:
+                    errors.append("বাংলাদেশ নম্বর দিন")
+                elif not bd_no.startswith('01') or len(bd_no) < 10 or len(bd_no) > 11 or not bd_no.isdigit():
+                    errors.append("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)")
+                if not request.POST.get("is_whatsapp_bd"):
+                    errors.append("হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন")
+                if not request.POST.get("is_no_hide"):
+                    errors.append("নম্বর হাইড কিনা নির্বাচন করুন")
+                if not photo:
+                    errors.append("শিক্ষার্থীর ছবি আপলোড করুন")
+                
+                if errors:
+                    for error in errors:
+                        messages.error(request, error)
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                
                 student_data = {
-                    'student_name': request.POST.get("student_name", "").strip(),
-                    'gender': int(request.POST.get("gender", 1)) if request.POST.get("gender") else None,
-                    'marrital_status': int(request.POST.get("marital_status", 1)) if request.POST.get("marital_status") else None,
+                    'student_name': student_name,
+                    'student_bio': student_bio,
+                    'facebook_profile': facebook_profile,
+                    'gender': int(gender),
+                    'marrital_status': int(marital_status),
                     'is_whatsapp_bd': is_whatsapp_bd_value,
                     'is_whatsapp_abroad': is_whatsapp_abroad_value,
                     'is_no_hide': is_no_hide_value,
-                    'batch': int(request.POST.get("batch", datetime.datetime.now().year)),
-                    'village_id': int(request.POST.get("village", 0)) if request.POST.get("village") else None,
-                    'current_location': request.POST.get("current_location", ""),
+                    'batch': int(batch),
+                    'village_id': int(village_id),
+                    'current_location': current_location,
                     'bd_no': bd_no,
                     'abroad_no': abroad_no,
-                    'occupation': int(request.POST.get("occupation", 1)) if request.POST.get("occupation") else None,
-                    'last_edu': int(request.POST.get("last_edu", 1)) if request.POST.get("last_edu") else None,
+                    'occupation': int(occupation),
+                    'last_edu': int(last_edu),
                 }
-                
-                # Validation
-                if not student_data['student_name']:
-                    messages.error(request, 'শিক্ষার্থীর নাম দিন')
-                    context['form_data'] = request.POST
-                    context['show_otp_form'] = False
-                    return render(request, 'student_registration.html', context)
-                    
-                if not student_data['village_id'] or student_data['village_id'] == 0:
-                    messages.error(request, 'গ্রাম নির্বাচন করুন')
-                    context['form_data'] = request.POST
-                    context['show_otp_form'] = False
-                    return render(request, 'student_registration.html', context)
-                    
-                if not student_data['current_location']:
-                    messages.error(request, 'বর্তমান অবস্থান নির্বাচন করুন')
-                    context['form_data'] = request.POST
-                    context['show_otp_form'] = False
-                    return render(request, 'student_registration.html', context)
-                    
-                if not bd_no or not bd_no.startswith('01') or len(bd_no) < 10 or len(bd_no) > 11:
-                    messages.error(request, 'সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)')
-                    context['form_data'] = request.POST
-                    context['show_otp_form'] = False
-                    return render(request, 'student_registration.html', context)
                     
             except (ValueError, TypeError) as e:
                 messages.error(request, f'ডেটা সাবমিশনে সমস্যা: {str(e)}')
@@ -511,18 +551,14 @@ def student_registration(request):
                 context['show_otp_form'] = False
                 return render(request, 'student_registration.html', context)
 
-            # Handle photo upload
-            photo = request.FILES.get('student_photo')
             temp_path = None
             if photo:
                 temp_path = default_storage.save(f"temp/{bd_no}_{photo.name}", ContentFile(photo.read()))
 
-            # Store in session
             request.session['pending_student'] = student_data
             request.session['pending_student']['temp_photo_path'] = temp_path
             request.session['pending_phone'] = bd_no
             
-            # Send OTP
             success, result = send_otp(bd_no)
             if success:
                 context['show_otp_form'] = True
@@ -535,7 +571,6 @@ def student_registration(request):
                 context['show_otp_form'] = False
                 return render(request, 'student_registration.html', context)
 
-        # STEP 2: VERIFY OTP
         elif step == "verify_otp":
             phone = request.session.get('pending_phone')
             data = request.session.get('pending_student')
@@ -549,14 +584,14 @@ def student_registration(request):
             
             if success:
                 try:
-                    # Get village instance
                     village = None
                     if data.get('village_id'):
                         village = Village.objects.get(id=data['village_id'])
                     
-                    # Create student registration
                     student = StudentRegistration.objects.create(
                         student_name=data['student_name'],
+                        student_bio=data.get('student_bio'),
+                        facebook_profile=data.get('facebook_profile'),
                         gender=data.get('gender'),
                         marrital_status=data.get('marrital_status'),
                         is_whatsapp_bd=data.get('is_whatsapp_bd'),
@@ -572,7 +607,6 @@ def student_registration(request):
                         is_verified=True
                     )
                     
-                    # Handle photo if exists
                     if data.get('temp_photo_path'):
                         if default_storage.exists(data['temp_photo_path']):
                             with default_storage.open(data['temp_photo_path'], 'rb') as f:
@@ -582,7 +616,6 @@ def student_registration(request):
                                 )
                             default_storage.delete(data['temp_photo_path'])
                     
-                    # Clear session
                     request.session.flush()
                     messages.success(request, '🎉 আপনার নিবন্ধন সফল হয়েছে! ধন্যবাদ।')
                     return redirect('student_registration')
@@ -603,7 +636,6 @@ def student_registration(request):
                 context['phone_number'] = phone
                 return render(request, 'student_registration.html', context)
                 
-        # STEP 3: RESEND OTP
         elif step == "resend_otp":
             phone = request.session.get('pending_phone')
             if not phone:
@@ -621,7 +653,6 @@ def student_registration(request):
             context['phone_number'] = phone
             return render(request, 'student_registration.html', context)
         
-        # STEP 4: CHANGE NUMBER
         elif step == 'change_number':
             new_phone = request.POST.get('new_phone_number', '').strip()
             
@@ -643,7 +674,6 @@ def student_registration(request):
                 context['phone_number'] = request.session.get('pending_phone', '')
                 return render(request, 'student_registration.html', context)
             
-            # Check if number already exists
             pending_phone = request.session.get('pending_phone', '')
             if new_phone != pending_phone and StudentRegistration.objects.filter(bd_no=new_phone).exists():
                 messages.error(request, "এই নম্বরটি ইতিমধ্যে নিবন্ধিত")
@@ -651,7 +681,6 @@ def student_registration(request):
                 context['phone_number'] = pending_phone
                 return render(request, 'student_registration.html', context)
             
-            # Update session with new number
             request.session['pending_phone'] = new_phone
             request.session.modified = True
             
@@ -660,7 +689,6 @@ def student_registration(request):
                 pending['bd_no'] = new_phone
                 request.session['pending_student'] = pending
             
-            # Send OTP to new number
             success, msg = send_otp(new_phone)
             
             if success:
@@ -668,28 +696,24 @@ def student_registration(request):
             else:
                 messages.error(request, msg)
             
-            # Create fresh context with new number
             context = get_common_data()
             context['show_otp_form'] = True
             context['phone_number'] = new_phone
             return render(request, 'student_registration.html', context)
     
-    # GET request
+    context['form_data'] = {}
     context['show_otp_form'] = False
     return render(request, 'student_registration.html', context)
 
 
 def registration_students_list(request):
-    """Display list of registered students with filters and search"""
     students = StudentRegistration.objects.filter(is_verified=True).order_by('batch', 'student_name')
     
-    # Get filter parameters
     selected_batch = request.GET.get('batch', '')
     selected_gender = request.GET.get('gender', '')
     selected_occupation = request.GET.get('occupation', '')
     selected_name = request.GET.get('student_name', '').strip()
     
-    # Apply filters
     if selected_batch and selected_batch.isdigit():
         students = students.filter(batch=int(selected_batch))
     if selected_gender and selected_gender.isdigit():
@@ -699,7 +723,6 @@ def registration_students_list(request):
     if selected_name:
         students = students.filter(student_name__icontains=selected_name)
     
-    # Prepare dropdown choices
     batch_choices = StudentRegistration.objects.filter(is_verified=True).values_list('batch', flat=True).distinct().order_by('-batch')
     
     context = {
@@ -722,25 +745,18 @@ def registration_student_detail(request, id):
     bd_no_display = "নাই"
     
     if student.bd_no:
-        # Clean the number
         clean_number = ''.join(filter(str.isdigit, student.bd_no))
         
-        # For 11-digit number starting with 01 (e.g., 01705260033)
         if len(clean_number) == 11 and clean_number[:2] == '01':
-            if student.is_no_hide == 2:  # Hide/Mask
-                # Show: +880-17**-****33
+            if student.is_no_hide == 2:
                 bd_no_display = f"+880-{clean_number[1:3]}**-****{clean_number[-2:]}"
-            else:  # Show full
-                # Show: +880-1705-260033
+            else:
                 bd_no_display = f"+880-{clean_number[1:5]}-{clean_number[5:]}"
-        
-        # For 10-digit number starting with 1 (e.g., 1705260033)
         elif len(clean_number) == 10 and clean_number[:1] == '1':
-            if student.is_no_hide == 2:  # Hide/Mask
+            if student.is_no_hide == 2:
                 bd_no_display = f"+880-{clean_number[:2]}**-****{clean_number[-2:]}"
-            else:  # Show full
+            else:
                 bd_no_display = f"+880-{clean_number[:4]}-{clean_number[4:]}"
-        
         else:
             bd_no_display = student.bd_no
     
@@ -750,13 +766,12 @@ def registration_student_detail(request, id):
     }
     return render(request, 'registration_students_details.html', context)
 
-# school/views.py (আপনার বিদ্যমান views.py-তে যোগ করুন)
+
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 
 @require_http_methods(["POST"])
 def switch_language(request):
-    """ভাষা পরিবর্তন করার জন্য ভিউ"""
     next_url = request.POST.get('next', '/')
     language = request.POST.get('language', 'bn')
     

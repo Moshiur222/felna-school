@@ -118,9 +118,14 @@
         text-transform: uppercase;
         letter-spacing: 2px;
         margin-bottom: 30px;
+        margin-top: 30px;
         display: block;
         border-left: 5px solid var(--brand-orange);
         padding-left: 15px;
+    }
+    
+    .info-group-title:first-of-type {
+        margin-top: 0;
     }
 
     .data-grid {
@@ -133,22 +138,26 @@
     .data-item {
         display: flex;
         flex-direction: column;
+        background: #ffffff;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
     }
 
     .data-label {
-        font-size: 1.6rem;
+        font-size: 1.4rem;
         color: var(--text-muted);
         margin-bottom: 8px;
         font-weight: 500;
+        display: block;
     }
 
     .data-value {
         font-size: 1.7rem;
         color: var(--text-dark);
         font-weight: 700;
-        display: flex;
-        align-items: center;
         gap: 12px;
+        flex-wrap: wrap;
     }
 
     .data-value i {
@@ -178,88 +187,125 @@
     }
     
     .whatsapp-badge {
-        display: inline-flex;
-        align-items: center;
         gap: 8px;
-        padding: 5px 12px;
+        padding: 8px 16px;
         border-radius: 8px;
         font-size: 1.4rem;
         font-weight: 600;
+        padding-left: 5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
     }
     
     .whatsapp-available {
-        background: #dcfce7;
-        color: #166534;
+        background: #25D366;
+        color: #ffffff;
+    }
+    
+    .whatsapp-available:hover {
+        background: #128C7E;
+        transform: translateY(-2px);
+        color: #ffffff;
     }
     
     .whatsapp-not-available {
         background: #fee2e2;
         color: #991b1b;
     }
-
-    @media (max-width: 992px) {
-        .data-grid { grid-template-columns: 1fr; }
-        .profile-sidebar-card { flex: 0 0 100%; }
-        .detail-header { flex-direction: column; align-items: flex-start; gap: 20px; }
-    }
-    .info-group-title {
-        display: block;
-        font-size: 18px;
-        font-weight: bold;
-        margin: 20px 0 10px;
-        color: #2c3e50;
-    }
     
-    .data-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 15px;
-    }
-    
-    .data-item {
-        background: #ffffff;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-    }
-    
-    .data-label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 5px;
-        color: #555;
-    }
-    
-    .data-value {
-        font-size: 15px;
-        color: #333;
-    }
-    
-    .whatsapp-badge {
-        display: inline-block;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        text-decoration: none;
-    }
-    
-    .whatsapp-available {
-        background-color: #25D366;
-        color: #ffffff;
-    }
-    
-    .whatsapp-not-available {
-        background-color: #e0e0e0;
-        color: #555;
+    .whatsapp-hidden {
+        background: #fef3c7;
+        color: #d97706;
     }
     
     .whatsapp-badge i {
-        margin-right: 5px;
+        font-size: 1.6rem;
     }
     
-    .whatsapp-badge:hover {
-        opacity: 0.9;
+    /* Bio Section Styles */
+    .bio-section {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid var(--border-color);
+        text-align: left;
+    }
+    
+    .bio-title {
+        color: var(--brand-navy);
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .bio-title i {
+        color: var(--brand-orange);
+        font-size: 1.8rem;
+    }
+    
+    .bio-content {
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        line-height: 1.6;
+        background: #f9fafb;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        /* JUSTIFY TEXT - Added this line */
+        text-align: justify;
+    }
+    
+    /* Facebook Button */
+    .facebook-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #1877f2;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .facebook-btn:hover {
+        background: #166fe5;
+        transform: translateY(-2px);
+        color: white;
+    }
+    
+    .facebook-btn i {
+        font-size: 1.8rem;
+    }
+    
+    .no-data {
+        color: #9ca3af;
+        font-style: italic;
+        font-size: 1.4rem;
+    }
+
+    @media (max-width: 992px) {
+        .data-grid { 
+            grid-template-columns: 1fr; 
+        }
+        .profile-sidebar-card { 
+            flex: 0 0 100%; 
+        }
+        .detail-header { 
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 20px; 
+        }
+        .detail-header h1 {
+            font-size: 2.5rem;
+        }
     }
 </style>
 
@@ -279,18 +325,46 @@
                 
                 <span class="batch-label">BATCH {{ student.batch }}</span>
                 
-                <!-- Verification Status -->
+                {% comment %} <!-- Verification Status -->
                 <div class="verification-ribbon mt-4">
                     {% if student.is_verified %}
                         <span class="whatsapp-status">
-                            <i class="fas fa-check-circle"></i> Verified Student
+                            <i class="fas fa-check-circle"></i> Is Not Verified Student
                         </span>
                     {% else %}
                         <span class="whatsapp-status" style="background: #fef3c7; color: #d97706;">
                             <i class="fas fa-clock"></i> Pending Verification
                         </span>
                     {% endif %}
+                </div> {% endcomment %}
+                
+                <!-- Bio Section in Sidebar -->
+                <div class="bio-section">
+                    <div class="bio-title">
+                        <i class="fas fa-align-left"></i>
+                        <span>About Me</span>
+                    </div>
+                    {% if student.student_bio %}
+                        <div class="bio-content">
+                            {{ student.student_bio|linebreaks }}
+                        </div>
+                    {% else %}
+                        <div class="no-data" style="text-align: center; padding: 20px;">
+                            <i class="fas fa-info-circle"></i> No bio added yet
+                        </div>
+                    {% endif %}
                 </div>
+                
+                <!-- Facebook Profile Button -->
+                {% if student.facebook_profile %}
+                    <a href="{{ student.facebook_profile }}" target="_blank" class="facebook-btn">
+                        <i class="fab fa-facebook"></i> Connect on Facebook
+                    </a>
+                {% else %}
+                    <div class="no-data" style="text-align: center; margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 12px;">
+                        <i class="fab fa-facebook"></i> No Facebook profile added
+                    </div>
+                {% endif %}
             </div>
 
             <!-- Details Area (Right) -->
@@ -357,16 +431,26 @@
                     <div class="data-item">
                         <span class="data-label">WhatsApp (BD Number)</span>
                         <span class="data-value">
-                            {% if student.is_whatsapp_bd == 1 and student.bd_no and student.is_no_hide != 2 %}
-                                <a href="https://wa.me/{{ student.bd_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')' }}"
-                                   target="_blank"
-                                   class="whatsapp-badge whatsapp-available">
-                                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-                                </a>
-                            {% elif student.is_whatsapp_bd == 1 and student.is_no_hide == 2 %}
-                                <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fas fa-user-secret"></i> Available
-                                </span>
+                            {% if student.is_whatsapp_bd == 1 %}
+                                {% if student.bd_no %}
+                                    {% if student.is_no_hide == 1 %}
+                                        {# Show full number and WhatsApp link #}
+                                        {% with clean_number=student.bd_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')'|cut:'*' %}
+                                            <a href="https://wa.me/{{ clean_number }}" target="_blank" class="whatsapp-badge whatsapp-available">
+                                                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                                            </a>
+                                        {% endwith %}
+                                    {% else %}
+                                        {# Hide number but WhatsApp is available #}
+                                        <span class="whatsapp-badge whatsapp-hidden">
+                                            <i class="fas fa-user-secret"></i>Available (Number Hidden)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="whatsapp-badge whatsapp-not-available">
+                                        <i class="fas fa-exclamation-circle"></i> No Number
+                                    </span>
+                                {% endif %}
                             {% else %}
                                 <span class="whatsapp-badge whatsapp-not-available">
                                     <i class="fab fa-whatsapp"></i> Not Available
@@ -381,9 +465,15 @@
                         <span class="data-value">
                             <i class="fa fa-globe"></i> 
                             {% if student.abroad_no %}
-                                {{ student.abroad_no }}
+                                {% if student.is_no_hide == 1 %}
+                                    {{ student.abroad_no }}
+                                {% else %}
+                                    <span class="whatsapp-badge whatsapp-hidden">
+                                        <i class="fas fa-user-secret"></i> Hidden
+                                    </span>
+                                {% endif %}
                             {% else %}
-                                Not Provided
+                                <span class="no-data">Not Provided</span>
                             {% endif %}
                         </span>
                     </div>
@@ -392,23 +482,27 @@
                     <div class="data-item">
                         <span class="data-label">WhatsApp (Abroad Number)</span>
                         <span class="data-value">
-                            {% if student.is_whatsapp_abroad == 1 and student.abroad_no and student.is_no_hide != 2 %}
-                                <a href="https://wa.me/{{ student.abroad_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')' }}"
-                                   target="_blank"
-                                   class="whatsapp-badge whatsapp-available">
-                                    <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-                                </a>
-                            {% elif student.is_whatsapp_abroad == 1 and student.is_no_hide == 2 %}
-                                <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fas fa-user-secret"></i> Available
-                                </span>
-                            {% elif student.abroad_no %}
-                                <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fab fa-whatsapp"></i> Not Available
-                                </span>
+                            {% if student.is_whatsapp_abroad == 1 %}
+                                {% if student.abroad_no %}
+                                    {% if student.is_no_hide == 1 %}
+                                        {% with clean_number=student.abroad_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')'|cut:'*' %}
+                                            <a href="https://wa.me/{{ clean_number }}" target="_blank" class="whatsapp-badge whatsapp-available">
+                                                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                                            </a>
+                                        {% endwith %}
+                                    {% else %}
+                                        <span class="whatsapp-badge whatsapp-hidden">
+                                            <i class="fas fa-user-secret"></i>Available (Number Hidden)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="whatsapp-badge whatsapp-not-available">
+                                        <i class="fas fa-exclamation-circle"></i> No Number
+                                    </span>
+                                {% endif %}
                             {% else %}
                                 <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fas fa-minus-circle"></i> No Number
+                                    <i class="fab fa-whatsapp"></i> Not Available
                                 </span>
                             {% endif %}
                         </span>
@@ -419,7 +513,5 @@
         </div>
     </div>
 </div>
-
-
 
 {% endblock %}
