@@ -86,8 +86,8 @@ def get_translations(request):
             'ADMISSION_RESULT': 'ভর্তি ফলাফল',
             'FACILITIES': 'সুবিধাসমূহ',
             'BOARD_PERMISSION': 'বোর্ড অনুমতি',
-            'ALUMNI_ASSOCIATION': 'পুরাতন শিক্ষার্থী সমিতি',
-            'REGISTRATION': 'নিবন্ধন',
+            'ALUMNI_ASSOCIATION': 'প্রাক্তন শিক্ষার্থী  সমিতি',
+            'REGISTRATION': 'প্রাক্তন শিক্ষার্থী নিবন্ধন',
             'No_Facilities': 'কোন সুবিধা নেই',
             
             # Notice and messages
@@ -100,7 +100,7 @@ def get_translations(request):
             
             # Footer keys
             'Administration': 'প্রশাসন',
-            'alumni': 'পুরাতন শিক্ষার্থী',
+            'alumni': 'প্রাক্তন শিক্ষার্থী',
             'download': 'ডাউনলোড',
             'magazine': 'ম্যাগাজিন',
             'annual_Report': 'বার্ষিক প্রতিবেদন',
@@ -257,7 +257,7 @@ def get_translations(request):
             'class_selection': 'শ্রেণি নির্বাচন',
             'all_academic_classes': 'সব একাডেমিক শ্রেণি',
             'filter_records': 'রেকর্ড ফিল্টার করুন',
-            'sl': 'ক্রমিক নং',
+            'sl': 'ক্র.নং',
             'circular_title_and_date': 'বিজ্ঞপ্তির শিরোনাম ও তারিখ',
             'class_label': 'শ্রেণি',
             'preview': 'প্রিভিউ',
@@ -282,6 +282,7 @@ def get_translations(request):
             'applicant_name': 'আবেদনকারীর নাম',
             'exam_track': 'পরীক্ষার ট্র্যাক',
             'admission_status': 'ভর্তির অবস্থা',
+            'Student_Registration_List': 'নিবন্ধিত প্রাক্তন শিক্ষার্থীদের তালিকা',
             'no_results_found_message': 'আপনার মানদণ্ডের সাথে মিলে এমন কোনো ফলাফল পাওয়া যায়নি। অনুগ্রহ করে আপনার ট্র্যাক নম্বর এবং নির্বাচন যাচাই করুন।',
 
             
@@ -303,7 +304,7 @@ def get_translations(request):
             'category_label': 'বিভাগ',
             'all_categories': 'সব বিভাগ',
             'filter': 'ফিল্টার',
-            'sl': 'ক্রমিক নং',
+            'sl': 'ক্র.নং',
             'title_label': 'শিরোনাম',
             'description_label': 'বিবরণ',
             'capacity_label': 'ধারণক্ষমতা',
@@ -321,7 +322,7 @@ def get_translations(request):
             'no_data_available': 'বর্তমানে কোনো তথ্য উপলব্ধ নেই।',
 
             # bn ডিকশনারিতে (বাংলা)
-            'sl': 'ক্রমিক নং',
+            'sl': 'ক্র.নং',
             'batch': 'ব্যাচ',
             'student_name': 'শিক্ষার্থীর নাম',
             'location': 'অবস্থান',
@@ -384,7 +385,8 @@ def get_translations(request):
             'FACILITIES': 'FACILITIES',
             'BOARD_PERMISSION': 'BOARD PERMISSION',
             'ALUMNI_ASSOCIATION': 'ALUMNI ASSOCIATION',
-            'REGISTRATION': 'REGISTRATION',
+            'REGISTRATION': 'ALUMNI STUDENTS REGISTRATION',
+            'Student_Registration_List': 'Alumni Student Registration List',
             'No_Facilities': 'No Facilities',
             
             # Notice and messages
