@@ -43,6 +43,6 @@ urlpatterns = [
     path('facilities/<int:pk>/', views.facility_detail, name='facility_detail'),
     path('student/registration/', views.student_registration, name='student_registration'),
     path('student/registration/list', views.registration_students_list, name='registration_students_list'),
-    path('student/registration/details/view/<int:id>/', views.registration_student_detail, name='registration_student_detail'),
+    path('student/registration/details/view/<slug:slug>/', views.registration_student_detail, name='registration_student_detail'),
     path('switch-language/', views.switch_language, name='switch_language'),
 ]

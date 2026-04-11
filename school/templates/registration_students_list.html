@@ -148,10 +148,7 @@
                         <option value="{{ code }}" {% if selected_occupation|stringformat:"s" == code|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
                     {% endfor %}
                 </select>
-            </div>
-            <div class="col-md-1 my-1">
-                <button type="submit" class="btn btn-primary btn-sm btn-block">{{ t.filter }}</button>
-            </div>
+            </div>>
             <div class="col-md-1 my-1">
                 <a href="{% url 'registration_students_list' %}" class="btn btn-secondary btn-sm btn-block">{{ t.reset }}</a>
             </div>
@@ -192,7 +189,7 @@
                         <td>{{ student.get_occupation_display }}</td>
                         <td>{{ student.get_last_edu_display }}</td>
                         <td>
-                            <a href="{% url 'registration_student_detail' student.id %}" class="view_btn">{{ t.view }}</a>
+                            <a href="{% url 'registration_student_detail' student.slug %}" class="view_btn">{{ t.view }}</a>
                         </td>
                     </tr>
                     {% endfor %}

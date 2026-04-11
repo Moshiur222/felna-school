@@ -727,6 +727,7 @@ class Visitor(models.Model):
 
 import datetime
 from django.db import models
+from django.urls import reverse
 from django_countries.fields import CountryField
 
 def batch_years():
@@ -763,5 +764,29 @@ class StudentRegistration(models.Model):
     last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
     is_no_hide = models.IntegerField(choices=NUMBER_HIDE_CHOICES, null=True)
     is_verified = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=200, unique=True)
 
-    def __str__(self): return self.student_name
+    def generate_unique_slug(self):
+        """Generate a unique slug with incremental numbering."""
+        base_slug = slugify(
+            f"felna-high-school-batch-{self.batch}-{self.student_name}"
+        )
+        slug = base_slug
+        counter = 1
+
+        while StudentRegistration.objects.filter(slug=slug).exists():
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        return slug
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self.generate_unique_slug()
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('student_detail', kwargs={'slug': self.slug})
+
+    def __str__(self):
+        return self.student_name

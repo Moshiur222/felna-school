@@ -35,7 +35,7 @@ def hash_otp(otp):
 #     cache.set(f"otp:{normalized}", hash_otp(otp_raw), timeout=300) # ৫ মিনিট মেয়াদ
 #     cache.set(otp_count_key, otp_count + 1, timeout=86400) # ২৪ ঘণ্টা মেয়াদ
 
-#     msg = f"Welcome to Felna High School, Your OTP Is: {otp_display}, Expire for 5 Min, Don't Share With Any One.\nfelnahs.edu.bd"
+#     msg = f"Your OTP Is: 227-931, Exp for 5 Min, Don't Share With Any One.\nAlumni Association of Felna High School\nfelnahs.edu.bd\nFelnaTech.com"
     
 #     try:
 #         response = requests.post(SMS_API_URL, data={"api_key": SMS_API_KEY, "contacts": normalized, "senderid": SMS_SENDER_ID, "msg": msg}, timeout=10)

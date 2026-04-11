@@ -739,8 +739,8 @@ def registration_students_list(request):
     return render(request, 'registration_students_list.html', context)
 
 
-def registration_student_detail(request, id):
-    student = get_object_or_404(StudentRegistration, id=id, is_verified=True)
+def registration_student_detail(request, slug):
+    student = get_object_or_404(StudentRegistration, slug=slug, is_verified=True)
     
     bd_no_display = "নাই"
     

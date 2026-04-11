@@ -354,17 +354,6 @@
                         </div>
                     {% endif %}
                 </div>
-                
-                <!-- Facebook Profile Button -->
-                {% if student.facebook_profile %}
-                    <a href="{{ student.facebook_profile }}" target="_blank" class="facebook-btn">
-                        <i class="fab fa-facebook"></i> Connect on Facebook
-                    </a>
-                {% else %}
-                    <div class="no-data" style="text-align: center; margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 12px;">
-                        <i class="fab fa-facebook"></i> No Facebook profile added
-                    </div>
-                {% endif %}
             </div>
 
             <!-- Details Area (Right) -->
@@ -507,7 +496,21 @@
                             {% endif %}
                         </span>
                     </div>
-                
+                    <div class="data-item">
+                        <span class="data-label">Facebook Profile</span>
+                        <span class="data-value">
+                            <!-- Facebook Profile Button -->
+                            {% if student.facebook_profile %}
+                                <a href="{{ student.facebook_profile }}" target="_blank" class="facebook-btn">
+                                    <i class="fab fa-facebook"></i> Connect on Facebook
+                                </a>
+                            {% else %}
+                                <div class="no-data" style="text-align: center; margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 12px;">
+                                    <i class="fab fa-facebook"></i> No Facebook profile added
+                                </div>
+                            {% endif %}
+                        </span>
+                    </div>
                 </div>
             </div> <!-- End Right Section -->
         </div>
