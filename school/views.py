@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
+from django.templatetags.static import static
 from .models import Notice
 from .models import ExamResult
 from .models import AdmissionResult
@@ -741,6 +742,15 @@ def registration_students_list(request):
 
 def registration_student_detail(request, slug):
     student = get_object_or_404(StudentRegistration, slug=slug, is_verified=True)
+    # Create SEO datastudent
+    seos = [{
+        'meta_title': f"{student.student_name} -Aluni Student Registration | Felna High School",
+        'meta_description': student.student_bio[:160] if student.student_bio else "Register for this meeting with Felna High School alumni. Join us to reconnect and celebrate our shared history.",
+        'meta_keywords': "alumni, registration, felna high school",
+        'meta_url': request.build_absolute_uri(),
+        'meta_image': request.build_absolute_uri(student.student_photo.url) if student.student_photo else request.build_absolute_uri(static('home/images/default-meeting-og.jpg')),
+    }]
+
     
     bd_no_display = "নাই"
     
@@ -763,6 +773,7 @@ def registration_student_detail(request, slug):
     context = {
         'student': student,
         'bd_no_display': bd_no_display,
+        'seos': seos,
     }
     return render(request, 'registration_students_details.html', context)
 
