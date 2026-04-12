@@ -2,1447 +2,316 @@
 {% load static %} 
 {% block title %}শিক্ষার্থী নিবন্ধন {% endblock %} 
 {% block extra_css %}
-<!-- Professional Font Stack: Times New Roman (English + Bengali Support) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>
-  /* Modern CSS Variables - Scoped to registration section */
   .registration-wrapper {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --primary-light: #818cf8;
-    --secondary: #ec489a;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --dark: #0f172a;
-    --gray-dark: #1e293b;
-    --gray: #475569;
-    --gray-light: #94a3b8;
-    --light: #f8fafc;
-    --white: #ffffff;
+    --primary: #6366f1; --primary-dark: #4f46e5; --primary-light: #818cf8;
+    --secondary: #ec489a; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+    --dark: #0f172a; --gray-dark: #1e293b; --gray: #475569; --gray-light: #94a3b8;
+    --light: #f8fafc; --white: #ffffff;
     --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
     --gradient-whatsapp: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
-    --border-radius: 1rem;
-    --border-radius-lg: 1.5rem;
     --border-radius-xl: 2rem;
     --text-base: 1.5rem;
   }
 
-  .registration-wrapper * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  .registration-wrapper * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  .registration-wrapper,
-  .registration-wrapper .card,
-  .registration-wrapper .card-body,
-  .registration-wrapper .form-label,
-  .registration-wrapper .form-control,
-  .registration-wrapper .form-select,
-  .registration-wrapper input,
-  .registration-wrapper select,
-  .registration-wrapper button,
-  .registration-wrapper span,
-  .registration-wrapper div,
-  .registration-wrapper p,
-  .registration-wrapper h1,
-  .registration-wrapper h2,
-  .registration-wrapper h3,
-  .registration-wrapper h4,
-  .registration-wrapper h5,
-  .registration-wrapper h6,
-  .registration-wrapper label,
-  .registration-wrapper .alert,
-  .registration-wrapper .card-header p,
-  .registration-wrapper .text-white-50,
-  .registration-wrapper .form-text,
-  .registration-wrapper .placeholder,
-  .registration-wrapper .gender-radio-option span,
-  .registration-wrapper .whatsapp-prefix,
-  .registration-wrapper .input-group-text,
-  .registration-wrapper .modern-btn,
-  .registration-wrapper .verify-otp-btn,
-  .registration-wrapper .otp-timer,
-  .registration-wrapper .resend-section button,
+  .registration-wrapper, .registration-wrapper *,
+  .registration-wrapper .card, .registration-wrapper .card-body,
+  .registration-wrapper .form-label, .registration-wrapper .form-control,
+  .registration-wrapper input, .registration-wrapper select, .registration-wrapper button,
+  .registration-wrapper span, .registration-wrapper div, .registration-wrapper p,
+  .registration-wrapper h1,.registration-wrapper h2,.registration-wrapper h3,
+  .registration-wrapper h4,.registration-wrapper h5,.registration-wrapper h6,
+  .registration-wrapper label, .registration-wrapper .alert,
+  .registration-wrapper .card-header p, .registration-wrapper .text-white-50,
+  .registration-wrapper .form-text, .registration-wrapper .gender-radio-option span,
+  .registration-wrapper .whatsapp-prefix, .registration-wrapper .input-group-text,
+  .registration-wrapper .modern-btn, .registration-wrapper .verify-otp-btn,
+  .registration-wrapper .otp-timer, .registration-wrapper .resend-section button,
   .registration-wrapper .captcha-error {
     font-size: var(--text-base) !important;
     line-height: 1.4 !important;
+    font-family: 'Times New Roman', Times, serif !important;
   }
 
   .registration-wrapper #bangladesh_number,
-  .registration-wrapper #abroad_number,
-  .registration-wrapper input[name="bangladesh_number"],
-  .registration-wrapper input[name="abroad_number"] {
-    font-size: 2rem !important;
-    line-height: 1.3 !important;
+  .registration-wrapper #abroad_number {
+    font-size: 2rem !important; line-height: 1.3 !important;
   }
 
   .registration-wrapper .card-header h2 {
-    font-size: 2.2rem !important;
-    font-weight: 700;
-    letter-spacing: -0.5px;
+    font-size: 2.2rem !important; font-weight: 700; letter-spacing: -0.5px;
     background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .registration-wrapper .card-header p {
-    font-size: 1.5rem !important;
-    opacity: 0.9;
-    color: #fff;
-  }
-
-  .registration-wrapper .otp-input-field {
-    font-size: 2rem !important;
-    font-weight: bold;
-    text-align: center !important;
-    letter-spacing: 0.5rem !important;
-  }
-
-  .otp-timer {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    margin-top: 1rem;
-    font-weight: 600;
-    color: var(--primary-dark);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .otp-timer i {
-    font-size: 1.6rem !important;
-    color: var(--primary);
-  }
-
-  .otp-timer span {
-    font-weight: 700;
-    font-size: 1.8rem !important;
-    color: var(--primary-dark);
-  }
-
-  .otp-input-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .otp-input-group {
-    max-width: 400px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .otp-input-field {
-    text-align: center !important;
-    font-size: 2rem !important;
-    font-weight: bold;
-    letter-spacing: 0.5rem;
-    padding: 1rem;
-    border-radius: 15px;
-    border: 2px solid rgba(203, 213, 225, 0.6);
-    transition: all 0.3s ease;
-  }
-
-  .otp-input-field:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    outline: none;
-  }
-
-  .otp-input-field.is-valid {
-    border-color: var(--success);
-    background-color: #f0fdf4;
-  }
-
-  .otp-input-field.is-invalid {
-    border-color: var(--danger);
-    background-color: #fef2f2;
-  }
-
-  .otp-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-
-  .verify-otp-btn {
-    min-width: 250px;
-    padding: 1rem 2rem;
-    font-weight: 600;
-    border-radius: 50px;
-    transition: all 0.3s ease;
-  }
-
-  .resend-section {
-    text-align: center;
-  }
-
-  .resend-otp-btn {
-    font-size: 1.5rem !important;
-    color: var(--primary) !important;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 0.5rem 1rem;
-  }
-
-  .resend-otp-btn:hover {
-    color: var(--primary-dark) !important;
-    text-decoration: underline !important;
-  }
-
-  .required-star {
-    color: #ef4444 !important;
-    font-weight: bold;
-    font-size: var(--text-base) !important;
-    margin-left: 0.25rem;
-  }
-
-  .registration-wrapper {
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4rem;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
-    font-family: 'Times New Roman', Times, serif !important;
-    font-size: var(--text-base) !important;
-  }
-
-  .registration-wrapper,
-  .registration-wrapper *,
-  .registration-wrapper .card,
-  .registration-wrapper .card-body,
-  .registration-wrapper .form-label,
-  .registration-wrapper .form-control,
-  .registration-wrapper .form-select,
-  .registration-wrapper input,
-  .registration-wrapper select,
-  .registration-wrapper button,
-  .registration-wrapper span,
-  .registration-wrapper div,
-  .registration-wrapper p,
-  .registration-wrapper h1,
-  .registration-wrapper h2,
-  .registration-wrapper h3,
-  .registration-wrapper h4,
-  .registration-wrapper h5,
-  .registration-wrapper h6,
-  .registration-wrapper label,
-  .registration-wrapper .alert,
-  .registration-wrapper .card-header p,
-  .registration-wrapper .text-white-50,
-  .registration-wrapper .form-text,
-  .registration-wrapper .placeholder,
-  .registration-wrapper .gender-radio-option span,
-  .registration-wrapper .whatsapp-prefix,
-  .registration-wrapper .input-group-text,
-  .registration-wrapper .modern-btn,
-  .registration-wrapper .verify-otp-btn,
-  .registration-wrapper .otp-timer,
-  .registration-wrapper .resend-section button,
-  .registration-wrapper .captcha-error {
-    font-family: 'Times New Roman', Times, serif !important;
-  }
-
-  .registration-wrapper::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.03) 0%, transparent 70%);
-    animation: rotate 60s linear infinite;
-    pointer-events: none;
-  }
-
-  @keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  .container-custom {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .row {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-  }
-
-  .row.justify-content-center {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .col-md-10, .col-lg-8 {
-    width: 100%;
-    max-width: 860px;
-    margin: 0 auto;
-  }
-
-  @media (min-width: 992px) {
-    .col-md-10, .col-lg-8 {
-      max-width: 780px;
-    }
-  }
-
-  .input-with-icon {
-    position: relative;
-    width: 100%;
-  }
-
-  .form-horizontal-row {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    transition: all 0.3s ease;
-  }
-
-  .form-horizontal-row .form-label {
-    flex: 0 0 200px;
-    text-align: left;
-    margin-bottom: 0;
-    white-space: nowrap;
-  }
-
-  .form-control{
-    height: 50px;
-  }
-
-  .form-horizontal-row .form-field-wrapper {
-    flex: 1;
-    min-width: 280px;
-    position: relative;
-  }
-
-  .searchable-dropdown {
-    position: relative;
-    width: 100%;
-  }
-
-  .searchable-input {
-    width: 100%;
-    cursor: pointer;
-  }
-
-  .dropdown-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border: 2px solid rgba(203, 213, 225, 0.6);
-    border-top: none;
-    border-radius: 0 0 20px 20px;
-    max-height: 300px;
-    overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: var(--shadow-lg);
-    margin-top: -2px;
-  }
-
-  .dropdown-list.show {
-    display: block;
-  }
-
-  .dropdown-item {
-    padding: 0.9rem 1.2rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: var(--text-base) !important;
-    color: var(--gray-dark);
-  }
-
-  .dropdown-item:hover {
-    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-    color: var(--primary);
-  }
-
-  .dropdown-item.selected {
-    background: var(--gradient-primary);
-    color: white;
-  }
-
-  .searchable-input:focus {
-    border-radius: 20px 20px 0 0;
-  }
-
-  .dropdown-list::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .dropdown-list::-webkit-scrollbar-track {
-    background: var(--light);
-    border-radius: 10px;
-  }
-
-  .dropdown-list::-webkit-scrollbar-thumb {
-    background: var(--gray-light);
-    border-radius: 10px;
-  }
-
-  .phone-number-row {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-    width: 100%;
-    margin-bottom: 0.75rem;
-  }
-
-  .phone-number-row .form-label {
-    flex: 0 0 200px;
-    margin-bottom: 0 !important;
-    white-space: nowrap;
-  }
-
-  .phone-number-row .input-group {
-    flex: 1;
-    width: auto;
-    margin-bottom: 0;
-  }
-
-  .whatsapp-radio-section {
-    width: 100%;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding-left: 33.9rem;
-  }
-
-  .whatsapp-radio-wrapper.whatsapp-inline {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .form-label-phone {
-    margin-bottom: 0 !important;
-    font-weight: 600;
-    color: var(--gray);
-    white-space: nowrap;
-    font-size: var(--text-base) !important;
-  }
-
-  @media (max-width: 768px) {
-    .form-horizontal-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-    .form-horizontal-row .form-label {
-      flex: none;
-      white-space: normal;
-    }
-    .phone-number-row {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .phone-number-row .form-label {
-      flex: none;
-      white-space: normal;
-    }
-    .phone-number-row .input-group {
-      width: 100% !important;
-    }
-    .whatsapp-radio-wrapper.whatsapp-inline {
-      padding-left: 0;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .whatsapp-radio-section {
-      padding-left: 0;
-    }
-  }
-
-  @media (max-width: 992px) {
-    .whatsapp-radio-wrapper.whatsapp-inline {
-      padding-left: 0;
-    }
-    .whatsapp-radio-section {
-      padding-left: 0;
-    }
-  }
-
-  .registration-wrapper .form-label {
-    font-weight: 600;
-    margin-bottom: 0.5rem !important;
-    white-space: nowrap;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .registration-wrapper .form-label-otp  {
-    font-weight: 600;
-    margin-bottom: 0.5rem !important;
-    white-space: nowrap;
-    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.3px;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding-left: 230px;
-  }
-
-  .registration-wrapper .form-label i {
-    background: none;
-    -webkit-text-fill-color: var(--primary);
-    font-size: 1.6rem !important;
-  }
-
-  .registration-wrapper .form-label .required-star {
-    background: none !important;
-    -webkit-text-fill-color: #ef4444 !important;
-    background-clip: unset !important;
-    color: #ef4444 !important;
-  }
-
-  .modern-input, .modern-select {
-    border: 2px solid rgba(203, 213, 225, 0.6);
-    border-radius: 20px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: var(--white);
-    padding: 0.9rem 1.2rem;
-    width: 100%;
-    box-shadow: var(--shadow-sm);
-    backdrop-filter: blur(10px);
-    font-size: var(--text-base) !important;
-  }
-
-  .modern-input:hover, .modern-select:hover {
-    border-color: var(--primary-light);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-  }
-
-  .modern-input:focus, .modern-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
-    outline: none;
-    transform: translateY(-2px);
-  }
-
-  .input-icon {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gray-light);
-    font-size: 1.6rem !important;
-    transition: all 0.3s ease;
-    z-index: 2;
-  }
-
-  .enhanced-input {
-    padding-left: 15px !important;
-    width: 100%;
-  }
-
-  .enhanced-whatsapp-group {
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    width: 100%;
-    display: flex;
-    flex-wrap: nowrap;
-    box-shadow: var(--shadow-sm);
-  }
-
-  .whatsapp-prefix {
-    background: var(--gradient-whatsapp);
-    color: white;
-    border: none;
-    font-weight: 600;
-    padding: 0.9rem 1.5rem;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-    font-size: var(--text-base) !important;
-  }
-
-  .whatsapp-icon {
-    margin-right: 10px;
-    font-size: 1.6rem !important;
-    animation: gentlePulse 2s infinite;
-  }
-
-  @keyframes gentlePulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.9; }
-  }
-
-  .enhanced-whatsapp-input {
-    border-left: none;
-    border-radius: 0 20px 20px 0;
-    transition: all 0.3s ease;
-    width: 100%;
-    flex: 1;
-    font-size: var(--text-base) !important;
-    /* FIX: ensure pointer events and user interaction work */
-    pointer-events: auto !important;
-    user-select: text !important;
-    -webkit-user-select: text !important;
-  }
-
-  .gender-radio-group {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    flex-wrap: wrap;
-    padding: 0.5rem 0;
-  }
-
-  .gender-radio-option {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    cursor: pointer;
-    padding: 0.8rem 1.5rem;
-    border-radius: 50px;
-    transition: all 0.25s ease;
-    background: var(--light);
-    border: 1px solid rgba(203, 213, 225, 0.5);
-  }
-
-  .gender-radio-option:hover {
-    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-    border-color: var(--primary-light);
-    transform: translateX(3px);
-  }
-
-  .gender-radio-option input[type="radio"] {
-    width: 1.4rem;
-    height: 1.4rem;
-    cursor: pointer;
-    accent-color: var(--primary);
-    margin: 0;
-  }
-
-  .gender-radio-option span {
-    margin: 0;
-    cursor: pointer;
-    color: var(--gray-dark);
-    font-weight: 500;
-    font-size: var(--text-base) !important;
-  }
-
-  .registration-wrapper .card {
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: var(--border-radius-xl) !important;
-    border: none;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(0px);
-    box-shadow: var(--shadow-2xl);
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .card-header {
-    background: #337ab7 !important;
-    border: none;
-    padding: 2rem 2rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card-header::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: float 8s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(-20px, -20px); }
-  }
-
-  .rounded-top-4 {
-    border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
-  }
-
-  .registration-wrapper .card-body {
-    animation: fadeInUp 0.6s ease-out;
-    padding: 2.5rem;
-  }
-
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .modern-btn {
-    border-radius: 50px;
-    padding: 1rem 2.5rem;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    border: none;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    font-size: var(--text-base) !important;
-  }
-
-  .modern-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-lg);
-  }
-
-  .wrapper_submit {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
-  }
-
-  .captcha-container {
-    margin: 2rem 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  .g-recaptcha {
-    transform: scale(0.95);
-    transform-origin: center;
-  }
-
-  .captcha-error {
-    color: var(--danger);
-    margin-top: 0.75rem;
-    text-align: center;
-    display: none;
-    background: #fee2e2;
-    padding: 0.8rem;
-    border-radius: 12px;
-    font-weight: 500;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: var(--text-base) !important;
-  }
-
-  .captcha-error.show {
-    display: block;
-  }
-
-  .photo-preview-container {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .photo-preview {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid var(--primary-light);
-    box-shadow: var(--shadow-md);
-    background: var(--light);
-    transition: transform 0.3s ease;
-  }
-
-  .photo-preview:hover {
-    transform: scale(1.05);
-  }
-
-  .file-input-wrapper {
-    position: relative;
-    width: 100%;
-  }
-
-  .file-input-wrapper .modern-input[type="file"] {
-    padding: 0.7rem 1.2rem;
-    cursor: pointer;
-    background: var(--white);
-    border: 2px solid rgba(203, 213, 225, 0.6);
-    border-radius: 20px;
-    transition: all 0.3s ease;
-  }
-
-  .file-input-wrapper .modern-input[type="file"]::file-selector-button {
-    background: #337ab7;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 50px;
-    margin-right: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.4rem !important;
-    font-weight: 600;
-  }
-
-  .crop-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: 10000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .crop-modal.show {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .crop-container {
-    background: white;
-    border-radius: 24px;
-    padding: 20px;
-    margin: 10%;
-    max-width: 50vw;
-    max-height: 90vh;
-    margin-left: 25%;
-    overflow: auto;
-  }
-
-  .crop-image-container {
-    max-width: 70vw;
-    max-height: 60vh;
-    overflow: hidden;
-  }
-
-  .crop-image-container img {
-    max-width: 100%;
-    display: block;
-  }
-
-  .crop-controls {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    justify-content: center;
-  }
-
-  .crop-info {
-    color: var(--success);
-    font-size: 1.3rem !important;
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: #dcfce7;
-    padding: 0.5rem 1rem;
-    border-radius: 12px;
-    width: fit-content;
-  }
-
-  .crop-warning {
-    background: #fed7aa;
-    color: #9b2c1d;
-  }
-
-  @media (max-width: 768px) {
-    .photo-preview {
-      width: 80px;
-      height: 80px;
-    }
-    .crop-controls {
-      flex-direction: column;
-    }
-    .otp-input-field {
-      font-size: 1.8rem !important;
-      letter-spacing: 0.3rem !important;
-    }
-  }
-
-  .change-number-section {
-    margin-top: 0.5rem;
-  }
-
-  .change-number-btn {
-    font-size: 1.4rem !important;
-    color: var(--primary) !important;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    background: rgba(99, 102, 241, 0.1);
-  }
-
-  .change-number-btn:hover {
-    background: rgba(99, 102, 241, 0.2);
-    color: var(--primary-dark) !important;
-    text-decoration: none !important;
-    transform: translateY(-1px);
-  }
-
-  #changeNumberModal .crop-container {
-    max-width: 500px;
-    width: 90%;
-    margin: auto;
-    padding: 2rem;
-  }
-
-  #changeNumberModal h3 {
-    color: var(--gray-dark);
-    margin-bottom: 1.5rem;
-  }
-
-  #changeNumberModal .form-label {
-    font-size: 1.5rem !important;
-    font-weight: 600;
-    color: var(--gray-dark);
-  }
-
-  #changeNumberModal .modern-btn {
-    padding: 0.8rem 1.5rem;
-    font-size: 1.5rem !important;
-  }
-
-  #changeNumberModal .btn-secondary {
-    background: #64748b;
-  }
-
-  #changeNumberModal .btn-secondary:hover {
-    background: #475569;
-    transform: translateY(-2px);
-  }
-
-  .change-photo-btn {
-    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
-    color: white;
-    border: none;
-    padding: 0.5rem 1.2rem;
-    border-radius: 50px;
-    font-size: 1.3rem !important;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .change-photo-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    background: linear-gradient(135deg, #475569 0%, #334155 100%);
-  }
-
-  .change-photo-btn:active {
-    transform: translateY(0px);
-  }
-
-  @media (max-width: 768px) {
-    .change-photo-btn {
-      padding: 0.4rem 1rem;
-      font-size: 1.2rem !important;
-    }
-    .photo-preview {
-      width: 80px;
-      height: 80px;
-    }
-  }
-
-  .global-messages-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 99999;
-    min-width: 350px;
-    max-width: 500px;
-  }
-
-  .global-messages-container .alert {
-    border-radius: 15px !important;
-    font-size: 1.5rem !important;
-    font-family: 'Times New Roman', Times, serif !important;
-    margin-bottom: 10px !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-  }
-
-  .form-text {
-    font-size: 1.2rem !important;
-    color: #6c757d;
-    margin-top: 0.5rem;
-  }
+    background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .registration-wrapper .card-header p { font-size: 1.5rem !important; opacity: 0.9; color: #fff; }
+
+  /* OTP */
+  .otp-timer { display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);padding:0.8rem 1.5rem;border-radius:50px;margin-top:1rem;font-weight:600;color:var(--primary-dark);box-shadow:var(--shadow-sm); }
+  .otp-timer i { font-size:1.6rem !important;color:var(--primary); }
+  .otp-timer span { font-weight:700;font-size:1.8rem !important;color:var(--primary-dark); }
+  .otp-input-container { display:flex;justify-content:center;width:100%; }
+  .otp-input-group { max-width:400px;width:100%;margin:0 auto; }
+  .otp-input-field { text-align:center !important;font-size:2rem !important;font-weight:bold;letter-spacing:0.5rem;padding:1rem;border-radius:15px;border:2px solid rgba(203,213,225,0.6);transition:all 0.3s ease; }
+  .otp-input-field:focus { border-color:var(--primary);box-shadow:0 0 0 4px rgba(99,102,241,0.1);outline:none; }
+  .otp-input-field.is-valid { border-color:var(--success);background-color:#f0fdf4; }
+  .otp-input-field.is-invalid { border-color:var(--danger);background-color:#fef2f2; }
+  .otp-actions { display:flex;flex-direction:column;align-items:center;gap:1.5rem;margin-top:2rem; }
+  .verify-otp-btn { min-width:250px;padding:1rem 2rem;font-weight:600;border-radius:50px;transition:all 0.3s ease; }
+  .resend-section { text-align:center; }
+  .resend-otp-btn { font-size:1.5rem !important;color:var(--primary) !important;text-decoration:none;font-weight:500;transition:all 0.3s ease;padding:0.5rem 1rem; }
+  .resend-otp-btn:hover { color:var(--primary-dark) !important;text-decoration:underline !important; }
+
+  .required-star { color:#ef4444 !important;font-weight:bold;font-size:var(--text-base) !important;margin-left:0.25rem; }
+
+  /* WRAPPER */
+  .registration-wrapper { min-height:auto;display:flex;align-items:center;justify-content:center;padding:4rem;position:relative;overflow:hidden;background:linear-gradient(145deg,#f1f5f9 0%,#e2e8f0 100%);font-family:'Times New Roman',Times,serif !important;font-size:var(--text-base) !important; }
+  .registration-wrapper::before { content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(99,102,241,0.03) 0%,transparent 70%);animation:rotate 60s linear infinite;pointer-events:none; }
+  @keyframes rotate { from{transform:rotate(0deg)}to{transform:rotate(360deg)} }
+
+  .container-custom { width:100%;max-width:1400px;margin:0 auto;position:relative;z-index:1;display:flex;justify-content:center;align-items:center; }
+  .row { width:100%;display:flex;justify-content:center;margin:0; }
+  .row.justify-content-center { display:flex;justify-content:center;width:100%; }
+  .col-md-10,.col-lg-8 { width:100%;max-width:860px;margin:0 auto; }
+  @media(min-width:992px){.col-md-10,.col-lg-8{max-width:780px}}
+
+  .input-with-icon { position:relative;width:100%; }
+
+  .form-horizontal-row { display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap;transition:all 0.3s ease; }
+  .form-horizontal-row .form-label { flex:0 0 200px;text-align:left;margin-bottom:0;white-space:nowrap; }
+  .form-control { height:50px; }
+  .form-horizontal-row .form-field-wrapper { flex:1;min-width:280px;position:relative; }
+
+  /* ============================================================
+     SEARCHABLE DROPDOWN — search lives INSIDE the panel
+  ============================================================ */
+  .searchable-dropdown { position:relative;width:100%; }
+
+  /* Trigger button */
+  .sd-trigger {
+    display:flex;align-items:center;justify-content:space-between;
+    width:100%;height:50px;padding:0 1.2rem;
+    background:var(--white);border:2px solid rgba(203,213,225,0.6);
+    border-radius:20px;cursor:pointer;
+    transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:var(--shadow-sm);
+    font-size:var(--text-base) !important;
+    font-family:'Times New Roman',Times,serif !important;
+    color:var(--gray);user-select:none;-webkit-user-select:none;
+    text-align:left;
+  }
+  .sd-trigger:hover { border-color:var(--primary-light);box-shadow:var(--shadow-md);transform:translateY(-1px); }
+  .sd-trigger.open { border-color:var(--primary);box-shadow:0 0 0 4px rgba(99,102,241,0.1);border-radius:20px 20px 0 0;transform:translateY(-2px); }
+  .sd-trigger.has-value { color:var(--gray-dark);font-weight:500; }
+  .sd-trigger-text { flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--text-base) !important; }
+  .sd-chevron { flex-shrink:0;margin-left:0.75rem;color:var(--gray-light);transition:transform 0.25s ease;font-size:1.1rem !important; }
+  .sd-trigger.open .sd-chevron { transform:rotate(180deg);color:var(--primary); }
+
+  /* Panel */
+  .sd-panel {
+    position:absolute;top:calc(100% - 2px);left:0;right:0;
+    background:var(--white);border:2px solid var(--primary);border-top:none;
+    border-radius:0 0 20px 20px;z-index:1050;display:none;
+    box-shadow:var(--shadow-lg);overflow:hidden;
+  }
+  .sd-panel.show { display:block;animation:sdIn 0.18s ease-out; }
+  @keyframes sdIn { from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)} }
+
+  /* Search box INSIDE panel */
+  .sd-search-wrap { padding:0.7rem 0.9rem 0.55rem;background:#f8fafc;border-bottom:1px solid rgba(203,213,225,0.45); }
+  .sd-search-inner { position:relative; }
+  .sd-search-icon-inner { position:absolute;left:0.9rem;top:50%;transform:translateY(-50%);color:var(--gray-light);font-size:1.25rem !important;pointer-events:none; }
+  .sd-search-input {
+    width:100%;height:40px;padding:0 0.9rem 0 2.5rem;
+    border:1.5px solid rgba(203,213,225,0.7);border-radius:50px;
+    font-size:1.4rem !important;font-family:'Times New Roman',Times,serif !important;
+    color:var(--gray-dark);background:var(--white);outline:none;
+    transition:border-color 0.2s,box-shadow 0.2s;
+  }
+  .sd-search-input:focus { border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+  .sd-search-input::placeholder { color:var(--gray-light); }
+
+  /* Items */
+  .sd-list { max-height:250px;overflow-y:auto; }
+  .sd-list::-webkit-scrollbar { width:6px; }
+  .sd-list::-webkit-scrollbar-track { background:var(--light); }
+  .sd-list::-webkit-scrollbar-thumb { background:var(--gray-light);border-radius:10px; }
+  .sd-item {
+    padding:0.85rem 1.2rem;cursor:pointer;
+    transition:all 0.15s ease;
+    font-size:var(--text-base) !important;
+    font-family:'Times New Roman',Times,serif !important;
+    color:var(--gray-dark);
+    border-bottom:1px solid rgba(203,213,225,0.18);
+  }
+  .sd-item:last-child { border-bottom:none; }
+  .sd-item:hover { background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%);color:var(--primary); }
+  .sd-item.selected { background:var(--gradient-primary);color:white;font-weight:600; }
+  .sd-item.selected:hover { background:var(--gradient-primary);color:white; }
+  .sd-no-results { padding:1.2rem;text-align:center;color:var(--gray-light);font-size:1.4rem !important;font-style:italic; }
+
+  /* Phone */
+  .phone-number-row { display:flex;align-items:center;gap:1.2rem;width:100%;margin-bottom:0.75rem; }
+  .phone-number-row .form-label { flex:0 0 200px;margin-bottom:0 !important;white-space:nowrap; }
+  .phone-number-row .input-group { flex:1;width:auto;margin-bottom:0; }
+  .whatsapp-radio-section { width:100%;margin-top:0.5rem;margin-bottom:0.5rem;padding-left:33.9rem; }
+  .whatsapp-radio-wrapper.whatsapp-inline { display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap; }
+  .form-label-phone { margin-bottom:0 !important;font-weight:600;color:var(--gray);white-space:nowrap;font-size:var(--text-base) !important; }
+
+  @media(max-width:768px){
+    .form-horizontal-row{flex-direction:column;align-items:flex-start;gap:1rem}
+    .form-horizontal-row .form-label{flex:none;white-space:normal}
+    .phone-number-row{flex-direction:column;align-items:flex-start}
+    .phone-number-row .form-label{flex:none;white-space:normal}
+    .phone-number-row .input-group{width:100% !important}
+    .whatsapp-radio-wrapper.whatsapp-inline{padding-left:0;flex-direction:column;align-items:flex-start}
+    .whatsapp-radio-section{padding-left:0}
+  }
+  @media(max-width:992px){.whatsapp-radio-wrapper.whatsapp-inline{padding-left:0}.whatsapp-radio-section{padding-left:0}}
+
+  /* Labels */
+  .registration-wrapper .form-label { font-weight:600;margin-bottom:0.5rem !important;white-space:nowrap;background:linear-gradient(135deg,#1e293b 0%,#334155 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.3px;display:flex;align-items:center;gap:0.75rem; }
+  .registration-wrapper .form-label-otp { font-weight:600;margin-bottom:0.5rem !important;white-space:nowrap;background:linear-gradient(135deg,#1e293b 0%,#334155 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.3px;display:flex;align-items:center;gap:0.75rem;padding-left:230px; }
+  .registration-wrapper .form-label i { background:none;-webkit-text-fill-color:var(--primary);font-size:1.6rem !important; }
+  .registration-wrapper .form-label .required-star { background:none !important;-webkit-text-fill-color:#ef4444 !important;background-clip:unset !important;color:#ef4444 !important; }
+
+  /* Inputs */
+  .modern-input,.modern-select { border:2px solid rgba(203,213,225,0.6);border-radius:20px;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);background:var(--white);padding:0.9rem 1.2rem;width:100%;box-shadow:var(--shadow-sm);font-size:var(--text-base) !important; }
+  .modern-input:hover,.modern-select:hover { border-color:var(--primary-light);box-shadow:var(--shadow-md);transform:translateY(-1px); }
+  .modern-input:focus,.modern-select:focus { border-color:var(--primary);box-shadow:0 0 0 4px rgba(99,102,241,0.1);outline:none;transform:translateY(-2px); }
+  .input-icon { position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--gray-light);font-size:1.6rem !important;transition:all 0.3s ease;z-index:2; }
+  .enhanced-input { padding-left:15px !important;width:100%; }
+
+  /* WhatsApp */
+  .enhanced-whatsapp-group { border-radius:20px;overflow:hidden;transition:all 0.3s ease;width:100%;display:flex;flex-wrap:nowrap;box-shadow:var(--shadow-sm); }
+  .whatsapp-prefix { background:var(--gradient-whatsapp);color:white;border:none;font-weight:600;padding:0.9rem 1.5rem;flex-shrink:0;font-size:var(--text-base) !important; }
+  .whatsapp-icon { margin-right:10px;font-size:1.6rem !important;animation:gentlePulse 2s infinite; }
+  @keyframes gentlePulse { 0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:0.9} }
+  .enhanced-whatsapp-input { border-left:none;border-radius:0 20px 20px 0;width:100%;flex:1;font-size:var(--text-base) !important;pointer-events:auto !important;user-select:text !important; }
+
+  /* Radio */
+  .gender-radio-group { display:flex;gap:2rem;align-items:center;flex-wrap:wrap;padding:0.5rem 0; }
+  .gender-radio-option { display:flex;align-items:center;gap:0.8rem;cursor:pointer;padding:0.8rem 1.5rem;border-radius:50px;transition:all 0.25s ease;background:var(--light);border:1px solid rgba(203,213,225,0.5); }
+  .gender-radio-option:hover { background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%);border-color:var(--primary-light);transform:translateX(3px); }
+  .gender-radio-option input[type="radio"] { width:1.4rem;height:1.4rem;cursor:pointer;accent-color:var(--primary);margin:0; }
+  .gender-radio-option span { margin:0;cursor:pointer;color:var(--gray-dark);font-weight:500;font-size:var(--text-base) !important; }
+
+  /* Card */
+  .registration-wrapper .card { overflow:hidden;transition:all 0.4s cubic-bezier(0.4,0,0.2,1);border-radius:var(--border-radius-xl) !important;border:none;background:rgba(255,255,255,0.98);box-shadow:var(--shadow-2xl);margin:0 auto;width:100%; }
+  .card-header { background:#337ab7 !important;border:none;padding:2rem;position:relative;overflow:hidden; }
+  .card-header::before { content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,0.2) 0%,transparent 70%);border-radius:50%;animation:float 8s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,-20px)} }
+  .rounded-top-4 { border-radius:var(--border-radius-xl) var(--border-radius-xl) 0 0; }
+  .registration-wrapper .card-body { animation:fadeInUp 0.6s ease-out;padding:2.5rem; }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)} }
+
+  /* Buttons */
+  .modern-btn { border-radius:50px;padding:1rem 2.5rem;font-weight:700;transition:all 0.3s ease;border:none;position:relative;overflow:hidden;box-shadow:var(--shadow-md);font-size:var(--text-base) !important; }
+  .modern-btn:hover { transform:translateY(-3px);box-shadow:var(--shadow-lg); }
+  .wrapper_submit { display:flex;justify-content:flex-end;width:100%; }
+
+  /* Captcha */
+  .captcha-container { margin:2rem 0;display:flex;justify-content:center;align-items:center;width:100%; }
+  .g-recaptcha { transform:scale(0.95);transform-origin:center; }
+  .captcha-error { color:var(--danger);margin-top:0.75rem;text-align:center;display:none;background:#fee2e2;padding:0.8rem;border-radius:12px;font-weight:500;width:fit-content;margin-left:auto;margin-right:auto;font-size:var(--text-base) !important; }
+  .captcha-error.show { display:block; }
+
+  /* Photo */
+  .photo-preview-container { margin-top:1rem;display:flex;justify-content:flex-start;align-items:center;gap:1rem;flex-wrap:wrap; }
+  .photo-preview { width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--primary-light);box-shadow:var(--shadow-md);background:var(--light);transition:transform 0.3s ease; }
+  .photo-preview:hover { transform:scale(1.05); }
+  .file-input-wrapper { position:relative;width:100%; }
+  .file-input-wrapper .modern-input[type="file"] { padding:0.7rem 1.2rem;cursor:pointer;background:var(--white);border:2px solid rgba(203,213,225,0.6);border-radius:20px; }
+  .file-input-wrapper .modern-input[type="file"]::file-selector-button { background:#337ab7;color:white;border:none;padding:0.7rem 1.5rem;border-radius:50px;margin-right:1rem;cursor:pointer;font-size:1.4rem !important;font-weight:600; }
+
+  /* Crop */
+  .crop-modal { display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;z-index:10000;justify-content:center;align-items:center; }
+  .crop-modal.show { display:flex; }
+  .crop-container { background:white;border-radius:24px;padding:20px;margin:10%;max-width:50vw;max-height:90vh;margin-left:25%;overflow:auto; }
+  .crop-image-container { max-width:70vw;max-height:60vh;overflow:hidden; }
+  .crop-image-container img { max-width:100%;display:block; }
+  .crop-controls { display:flex;gap:1rem;margin-top:1.5rem;justify-content:center; }
+  .crop-info { color:var(--success);font-size:1.3rem !important;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;background:#dcfce7;padding:0.5rem 1rem;border-radius:12px;width:fit-content; }
+
+  /* Change number */
+  .change-number-section { margin-top:0.5rem; }
+  .change-number-btn { font-size:1.4rem !important;color:var(--primary) !important;text-decoration:none;padding:0.3rem 0.8rem;border-radius:20px;background:rgba(99,102,241,0.1);transition:all 0.3s ease; }
+  .change-number-btn:hover { background:rgba(99,102,241,0.2);color:var(--primary-dark) !important;text-decoration:none !important; }
+  #changeNumberModal .crop-container { max-width:500px;width:90%;margin:auto;padding:2rem; }
+  #changeNumberModal .modern-btn { padding:0.8rem 1.5rem; }
+  #changeNumberModal .btn-secondary { background:#64748b; }
+  .change-photo-btn { background:linear-gradient(135deg,#64748b 0%,#475569 100%);color:white;border:none;padding:0.5rem 1.2rem;border-radius:50px;font-size:1.3rem !important;font-weight:600;cursor:pointer;transition:all 0.3s ease;display:inline-flex;align-items:center;gap:0.5rem; }
+  .change-photo-btn:hover { transform:translateY(-2px);box-shadow:var(--shadow-md); }
+  .form-text { font-size:1.2rem !important;color:#6c757d;margin-top:0.5rem; }
+
+  @media(max-width:768px){ .photo-preview{width:80px;height:80px} .crop-controls{flex-direction:column} .otp-input-field{font-size:1.8rem !important;letter-spacing:0.3rem !important} }
+
+  /* Char counter */
+  .char-counter-wrapper { display:flex;justify-content:space-between;align-items:center;margin-top:0.5rem;width:100%; }
+  .char-counter-right { text-align:right;font-size:1.3rem !important;padding:0.3rem 0.8rem;border-radius:20px;background:#f1f5f9;display:inline-block;font-weight:500; }
+  .char-counter-right .char-count { font-weight:700; }
+  .char-counter-right .char-max { color:#64748b;font-weight:normal; }
+  .char-counter-right.success .char-count{color:#10b981}
+  .char-counter-right.warning .char-count{color:#f59e0b}
+  .char-counter-right.danger  .char-count{color:#ef4444}
 </style>
 
 <style>
-    /* ============================================
-       MODERN ALUMNI GALLERY SECTION
-    ============================================ */
-    
-    .alumni-gallery-section {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 24px;
-        padding: 2rem 1.5rem;
-        margin: 2rem 0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(32, 60, 92, 0.08);
-    }
-    
-    .gallery-header-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 1.75rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .gallery-title-container {
-        position: relative;
-    }
-    
-    .alumni-gallery-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--brand-navy, #203C5C) 0%, #2c4c6e 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        margin: 0;
-        letter-spacing: -0.3px;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    .title-underline {
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, var(--brand-orange, #F4A024), #ffc44d);
-        border-radius: 3px;
-        margin-top: 8px;
-        transition: width 0.3s ease;
-    }
-    
-    .gallery-title-container:hover .title-underline {
-        width: 100px;
-    }
-    
-    .gallery-controls-hint {
-        display: flex;
-        align-items: center;
-    }
-    
-    .hint-text {
-        font-size: 0.75rem;
-        color: #6c757d;
-        background: rgba(0, 0, 0, 0.04);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    .hint-text i {
-        margin-right: 5px;
-        font-size: 0.7rem;
-    }
-    
-    .slider-wrapper {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-        border-radius: 16px;
-        cursor: grab;
-        user-select: none;
-    }
-    
-    .slider-wrapper:active {
-        cursor: grabbing;
-    }
-    
-    .slider-track {
-        display: flex;
-        width: max-content;
-        gap: 1.25rem;
-        animation: scrollRightToLeft 28s linear infinite;
-        will-change: transform;
-    }
-    
-    .slider-wrapper:hover .slider-track {
-        animation-play-state: paused;
-    }
-    
-    .slider-item {
-        flex: 0 0 auto;
-        width: 280px;
-        transition: transform 0.3s ease;
-    }
-    
-    .slider-item:hover {
-        transform: translateY(-4px);
-    }
-    
-    .img-card {
-        background: #ffffff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-    
-    .slider-item:hover .img-card {
-        box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.15);
-        border-color: rgba(244, 160, 36, 0.2);
-    }
-    
-    .img-wrapper {
-        position: relative;
-        width: 100%;
-        height: 220px;
-        overflow: hidden;
-        background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-    }
-    
-    .img-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        display: block;
-    }
-    
-    .slider-item:hover .img-wrapper img {
-        transform: scale(1.08);
-    }
-    
-    .image-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(32, 60, 92, 0.85);
-        backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .img-wrapper:hover .image-overlay {
-        opacity: 1;
-    }
-    
-    .overlay-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        transform: translateY(10px);
-        transition: transform 0.3s ease;
-    }
-    
-    .img-wrapper:hover .overlay-content {
-        transform: translateY(0);
-    }
-    
-    .overlay-content i {
-        font-size: 2rem;
-        color: var(--brand-orange, #F4A024);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-    
-    .overlay-content span {
-        color: white;
-        font-size: 1.5rem;
-        font-weight: 500;
-        font-family: 'Roboto', sans-serif;
-        letter-spacing: 0.5px;
-        background: rgba(255,255,255,0.15);
-        padding: 4px 12px;
-        border-radius: 30px;
-    }
-    
-    .img-caption {
-        padding: 0.75rem 1rem;
-        font-size: 1.5rem;
-        font-weight: 500;
-        color: #334155;
-        background: #ffffff;
-        border-top: 1px solid #f0f2f5;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    .gallery-dots-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 1.75rem;
-    }
-    
-    .gallery-dots {
-        display: flex;
-        gap: 8px;
-        background: rgba(0, 0, 0, 0.04);
-        padding: 6px 12px;
-        border-radius: 50px;
-    }
-    
-    .gallery-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #cbd5e1;
-        cursor: pointer;
-        transition: all 0.25s ease;
-    }
-    
-    .gallery-dot:hover {
-        background: var(--brand-orange, #F4A024);
-        transform: scale(1.2);
-    }
-    
-    .gallery-dot.active {
-        width: 24px;
-        border-radius: 12px;
-        background: linear-gradient(90deg, var(--brand-navy, #203C5C), var(--brand-orange, #F4A024));
-    }
-    
-    .lightbox-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0.25s, opacity 0.25s ease;
-    }
-    
-    .lightbox-modal.active {
-        visibility: visible;
-        opacity: 1;
-    }
-    
-    .lightbox-overlay-close {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.92);
-        backdrop-filter: blur(12px);
-        cursor: pointer;
-    }
-    
-    .lightbox-container {
-        position: relative;
-        max-width: 90vw;
-        max-height: 90vh;
-        z-index: 10000;
-    }
-    
-    .lightbox-close-btn {
-        position: absolute;
-        top: -50px;
-        right: -10px;
-        background: rgba(255, 255, 255, 0.15);
-        border: none;
-        color: white;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        backdrop-filter: blur(8px);
-        z-index: 10001;
-    }
-    
-    .lightbox-close-btn:hover {
-        background: #ef4444;
-        transform: scale(1.05);
-    }
-    
-    .lightbox-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255, 255, 255, 0.15);
-        border: none;
-        color: white;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        backdrop-filter: blur(8px);
-        z-index: 10001;
-    }
-    
-    .lightbox-nav:hover {
-        background: var(--brand-orange, #F4A024);
-        transform: translateY(-50%) scale(1.08);
-    }
-    
-    .lightbox-prev {
-        left: -60px;
-    }
-    
-    .lightbox-next {
-        right: -60px;
-    }
-    
-    .lightbox-content {
-        text-align: center;
-        background: transparent;
-    }
-    
-    .lightbox-image {
-        max-width: 85vw;
-        max-height: 80vh;
-        object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        background: #0f172a;
-    }
-    
-    .lightbox-caption {
-        margin-top: 1rem;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-        font-weight: 400;
-        background: rgba(0, 0, 0, 0.6);
-        display: inline-block;
-        padding: 6px 18px;
-        border-radius: 30px;
-        backdrop-filter: blur(4px);
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    @keyframes scrollRightToLeft {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-    
-    @media (max-width: 768px) {
-        .alumni-gallery-section { padding: 1.25rem; border-radius: 20px; }
-        .alumni-gallery-title { font-size: 1.4rem; }
-        .slider-item { width: 220px; }
-        .img-wrapper { height: 180px; }
-        .lightbox-prev { left: 10px; }
-        .lightbox-next { right: 10px; }
-        .lightbox-nav { width: 40px; height: 40px; font-size: 1rem; }
-        .lightbox-close-btn { top: -40px; right: 5px; width: 38px; height: 38px; }
-    }
-    
-    @media (max-width: 480px) {
-        .slider-item { width: 180px; }
-        .img-wrapper { height: 150px; }
-        .overlay-content span { font-size: 0.7rem; }
-        .gallery-header-wrapper { flex-direction: column; align-items: flex-start; }
-    }
-
-    /* Character counter right-aligned styles */
-    .char-counter-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 0.5rem;
-      width: 100%;
-    }
-
-    .char-counter-right {
-      text-align: right;
-      font-size: 1.3rem !important;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      background: #f1f5f9;
-      display: inline-block;
-      font-weight: 500;
-    }
-
-    .char-counter-right .char-count {
-      font-weight: 700;
-    }
-
-    .char-counter-right .char-max {
-      color: #64748b;
-      font-weight: normal;
-    }
-
-    .char-counter-right.success .char-count { color: #10b981; }
-    .char-counter-right.warning .char-count { color: #f59e0b; }
-    .char-counter-right.danger .char-count { color: #ef4444; }
-
-    @media (max-width: 768px) {
-      .char-counter-wrapper { flex-direction: column; align-items: flex-end; gap: 0.5rem; }
-      .char-counter-right { font-size: 1.1rem !important; padding: 0.2rem 0.6rem; }
-    }
+  /* GALLERY */
+  .alumni-gallery-section{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border-radius:24px;padding:2rem 1.5rem;margin:2rem 0;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid rgba(32,60,92,0.08)}
+  .gallery-header-wrapper{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+  .gallery-title-container{position:relative}
+  .alumni-gallery-title{font-size:1.75rem;font-weight:700;background:linear-gradient(135deg,var(--brand-navy,#203C5C) 0%,#2c4c6e 100%);background-clip:text;-webkit-background-clip:text;color:transparent;margin:0;letter-spacing:-0.3px;font-family:'Roboto',sans-serif}
+  .title-underline{width:60px;height:3px;background:linear-gradient(90deg,var(--brand-orange,#F4A024),#ffc44d);border-radius:3px;margin-top:8px;transition:width 0.3s ease}
+  .gallery-title-container:hover .title-underline{width:100px}
+  .slider-wrapper{overflow:hidden;width:100%;position:relative;border-radius:16px;cursor:grab;user-select:none}
+  .slider-wrapper:active{cursor:grabbing}
+  .slider-track{display:flex;width:max-content;gap:1.25rem;animation:scrollRTL 28s linear infinite;will-change:transform}
+  .slider-wrapper:hover .slider-track{animation-play-state:paused}
+  .slider-item{flex:0 0 auto;width:280px;transition:transform 0.3s ease}
+  .slider-item:hover{transform:translateY(-4px)}
+  .img-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.06);transition:all 0.3s cubic-bezier(0.2,0,0,1);border:1px solid rgba(0,0,0,0.04)}
+  .slider-item:hover .img-card{box-shadow:0 15px 35px -12px rgba(0,0,0,0.15);border-color:rgba(244,160,36,0.2)}
+  .img-wrapper{position:relative;width:100%;height:220px;overflow:hidden;background:linear-gradient(135deg,#e2e8f0,#cbd5e1)}
+  .img-wrapper img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);display:block}
+  .slider-item:hover .img-wrapper img{transform:scale(1.08)}
+  .image-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(32,60,92,0.85);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;cursor:pointer}
+  .img-wrapper:hover .image-overlay{opacity:1}
+  .overlay-content{display:flex;flex-direction:column;align-items:center;gap:8px;transform:translateY(10px);transition:transform 0.3s ease}
+  .img-wrapper:hover .overlay-content{transform:translateY(0)}
+  .overlay-content i{font-size:2rem;color:var(--brand-orange,#F4A024)}
+  .overlay-content span{color:white;font-size:1.5rem;font-weight:500;background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:30px}
+  .img-caption{padding:0.75rem 1rem;font-size:1.5rem;font-weight:500;color:#334155;background:#fff;border-top:1px solid #f0f2f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:'Roboto',sans-serif}
+  .gallery-dots-container{display:flex;justify-content:center;margin-top:1.75rem}
+  .gallery-dots{display:flex;gap:8px;background:rgba(0,0,0,0.04);padding:6px 12px;border-radius:50px}
+  .gallery-dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;cursor:pointer;transition:all 0.25s ease}
+  .gallery-dot:hover{background:var(--brand-orange,#F4A024);transform:scale(1.2)}
+  .gallery-dot.active{width:24px;border-radius:12px;background:linear-gradient(90deg,var(--brand-navy,#203C5C),var(--brand-orange,#F4A024))}
+  .lightbox-modal{position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;transition:visibility 0.25s,opacity 0.25s ease}
+  .lightbox-modal.active{visibility:visible;opacity:1}
+  .lightbox-overlay-close{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);cursor:pointer}
+  .lightbox-container{position:relative;max-width:90vw;max-height:90vh;z-index:10000}
+  .lightbox-close-btn{position:absolute;top:-50px;right:-10px;background:rgba(255,255,255,0.15);border:none;color:white;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;backdrop-filter:blur(8px);z-index:10001}
+  .lightbox-close-btn:hover{background:#ef4444}
+  .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.15);border:none;color:white;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:all 0.2s;backdrop-filter:blur(8px);z-index:10001}
+  .lightbox-nav:hover{background:var(--brand-orange,#F4A024);transform:translateY(-50%) scale(1.08)}
+  .lightbox-prev{left:-60px}.lightbox-next{right:-60px}
+  .lightbox-content{text-align:center;background:transparent}
+  .lightbox-image{max-width:85vw;max-height:80vh;object-fit:contain;border-radius:12px;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);background:#0f172a}
+  .lightbox-caption{margin-top:1rem;color:#e2e8f0;font-size:0.9rem;background:rgba(0,0,0,0.6);display:inline-block;padding:6px 18px;border-radius:30px}
+  @keyframes scrollRTL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @media(max-width:768px){.alumni-gallery-section{padding:1.25rem;border-radius:20px}.alumni-gallery-title{font-size:1.4rem}.slider-item{width:220px}.img-wrapper{height:180px}.lightbox-prev{left:10px}.lightbox-next{right:10px}.lightbox-nav,.lightbox-close-btn{width:38px;height:38px}}
+  @media(max-width:480px){.slider-item{width:180px}.img-wrapper{height:150px}.gallery-header-wrapper{flex-direction:column;align-items:flex-start}}
 </style>
-{% endblock %} 
+{% endblock %}
+
 {% block content %}
 <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 
@@ -1460,41 +329,33 @@
           <div class="card-body">
             <form method="POST" id="registrationForm" enctype="multipart/form-data" action="{% url 'student_registration' %}" novalidate>
               {% csrf_token %}
-
               <div class="mb-4">
-                <!-- Student Name - English Only -->
+
+                <!-- Student Name -->
                 <div class="form-horizontal-row">
                   <label for="student_name" class="form-label fw-bold">
                     <i class="fas fa-user-graduate"></i> শিক্ষার্থীর নাম <span class="required-star">*</span>
                   </label>
                   <div class="form-field-wrapper">
-                    <div class="input-with-icon">
-                      <i class="fas fa-user input-icon"></i>
-                      <input type="text" name="student_name" id="student_name"
-                        class="form-control form-control-lg modern-input enhanced-input"
-                        placeholder="শুধুমাত্র ইংরেজি অক্ষরে আপনার নাম লিখুন (যেমন: John Doe)"
-                        value="{{ form_data.student_name|default:'' }}" 
-                        required 
-                        pattern="[A-Za-z\s\.\-]+"
-                        title="শুধুমাত্র ইংরেজি অক্ষর, স্পেস, ডট (.) এবং হাইফেন (-) ব্যবহার করুন" />
-                    </div>
+                    <input type="text" name="student_name" id="student_name"
+                      class="form-control form-control-lg modern-input"
+                      placeholder="শুধুমাত্র ইংরেজি অক্ষরে আপনার নাম লিখুন (যেমন: John Doe)"
+                      value="{{ form_data.student_name|default:'' }}"
+                      required pattern="[A-Za-z\s\.\-]+"
+                      title="শুধুমাত্র ইংরেজি অক্ষর, স্পেস, ডট (.) এবং হাইফেন (-) ব্যবহার করুন" />
                   </div>
                 </div>
 
-                <!-- Student Bio -->
+                <!-- Bio -->
                 <div class="form-horizontal-row">
                   <label for="student_bio" class="form-label fw-bold">
                     <i class="fas fa-align-left"></i> আপনার বায়ো (bio)
                   </label>
                   <div class="form-field-wrapper">
-                    <div class="input-with-icon">
-                      <i class="fas fa-info-circle input-icon"></i>
-                      <textarea name="student_bio" id="student_bio"
-                        class="form-control modern-input enhanced-input"
-                        rows="3"
-                        maxlength="1000"
-                        placeholder="আপনার সম্পর্কে সংক্ষেপে লিখুন (সর্বোচ্চ ১০০০ অক্ষর)">{{ form_data.student_bio|default:'' }}</textarea>
-                    </div>
+                    <textarea name="student_bio" id="student_bio"
+                      class="form-control modern-input enhanced-input"
+                      rows="3" maxlength="1000"
+                      placeholder="আপনার সম্পর্কে সংক্ষেপে লিখুন (সর্বোচ্চ ১০০০ অক্ষর)">{{ form_data.student_bio|default:'' }}</textarea>
                     <div class="char-counter-wrapper">
                       <div></div>
                       <div class="char-counter-right" id="bioCounter">
@@ -1505,73 +366,64 @@
                   </div>
                 </div>
 
-                <!-- Facebook Profile -->
+                <!-- Facebook -->
                 <div class="form-horizontal-row">
                   <label for="facebook_profile" class="form-label fw-bold">
                     <i class="fab fa-facebook"></i> আপনার ফেসবুক প্রোফাইল
                   </label>
                   <div class="form-field-wrapper">
-                    <div class="input-with-icon">
-                      <i class="fab fa-facebook input-icon"></i>
-                      <input type="url" name="facebook_profile" id="facebook_profile"
-                        class="form-control form-control-lg modern-input enhanced-input"
-                        placeholder="https://facebook.com/your.profile"
-                        value="{{ form_data.facebook_profile|default:'' }}"/>
-                    </div>
+                    <input type="url" name="facebook_profile" id="facebook_profile"
+                      class="form-control form-control-lg modern-input"
+                      placeholder="https://facebook.com/your.profile"
+                      value="{{ form_data.facebook_profile|default:'' }}"/>
                   </div>
                 </div>
 
                 <!-- Gender -->
                 <div class="form-horizontal-row">
-                  <label class="form-label fw-bold">
-                    <i class="fas fa-venus-mars"></i> লিঙ্গ <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-venus-mars"></i> লিঙ্গ <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="gender-wrapper">
-                      <div class="gender-radio-group">
-                        {% for val, label in gender_choices %}
-                          <label class="gender-radio-option">
-                            <input type="radio" name="gender" value="{{ val }}" class="gender-radio" {% if form_data.gender == val %}checked{% endif %} required />
-                            <span>{{ label }}</span>
-                          </label>
-                        {% endfor %}
-                      </div>
+                    <div class="gender-radio-group">
+                      {% for val, label in gender_choices %}
+                        <label class="gender-radio-option">
+                          <input type="radio" name="gender" value="{{ val }}" {% if form_data.gender == val %}checked{% endif %} required />
+                          <span>{{ label }}</span>
+                        </label>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
 
                 <!-- Marital Status -->
                 <div class="form-horizontal-row">
-                  <label class="form-label fw-bold">
-                    <i class="fas fa-heart"></i> বৈবাহিক অবস্থা <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-heart"></i> বৈবাহিক অবস্থা <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="gender-wrapper">
-                      <div class="gender-radio-group">
-                        {% for val, label in maritalstatus_choices %}
-                          <label class="gender-radio-option">
-                            <input type="radio" name="marital_status" value="{{ val }}" class="gender-radio" {% if form_data.marital_status == val %}checked{% endif %} required />
-                            <span>{{ label }}</span>
-                          </label>
-                        {% endfor %}
-                      </div>
+                    <div class="gender-radio-group">
+                      {% for val, label in maritalstatus_choices %}
+                        <label class="gender-radio-option">
+                          <input type="radio" name="marital_status" value="{{ val }}" {% if form_data.marital_status == val %}checked{% endif %} required />
+                          <span>{{ label }}</span>
+                        </label>
+                      {% endfor %}
                     </div>
                   </div>
                 </div>
 
                 <!-- Batch Year -->
                 <div class="form-horizontal-row">
-                  <label for="batch" class="form-label fw-bold">
-                    <i class="fas fa-calendar-alt"></i> ব্যাচের বছর <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-calendar-alt"></i> ব্যাচের বছর <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="batch">
-                      <input type="text" id="batchSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="ব্যাচের বছর অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{{ form_data.batch|default:'' }}" required>
+                    <div class="searchable-dropdown" id="sd-batch">
+                      <button type="button" class="sd-trigger {% if form_data.batch %}has-value{% endif %}" data-placeholder="ব্যাচের বছর নির্বাচন করুন">
+                        <span class="sd-trigger-text">{% if form_data.batch %}{{ form_data.batch }}{% else %}ব্যাচের বছর নির্বাচন করুন{% endif %}</span>
+                        <i class="fas fa-chevron-down sd-chevron"></i>
+                      </button>
                       <input type="hidden" name="batch" id="batchHidden" value="{{ form_data.batch|default:'' }}" required>
-                      <div id="batchDropdown" class="dropdown-list">
-                        {% for year in batch_years %}
-                          <div class="dropdown-item" data-value="{{ year }}">{{ year }}</div>
-                        {% endfor %}
+                      <div class="sd-panel">
+                        <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                        <div class="sd-list">
+                          {% for year in batch_years %}<div class="sd-item {% if form_data.batch == year|stringformat:'s' %}selected{% endif %}" data-value="{{ year }}" data-text="{{ year }}">{{ year }}</div>{% endfor %}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1579,17 +431,19 @@
 
                 <!-- Village -->
                 <div class="form-horizontal-row">
-                  <label for="village" class="form-label fw-bold">
-                    <i class="fas fa-home"></i> আপনার গ্রাম <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-home"></i> আপনার গ্রাম <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="village">
-                      <input type="text" id="villageSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="গ্রাম অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for village in villages %}{% if form_data.village_id == village.id %}{{ village.name }}{% endif %}{% endfor %}" required>
+                    <div class="searchable-dropdown" id="sd-village">
+                      <button type="button" class="sd-trigger {% if form_data.village_id %}has-value{% endif %}" data-placeholder="গ্রাম নির্বাচন করুন">
+                        <span class="sd-trigger-text">{% for v in villages %}{% if form_data.village_id == v.id %}{{ v.name }}{% endif %}{% endfor %}{% if not form_data.village_id %}গ্রাম নির্বাচন করুন{% endif %}</span>
+                        <i class="fas fa-chevron-down sd-chevron"></i>
+                      </button>
                       <input type="hidden" name="village" id="villageHidden" value="{{ form_data.village_id|default:'' }}" required>
-                      <div id="villageDropdown" class="dropdown-list">
-                        {% for village in villages %}
-                          <div class="dropdown-item" data-value="{{ village.id }}" data-text="{{ village.name }}">{{ village.name }}</div>
-                        {% endfor %}
+                      <div class="sd-panel">
+                        <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                        <div class="sd-list">
+                          {% for v in villages %}<div class="sd-item {% if form_data.village_id == v.id %}selected{% endif %}" data-value="{{ v.id }}" data-text="{{ v.name }}">{{ v.name }}</div>{% endfor %}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1597,17 +451,19 @@
 
                 <!-- Current Location -->
                 <div class="form-horizontal-row">
-                  <label for="current_location" class="form-label fw-bold">
-                    <i class="fas fa-globe-americas"></i> বর্তমান অবস্থান <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-globe-americas"></i> বর্তমান অবস্থান <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="current_location">
-                      <input type="text" id="currentLocationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="দেশ অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" required value="{% for code, name in countries %}{% if form_data.current_location == code %}{{ name }}{% endif %}{% endfor %}">
+                    <div class="searchable-dropdown" id="sd-current_location">
+                      <button type="button" class="sd-trigger {% if form_data.current_location %}has-value{% endif %}" data-placeholder="দেশ নির্বাচন করুন">
+                        <span class="sd-trigger-text">{% for code, name in countries %}{% if form_data.current_location == code %}{{ name }}{% endif %}{% endfor %}{% if not form_data.current_location %}দেশ নির্বাচন করুন{% endif %}</span>
+                        <i class="fas fa-chevron-down sd-chevron"></i>
+                      </button>
                       <input type="hidden" name="current_location" id="currentLocationHidden" value="{{ form_data.current_location|default:'' }}" required>
-                      <div id="currentLocationDropdown" class="dropdown-list">
-                        {% for code, name in countries %}
-                          <div class="dropdown-item" data-value="{{ code }}" data-text="{{ name }}">{{ name }}</div>
-                        {% endfor %}
+                      <div class="sd-panel">
+                        <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                        <div class="sd-list">
+                          {% for code, name in countries %}<div class="sd-item {% if form_data.current_location == code %}selected{% endif %}" data-value="{{ code }}" data-text="{{ name }}">{{ name }}</div>{% endfor %}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1615,67 +471,61 @@
 
                 <!-- Job Location -->
                 <div class="form-horizontal-row">
-                  <label for="job_location" class="form-label fw-bold">
-                    <i class="fas fa-globe-americas"></i> কর্মস্থলের দেশ <span class="required-star">*</span>
-                  </label>
+                  <label class="form-label fw-bold"><i class="fas fa-globe-americas"></i> কর্মস্থলের দেশ <span class="required-star">*</span></label>
                   <div class="form-field-wrapper">
-                    <div class="searchable-dropdown" data-field="job_location">
-                      <input type="text" id="jobLocationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="দেশ অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" required value="{% for code, name in countries %}{% if form_data.job_location == code %}{{ name }}{% endif %}{% endfor %}">
+                    <div class="searchable-dropdown" id="sd-job_location">
+                      <button type="button" class="sd-trigger {% if form_data.job_location %}has-value{% endif %}" data-placeholder="দেশ নির্বাচন করুন">
+                        <span class="sd-trigger-text">{% for code, name in countries %}{% if form_data.job_location == code %}{{ name }}{% endif %}{% endfor %}{% if not form_data.job_location %}দেশ নির্বাচন করুন{% endif %}</span>
+                        <i class="fas fa-chevron-down sd-chevron"></i>
+                      </button>
                       <input type="hidden" name="job_location" id="jobLocationHidden" value="{{ form_data.job_location|default:'' }}" required>
-                      <div id="jobLocationDropdown" class="dropdown-list">
-                        {% for code, name in countries %}
-                          <div class="dropdown-item" data-value="{{ code }}" data-text="{{ name }}">{{ name }}</div>
-                        {% endfor %}
+                      <div class="sd-panel">
+                        <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                        <div class="sd-list">
+                          {% for code, name in countries %}<div class="sd-item {% if form_data.job_location == code %}selected{% endif %}" data-value="{{ code }}" data-text="{{ name }}">{{ name }}</div>{% endfor %}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- CONTACT INFORMATION SECTION -->
+                <!-- CONTACT SECTION -->
                 <div class="mb-4">
-                  <div class="phone-row-wrapper" style="display: flex; align-items: center; gap: 35px; flex-wrap: wrap; margin-bottom: 15px;">
-                    <label class="form-label fw-bold" style="margin-bottom: 0; white-space: nowrap;">
+                  <div style="display:flex;align-items:center;gap:35px;flex-wrap:wrap;margin-bottom:15px;">
+                    <label class="form-label fw-bold" style="margin-bottom:0;white-space:nowrap;">
                       <i class="fas fa-phone-alt"></i> মোবাইল নম্বর <span class="required-star">*</span>
                     </label>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                      <label class="form-label-phone fw-bold" style="margin-bottom: 0; white-space: nowrap;">আপনি কি আপনার ফোন নম্বর ওয়েবসাইটে দেখাতে চান ? <span class="required-star">*</span></label>
-                      <div class="gender-radio-group" style="display: flex; gap: 15px; margin-bottom: 0;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <label class="form-label-phone fw-bold" style="margin-bottom:0;white-space:nowrap;">আপনি কি আপনার ফোন নম্বর ওয়েবসাইটে দেখাতে চান ? <span class="required-star">*</span></label>
+                      <div class="gender-radio-group" style="display:flex;gap:15px;margin-bottom:0;">
                         {% for val, label in is_no_hide_choices %}
-                          <label class="gender-radio-option" style="display: flex; align-items: center; gap: 5px; cursor: pointer; margin-bottom: 0;">
+                          <label class="gender-radio-option" style="display:flex;align-items:center;gap:5px;cursor:pointer;margin-bottom:0;">
                             <input type="radio" name="is_no_hide" value="{{ val }}" {% if form_data.is_no_hide == val %}checked{% endif %} required />
-                            <span style="font-size: 1.5rem;">{{ label }}</span>
+                            <span style="font-size:1.5rem;">{{ label }}</span>
                           </label>
                         {% endfor %}
                       </div>
                     </div>
                   </div>
-                  
-                  <!-- Bangladesh Number -->
+
                   <div class="phone-number-row">
-                    <label class="form-label fw-bold">
-                      <i class="fas fa-phone-alt"></i> বাংলাদেশ নম্বর <span class="required-star">*</span>
-                    </label>
+                    <label class="form-label fw-bold"><i class="fas fa-phone-alt"></i> বাংলাদেশ নম্বর <span class="required-star">*</span></label>
                     <div class="input-group enhanced-whatsapp-group">
                       <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +88</span>
-                      <input type="tel" name="bangladesh_number" id="bangladesh_number" 
-                            class="form-control form-control-lg modern-input enhanced-whatsapp-input" 
-                            placeholder="বাংলাদেশি নম্বর লিখুন" 
-                            value="{{ form_data.bangladesh_number|default:'' }}" required
-                            inputmode="numeric" />
+                      <input type="tel" name="bangladesh_number" id="bangladesh_number"
+                            class="form-control form-control-lg modern-input enhanced-whatsapp-input"
+                            placeholder="বাংলাদেশি নম্বর লিখুন"
+                            value="{{ form_data.bangladesh_number|default:'' }}" required inputmode="numeric" />
                     </div>
                   </div>
 
-                  <!-- Is WhatsApp BD -->
                   <div class="whatsapp-radio-section">
                     <div class="whatsapp-radio-wrapper whatsapp-inline">
-                      <label class="form-label-phone fw-bold">
-                        এটা কি হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span>
-                      </label>
+                      <label class="form-label-phone fw-bold">এটা কি হোয়াটসঅ্যাপ নম্বর ? <span class="required-star">*</span></label>
                       <div class="gender-radio-group">
                         {% for val, label in is_whatsapp_bd_choices %}
                           <label class="gender-radio-option">
-                            <input type="radio" name="is_whatsapp_bd" value="{{ val }}" 
-                                  {% if form_data.is_whatsapp_bd == val %}checked{% endif %} required />
+                            <input type="radio" name="is_whatsapp_bd" value="{{ val }}" {% if form_data.is_whatsapp_bd == val %}checked{% endif %} required />
                             <span>{{ label }}</span>
                           </label>
                         {% endfor %}
@@ -1683,32 +533,24 @@
                     </div>
                   </div>
 
-                  <!-- Abroad Number -->
-                  <div class="phone-number-row" style="margin-top: 1rem;">
-                    <label class="form-label fw-bold">
-                      <i class="fas fa-globe"></i> বিদেশি নম্বর
-                    </label>
+                  <div class="phone-number-row" style="margin-top:1rem;">
+                    <label class="form-label fw-bold"><i class="fas fa-globe"></i> বিদেশি নম্বর</label>
                     <div class="input-group enhanced-whatsapp-group">
                       <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +</span>
-                      <input type="tel" name="abroad_number" id="abroad_number" 
-                            class="form-control form-control-lg modern-input enhanced-whatsapp-input" 
-                            placeholder="বিদেশি নম্বর লিখুন" 
-                            value="{{ form_data.abroad_number|default:'' }}"
-                            inputmode="numeric" />
+                      <input type="tel" name="abroad_number" id="abroad_number"
+                            class="form-control form-control-lg modern-input enhanced-whatsapp-input"
+                            placeholder="বিদেশি নম্বর লিখুন"
+                            value="{{ form_data.abroad_number|default:'' }}" inputmode="numeric" />
                     </div>
                   </div>
 
-                  <!-- Is WhatsApp Abroad -->
-                  <div class="whatsapp-radio-section" style="padding-left: 353px">
+                  <div class="whatsapp-radio-section" style="padding-left:353px">
                     <div class="whatsapp-radio-wrapper whatsapp-inline">
-                      <label class="form-label-phone fw-bold">
-                        এটা কি হোয়াটসঅ্যাপ নম্বর ?
-                      </label>
+                      <label class="form-label-phone fw-bold">এটা কি হোয়াটসঅ্যাপ নম্বর ?</label>
                       <div class="gender-radio-group">
                         {% for val, label in is_whatsapp_abroad_choices %}
                           <label class="gender-radio-option">
-                            <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" 
-                                  {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
+                            <input type="radio" name="is_whatsapp_abroad" value="{{ val }}" {% if form_data.is_whatsapp_abroad == val %}checked{% endif %} />
                             <span>{{ label }}</span>
                           </label>
                         {% endfor %}
@@ -1716,39 +558,38 @@
                     </div>
                   </div>
 
-                  <!-- PROFESSIONAL INFORMATION SECTION -->
+                  <!-- PROFESSIONAL SECTION -->
                   <div class="mb-4">
+
                     <!-- Occupation -->
                     <div class="form-horizontal-row">
-                      <label for="occupation" class="form-label fw-bold">
-                        <i class="fas fa-briefcase"></i> পেশা <span class="required-star">*</span>
-                      </label>
+                      <label class="form-label fw-bold"><i class="fas fa-briefcase"></i> পেশা <span class="required-star">*</span></label>
                       <div class="form-field-wrapper">
-                        <div class="searchable-dropdown" data-field="occupation">
-                          <input type="text" id="occupationSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="পেশা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in occupation_choices %}{% if form_data.occupation == val %}{{ label }}{% endif %}{% endfor %}" required>
+                        <div class="searchable-dropdown" id="sd-occupation">
+                          <button type="button" class="sd-trigger {% if form_data.occupation %}has-value{% endif %}" data-placeholder="পেশা নির্বাচন করুন">
+                            <span class="sd-trigger-text">{% for val, label in occupation_choices %}{% if form_data.occupation == val %}{{ label }}{% endif %}{% endfor %}{% if not form_data.occupation %}পেশা নির্বাচন করুন{% endif %}</span>
+                            <i class="fas fa-chevron-down sd-chevron"></i>
+                          </button>
                           <input type="hidden" name="occupation" id="occupationHidden" value="{{ form_data.occupation|default:'' }}" required>
-                          <div id="occupationDropdown" class="dropdown-list">
-                            {% for val, label in occupation_choices %}
-                              <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
-                            {% endfor %}
+                          <div class="sd-panel">
+                            <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                            <div class="sd-list">
+                              {% for val, label in occupation_choices %}<div class="sd-item {% if form_data.occupation == val %}selected{% endif %}" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>{% endfor %}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    <!-- Job Description - shown/hidden + label changes based on occupation -->
-                    <div class="form-horizontal-row" id="jobDescriptionRow" style="display: none;">
+                    <!-- Job Description -->
+                    <div class="form-horizontal-row" id="jobDescriptionRow" style="display:none;">
                       <label for="job_description" id="jobDescriptionLabel" class="form-label fw-bold">
                         <i class="fas fa-briefcase"></i> চাকরির বিবরণ
                       </label>
                       <div class="form-field-wrapper">
-                        <div class="input-with-icon">
-                          <i class="fas fa-info-circle input-icon"></i>
-                          <textarea name="job_description" id="job_description"
-                            class="form-control modern-input enhanced-input"
-                            rows="3"
-                            maxlength="200">{{ form_data.job_description|default:'' }}</textarea>
-                        </div>
+                        <textarea name="job_description" id="job_description"
+                          class="form-control modern-input enhanced-input"
+                          rows="3" maxlength="200">{{ form_data.job_description|default:'' }}</textarea>
                         <div class="char-counter-wrapper">
                           <div></div>
                           <div class="char-counter-right" id="jobDescCounter">
@@ -1761,54 +602,48 @@
 
                     <!-- Last Education -->
                     <div class="form-horizontal-row">
-                      <label for="last_edu" class="form-label fw-bold">
-                        <i class="fas fa-graduation-cap"></i> সর্বশেষ শিক্ষাগত যোগ্যতা <span class="required-star">*</span>
-                      </label>
+                      <label class="form-label fw-bold"><i class="fas fa-graduation-cap"></i> সর্বশেষ শিক্ষাগত যোগ্যতা <span class="required-star">*</span></label>
                       <div class="form-field-wrapper">
-                        <div class="searchable-dropdown" data-field="last_edu">
-                          <input type="text" id="lastEduSearch" class="form-control form-control-lg modern-input searchable-input" placeholder="শিক্ষাগত যোগ্যতা অনুসন্ধান করুন বা নির্বাচন করুন" autocomplete="off" value="{% for val, label in education_choices %}{% if form_data.last_edu == val %}{{ label }}{% endif %}{% endfor %}" required>
+                        <div class="searchable-dropdown" id="sd-last_edu">
+                          <button type="button" class="sd-trigger {% if form_data.last_edu %}has-value{% endif %}" data-placeholder="শিক্ষাগত যোগ্যতা নির্বাচন করুন">
+                            <span class="sd-trigger-text">{% for val, label in education_choices %}{% if form_data.last_edu == val %}{{ label }}{% endif %}{% endfor %}{% if not form_data.last_edu %}শিক্ষাগত যোগ্যতা নির্বাচন করুন{% endif %}</span>
+                            <i class="fas fa-chevron-down sd-chevron"></i>
+                          </button>
                           <input type="hidden" name="last_edu" id="lastEduHidden" value="{{ form_data.last_edu|default:'' }}" required>
-                          <div id="lastEduDropdown" class="dropdown-list">
-                            {% for val, label in education_choices %}
-                              <div class="dropdown-item" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>
-                            {% endfor %}
+                          <div class="sd-panel">
+                            <div class="sd-search-wrap"><div class="sd-search-inner"><i class="fas fa-search sd-search-icon-inner"></i><input type="text" class="sd-search-input" placeholder="অনুসন্ধান করুন..." autocomplete="off"></div></div>
+                            <div class="sd-list">
+                              {% for val, label in education_choices %}<div class="sd-item {% if form_data.last_edu == val %}selected{% endif %}" data-value="{{ val }}" data-text="{{ label }}">{{ label }}</div>{% endfor %}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Photo Upload -->
+                  <!-- Photo -->
                   <div class="form-horizontal-row">
-                    <label for="student_photo" class="form-label fw-bold">
-                      <i class="fas fa-camera"></i> শিক্ষার্থীর ছবি<span class="required-star">*</span>
-                    </label>
+                    <label for="student_photo" class="form-label fw-bold"><i class="fas fa-camera"></i> শিক্ষার্থীর ছবি<span class="required-star">*</span></label>
                     <div class="form-field-wrapper">
                       <div class="file-input-wrapper">
                         <input type="file" name="student_photo" id="student_photo" class="form-control form-control-lg modern-input" accept="image/jpeg,image/png,image/jpg,image/webp" required>
                       </div>
-                      <div class="photo-preview-container" id="photoPreviewContainer" style="display: none;">
+                      <div class="photo-preview-container" id="photoPreviewContainer" style="display:none;">
                         <img id="photoPreview" class="photo-preview" src="#" alt="ছবি প্রিভিউ">
-                        <button type="button" id="changePhotoBtn" class="change-photo-btn">
-                          <i class="fas fa-exchange-alt"></i> ছবি পরিবর্তন
-                        </button>
+                        <button type="button" id="changePhotoBtn" class="change-photo-btn"><i class="fas fa-exchange-alt"></i> ছবি পরিবর্তন</button>
                       </div>
-                      <div id="cropInfo" class="crop-info" style="display: none;">
-                        <i class="fas fa-magic"></i> ছবি সিলেক্ট করুন...
-                      </div>
+                      <div id="cropInfo" class="crop-info" style="display:none;"><i class="fas fa-magic"></i> ছবি সিলেক্ট করুন...</div>
                     </div>
                   </div>
                 </div>
 
-                <!-- CAPTCHA -->
+                <!-- Captcha -->
                 <div class="captcha-container">
                   <div class="g-recaptcha" data-sitekey="6LfrTpssAAAAABo3slHE9MGypqF6IiVzTlYeFeQ_" data-callback="onCaptchaSuccess" data-expired-callback="onCaptchaExpired"></div>
                 </div>
-                <div class="captcha-error" id="captchaError">
-                  <i class="fas fa-exclamation-circle me-2"></i> অনুগ্রহ করে reCAPTCHA যাচাই সম্পূর্ণ করুন
-                </div>
+                <div class="captcha-error" id="captchaError"><i class="fas fa-exclamation-circle me-2"></i> অনুগ্রহ করে reCAPTCHA যাচাই সম্পূর্ণ করুন</div>
 
-                <!-- Submit Button -->
+                <!-- Submit -->
                 <div class="wrapper_submit">
                   <button type="submit" class="btn btn-primary btn-lg modern-btn" id="submitBtn">
                     <i class="fas fa-paper-plane me-2"></i>নিবন্ধন করুন
@@ -1826,22 +661,16 @@
 <!-- Crop Modal -->
 <div id="cropModal" class="crop-modal">
   <div class="crop-container">
-    <div class="crop-image-container">
-      <img id="cropImage" alt="ক্রপ করার জন্য ছবি">
-    </div>
+    <div class="crop-image-container"><img id="cropImage" alt="ক্রপ করার জন্য ছবি"></div>
     <div class="crop-controls d-flex justify-content-center gap-3 mt-4">
-      <button type="button" class="btn btn-danger px-4 py-2 fs-5 rounded-pill" id="cancelCropBtn">
-        <i class="fas fa-times-circle me-1"></i> বাতিল করুন
-      </button>
-      <button type="button" class="btn btn-success px-4 py-2 fs-5 rounded-pill" id="confirmCropBtn">
-        <i class="fas fa-check-circle me-1"></i> ক্রপ করুন
-      </button>
+      <button type="button" class="btn btn-danger px-4 py-2 fs-5 rounded-pill" id="cancelCropBtn"><i class="fas fa-times-circle me-1"></i> বাতিল করুন</button>
+      <button type="button" class="btn btn-success px-4 py-2 fs-5 rounded-pill" id="confirmCropBtn"><i class="fas fa-check-circle me-1"></i> ক্রপ করুন</button>
     </div>
   </div>
 </div>
 
 {% else %}
-<!-- OTP Verification Form -->
+<!-- OTP Form -->
 <div class="registration-wrapper">
   <div class="container-custom">
     <div class="row justify-content-center">
@@ -1855,29 +684,18 @@
           </div>
           <div class="card-body">
             <div class="text-center mb-4">
-              <div class="otp-icon-wrapper mb-3">
-                <i class="fab fa-whatsapp" style="font-size: 70px; color: #25d366"></i>
-              </div>
+              <div class="otp-icon-wrapper mb-3"><i class="fab fa-whatsapp" style="font-size:70px;color:#25d366"></i></div>
               <h4 class="mt-3 fw-bold mb-2">ওটিপি যাচাই</h4>
-              <p class="text-muted mt-2">
-                আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে
-              </p>
+              <p class="text-muted mt-2">আমরা একটি ভেরিফিকেশন কোড পাঠিয়েছি <strong class="text-primary" id="displayPhoneNumber">{{ phone_number }}</strong> নম্বরে</p>
               <div class="change-number-section mt-2">
-                <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn">
-                  <i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন
-                </button>
+                <button type="button" class="btn btn-link change-number-btn" id="changeNumberBtn"><i class="fas fa-edit me-1"></i>নম্বর পরিবর্তন করুন</button>
               </div>
-              <div class="otp-timer">
-                <i class="fas fa-clock me-2"></i>
-                <span id="timer">05:00</span>
-                <span class="ms-2">বাকি সময়</span>
-              </div>
+              <div class="otp-timer"><i class="fas fa-clock me-2"></i><span id="timer">05:00</span><span class="ms-2">বাকি সময়</span></div>
             </div>
 
-            <!-- Change Number Modal -->
-            <div id="changeNumberModal" class="crop-modal" style="display: none;">
-              <div class="crop-container" style="max-width: 500px; margin: auto;">
-                <h3 class="mb-4 text-center" style="font-size: 1.8rem;">নম্বর পরিবর্তন করুন</h3>
+            <div id="changeNumberModal" class="crop-modal" style="display:none;">
+              <div class="crop-container" style="max-width:500px;margin:auto;">
+                <h3 class="mb-4 text-center" style="font-size:1.8rem;">নম্বর পরিবর্তন করুন</h3>
                 <form id="changeNumberForm" method="POST" action="{% url 'student_registration' %}">
                   {% csrf_token %}
                   <input type="hidden" name="step" value="change_number" />
@@ -1885,16 +703,12 @@
                     <label class="form-label fw-bold d-block mb-2">নতুন বাংলাদেশ নম্বর</label>
                     <div class="input-group enhanced-whatsapp-group">
                       <span class="input-group-text whatsapp-prefix"><i class="fab fa-whatsapp whatsapp-icon"></i> +88</span>
-                      <input type="tel" name="new_phone_number" id="newPhoneNumber" class="form-control modern-input enhanced-whatsapp-input" placeholder="১০ বা ১১ ডিজিট লিখুন" required style="font-size: 1.6rem !important;" inputmode="numeric" />
+                      <input type="tel" name="new_phone_number" id="newPhoneNumber" class="form-control modern-input enhanced-whatsapp-input" placeholder="১০ বা ১১ ডিজিট লিখুন" required style="font-size:1.6rem !important;" inputmode="numeric" />
                     </div>
                   </div>
-                  <div class="otp-actions" style="margin-top: 1rem;">
-                    <button type="submit" class="btn btn-primary modern-btn" style="width: 100%;">
-                      <i class="fas fa-paper-plane me-2"></i>নম্বর আপডেট ও ওটিপি পাঠান
-                    </button>
-                    <button type="button" class="btn btn-secondary modern-btn" id="closeChangeNumberModal" style="background: #64748b; color: #fff; width: 100%; margin-top: 0.5rem;">
-                      <i class="fas fa-times me-2"></i>বাতিল করুন
-                    </button>
+                  <div class="otp-actions" style="margin-top:1rem;">
+                    <button type="submit" class="btn btn-primary modern-btn" style="width:100%;"><i class="fas fa-paper-plane me-2"></i>নম্বর আপডেট ও ওটিপি পাঠান</button>
+                    <button type="button" class="btn btn-secondary modern-btn" id="closeChangeNumberModal" style="background:#64748b;color:#fff;width:100%;margin-top:0.5rem;"><i class="fas fa-times me-2"></i>বাতিল করুন</button>
                   </div>
                 </form>
               </div>
@@ -1904,30 +718,17 @@
               {% csrf_token %}
               <input type="hidden" name="step" value="verify_otp" />
               <div class="mb-4">
-                <label for="otp_code" class="form-label-otp fw-bold text-center d-block mb-3">
-                  ৬-অঙ্কের ভেরিফিকেশন কোড লিখুন
-                </label>
-                <div class="otp-input-container">
-                  <div class="otp-input-group">
-                    <input type="text" name="otp_code" id="otp_code" class="form-control otp-input-field" placeholder="••••••" maxlength="6" required autocomplete="off" />
-                  </div>
-                </div>
+                <label for="otp_code" class="form-label-otp fw-bold text-center d-block mb-3">৬-অঙ্কের ভেরিফিকেশন কোড লিখুন</label>
+                <div class="otp-input-container"><div class="otp-input-group">
+                  <input type="text" name="otp_code" id="otp_code" class="form-control otp-input-field" placeholder="••••••" maxlength="6" required autocomplete="off" />
+                </div></div>
               </div>
               <div class="otp-actions">
-                <button type="submit" class="btn btn-primary btn-lg verify-otp-btn" id="verifyBtn" disabled style="opacity: 0.6;">
-                  <i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন
-                </button>
-                <div class="resend-section">
-                  <button type="button" class="btn btn-link resend-otp-btn" id="resendBtn">
-                    <i class="fas fa-redo-alt me-1"></i>ওটিপি পুনরায় পাঠান
-                  </button>
-                </div>
+                <button type="submit" class="btn btn-primary btn-lg verify-otp-btn" id="verifyBtn" disabled style="opacity:0.6;"><i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন</button>
+                <div class="resend-section"><button type="button" class="btn btn-link resend-otp-btn" id="resendBtn"><i class="fas fa-redo-alt me-1"></i>ওটিপি পুনরায় পাঠান</button></div>
               </div>
             </form>
-            <form method="POST" id="resendForm" style="display: none;" action="{% url 'student_registration' %}">
-              {% csrf_token %}
-              <input type="hidden" name="step" value="resend_otp" />
-            </form>
+            <form method="POST" id="resendForm" style="display:none;" action="{% url 'student_registration' %}">{% csrf_token %}<input type="hidden" name="step" value="resend_otp" /></form>
           </div>
         </div>
       </div>
@@ -1935,658 +736,228 @@
   </div>
 </div>
 {% endif %}
-
 {% endblock content %}
 
 {% block photo_gallery %}
-<!-- Modern Alumni Gallery Section -->
 <div class="alumni-gallery-section">
-    <div class="gallery-header-wrapper">
-        <div class="gallery-title-container">
-            <h4 class="alumni-gallery-title">{{ t.alumni_gallery }}</h4>
-            <div class="title-underline"></div>
-        </div>
-    </div>
-
-    <div class="slider-wrapper">
-        <div class="slider-track">
-            {% for image in last_students %}
-               <a href="{% url 'registration_student_detail' image.slug %}">
-                 <div class="slider-item">
-                    <div class="img-card">
-                        <div class="img-wrapper">
-                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
-                            <div class="image-overlay">
-                                <div class="overlay-content">
-                                    <i class="fas fa-search-plus"></i>
-                                    <span>View</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if image.batch %}
-                        <div class="img-caption">
-                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-               </a>
-            {% endfor %}
-
-            {% for image in last_students %}
-                <a href="{% url 'registration_student_detail' image.slug %}">
-                    <div class="slider-item">
-                    <div class="img-card">
-                        <div class="img-wrapper">
-                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
-                            <div class="image-overlay">
-                                <div class="overlay-content">
-                                    <i class="fas fa-search-plus"></i>
-                                    <span>View</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if image.batch %}
-                        <div class="img-caption">
-                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-                </a>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div class="gallery-dots-container">
-        <div class="gallery-dots">
-            {% for image in last_students %}
-                <span class="gallery-dot" data-index="{{ forloop.counter0 }}"></span>
-            {% endfor %}
-        </div>
-    </div>
+  <div class="gallery-header-wrapper">
+    <div class="gallery-title-container"><h4 class="alumni-gallery-title">{{ t.alumni_gallery }}</h4><div class="title-underline"></div></div>
+  </div>
+  <div class="slider-wrapper"><div class="slider-track">
+    {% for image in last_students %}<a href="{% url 'registration_student_detail' image.slug %}"><div class="slider-item"><div class="img-card"><div class="img-wrapper"><img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni' }}" loading="lazy"><div class="image-overlay"><div class="overlay-content"><i class="fas fa-search-plus"></i><span>View</span></div></div></div>{% if image.batch %}<div class="img-caption"><i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}</div>{% endif %}</div></div></a>{% endfor %}
+    {% for image in last_students %}<a href="{% url 'registration_student_detail' image.slug %}"><div class="slider-item"><div class="img-card"><div class="img-wrapper"><img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni' }}" loading="lazy"><div class="image-overlay"><div class="overlay-content"><i class="fas fa-search-plus"></i><span>View</span></div></div></div>{% if image.batch %}<div class="img-caption"><i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}</div>{% endif %}</div></div></a>{% endfor %}
+  </div></div>
+  <div class="gallery-dots-container"><div class="gallery-dots">{% for image in last_students %}<span class="gallery-dot" data-index="{{ forloop.counter0 }}"></span>{% endfor %}</div></div>
 </div>
-
-<!-- Lightbox Modal -->
-<div id="galleryLightbox" class="lightbox-modal" style="display: none;">
-    <div class="lightbox-overlay-close"></div>
-    <div class="lightbox-container">
-        <button class="lightbox-close-btn" aria-label="Close lightbox">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="lightbox-content">
-            <img class="lightbox-image" src="" alt="">
-            <div class="lightbox-caption"></div>
-        </div>
-        <button class="lightbox-nav lightbox-next" aria-label="Next image">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
+<div id="galleryLightbox" class="lightbox-modal" style="display:none;">
+  <div class="lightbox-overlay-close"></div>
+  <div class="lightbox-container">
+    <button class="lightbox-close-btn"><i class="fas fa-times"></i></button>
+    <button class="lightbox-nav lightbox-prev"><i class="fas fa-chevron-left"></i></button>
+    <div class="lightbox-content"><img class="lightbox-image" src="" alt=""><div class="lightbox-caption"></div></div>
+    <button class="lightbox-nav lightbox-next"><i class="fas fa-chevron-right"></i></button>
+  </div>
 </div>
 {% endblock %}
-
 
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js?hl=bn" async defer></script>
 <script>
-  // ============================================================
-  // SEARCHABLE DROPDOWN
-  // ============================================================
-  function initializeSearchableDropdown(searchInputId, dropdownId, hiddenInputId, onChangeCallback) {
-    const searchInput = document.getElementById(searchInputId);
-    const hiddenInput = document.getElementById(hiddenInputId);
-    const dropdown = document.getElementById(dropdownId);
-    
-    if (!searchInput || !dropdown) return;
-    
-    const dropdownItems = dropdown.querySelectorAll('.dropdown-item');
-    
-    searchInput.addEventListener('focus', function() {
-      dropdown.classList.add('show');
-      filterDropdown();
+// ============================================================
+// SEARCHABLE DROPDOWN — search is INSIDE the panel
+// ============================================================
+function initSD(wrapperId, hiddenId, onChangeCb) {
+  const wrap    = document.getElementById(wrapperId);
+  const hidden  = document.getElementById(hiddenId);
+  if (!wrap || !hidden) return;
+
+  const trigger  = wrap.querySelector('.sd-trigger');
+  const trigTxt  = wrap.querySelector('.sd-trigger-text');
+  const panel    = wrap.querySelector('.sd-panel');
+  const search   = wrap.querySelector('.sd-search-input');
+  const list     = wrap.querySelector('.sd-list');
+  const items    = list.querySelectorAll('.sd-item');
+  const ph       = trigger.dataset.placeholder || 'নির্বাচন করুন';
+
+  function open() {
+    // close others
+    document.querySelectorAll('.sd-panel.show').forEach(p => {
+      if (p !== panel) { p.classList.remove('show'); p.closest('.searchable-dropdown').querySelector('.sd-trigger').classList.remove('open'); }
     });
-    
-    document.addEventListener('click', function(e) {
-      if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('show');
-      }
+    panel.classList.add('show');
+    trigger.classList.add('open');
+    setTimeout(() => { search.value = ''; filter(''); search.focus(); }, 20);
+  }
+  function close() { panel.classList.remove('show'); trigger.classList.remove('open'); }
+
+  trigger.addEventListener('click', e => { e.stopPropagation(); panel.classList.contains('show') ? close() : open(); });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+  panel.addEventListener('click', e => e.stopPropagation());
+  search.addEventListener('click', e => e.stopPropagation());
+
+  function filter(term) {
+    const t = term.toLowerCase().trim();
+    let vis = 0;
+    items.forEach(it => { const show = !t || (it.dataset.text||it.textContent).toLowerCase().includes(t); it.style.display = show ? '' : 'none'; if(show) vis++; });
+    let noRes = list.querySelector('.sd-no-results');
+    if (vis === 0) {
+      if (!noRes) { noRes = document.createElement('div'); noRes.className = 'sd-no-results'; noRes.textContent = 'কোনো মিল পাওয়া যায়নি'; list.appendChild(noRes); }
+      noRes.style.display = '';
+    } else { if (noRes) noRes.style.display = 'none'; }
+  }
+
+  search.addEventListener('input', function() { filter(this.value); });
+  search.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  items.forEach(it => {
+    it.addEventListener('click', function() {
+      const val = this.dataset.value, txt = this.dataset.text || this.textContent;
+      hidden.value = val;
+      trigTxt.textContent = txt;
+      trigger.classList.add('has-value');
+      items.forEach(x => x.classList.remove('selected'));
+      this.classList.add('selected');
+      close();
+      if (typeof onChangeCb === 'function') onChangeCb(val, txt);
     });
-    
-    function filterDropdown() {
-      const searchTerm = searchInput.value.toLowerCase();
-      let hasVisible = false;
-      
-      dropdownItems.forEach(item => {
-        const text = item.getAttribute('data-text') || item.textContent;
-        if (text.toLowerCase().includes(searchTerm)) {
-          item.style.display = 'block';
-          hasVisible = true;
-        } else {
-          item.style.display = 'none';
-        }
-      });
-      
-      const existingNoResults = dropdown.querySelector('.no-results');
-      if (existingNoResults) existingNoResults.remove();
-      
-      if (!hasVisible && searchTerm) {
-        const noResults = document.createElement('div');
-        noResults.className = 'dropdown-item no-results';
-        noResults.textContent = 'কোনো মিল পাওয়া যায়নি';
-        noResults.style.cursor = 'default';
-        noResults.style.opacity = '0.7';
-        dropdown.appendChild(noResults);
-      }
-    }
-    
-    searchInput.addEventListener('input', function() {
-      filterDropdown();
-      dropdown.classList.add('show');
-    });
-    
-    dropdownItems.forEach(item => {
-      item.addEventListener('click', function() {
-        const value = this.getAttribute('data-value');
-        const text = this.getAttribute('data-text') || this.textContent;
-        searchInput.value = text;
-        hiddenInput.value = value;
-        dropdown.classList.remove('show');
-        dropdownItems.forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
-        
-        // Fire callback if provided
-        if (typeof onChangeCallback === 'function') {
-          onChangeCallback(value, text);
-        }
-      });
-    });
-    
-    filterDropdown();
+  });
+}
+
+// ============================================================
+// OCCUPATION → JOB DESCRIPTION
+// ============================================================
+function updateJobDesc(val) {
+  const row   = document.getElementById('jobDescriptionRow');
+  const label = document.getElementById('jobDescriptionLabel');
+  const ta    = document.getElementById('job_description');
+  if (!row || !label) return;
+  if (!val) { row.style.display = 'none'; if(ta) ta.value=''; return; }
+  const map = {'1':'🌾 কৃষি কাজের বিবরণ','2':'চাকরির বিবরণ','3':'ব্যবসার বিবরণ','4':'ফ্রিল্যান্সিং কাজের বিবরণ','5':'বেকার অবস্থার বিবরণ'};
+  if (map[val]) {
+    label.innerHTML = `<i class="fas fa-briefcase"></i> ${map[val]} <span style="color:#64748b;font-size:1.2rem;">(ঐচ্ছিক)</span>`;
+    row.style.display = 'flex'; row.style.animation = 'fadeInUp 0.4s ease-out';
+  } else { row.style.display = 'none'; if(ta) ta.value=''; }
+}
+
+// ============================================================
+// PHOTO CROP
+// ============================================================
+let cropper=null, curFile=null;
+const photoInput=document.getElementById('student_photo'), prevCont=document.getElementById('photoPreviewContainer'), prevImg=document.getElementById('photoPreview'), chgBtn=document.getElementById('changePhotoBtn'), cropModal=document.getElementById('cropModal'), cropImg=document.getElementById('cropImage'), confirmBtn=document.getElementById('confirmCropBtn'), cancelBtn=document.getElementById('cancelCropBtn'), cropInfo=document.getElementById('cropInfo');
+
+function openCrop(file) {
+  curFile=file;
+  if(cropInfo){cropInfo.style.display='flex';cropInfo.innerHTML='<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। ক্রপ করুন...';}
+  const r=new FileReader(); r.onload=ev=>{cropImg.src=ev.target.result;cropModal.classList.add('show');if(cropper)cropper.destroy();cropper=new Cropper(cropImg,{aspectRatio:1,viewMode:1,dragMode:'move',autoCropArea:1,restore:false,guides:true,center:true,highlight:true,cropBoxMovable:true,cropBoxResizable:true,toggleDragModeOnDblclick:false,background:true,modal:true,responsive:true});}; r.readAsDataURL(file);
+}
+if(photoInput){photoInput.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(!['image/jpeg','image/png','image/jpg','image/webp'].includes(f.type)){alert('শুধুমাত্র ছবির ফাইল আপলোড করুন');photoInput.value='';prevCont.style.display='none';if(cropInfo)cropInfo.style.display='none';return;}openCrop(f);});}
+if(chgBtn) chgBtn.addEventListener('click',()=>photoInput.click());
+if(confirmBtn){confirmBtn.addEventListener('click',()=>{if(cropper){const c=cropper.getCroppedCanvas({width:500,height:500,imageSmoothingQuality:'high'});c.toBlob(blob=>{const cf=new File([blob],curFile.name,{type:'image/jpeg',lastModified:Date.now()});const dt=new DataTransfer();dt.items.add(cf);photoInput.files=dt.files;const r=new FileReader();r.onload=e=>{prevImg.src=e.target.result;prevCont.style.display='flex';if(cropInfo){cropInfo.innerHTML='<i class="fas fa-check-circle"></i> ছবি সফলভাবে ক্রপ করা হয়েছে!';setTimeout(()=>{if(cropInfo)cropInfo.style.opacity='0.7';},2000);}};r.readAsDataURL(cf);curFile=cf;cropModal.classList.remove('show');if(cropper){cropper.destroy();cropper=null;}},'image/jpeg',0.9);}});}
+if(cancelBtn){cancelBtn.addEventListener('click',()=>{cropModal.classList.remove('show');if(cropper){cropper.destroy();cropper=null;}photoInput.value='';prevCont.style.display='none';if(cropInfo)cropInfo.style.display='none';});}
+
+// Compress
+const MAX_SZ=50*1024;
+async function compress(file){
+  if(file.size<=MAX_SZ)return file;
+  return new Promise((res,rej)=>{const r=new FileReader();r.readAsDataURL(file);r.onload=ev=>{const img=new Image();img.src=ev.target.result;img.onload=()=>{let w=img.width,h=img.height,att=0;function go(){att++;const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);c.toBlob(b=>{if(b.size<=MAX_SZ||att>=8){res(new File([b],file.name,{type:'image/jpeg',lastModified:Date.now()}));}else{w=Math.floor(w*0.85);h=Math.floor(h*0.85);go();}},'image/jpeg',0.85);}go();};img.onerror=rej;};r.onerror=rej;});
+}
+const regForm=document.getElementById('registrationForm');
+if(regForm&&photoInput){regForm.addEventListener('submit',async function(e){if(photoInput.files&&photoInput.files[0]){const f=photoInput.files[0];if(f.size>MAX_SZ){e.preventDefault();if(cropInfo){cropInfo.innerHTML='<i class="fas fa-spinner fa-spin"></i> ছবি কম্প্রেস করা হচ্ছে...';cropInfo.style.display='flex';}try{const cf=await compress(f);const dt=new DataTransfer();dt.items.add(cf);photoInput.files=dt.files;if(cropInfo)cropInfo.innerHTML='<i class="fas fa-check-circle"></i> সম্পন্ন!';setTimeout(()=>regForm.submit(),500);}catch(err){regForm.submit();}}}});}
+
+// Captcha
+let captchaOK=false;
+window.onCaptchaSuccess=()=>{captchaOK=true;document.getElementById('captchaError')?.classList.remove('show');}
+window.onCaptchaExpired=()=>{captchaOK=false;}
+function chkCaptcha(){if(!captchaOK){document.getElementById('captchaError')?.classList.add('show');return false;}document.getElementById('captchaError')?.classList.remove('show');return true;}
+
+// OTP timer
+let tmrInt,tLeft=300,tmrExp=false,resendAtt=0;
+const MAX_RESEND=2;
+function startTmr(){
+  const el=document.getElementById('timer'),vB=document.getElementById('verifyBtn'),otp=document.getElementById('otp_code'),rB=document.getElementById('resendBtn');
+  if(!el)return;if(tmrInt)clearInterval(tmrInt);if(!tLeft)tLeft=300;tmrExp=false;if(rB)rB.style.display='none';
+  tmrInt=setInterval(()=>{if(tLeft<=0){clearInterval(tmrInt);el.textContent='00:00';tmrExp=true;if(otp){otp.disabled=true;otp.value='';otp.placeholder='মেয়াদ শেষ';}if(vB){vB.disabled=true;vB.style.opacity='0.5';vB.innerHTML='<i class="fas fa-clock me-2"></i>মেয়াদ শেষ';}if(rB&&resendAtt<MAX_RESEND)rB.style.display='inline-block';el.style.color='#dc3545';}else{const m=Math.floor(tLeft/60),s=tLeft%60;el.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;tLeft--;}},1000);
+}
+function resetTmr(){clearInterval(tmrInt);tLeft=300;tmrExp=false;const el=document.getElementById('timer'),vB=document.getElementById('verifyBtn'),otp=document.getElementById('otp_code'),rB=document.getElementById('resendBtn');if(el){el.textContent='05:00';el.style.color='';}if(otp){otp.disabled=false;otp.value='';otp.placeholder='••••••';otp.classList.remove('is-valid','is-invalid');otp.focus();}if(vB){vB.disabled=true;vB.style.opacity='0.6';vB.innerHTML='<i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন';}if(rB)rB.style.display='none';startTmr();}
+
+// Change number modal
+function setupCNModal(){
+  const cB=document.getElementById('changeNumberBtn'),modal=document.getElementById('changeNumberModal'),clB=document.getElementById('closeChangeNumberModal'),frm=document.getElementById('changeNumberForm'),disp=document.getElementById('displayPhoneNumber'),nI=document.getElementById('newPhoneNumber');
+  if(!cB||!modal)return;
+  cB.addEventListener('click',()=>{if(nI&&disp)nI.value=disp.textContent;modal.style.display='flex';if(tmrInt)clearInterval(tmrInt);});
+  if(clB)clB.addEventListener('click',()=>{modal.style.display='none';if(!tmrExp&&tLeft>0)startTmr();});
+  modal.addEventListener('click',e=>{if(e.target===modal){modal.style.display='none';if(!tmrExp&&tLeft>0)startTmr();}});
+  if(frm){frm.addEventListener('submit',function(e){const n=nI?nI.value.trim():'';if(!n){e.preventDefault();alert('দয়া করে নম্বর লিখুন।');return;}if(n.length<10||n.length>11){e.preventDefault();alert('১০-১১ অঙ্কের নম্বর দিন।');return;}if(!/^01[0-9]{8,9}$/.test(n)){e.preventDefault();alert('সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)');return;}if(disp)disp.textContent=n;resendAtt=0;tLeft=300;tmrExp=false;if(tmrInt)clearInterval(tmrInt);modal.style.display='none';});}
+}
+
+// DOM Ready
+document.addEventListener('DOMContentLoaded', function() {
+
+  // Init all dropdowns
+  initSD('sd-batch',            'batchHidden');
+  initSD('sd-village',          'villageHidden');
+  initSD('sd-current_location', 'currentLocationHidden');
+  initSD('sd-job_location',     'jobLocationHidden');
+  initSD('sd-last_edu',         'lastEduHidden');
+  initSD('sd-occupation',       'occupationHidden', val => updateJobDesc(val));
+
+  // Apply saved occupation on load (form re-submit)
+  const occH = document.getElementById('occupationHidden');
+  if (occH && occH.value) updateJobDesc(occH.value);
+
+  setupCNModal();
+
+  // Phone number — digits only
+  ['bangladesh_number','abroad_number'].forEach(id=>{
+    const el=document.getElementById(id); if(!el)return;
+    el.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');});
+    el.addEventListener('keypress',function(e){if(!/[0-9]/.test(e.key)&&!['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key))e.preventDefault();});
+  });
+
+  // English name
+  const nm=document.getElementById('student_name');
+  if(nm){
+    function chkName(){let v=nm.value.replace(/[^A-Za-z\s\.\-]/g,'');v=v.replace(/\b\w/g,c=>c.toUpperCase());nm.value=v;nm.classList.toggle('is-invalid',v.trim()&&!/^[A-Za-z\s\.\-]+$/.test(v));}
+    nm.addEventListener('input',chkName);nm.addEventListener('blur',chkName);
   }
 
-  // ============================================================
-  // OCCUPATION: show/hide job description + update label
-  // ============================================================
-  function updateJobDescriptionLabel(occupationValue) {
-    const jobRow = document.getElementById('jobDescriptionRow');
-    const jobLabel = document.getElementById('jobDescriptionLabel');
-    const jobDesc = document.getElementById('job_description');
+  // OTP
+  const otpIn=document.getElementById('otp_code'),otpFrm=document.getElementById('otpForm'),vBtn=document.getElementById('verifyBtn'),rBtn=document.getElementById('resendBtn'),tmrEl=document.getElementById('timer');
+  if(tmrEl&&otpFrm){startTmr();if(rBtn){rBtn.addEventListener('click',()=>{if(resendAtt>=MAX_RESEND){alert('আপনি সর্বোচ্চ ২ বার ওটিপি পুনরায় পাঠাতে পারেন।');return;}if(confirm('একটি নতুন ওটিপি কোডের অনুরোধ করবেন?')){resendAtt++;resetTmr();document.getElementById('resendForm').submit();}});}}
+  if(otpIn){otpIn.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'').slice(0,6);this.classList.remove('is-valid','is-invalid');if(this.value.length===6&&!tmrExp){this.classList.add('is-valid');if(vBtn){vBtn.disabled=false;vBtn.style.opacity='1';}}else if(this.value.length>0){this.classList.add('is-invalid');if(vBtn&&!tmrExp){vBtn.disabled=true;vBtn.style.opacity='0.6';}}else{if(vBtn&&!tmrExp){vBtn.disabled=true;vBtn.style.opacity='0.6';}}});}
+  if(otpFrm){otpFrm.addEventListener('submit',function(e){const v=otpIn?otpIn.value:'';if(tmrExp){e.preventDefault();alert('ওটিপির মেয়াদ শেষ হয়ে গেছে।');return;}if(!v||v.length!==6){e.preventDefault();if(otpIn){otpIn.classList.add('is-invalid');otpIn.focus();}alert('দয়া করে ৬-অঙ্কের সঠিক ওটিপি কোড লিখুন।');return;}if(vBtn){vBtn.innerHTML='<i class="fas fa-spinner fa-spin me-2"></i> যাচাই করা হচ্ছে...';vBtn.disabled=true;}});}
 
-    if (!jobRow || !jobLabel) return;
+  // Form validation
+  const frm=document.getElementById('registrationForm');
+  if(frm){frm.addEventListener('submit',function(e){
+    let ok=true;
+    const n=document.getElementById('student_name'),bH=document.getElementById('batchHidden'),vH=document.getElementById('villageHidden'),cH=document.getElementById('currentLocationHidden'),oH=document.getElementById('occupationHidden'),eH=document.getElementById('lastEduHidden'),ph=document.getElementById('student_photo'),wbd=document.querySelector('input[name="is_whatsapp_bd"]:checked'),nh=document.querySelector('input[name="is_no_hide"]:checked'),bd=document.getElementById('bangladesh_number'),g=document.querySelector('input[name="gender"]:checked'),ms=document.querySelector('input[name="marital_status"]:checked');
+    if(!n||!n.value.trim()){if(n)n.classList.add('is-invalid');ok=false;alert('শিক্ষার্থীর নাম দিন');}
+    else if(!/^[A-Za-z\s\.\-]+$/.test(n.value.trim())){n.classList.add('is-invalid');ok=false;alert('শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন');}
+    if(!g){alert('লিঙ্গ নির্বাচন করুন');ok=false;}
+    if(!ms){alert('বৈবাহিক অবস্থা নির্বাচন করুন');ok=false;}
+    if(!bH||!bH.value.trim()){alert('ব্যাচের বছর নির্বাচন করুন');ok=false;}
+    if(!vH||!vH.value.trim()){alert('গ্রাম নির্বাচন করুন');ok=false;}
+    if(!cH||!cH.value.trim()){alert('বর্তমান অবস্থান নির্বাচন করুন');ok=false;}
+    if(!oH||!oH.value.trim()){alert('পেশা নির্বাচন করুন');ok=false;}
+    if(!eH||!eH.value.trim()){alert('শিক্ষাগত যোগ্যতা নির্বাচন করুন');ok=false;}
+    if(!ph||!ph.files||!ph.files.length){alert('শিক্ষার্থীর ছবি আপলোড করুন');ok=false;}
+    if(!bd||!bd.value.trim()){alert('বাংলাদেশ নম্বর দিন');ok=false;}
+    else if(!/^01[0-9]{8,9}$/.test(bd.value.trim())){alert('সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)');ok=false;}
+    if(!wbd){alert('হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন');ok=false;}
+    if(!nh){alert('নম্বর হাইড কিনা নির্বাচন করুন');ok=false;}
+    if(!chkCaptcha())ok=false;
+    if(!ok){e.preventDefault();const fi=frm.querySelector('.is-invalid');if(fi)fi.scrollIntoView({behavior:'smooth',block:'center'});}
+  });}
 
-    // If no occupation selected, hide
-    if (!occupationValue || occupationValue === '') {
-      jobRow.style.display = 'none';
-      if (jobDesc) jobDesc.value = '';
-      return;
-    }
+  // Counters
+  const bioTA=document.getElementById('student_bio'),bioCnt=document.getElementById('bioCharCount'),bioDiv=document.getElementById('bioCounter');
+  if(bioTA&&bioCnt){function updBio(){const l=bioTA.value.length;bioCnt.textContent=l;if(bioDiv){bioDiv.classList.remove('success','warning','danger');bioDiv.classList.add(l>=1000?'danger':l>=900?'warning':'success');}bioTA.classList.toggle('is-invalid',l>1000);}bioTA.addEventListener('input',updBio);updBio();}
 
-    const labelMap = {
-      '1': '🌾 কৃষি কাজের বিবরণ',
-      '2': 'চাকরির বিবরণ',
-      '3': 'ব্যবসার বিবরণ',
-      '4': 'ফ্রিল্যান্সিং কাজের বিবরণ',
-      '5': 'বেকার অবস্থার বিবরণ',
-    };
+  const jdTA=document.getElementById('job_description'),jdCnt=document.getElementById('jobDescCharCount'),jdDiv=document.getElementById('jobDescCounter');
+  if(jdTA&&jdCnt){function updJD(){const l=jdTA.value.length;jdCnt.textContent=l;if(jdDiv){jdDiv.classList.remove('success','warning','danger');jdDiv.classList.add(l>=200?'danger':l>=180?'warning':'success');}jdTA.classList.toggle('is-invalid',l>200);}jdTA.addEventListener('input',updJD);updJD();}
 
-    if (labelMap[occupationValue]) {
-      jobLabel.innerHTML = `<i class="fas fa-briefcase"></i> ${labelMap[occupationValue]} <span class="optional-star" style="color: #64748b; font-size: 1.2rem;">(ঐচ্ছিক)</span>`;
-      jobRow.style.display = 'flex';
-      jobRow.style.animation = 'fadeInUp 0.4s ease-out';
-    } else {
-      jobRow.style.display = 'none';
-      if (jobDesc) jobDesc.value = '';
-    }
-  }
-
-  // ============================================================
-  // PHOTO CROP
-  // ============================================================
-  let cropper = null;
-  let currentImageFile = null;
-  
-  const photoInput = document.getElementById('student_photo');
-  const previewContainer = document.getElementById('photoPreviewContainer');
-  const previewImg = document.getElementById('photoPreview');
-  const changePhotoBtn = document.getElementById('changePhotoBtn');
-  const cropModal = document.getElementById('cropModal');
-  const cropImage = document.getElementById('cropImage');
-  const confirmCropBtn = document.getElementById('confirmCropBtn');
-  const cancelCropBtn = document.getElementById('cancelCropBtn');
-  const cropInfo = document.getElementById('cropInfo');
-  
-  function openCropModal(file) {
-    if (!file) return;
-    currentImageFile = file;
-    if (cropInfo) {
-      cropInfo.style.display = 'flex';
-      cropInfo.innerHTML = '<i class="fas fa-crop-alt"></i> ছবি নির্বাচন করা হয়েছে। ক্রপ করুন...';
-      cropInfo.classList.remove('crop-warning');
-    }
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      cropImage.src = event.target.result;
-      cropModal.classList.add('show');
-      if (cropper) cropper.destroy();
-      cropper = new Cropper(cropImage, {
-        aspectRatio: 1,
-        viewMode: 1,
-        dragMode: 'move',
-        autoCropArea: 1,
-        restore: false,
-        guides: true,
-        center: true,
-        highlight: true,
-        cropBoxMovable: true,
-        cropBoxResizable: true,
-        toggleDragModeOnDblclick: false,
-        background: true,
-        modal: true,
-        responsive: true
-      });
-    };
-    reader.readAsDataURL(file);
-  }
-  
-  if (photoInput) {
-    photoInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        alert('শুধুমাত্র ছবির ফাইল আপলোড করুন (.jpg, .jpeg, .png, .webp)');
-        photoInput.value = '';
-        previewContainer.style.display = 'none';
-        if (cropInfo) cropInfo.style.display = 'none';
-        return;
-      }
-      openCropModal(file);
-    });
-  }
-  
-  if (changePhotoBtn) {
-    changePhotoBtn.addEventListener('click', function() {
-      photoInput.click();
-    });
-  }
-  
-  if (confirmCropBtn) {
-    confirmCropBtn.addEventListener('click', function() {
-      if (cropper) {
-        const canvas = cropper.getCroppedCanvas({ width: 500, height: 500, imageSmoothingQuality: 'high' });
-        canvas.toBlob(function(blob) {
-          const croppedFile = new File([blob], currentImageFile.name, { type: 'image/jpeg', lastModified: Date.now() });
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(croppedFile);
-          photoInput.files = dataTransfer.files;
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            previewContainer.style.display = 'flex';
-            if (cropInfo) {
-              cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি সফলভাবে ক্রপ করা হয়েছে!';
-              setTimeout(() => { if (cropInfo) cropInfo.style.opacity = '0.7'; }, 2000);
-            }
-          };
-          reader.readAsDataURL(croppedFile);
-          currentImageFile = croppedFile;
-          cropModal.classList.remove('show');
-          if (cropper) { cropper.destroy(); cropper = null; }
-        }, 'image/jpeg', 0.9);
-      }
-    });
-  }
-  
-  if (cancelCropBtn) {
-    cancelCropBtn.addEventListener('click', function() {
-      cropModal.classList.remove('show');
-      if (cropper) { cropper.destroy(); cropper = null; }
-      photoInput.value = '';
-      previewContainer.style.display = 'none';
-      if (cropInfo) cropInfo.style.display = 'none';
-    });
-  }
-  
-  // ============================================================
-  // IMAGE COMPRESSION
-  // ============================================================
-  const MAX_FILE_SIZE = 50 * 1024;
-  async function compressImage(file) {
-    if (file.size <= MAX_FILE_SIZE) return file;
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          let width = img.width, height = img.height, attempts = 0;
-          const maxAttempts = 8;
-          function attemptCompress() {
-            attempts++;
-            const canvas = document.createElement('canvas');
-            canvas.width = width; canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            canvas.toBlob((blob) => {
-              if (blob.size <= MAX_FILE_SIZE || attempts >= maxAttempts) {
-                resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
-              } else {
-                width = Math.floor(width * 0.85);
-                height = Math.floor(height * 0.85);
-                attemptCompress();
-              }
-            }, 'image/jpeg', 0.85);
-          }
-          attemptCompress();
-        };
-        img.onerror = reject;
-      };
-      reader.onerror = reject;
-    });
-  }
-  
-  const registrationForm = document.getElementById('registrationForm');
-  if (registrationForm && photoInput) {
-    registrationForm.addEventListener('submit', async function(e) {
-      if (photoInput.files && photoInput.files[0]) {
-        const file = photoInput.files[0];
-        if (file.size > MAX_FILE_SIZE) {
-          e.preventDefault();
-          if (cropInfo) {
-            cropInfo.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ছবি কম্প্রেস করা হচ্ছে...';
-            cropInfo.style.display = 'flex';
-          }
-          try {
-            const compressedFile = await compressImage(file);
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(compressedFile);
-            photoInput.files = dataTransfer.files;
-            if (cropInfo) cropInfo.innerHTML = '<i class="fas fa-check-circle"></i> ছবি কম্প্রেস সম্পন্ন!';
-            setTimeout(() => registrationForm.submit(), 500);
-          } catch (error) {
-            console.error('Compression error:', error);
-            registrationForm.submit();
-          }
-        }
-      }
-    });
-  }
-
-  // ============================================================
-  // CAPTCHA
-  // ============================================================
-  let captchaVerified = false;
-  window.onCaptchaSuccess = function() { captchaVerified = true; document.getElementById("captchaError")?.classList.remove("show"); }
-  window.onCaptchaExpired = function() { captchaVerified = false; document.getElementById("captchaError")?.classList.remove("show"); }
-  function validateCaptcha() {
-    if (!captchaVerified) { document.getElementById("captchaError")?.classList.add("show"); return false; }
-    else { document.getElementById("captchaError")?.classList.remove("show"); return true; }
-  }
-
-  // ============================================================
-  // OTP TIMER
-  // ============================================================
-  let timerInterval, timeLeft = 300, isTimerExpired = false, resendAttempts = 0;
-  const MAX_RESEND_ATTEMPTS = 2;
-
-  function startTimer() {
-    const timerElement = document.getElementById("timer"), verifyBtn = document.getElementById("verifyBtn"), otpInput = document.getElementById("otp_code"), resendBtn = document.getElementById("resendBtn");
-    if (!timerElement) return false;
-    if (timerInterval) clearInterval(timerInterval);
-    if (timeLeft === 0 || timeLeft === undefined) timeLeft = 300;
-    isTimerExpired = false;
-    if (resendBtn) resendBtn.style.display = "none";
-    timerInterval = setInterval(() => {
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        timerElement.textContent = "00:00";
-        isTimerExpired = true;
-        if (otpInput) { otpInput.disabled = true; otpInput.value = ""; otpInput.placeholder = "মেয়াদ শেষ"; }
-        if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.5"; verifyBtn.innerHTML = '<i class="fas fa-clock me-2"></i>মেয়াদ শেষ'; }
-        if (resendBtn && resendAttempts < MAX_RESEND_ATTEMPTS) resendBtn.style.display = "inline-block";
-        timerElement.style.color = "#dc3545";
-      } else {
-        const minutes = Math.floor(timeLeft / 60), seconds = timeLeft % 60;
-        timerElement.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-        timeLeft--;
-      }
-    }, 1000);
-    return true;
-  }
-
-  function resetTimer() {
-    clearInterval(timerInterval);
-    timeLeft = 300;
-    isTimerExpired = false;
-    const timerElement = document.getElementById("timer"), verifyBtn = document.getElementById("verifyBtn"), otpInput = document.getElementById("otp_code"), resendBtn = document.getElementById("resendBtn");
-    if (timerElement) { timerElement.textContent = "05:00"; timerElement.style.color = ""; }
-    if (otpInput) { otpInput.disabled = false; otpInput.value = ""; otpInput.placeholder = "••••••"; otpInput.classList.remove("is-valid", "is-invalid"); otpInput.focus(); }
-    if (verifyBtn) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; verifyBtn.innerHTML = '<i class="fas fa-check-circle me-2"></i>ওটিপি যাচাই করুন'; }
-    if (resendBtn) resendBtn.style.display = "none";
-    startTimer();
-  }
-
-  // ============================================================
-  // CHANGE NUMBER MODAL
-  // ============================================================
-  function setupChangeNumberModal() {
-    const changeNumberBtn = document.getElementById("changeNumberBtn"), changeNumberModal = document.getElementById("changeNumberModal"), closeChangeNumberModal = document.getElementById("closeChangeNumberModal"), changeNumberForm = document.getElementById("changeNumberForm"), displayPhoneNumber = document.getElementById("displayPhoneNumber"), newPhoneInput = document.getElementById("newPhoneNumber");
-    if (!changeNumberBtn || !changeNumberModal) return;
-    changeNumberBtn.addEventListener("click", function() {
-      const currentPhone = displayPhoneNumber ? displayPhoneNumber.textContent : '';
-      if (newPhoneInput && currentPhone) newPhoneInput.value = currentPhone;
-      changeNumberModal.style.display = "flex";
-      if (timerInterval) clearInterval(timerInterval);
-    });
-    if (closeChangeNumberModal) {
-      closeChangeNumberModal.addEventListener("click", function() { changeNumberModal.style.display = "none"; if (!isTimerExpired && timeLeft > 0) startTimer(); });
-    }
-    changeNumberModal.addEventListener("click", function(e) { if (e.target === changeNumberModal) { changeNumberModal.style.display = "none"; if (!isTimerExpired && timeLeft > 0) startTimer(); } });
-    if (changeNumberForm) {
-      changeNumberForm.addEventListener("submit", function(e) {
-        const newNumber = newPhoneInput ? newPhoneInput.value.trim() : '';
-        if (!newNumber) { e.preventDefault(); alert("দয়া করে নম্বর লিখুন।"); return false; }
-        if (newNumber.length < 10 || newNumber.length > 11) { e.preventDefault(); alert("দয়া করে সঠিক ১০-১১ অঙ্কের বাংলাদেশ নম্বর লিখুন।"); return false; }
-        if (!/^01[0-9]{8,9}$/.test(newNumber)) { e.preventDefault(); alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)"); return false; }
-        if (displayPhoneNumber) displayPhoneNumber.textContent = newNumber;
-        resendAttempts = 0; timeLeft = 300; isTimerExpired = false;
-        if (timerInterval) clearInterval(timerInterval);
-        changeNumberModal.style.display = "none";
-        return true;
-      });
-    }
-  }
-
-  // ============================================================
-  // DOM READY
-  // ============================================================
-  document.addEventListener("DOMContentLoaded", function () {
-
-    // Initialize dropdowns — occupation gets a callback to update job description
-    initializeSearchableDropdown('batchSearch', 'batchDropdown', 'batchHidden');
-    initializeSearchableDropdown('villageSearch', 'villageDropdown', 'villageHidden');
-    initializeSearchableDropdown('currentLocationSearch', 'currentLocationDropdown', 'currentLocationHidden');
-    initializeSearchableDropdown('jobLocationSearch', 'jobLocationDropdown', 'jobLocationHidden');
-    initializeSearchableDropdown('lastEduSearch', 'lastEduDropdown', 'lastEduHidden');
-
-    // Occupation dropdown — pass callback so job description row updates immediately on selection
-    initializeSearchableDropdown('occupationSearch', 'occupationDropdown', 'occupationHidden', function(value) {
-      updateJobDescriptionLabel(value);
-    });
-
-    // On page load: if occupation already has a value (e.g. form re-submit), apply immediately
-    const occupationHiddenOnLoad = document.getElementById('occupationHidden');
-    if (occupationHiddenOnLoad && occupationHiddenOnLoad.value) {
-      updateJobDescriptionLabel(occupationHiddenOnLoad.value);
-    }
-
-    setupChangeNumberModal();
-
-    // ---- Phone number inputs: only allow digits ----
-    const bdNumber = document.getElementById('bangladesh_number');
-    const abroadNumber = document.getElementById('abroad_number');
-
-    if (bdNumber) {
-      bdNumber.addEventListener('input', function() {
-        // Strip any non-numeric characters
-        this.value = this.value.replace(/[^0-9]/g, '');
-      });
-      bdNumber.addEventListener('keypress', function(e) {
-        if (!/[0-9]/.test(e.key) && !['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) {
-          e.preventDefault();
-        }
-      });
-    }
-
-    if (abroadNumber) {
-      abroadNumber.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-      });
-      abroadNumber.addEventListener('keypress', function(e) {
-        if (!/[0-9]/.test(e.key) && !['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) {
-          e.preventDefault();
-        }
-      });
-    }
-
-    // ---- English-only name with auto-capitalization ----
-    const studentNameInput = document.getElementById('student_name');
-    if (studentNameInput) {
-      function validateEnglishName() {
-        let value = studentNameInput.value;
-        value = value.replace(/[^A-Za-z\s\.\-]/g, '');
-        value = value.replace(/\b\w/g, char => char.toUpperCase());
-        studentNameInput.value = value;
-        if (value.trim() && !/^[A-Za-z\s\.\-]+$/.test(value)) {
-          studentNameInput.classList.add('is-invalid');
-        } else if (value.trim()) {
-          studentNameInput.classList.remove('is-invalid');
-        }
-      }
-      studentNameInput.addEventListener('input', validateEnglishName);
-      studentNameInput.addEventListener('blur', validateEnglishName);
-    }
-
-    // ---- OTP form logic ----
-    const otpInput = document.getElementById("otp_code"), otpForm = document.getElementById("otpForm"), verifyBtn = document.getElementById("verifyBtn"), resendBtn = document.getElementById("resendBtn"), timerElement = document.getElementById("timer");
-    if (timerElement && otpForm) {
-      startTimer();
-      if (resendBtn) {
-        resendBtn.addEventListener('click', function() {
-          if (resendAttempts >= MAX_RESEND_ATTEMPTS) { alert("আপনি সর্বোচ্চ ২ বার ওটিপি পুনরায় পাঠাতে পারেন।"); return; }
-          if (confirm("একটি নতুন ওটিপি কোডের অনুরোধ করবেন?")) { resendAttempts++; resetTimer(); document.getElementById("resendForm").submit(); }
-        });
-      }
-    }
-    
-    if (otpInput) {
-      otpInput.addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "").slice(0, 6);
-        this.classList.remove("is-valid", "is-invalid");
-        if (this.value.length === 6 && !isTimerExpired) { this.classList.add("is-valid"); if (verifyBtn) { verifyBtn.disabled = false; verifyBtn.style.opacity = "1"; } }
-        else if (this.value.length > 0) { this.classList.add("is-invalid"); if (verifyBtn && !isTimerExpired) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; } }
-        else { if (verifyBtn && !isTimerExpired) { verifyBtn.disabled = true; verifyBtn.style.opacity = "0.6"; } }
-      });
-    }
-    
-    if (otpForm) {
-      otpForm.addEventListener("submit", function (event) {
-        const otpValue = otpInput ? otpInput.value : "";
-        if (isTimerExpired) { event.preventDefault(); alert("ওটিপির মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে একটি নতুন কোডের অনুরোধ করুন।"); return false; }
-        if (!otpValue || otpValue.length !== 6) { event.preventDefault(); if (otpInput) { otpInput.classList.add("is-invalid"); otpInput.focus(); } alert("দয়া করে ৬-অঙ্কের সঠিক ওটিপি কোড লিখুন।"); return false; }
-        if (verifyBtn) { verifyBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> যাচাই করা হচ্ছে...'; verifyBtn.disabled = true; }
-        return true;
-      });
-    }
-
-    // ---- Registration form validation ----
-    const form = document.getElementById("registrationForm");
-    if (form) {
-      form.addEventListener("submit", function (event) {
-        let isValid = true;
-        const studentName = document.getElementById("student_name");
-        const batchHidden = document.getElementById("batchHidden");
-        const villageHidden = document.getElementById("villageHidden");
-        const currentLocationHidden = document.getElementById("currentLocationHidden");
-        const occupationHidden = document.getElementById("occupationHidden");
-        const lastEduHidden = document.getElementById("lastEduHidden");
-        const photoFile = document.getElementById("student_photo");
-        const isWhatsappBd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
-        const isNoHide = document.querySelector('input[name="is_no_hide"]:checked');
-        const bangladeshNumber = document.getElementById("bangladesh_number");
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const maritalStatus = document.querySelector('input[name="marital_status"]:checked');
-        
-        if (!studentName || !studentName.value.trim()) { if (studentName) studentName.classList.add("is-invalid"); isValid = false; alert("শিক্ষার্থীর নাম দিন"); }
-        else if (studentName && !/^[A-Za-z\s\.\-]+$/.test(studentName.value.trim())) { studentName.classList.add("is-invalid"); isValid = false; alert("শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন"); }
-        
-        if (!gender) { alert("লিঙ্গ নির্বাচন করুন"); isValid = false; }
-        if (!maritalStatus) { alert("বৈবাহিক অবস্থা নির্বাচন করুন"); isValid = false; }
-        if (!batchHidden || !batchHidden.value.trim()) { alert("ব্যাচের বছর নির্বাচন করুন"); isValid = false; }
-        if (!villageHidden || !villageHidden.value.trim()) { alert("গ্রাম নির্বাচন করুন"); isValid = false; }
-        if (!currentLocationHidden || !currentLocationHidden.value.trim()) { alert("বর্তমান অবস্থান নির্বাচন করুন"); isValid = false; }
-        if (!occupationHidden || !occupationHidden.value.trim()) { alert("পেশা নির্বাচন করুন"); isValid = false; }
-        if (!lastEduHidden || !lastEduHidden.value.trim()) { alert("শিক্ষাগত যোগ্যতা নির্বাচন করুন"); isValid = false; }
-        if (!photoFile || !photoFile.files || !photoFile.files.length) { alert("শিক্ষার্থীর ছবি আপলোড করুন"); isValid = false; }
-        if (!bangladeshNumber || !bangladeshNumber.value.trim()) { alert("বাংলাদেশ নম্বর দিন"); isValid = false; }
-        else if (!/^01[0-9]{8,9}$/.test(bangladeshNumber.value.trim())) { alert("সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)"); isValid = false; }
-        if (!isWhatsappBd) { alert("দয়া করে হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন"); isValid = false; }
-        if (!isNoHide) { alert("দয়া করে নম্বর হাইড কিনা নির্বাচন করুন"); isValid = false; }
-        if (!validateCaptcha()) isValid = false;
-        
-        if (!isValid) { event.preventDefault(); const firstInvalid = form.querySelector(".is-invalid"); if (firstInvalid) firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" }); }
-      });
-    }
-
-    // ---- Bio character counter ----
-    const bioTextarea = document.getElementById('student_bio');
-    const bioCharCountSpan = document.getElementById('bioCharCount');
-    const bioCounterDiv = document.getElementById('bioCounter');
-
-    if (bioTextarea && bioCharCountSpan) {
-      function updateBioCharCount() {
-        const length = bioTextarea.value.length;
-        bioCharCountSpan.textContent = length;
-        if (bioCounterDiv) {
-          bioCounterDiv.classList.remove('success', 'warning', 'danger');
-          if (length >= 1000) bioCounterDiv.classList.add('danger');
-          else if (length >= 900) bioCounterDiv.classList.add('warning');
-          else bioCounterDiv.classList.add('success');
-        }
-        if (length > 1000) bioTextarea.classList.add('is-invalid');
-        else bioTextarea.classList.remove('is-invalid');
-      }
-      bioTextarea.addEventListener('input', updateBioCharCount);
-      updateBioCharCount();
-    }
-
-    // ---- Job description character counter ----
-    const jobDescTextarea = document.getElementById('job_description');
-    const jobDescCharCountSpan = document.getElementById('jobDescCharCount');
-    const jobDescCounterDiv = document.getElementById('jobDescCounter');
-
-    if (jobDescTextarea && jobDescCharCountSpan) {
-      function updateJobDescCharCount() {
-        const length = jobDescTextarea.value.length;
-        jobDescCharCountSpan.textContent = length;
-        if (jobDescCounterDiv) {
-          jobDescCounterDiv.classList.remove('success', 'warning', 'danger');
-          if (length >= 200) jobDescCounterDiv.classList.add('danger');
-          else if (length >= 180) jobDescCounterDiv.classList.add('warning');
-          else jobDescCounterDiv.classList.add('success');
-        }
-        if (length > 200) jobDescTextarea.classList.add('is-invalid');
-        else jobDescTextarea.classList.remove('is-invalid');
-      }
-      jobDescTextarea.addEventListener('input', updateJobDescCharCount);
-      updateJobDescCharCount();
-    }
-
-  }); // end DOMContentLoaded
+});
 </script>
 {% endblock %}
