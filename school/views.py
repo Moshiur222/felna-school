@@ -740,23 +740,46 @@ def registration_students_list(request):
     return render(request, 'registration_students_list.html', context)
 
 
+from django.shortcuts import render, get_object_or_404
+from django.templatetags.static import static
+from .models import StudentRegistration
+
 def registration_student_detail(request, slug):
-    student = get_object_or_404(StudentRegistration, slug=slug, is_verified=True)
-    # Create SEO datastudent
+    student = get_object_or_404(
+        StudentRegistration,
+        slug=slug,
+        is_verified=True
+    )
+
+    # Get previous student (with smaller ID)
+    previous_student = StudentRegistration.objects.filter(
+        is_verified=True,
+        id__lt=student.id
+    ).order_by('-id').first()
+
+    # Get next student (with larger ID)
+    next_student = StudentRegistration.objects.filter(
+        is_verified=True,
+        id__gt=student.id
+    ).order_by('id').first()
+
+    # Create SEO data
     seos = [{
-        'meta_title': f"{student.student_name} -Aluni Student Registration | Felna High School",
+        'meta_title': f"{student.student_name} - Alumni Student Registration | Felna High School",
         'meta_description': student.student_bio[:160] if student.student_bio else "Register for this meeting with Felna High School alumni. Join us to reconnect and celebrate our shared history.",
         'meta_keywords': "alumni, registration, felna high school",
         'meta_url': request.build_absolute_uri(),
-        'meta_image': request.build_absolute_uri(student.student_photo.url) if student.student_photo else request.build_absolute_uri(static('home/images/default-meeting-og.jpg')),
+        'meta_image': request.build_absolute_uri(student.student_photo.url)
+        if student.student_photo else request.build_absolute_uri(
+            static('home/images/default-meeting-og.jpg')
+        ),
     }]
 
-    
+    # Format Bangladesh Phone Number
     bd_no_display = "নাই"
-    
     if student.bd_no:
         clean_number = ''.join(filter(str.isdigit, student.bd_no))
-        
+
         if len(clean_number) == 11 and clean_number[:2] == '01':
             if student.is_no_hide == 2:
                 bd_no_display = f"+880-{clean_number[1:3]}**-****{clean_number[-2:]}"
@@ -769,14 +792,16 @@ def registration_student_detail(request, slug):
                 bd_no_display = f"+880-{clean_number[:4]}-{clean_number[4:]}"
         else:
             bd_no_display = student.bd_no
-    
+
     context = {
         'student': student,
         'bd_no_display': bd_no_display,
         'seos': seos,
+        'previous_student': previous_student,
+        'next_student': next_student,
     }
-    return render(request, 'registration_students_details.html', context)
 
+    return render(request, 'registration_students_details.html', context)
 
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
