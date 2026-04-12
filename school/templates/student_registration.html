@@ -833,7 +833,7 @@ function updateJobDesc(val) {
   const ta    = document.getElementById('job_description');
   if (!row || !label) return;
   if (!val) { row.style.display = 'none'; if(ta) ta.value=''; return; }
-  const map = {'1':'🌾 কৃষি কাজের বিবরণ','2':'চাকরির বিবরণ','3':'ব্যবসার বিবরণ','4':'ফ্রিল্যান্সিং কাজের বিবরণ','5':'বেকার অবস্থার বিবরণ'};
+  const map = {'1':' কী ধরনের কৃষি কাজ করেন ?','2':'কোথায় চাকরি করেন?','3':'কোন ধরনের ব্যবসা করেন?','4':'কোন ধরনের ফ্রিল্যান্সিং কাজ করেন?','5':'কোন ধরনের চাকরি খুঁজছেন?'};
   if (map[val]) {
     label.innerHTML = `<i class="fas fa-briefcase"></i> ${map[val]} <span style="color:#64748b;font-size:1.2rem;">(ঐচ্ছিক)</span>`;
     row.style.display = 'flex'; row.style.animation = 'fadeInUp 0.4s ease-out';
