@@ -743,9 +743,10 @@ class StudentRegistration(models.Model):
     MARITAL_STATUS_CHOICES = [(1, 'অবিবাহিত'), (2, 'বিবাহিত'), (3, 'তালাকপ্রাপ্ত')]
     IS_WHATSAPP_BD_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
     IS_WHATSAPP_ABROAD_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
-    OCCUPATION_CHOICES = [(1, 'কৃষক'), (2, 'চাকরি'), (3, 'ব্যবসা'), (4, 'ফ্রিল্যান্সার')]
+    OCCUPATION_CHOICES = [(1, 'কৃষক'), (2, 'চাকরিজীবী'), (3, 'ব্যবসায়ী'), (4, 'ফ্রিল্যান্সার'), (5, 'বেকার'),]
     EDUCATION_CHOICES = [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')]
     NUMBER_HIDE_CHOICES = [(1, 'হ্যাঁ'), (2, 'না')]
+    IS_VERIFIED_CHOICES = [ (0, 'Pending'), (1, 'Accepted')]
 
     student_name = models.CharField(max_length=100)
     facebook_profile = models.CharField(max_length=1000, null=True, blank=True)
@@ -756,6 +757,7 @@ class StudentRegistration(models.Model):
     batch = models.IntegerField(choices=batch_years(), null=True)
     village = models.ForeignKey(Village, on_delete=models.SET_NULL, null=True)
     current_location = CountryField(blank_label='Select Country')
+    job_location = CountryField(blank_label='Select Country')
     bd_no = models.CharField(max_length=15)
     is_whatsapp_bd = models.IntegerField(choices=IS_WHATSAPP_BD_CHOICES, null=True)
     abroad_no = models.CharField(max_length=15, null=True, blank=True)
@@ -763,7 +765,8 @@ class StudentRegistration(models.Model):
     occupation = models.IntegerField(choices=OCCUPATION_CHOICES, null=True)
     last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
     is_no_hide = models.IntegerField(choices=NUMBER_HIDE_CHOICES, null=True)
-    is_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(choices=IS_VERIFIED_CHOICES,)
+    job_description = models.TextField(max_length=500, null=True, blank=True)
     slug = models.SlugField(max_length=200, unique=True)
 
     def generate_unique_slug(self):

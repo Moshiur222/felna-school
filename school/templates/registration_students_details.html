@@ -312,6 +312,12 @@
         font-size: 1.4rem;
     }
 
+    #container h1{
+        color: green;
+        font-size: 2.8rem;
+        background-color: transparent;
+    }
+
     @media (max-width: 992px) {
         .data-grid { 
             grid-template-columns: 1fr; 
@@ -328,8 +334,454 @@
             font-size: 2.5rem;
         }
     }
+    
+    
 </style>
 
+<style>
+    /* ============================================
+       MODERN ALUMNI GALLERY SECTION
+       Professional, Clean, Interactive
+    ============================================ */
+    
+    .alumni-gallery-section {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 24px;
+        padding: 2rem 1.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(32, 60, 92, 0.08);
+    }
+    
+    /* Gallery Header */
+    .gallery-header-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 1.75rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .gallery-title-container {
+        position: relative;
+    }
+    
+    .alumni-gallery-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--brand-navy, #203C5C) 0%, #2c4c6e 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        margin: 0;
+        letter-spacing: -0.3px;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    .title-underline {
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--brand-orange, #F4A024), #ffc44d);
+        border-radius: 3px;
+        margin-top: 8px;
+        transition: width 0.3s ease;
+    }
+    
+    .gallery-title-container:hover .title-underline {
+        width: 100px;
+    }
+    
+    .gallery-controls-hint {
+        display: flex;
+        align-items: center;
+    }
+    
+    .hint-text {
+        font-size: 0.75rem;
+        color: #6c757d;
+        background: rgba(0, 0, 0, 0.04);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    .hint-text i {
+        margin-right: 5px;
+        font-size: 0.7rem;
+    }
+    
+    /* Slider Wrapper - Infinite Carousel */
+    .slider-wrapper {
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+        border-radius: 16px;
+        cursor: grab;
+        user-select: none;
+    }
+    
+    .slider-wrapper:active {
+        cursor: grabbing;
+    }
+    
+    .slider-track {
+        display: flex;
+        width: max-content;
+        gap: 1.25rem;
+        animation: scrollRightToLeft 28s linear infinite;
+        will-change: transform;
+    }
+    
+    /* Pause animation on hover */
+    .slider-wrapper:hover .slider-track {
+        animation-play-state: paused;
+    }
+    
+    /* Individual Gallery Items */
+    .slider-item {
+        flex: 0 0 auto;
+        width: 280px;
+        transition: transform 0.3s ease;
+    }
+    
+    .slider-item:hover {
+        transform: translateY(-4px);
+    }
+    
+    /* Image Card */
+    .img-card {
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+    
+    .slider-item:hover .img-card {
+        box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.15);
+        border-color: rgba(244, 160, 36, 0.2);
+    }
+    
+    /* Image Wrapper */
+    .img-wrapper {
+        position: relative;
+        width: 100%;
+        height: 220px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    }
+    
+    .img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        display: block;
+    }
+    
+    .slider-item:hover .img-wrapper img {
+        transform: scale(1.08);
+    }
+    
+    /* Modern Overlay */
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(32, 60, 92, 0.85);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .img-wrapper:hover .image-overlay {
+        opacity: 1;
+    }
+    
+    .overlay-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        transform: translateY(10px);
+        transition: transform 0.3s ease;
+    }
+    
+    .img-wrapper:hover .overlay-content {
+        transform: translateY(0);
+    }
+    
+    .overlay-content i {
+        font-size: 2rem;
+        color: var(--brand-orange, #F4A024);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+    
+    .overlay-content span {
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 500;
+        font-family: 'Roboto', sans-serif;
+        letter-spacing: 0.5px;
+        background: rgba(255,255,255,0.15);
+        padding: 4px 12px;
+        border-radius: 30px;
+    }
+    
+    /* Image Caption */
+    .img-caption {
+        padding: 0.75rem 1rem;
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: #334155;
+        background: #ffffff;
+        border-top: 1px solid #f0f2f5;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Gallery Dots Navigation */
+    .gallery-dots-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.75rem;
+    }
+    
+    .gallery-dots {
+        display: flex;
+        gap: 8px;
+        background: rgba(0, 0, 0, 0.04);
+        padding: 6px 12px;
+        border-radius: 50px;
+    }
+    
+    .gallery-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #cbd5e1;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+    
+    .gallery-dot:hover {
+        background: var(--brand-orange, #F4A024);
+        transform: scale(1.2);
+    }
+    
+    .gallery-dot.active {
+        width: 24px;
+        border-radius: 12px;
+        background: linear-gradient(90deg, var(--brand-navy, #203C5C), var(--brand-orange, #F4A024));
+    }
+    
+    /* ============================================
+       LIGHTBOX MODAL - Professional Image Viewer
+    ============================================ */
+    .lightbox-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.25s, opacity 0.25s ease;
+    }
+    
+    .lightbox-modal.active {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+    .lightbox-overlay-close {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.92);
+        backdrop-filter: blur(12px);
+        cursor: pointer;
+    }
+    
+    .lightbox-container {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        z-index: 10000;
+    }
+    
+    .lightbox-close-btn {
+        position: absolute;
+        top: -50px;
+        right: -10px;
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: white;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        backdrop-filter: blur(8px);
+        z-index: 10001;
+    }
+    
+    .lightbox-close-btn:hover {
+        background: #ef4444;
+        transform: scale(1.05);
+    }
+    
+    .lightbox-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: white;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        backdrop-filter: blur(8px);
+        z-index: 10001;
+    }
+    
+    .lightbox-nav:hover {
+        background: var(--brand-orange, #F4A024);
+        transform: translateY(-50%) scale(1.08);
+    }
+    
+    .lightbox-prev {
+        left: -60px;
+    }
+    
+    .lightbox-next {
+        right: -60px;
+    }
+    
+    .lightbox-content {
+        text-align: center;
+        background: transparent;
+    }
+    
+    .lightbox-image {
+        max-width: 85vw;
+        max-height: 80vh;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        background: #0f172a;
+    }
+    
+    .lightbox-caption {
+        margin-top: 1rem;
+        color: #e2e8f0;
+        font-size: 0.9rem;
+        font-weight: 400;
+        background: rgba(0, 0, 0, 0.6);
+        display: inline-block;
+        padding: 6px 18px;
+        border-radius: 30px;
+        backdrop-filter: blur(4px);
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    /* Animation Keyframes */
+    @keyframes scrollRightToLeft {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .alumni-gallery-section {
+            padding: 1.25rem;
+            border-radius: 20px;
+        }
+        
+        .alumni-gallery-title {
+            font-size: 1.4rem;
+        }
+        
+        .slider-item {
+            width: 220px;
+        }
+        
+        .img-wrapper {
+            height: 180px;
+        }
+        
+        .lightbox-prev {
+            left: 10px;
+        }
+        
+        .lightbox-next {
+            right: 10px;
+        }
+        
+        .lightbox-nav {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+        
+        .lightbox-close-btn {
+            top: -40px;
+            right: 5px;
+            width: 38px;
+            height: 38px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .slider-item {
+            width: 180px;
+        }
+        
+        .img-wrapper {
+            height: 150px;
+        }
+        
+        .overlay-content span {
+            font-size: 0.7rem;
+        }
+        
+        .gallery-header-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
 <div class="profile-main-wrapper">
     <div class="container">
         <div class="profile-card-container">
@@ -434,6 +886,10 @@
                         <span class="data-label">Country of Residence</span>
                         <span class="data-value"><i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}</span>
                     </div>
+                    <div class="data-item">
+                        <span class="data-label">Job Location</span>
+                        <span class="data-value"><i class="fa fa-map-marker-alt"></i> {{ student.job_location.name }}</span>
+                    </div>
                 </div>
 
                 <!-- Group 2: Career & Education -->
@@ -446,6 +902,12 @@
                     <div class="data-item">
                         <span class="data-label">Current Occupation</span>
                         <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.get_occupation_display }}</span>
+                    </div>
+                </div>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="data-label">Job Description</span>
+                        <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.job_description }}</span>
                     </div>
                 </div>
                 
@@ -563,4 +1025,97 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block photo_gallery %}
+<!-- Modern Alumni Gallery Section - Professional Gallery Display -->
+<div class="alumni-gallery-section">
+    <div class="gallery-header-wrapper">
+        <div class="gallery-title-container">
+            <h4 class="alumni-gallery-title">{{ t.alumni_gallery }}</h4>
+            <div class="title-underline"></div>
+        </div>
+    </div>
+
+    <div class="slider-wrapper">
+        <div class="slider-track">
+            <!-- Original images loop - Simple gallery display without student link -->
+            {% for image in last_students %}
+               <a href="{% url 'registration_student_detail' image.slug %}">
+                 <div class="slider-item">
+                    <div class="img-card">
+                        <div class="img-wrapper">
+                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
+                            <div class="image-overlay">
+                                <div class="overlay-content">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>View</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if image.batch %}
+                        <div class="img-caption">
+                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+               </a>
+            {% endfor %}
+
+            <!-- Duplicate for seamless infinite scroll -->
+            {% for image in last_students %}
+                <a href="{% url 'registration_student_detail' image.slug %}">
+                    <div class="slider-item">
+                    <div class="img-card">
+                        <div class="img-wrapper">
+                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
+                            <div class="image-overlay">
+                                <div class="overlay-content">
+                                    <i class="fas fa-search-plus"></i>
+                                    <span>View</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if image.batch %}
+                        <div class="img-caption">
+                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Gallery Navigation Dots -->
+    <div class="gallery-dots-container">
+        <div class="gallery-dots">
+            {% for image in last_students %}
+                <span class="gallery-dot" data-index="{{ forloop.counter0 }}"></span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Lightbox Modal for Image Preview -->
+<div id="galleryLightbox" class="lightbox-modal" style="display: none;">
+    <div class="lightbox-overlay-close"></div>
+    <div class="lightbox-container">
+        <button class="lightbox-close-btn" aria-label="Close lightbox">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="lightbox-content">
+            <img class="lightbox-image" src="" alt="">
+            <div class="lightbox-caption"></div>
+        </div>
+        <button class="lightbox-nav lightbox-next" aria-label="Next image">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
 {% endblock %}

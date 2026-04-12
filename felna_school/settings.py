@@ -88,6 +88,7 @@ TEMPLATES = [
                 'school.context_processors.visitor_stats',
                 'school.context_processors.active_menu',
                 'school.context_processors.get_translations',
+                'school.context_processors.alumni_students',
             ],
         },
     },

@@ -654,7 +654,7 @@
                         {% block content %}{% endblock content %}
                     </div>
                 {% endif %}
-
+                {% block photo_gallery %}
                 <div class="col-md-12" style="background: #efffff; margin-top: 20px; padding: 10px;">
                     <h4 style="font-size: 20px; background: #1d1836; padding: 5px; color: #fff">{{t.photo_gallery}}</h4>
                     <div class="slider-wrapper" style="overflow: hidden; width: 100%; position: relative;">
@@ -672,6 +672,7 @@
                         </div>
                     </div>
                 </div>
+                {% endblock %}
             </div>
         </div>
     </div>

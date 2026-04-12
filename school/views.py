@@ -425,6 +425,7 @@ def get_common_data():
         'countries': list(countries),
     }
 
+
 def student_registration(request):
     context = get_common_data()
     
@@ -441,6 +442,7 @@ def student_registration(request):
                 return render(request, 'student_registration.html', context)
 
             try:
+                # ... existing code for getting values ...
                 is_whatsapp_bd_value = request.POST.get("is_whatsapp_bd")
                 if not is_whatsapp_bd_value:
                     is_whatsapp_bd_value = 2
@@ -485,6 +487,8 @@ def student_registration(request):
                 batch = request.POST.get("batch", "").strip()
                 village_id = request.POST.get("village", "").strip()
                 current_location = request.POST.get("current_location", "").strip()
+                job_location = request.POST.get("job_location", "").strip()
+                job_description = request.POST.get("job_description", "").strip()  # নতুন ফিল্ড
                 occupation = request.POST.get("occupation", "").strip()
                 last_edu = request.POST.get("last_edu", "").strip()
                 photo = request.FILES.get('student_photo')
@@ -506,6 +510,9 @@ def student_registration(request):
                     errors.append("গ্রাম নির্বাচন করুন")
                 if not current_location:
                     errors.append("বর্তমান অবস্থান নির্বাচন করুন")
+                if not job_location:
+                    errors.append("কর্মস্থলের দেশ নির্বাচন করুন")
+                # job_description is optional, no validation needed
                 if not occupation:
                     errors.append("পেশা নির্বাচন করুন")
                 if not last_edu:
@@ -540,6 +547,8 @@ def student_registration(request):
                     'batch': int(batch),
                     'village_id': int(village_id),
                     'current_location': current_location,
+                    'job_location': job_location,
+                    'job_description': job_description,  # নতুন ফিল্ড
                     'bd_no': bd_no,
                     'abroad_no': abroad_no,
                     'occupation': int(occupation),
@@ -560,17 +569,73 @@ def student_registration(request):
             request.session['pending_student']['temp_photo_path'] = temp_path
             request.session['pending_phone'] = bd_no
             
-            success, result = send_otp(bd_no)
-            if success:
-                context['show_otp_form'] = True
-                context['phone_number'] = bd_no
-                messages.info(request, f'{bd_no} নম্বরে OTP পাঠানো হয়েছে।')
-                return render(request, 'student_registration.html', context)
+            # Check if current location is Bangladesh
+            current_location_code = student_data.get('current_location', '')
+            
+            # Only send OTP if current location is Bangladesh (code 'BD')
+            if current_location_code == 'BD':
+                success, result = send_otp(bd_no)
+                if success:
+                    context['show_otp_form'] = True
+                    context['phone_number'] = bd_no
+                    messages.info(request, f'{bd_no} নম্বরে OTP পাঠানো হয়েছে।')
+                    return render(request, 'student_registration.html', context)
+                else:
+                    messages.error(request, f'OTP পাঠাতে ব্যর্থ: {result}')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
             else:
-                messages.error(request, f'OTP পাঠাতে ব্যর্থ: {result}')
-                context['form_data'] = request.POST
-                context['show_otp_form'] = False
-                return render(request, 'student_registration.html', context)
+                # If current location is not Bangladesh, save directly without OTP
+                try:
+                    village = None
+                    if student_data.get('village_id'):
+                        village = Village.objects.get(id=student_data['village_id'])
+                    
+                    student = StudentRegistration.objects.create(
+                        student_name=student_data['student_name'],
+                        student_bio=student_data.get('student_bio'),
+                        facebook_profile=student_data.get('facebook_profile'),
+                        gender=student_data.get('gender'),
+                        marrital_status=student_data.get('marrital_status'),
+                        is_whatsapp_bd=student_data.get('is_whatsapp_bd'),
+                        is_whatsapp_abroad=student_data.get('is_whatsapp_abroad'),
+                        is_no_hide=student_data.get('is_no_hide'),
+                        batch=student_data.get('batch'),
+                        village=village,
+                        current_location=student_data.get('current_location'),
+                        job_location=student_data.get('job_location'),
+                        job_description=student_data.get('job_description'),  # নতুন ফিল্ড
+                        bd_no=student_data['bd_no'],
+                        abroad_no=student_data.get('abroad_no'),
+                        occupation=student_data.get('occupation'),
+                        last_edu=student_data.get('last_edu'),
+                        is_verified=False
+                    )
+                    
+                    if temp_path:
+                        if default_storage.exists(temp_path):
+                            with default_storage.open(temp_path, 'rb') as f:
+                                student.student_photo.save(
+                                    os.path.basename(temp_path), 
+                                    ContentFile(f.read())
+                                )
+                            default_storage.delete(temp_path)
+                    
+                    request.session.flush()
+                    messages.success(request, '🎉 আপনার নিবন্ধন সফল হয়েছে! ধন্যবাদ।')
+                    return redirect('student_registration')
+                    
+                except Village.DoesNotExist:
+                    messages.error(request, 'গ্রামটি পাওয়া যায়নি।')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
+                except Exception as e:
+                    messages.error(request, f'নিবন্ধন সংরক্ষণে সমস্যা: {str(e)}')
+                    context['form_data'] = request.POST
+                    context['show_otp_form'] = False
+                    return render(request, 'student_registration.html', context)
 
         elif step == "verify_otp":
             phone = request.session.get('pending_phone')
@@ -601,11 +666,13 @@ def student_registration(request):
                         batch=data.get('batch'),
                         village=village,
                         current_location=data.get('current_location'),
+                        job_location=data.get('job_location'),
+                        job_description=data.get('job_description'),  # নতুন ফিল্ড
                         bd_no=data['bd_no'],
                         abroad_no=data.get('abroad_no'),
                         occupation=data.get('occupation'),
                         last_edu=data.get('last_edu'),
-                        is_verified=True
+                        is_verified=False
                     )
                     
                     if data.get('temp_photo_path'):
@@ -636,8 +703,11 @@ def student_registration(request):
                 context['show_otp_form'] = True
                 context['phone_number'] = phone
                 return render(request, 'student_registration.html', context)
-                
+        
+        # ... rest of the code remains same for resend_otp and change_number ...
+        
         elif step == "resend_otp":
+            # ... existing resend_otp code ...
             phone = request.session.get('pending_phone')
             if not phone:
                 messages.error(request, 'সেশন এক্সপায়ার্ড হয়েছে।')
@@ -655,6 +725,7 @@ def student_registration(request):
             return render(request, 'student_registration.html', context)
         
         elif step == 'change_number':
+            # ... existing change_number code ...
             new_phone = request.POST.get('new_phone_number', '').strip()
             
             if not new_phone:
@@ -706,9 +777,8 @@ def student_registration(request):
     context['show_otp_form'] = False
     return render(request, 'student_registration.html', context)
 
-
 def registration_students_list(request):
-    students = StudentRegistration.objects.filter(is_verified=True).order_by('batch', 'student_name')
+    students = StudentRegistration.objects.filter().order_by('batch', 'student_name')
     
     selected_batch = request.GET.get('batch', '')
     selected_gender = request.GET.get('gender', '')
@@ -724,7 +794,7 @@ def registration_students_list(request):
     if selected_name:
         students = students.filter(student_name__icontains=selected_name)
     
-    batch_choices = StudentRegistration.objects.filter(is_verified=True).values_list('batch', flat=True).distinct().order_by('-batch')
+    batch_choices = StudentRegistration.objects.filter().values_list('batch', flat=True).distinct().order_by('-batch')
     
     context = {
         'students': students,
@@ -742,50 +812,57 @@ def registration_students_list(request):
 
 from django.shortcuts import render, get_object_or_404
 from django.templatetags.static import static
-from .models import StudentRegistration
 
 def registration_student_detail(request, slug):
-    student = get_object_or_404(
-        StudentRegistration,
-        slug=slug,
-        is_verified=True
+    student = get_object_or_404(StudentRegistration, slug=slug)
+
+    # Previous student
+    previous_student = StudentRegistration.objects.filter( id__lt=student.id ).order_by('-id').first()
+
+    # Next student
+    next_student = StudentRegistration.objects.filter( id__gt=student.id ).order_by('id').first()
+
+    # -----------------------------
+    # SAFE OG IMAGE HANDLING
+    # -----------------------------
+    default_image = request.build_absolute_uri(
+        static('home/images/default-meeting-og.jpg')
     )
 
-    # Get previous student (with smaller ID)
-    previous_student = StudentRegistration.objects.filter(
-        is_verified=True,
-        id__lt=student.id
-    ).order_by('-id').first()
+    if student.student_photo and hasattr(student.student_photo, 'url'):
+        meta_image = request.build_absolute_uri(student.student_photo.url)
+    else:
+        meta_image = default_image
 
-    # Get next student (with larger ID)
-    next_student = StudentRegistration.objects.filter(
-        is_verified=True,
-        id__gt=student.id
-    ).order_by('id').first()
-
-    # Create SEO data
+    # -----------------------------
+    # SEO DATA
+    # -----------------------------
     seos = [{
-        'meta_title': f"{student.student_name} - Alumni Student Registration | Felna High School",
-        'meta_description': student.student_bio[:160] if student.student_bio else "Register for this meeting with Felna High School alumni. Join us to reconnect and celebrate our shared history.",
-        'meta_keywords': "alumni, registration, felna high school",
-        'meta_url': request.build_absolute_uri(),
-        'meta_image': request.build_absolute_uri(student.student_photo.url)
-        if student.student_photo else request.build_absolute_uri(
-            static('home/images/default-meeting-og.jpg')
+        'meta_title': f"{student.student_name} - Alumni Association Member of Felna High School",
+        'meta_description': (
+            student.student_bio[:160]
+            if student.student_bio
+            else ""
         ),
+        'meta_keywords': "alumni, registration, felna high school", 
+        'meta_url': request.build_absolute_uri(),
+        'meta_image': meta_image,
     }]
 
-    # Format Bangladesh Phone Number
+    # -----------------------------
+    # PHONE FORMAT
+    # -----------------------------
     bd_no_display = "নাই"
+
     if student.bd_no:
         clean_number = ''.join(filter(str.isdigit, student.bd_no))
 
-        if len(clean_number) == 11 and clean_number[:2] == '01':
+        if len(clean_number) == 11 and clean_number.startswith('01'):
             if student.is_no_hide == 2:
                 bd_no_display = f"+880-{clean_number[1:3]}**-****{clean_number[-2:]}"
             else:
                 bd_no_display = f"+880-{clean_number[1:5]}-{clean_number[5:]}"
-        elif len(clean_number) == 10 and clean_number[:1] == '1':
+        elif len(clean_number) == 10 and clean_number.startswith('1'):
             if student.is_no_hide == 2:
                 bd_no_display = f"+880-{clean_number[:2]}**-****{clean_number[-2:]}"
             else:
