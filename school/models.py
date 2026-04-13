@@ -732,7 +732,7 @@ from django_countries.fields import CountryField
 
 def batch_years():
     current_year = datetime.datetime.now().year
-    return [(year, year) for year in range(2000, current_year + 1)]
+    return [(year, year) for year in range(2000, current_year)]
 
 class Village(models.Model):
     name = models.CharField(max_length=100)

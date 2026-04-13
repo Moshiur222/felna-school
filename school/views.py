@@ -414,7 +414,7 @@ from .utils import *
 def get_common_data():
     return {
         'villages': Village.objects.all(),
-        'batch_years': [(year) for year in range(2000, datetime.datetime.now().year + 1)],
+        'batch_years': [(year) for year in range(2000, datetime.datetime.now().year)],
         'occupation_choices': StudentRegistration.OCCUPATION_CHOICES,
         'education_choices': StudentRegistration.EDUCATION_CHOICES,
         'gender_choices': StudentRegistration.GENDER_CHOICES,
