@@ -6,16 +6,12 @@
 <meta name="description" content="{{ seos.0.meta_description }}">
 <meta name="keywords" content="{{ seos.0.meta_keywords }}">
 <link rel="canonical" href="{{ seos.0.meta_url }}">
-
-<!-- Open Graph -->
 <meta property="og:title" content="{{ seos.0.meta_title }}">
 <meta property="og:description" content="{{ seos.0.meta_description }}">
 <meta property="og:url" content="{{ seos.0.meta_url }}">
 <meta property="og:image" content="{{ seos.0.meta_image }}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Felna High School">
-
-<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ seos.0.meta_title }}">
 <meta name="twitter:description" content="{{ seos.0.meta_description }}">
@@ -23,7 +19,6 @@
 {% endblock %}
 
 {% block content %}
-<!-- Google Fonts: Roboto -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
 <style>
@@ -41,7 +36,7 @@
         font-family: 'Roboto', sans-serif;
         padding: 60px 0;
         min-height: 100vh;
-        font-size: 1.5rem; 
+        font-size: 1.5rem;
     }
 
     .profile-card-container {
@@ -50,25 +45,26 @@
         gap: 40px;
     }
 
-    /* Left Sidebar */
     .profile-sidebar-card {
         flex: 0 0 380px;
         background: #ffffff;
         border-radius: 20px;
         padding: 50px 25px;
         text-align: center;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         border: 1px solid var(--border-color);
         height: fit-content;
     }
 
     .profile-image-box {
+        position: relative;
         width: 220px;
         height: 220px;
         margin: 0 auto 30px;
         border-radius: 50%;
         padding: 8px;
         border: 3px solid var(--brand-orange);
+        cursor: pointer;
     }
 
     .profile-image-box img {
@@ -77,6 +73,25 @@
         object-fit: cover;
         border-radius: 50%;
     }
+
+    .photo-edit-overlay {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+
+    .profile-image-box:hover .photo-edit-overlay { opacity: 1; }
+    .photo-edit-overlay i { color: white; font-size: 2rem; margin-bottom: 5px; }
+    .photo-edit-overlay span { color: white; font-size: 1.2rem; }
 
     .batch-label {
         background: var(--brand-navy);
@@ -88,13 +103,12 @@
         display: inline-block;
     }
 
-    /* Right Section Details */
     .profile-details-card {
         flex: 1;
         background: #ffffff;
         border-radius: 20px;
         padding: 50px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
         border: 1px solid var(--border-color);
     }
 
@@ -105,6 +119,8 @@
         border-bottom: 2px solid var(--border-color);
         padding-bottom: 30px;
         margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
     }
 
     .detail-header h1 {
@@ -126,12 +142,8 @@
         transition: 0.3s;
     }
 
-    .btn-back-professional:hover {
-        background: var(--brand-navy);
-        color: #fff;
-    }
+    .btn-back-professional:hover { background: var(--brand-navy); color: #fff; }
 
-    /* Info Groups */
     .info-group-title {
         font-size: 1.8rem;
         font-weight: 800;
@@ -144,10 +156,8 @@
         border-left: 5px solid var(--brand-orange);
         padding-left: 15px;
     }
-    
-    .info-group-title:first-of-type {
-        margin-top: 0;
-    }
+
+    .info-group-title:first-of-type { margin-top: 0; }
 
     .data-grid {
         display: grid;
@@ -181,32 +191,8 @@
         flex-wrap: wrap;
     }
 
-    .data-value i {
-        color: var(--brand-navy);
-        width: 30px;
-    }
+    .data-value i { color: var(--brand-navy); width: 30px; }
 
-    /* WhatsApp & Verification */
-    .whatsapp-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        background: #f0fdf4;
-        color: #16a34a;
-        padding: 8px 20px;
-        border-radius: 10px;
-        font-size: 1.5rem;
-        font-weight: 700;
-        border: 2px solid #dcfce7;
-    }
-
-    .verification-ribbon {
-        margin-top: 25px;
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #16a34a;
-    }
-    
     .whatsapp-badge {
         gap: 8px;
         padding: 8px 16px;
@@ -217,40 +203,20 @@
         text-decoration: none;
         transition: all 0.3s ease;
     }
-    
-    .whatsapp-available {
-        background: #25D366;
-        color: #ffffff;
-    }
-    
-    .whatsapp-available:hover {
-        background: #128C7E;
-        transform: translateY(-2px);
-        color: #ffffff;
-    }
-    
-    .whatsapp-not-available {
-        background: #fee2e2;
-        color: #991b1b;
-    }
-    
-    .whatsapp-hidden {
-        background: #fef3c7;
-        color: #d97706;
-    }
-    
-    .whatsapp-badge i {
-        font-size: 1.6rem;
-    }
-    
-    /* Bio Section Styles */
+
+    .whatsapp-available { background: #25D366; color: #ffffff; }
+    .whatsapp-available:hover { background: #128C7E; transform: translateY(-2px); color: #ffffff; }
+    .whatsapp-not-available { background: #fee2e2; color: #991b1b; }
+    .whatsapp-hidden { background: #fef3c7; color: #d97706; }
+    .whatsapp-badge i { font-size: 1.6rem; }
+
     .bio-section {
         margin-top: 30px;
         padding-top: 20px;
         border-top: 2px solid var(--border-color);
         text-align: left;
     }
-    
+
     .bio-title {
         color: var(--brand-navy);
         font-size: 1.6rem;
@@ -260,12 +226,9 @@
         align-items: center;
         gap: 10px;
     }
-    
-    .bio-title i {
-        color: var(--brand-orange);
-        font-size: 1.8rem;
-    }
-    
+
+    .bio-title i { color: var(--brand-orange); font-size: 1.8rem; }
+
     .bio-content {
         font-size: 1.5rem;
         color: var(--text-muted);
@@ -274,15 +237,13 @@
         padding: 20px;
         border-radius: 12px;
         margin-bottom: 20px;
-        /* JUSTIFY TEXT - Added this line */
         text-align: justify;
     }
-    
-    /* Facebook Button */
+
     .facebook-btn {
         display: inline-flex;
+        gap: 2px;
         align-items: center;
-        gap: 10px;
         background: #1877f2;
         color: white;
         padding: 12px 24px;
@@ -293,689 +254,709 @@
         transition: all 0.3s ease;
         margin-top: 10px;
         width: 100%;
-        justify-content: center;
     }
-    
-    .facebook-btn:hover {
-        background: #166fe5;
-        transform: translateY(-2px);
+
+    .facebook-btn:hover { background: #166fe5; transform: translateY(-2px); color: white; }
+    .facebook-btn i { font-size: 1.8rem; }
+
+    .no-data { color: #9ca3af; font-style: italic; font-size: 1.4rem; }
+
+    .btn-edit {
+        background: var(--brand-orange);
         color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
     }
-    
-    .facebook-btn i {
+
+    .btn-edit:hover { background: #d48c1a; transform: translateY(-2px); }
+
+    /* ===== MODAL STYLES ===== */
+    .verify-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 10000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .verify-modal.active { display: flex; }
+
+    .verify-modal-content {
+        background: white;
+        border-radius: 24px;
+        max-width: 500px;
+        width: 90%;
+        padding: 35px;
+        position: relative;
+        animation: modalSlideIn 0.3s ease;
+    }
+
+    @keyframes modalSlideIn {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .verify-modal-header {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--brand-navy);
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 15px;
+    }
+
+    .verify-modal-close {
+        cursor: pointer;
+        font-size: 2rem;
+        color: #999;
+        transition: 0.3s;
+        line-height: 1;
+    }
+
+    .verify-modal-close:hover { color: #333; }
+
+    .verify-modal-body { font-size: 1.5rem; color: var(--text-muted); }
+
+    .verify-modal-body p { margin-bottom: 15px; line-height: 1.6; }
+
+    .phone-display {
+        background: #f3f4f6;
+        padding: 15px;
+        border-radius: 12px;
+        text-align: center;
         font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--brand-navy);
+        margin: 15px 0;
+        letter-spacing: 2px;
     }
-    
-    .no-data {
-        color: #9ca3af;
-        font-style: italic;
-        font-size: 1.4rem;
+
+    .verify-input {
+        width: 100%;
+        max-width: 400px; /* Optional: limits the width for better centering */
+        padding: 14px 16px;
+        font-size: 1.6rem;
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        margin: 15px auto; /* Changed from '15px 0' to '15px auto' for horizontal centering */
+        font-family: 'Roboto', sans-serif;
+        box-sizing: border-box;
+        display: block; /* Ensures margin auto works properly */
+    }
+
+    .verify-input:focus { outline: none; border-color: var(--brand-orange); }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 1.3rem;
+        margin-top: -10px;
+        margin-bottom: 15px;
+        display: none;
+        background: #fef2f2;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #fecaca;
+    }
+
+    .error-message.show { display: block; }
+
+    .verify-submit-btn {
+        background: var(--brand-navy);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-size: 1.6rem;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: 0.3s;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .verify-submit-btn:hover { background: #152f48; }
+    .verify-submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+
+    /* OTP Steps */
+    .otp-step-indicator {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .step-dot {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e5e7eb;
+        color: #6b7280;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+    .step-dot.active { background: var(--brand-navy); color: white; }
+    .step-dot.done { background: #10b981; color: white; }
+
+    .step-line {
+        width: 40px;
+        height: 2px;
+        background: #e5e7eb;
+        transition: 0.3s;
+    }
+
+    .step-line.done { background: #10b981; }
+
+    .otp-boxes {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+    }
+
+    .otp-box {
+        width: 50px;
+        height: 60px;
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        color: var(--brand-navy);
+        font-family: 'Roboto', sans-serif;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .otp-box:focus { border-color: var(--brand-orange); box-shadow: 0 0 0 3px rgba(244,160,36,0.2); }
+    .otp-box.filled { border-color: var(--brand-navy); background: #f0f4f8; }
+
+    .resend-section {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 1.3rem;
+        color: #6b7280;
+    }
+
+    .resend-btn {
+        background: none;
+        border: none;
+        color: var(--brand-orange);
+        font-size: 1.3rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+        font-family: 'Roboto', sans-serif;
+        padding: 0;
+    }
+
+    .resend-btn:disabled { color: #9ca3af; cursor: not-allowed; text-decoration: none; }
+
+    .back-link {
+        background: none;
+        border: none;
+        color: #6b7280;
+        font-size: 1.3rem;
+        cursor: pointer;
+        text-decoration: underline;
+        font-family: 'Roboto', sans-serif;
+        padding: 0;
+        margin-top: 12px;
+        display: block;
+        text-align: center;
+    }
+
+    .success-animation {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .success-icon {
+        width: 70px;
+        height: 70px;
+        background: #10b981;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+        animation: popIn 0.4s ease;
+    }
+
+    @keyframes popIn {
+        0% { transform: scale(0); }
+        70% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .success-icon i { color: white; font-size: 2.5rem; }
+
+    /* Edit Form Styles */
+    .edit-input {
+        display: none;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 1.5rem;
+        border: 2px solid var(--brand-orange);
+        border-radius: 8px;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .edit-input:focus { outline: none; border-color: var(--brand-navy); }
+    select.edit-input { background: white; cursor: pointer; }
+
+    .char-counter {
+        font-size: 1.2rem;
+        margin-top: 5px;
+        text-align: right;
+        color: #6c757d;
+    }
+
+    .char-counter.warning { color: #f0ad4e; }
+    .char-counter.danger { color: #d9534f; font-weight: bold; }
+    .edit-textarea { resize: vertical; min-height: 100px; }
+
+    .edit-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        justify-content: flex-end;
+    }
+
+    .btn-save {
+        background: #10b981;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-save:hover { background: #059669; }
+
+    .btn-cancel-edit {
+        background: #6b7280;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-cancel-edit:hover { background: #4b5563; }
+
+    .name-edit-input {
+        display: none;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 2rem;
+        border: 2px solid var(--brand-orange);
+        border-radius: 8px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 992px) {
+        .data-grid { grid-template-columns: 1fr; }
+        .profile-sidebar-card { flex: 0 0 100%; }
+        .detail-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+        .detail-header h1 { font-size: 2.5rem; }
+        .otp-box { width: 42px; height: 52px; font-size: 1.8rem; }
     }
 
     #container h1{
         color: green;
-        font-size: 2.8rem;
         background-color: transparent;
+        font-size: 2.5rem;
     }
-
-    @media (max-width: 992px) {
-        .data-grid { 
-            grid-template-columns: 1fr; 
-        }
-        .profile-sidebar-card { 
-            flex: 0 0 100%; 
-        }
-        .detail-header { 
-            flex-direction: column; 
-            align-items: flex-start; 
-            gap: 20px; 
-        }
-        .detail-header h1 {
-            font-size: 2.5rem;
-        }
-    }
-    
-    
 </style>
 
 <style>
-    /* ============================================
-       MODERN ALUMNI GALLERY SECTION
-       Professional, Clean, Interactive
-    ============================================ */
-    
-    .alumni-gallery-section {
-        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        border-radius: 24px;
-        padding: 2rem 1.5rem;
-        margin: 2rem 0;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(32, 60, 92, 0.08);
-    }
-    
-    /* Gallery Header */
-    .gallery-header-wrapper {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom: 1.75rem;
-        flex-wrap: wrap;
-        gap: 1rem;
-    }
-    
-    .gallery-title-container {
-        position: relative;
-    }
-    
-    .alumni-gallery-title {
-        font-size: 1.75rem;
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--brand-navy, #203C5C) 0%, #2c4c6e 100%);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-        margin: 0;
-        letter-spacing: -0.3px;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    .title-underline {
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, var(--brand-orange, #F4A024), #ffc44d);
-        border-radius: 3px;
-        margin-top: 8px;
-        transition: width 0.3s ease;
-    }
-    
-    .gallery-title-container:hover .title-underline {
-        width: 100px;
-    }
-    
-    .gallery-controls-hint {
-        display: flex;
-        align-items: center;
-    }
-    
-    .hint-text {
-        font-size: 0.75rem;
-        color: #6c757d;
-        background: rgba(0, 0, 0, 0.04);
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    .hint-text i {
-        margin-right: 5px;
-        font-size: 0.7rem;
-    }
-    
-    /* Slider Wrapper - Infinite Carousel */
-    .slider-wrapper {
-        overflow: hidden;
-        width: 100%;
-        position: relative;
-        border-radius: 16px;
-        cursor: grab;
-        user-select: none;
-    }
-    
-    .slider-wrapper:active {
-        cursor: grabbing;
-    }
-    
-    .slider-track {
-        display: flex;
-        width: max-content;
-        gap: 1.25rem;
-        animation: scrollRightToLeft 28s linear infinite;
-        will-change: transform;
-    }
-    
-    /* Pause animation on hover */
-    .slider-wrapper:hover .slider-track {
-        animation-play-state: paused;
-    }
-    
-    /* Individual Gallery Items */
-    .slider-item {
-        flex: 0 0 auto;
-        width: 280px;
-        transition: transform 0.3s ease;
-    }
-    
-    .slider-item:hover {
-        transform: translateY(-4px);
-    }
-    
-    /* Image Card */
-    .img-card {
-        background: #ffffff;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-        border: 1px solid rgba(0, 0, 0, 0.04);
-    }
-    
-    .slider-item:hover .img-card {
-        box-shadow: 0 15px 35px -12px rgba(0, 0, 0, 0.15);
-        border-color: rgba(244, 160, 36, 0.2);
-    }
-    
-    /* Image Wrapper */
-    .img-wrapper {
-        position: relative;
-        width: 100%;
-        height: 220px;
-        overflow: hidden;
-        background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-    }
-    
-    .img-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        display: block;
-    }
-    
-    .slider-item:hover .img-wrapper img {
-        transform: scale(1.08);
-    }
-    
-    /* Modern Overlay */
-    .image-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(32, 60, 92, 0.85);
-        backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        cursor: pointer;
-    }
-    
-    .img-wrapper:hover .image-overlay {
-        opacity: 1;
-    }
-    
-    .overlay-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-        transform: translateY(10px);
-        transition: transform 0.3s ease;
-    }
-    
-    .img-wrapper:hover .overlay-content {
-        transform: translateY(0);
-    }
-    
-    .overlay-content i {
-        font-size: 2rem;
-        color: var(--brand-orange, #F4A024);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    }
-    
-    .overlay-content span {
-        color: white;
-        font-size: 1.5rem;
-        font-weight: 500;
-        font-family: 'Roboto', sans-serif;
-        letter-spacing: 0.5px;
-        background: rgba(255,255,255,0.15);
-        padding: 4px 12px;
-        border-radius: 30px;
-    }
-    
-    /* Image Caption */
-    .img-caption {
-        padding: 0.75rem 1rem;
-        font-size: 1.5rem;
-        font-weight: 500;
-        color: #334155;
-        background: #ffffff;
-        border-top: 1px solid #f0f2f5;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: center;
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    /* Gallery Dots Navigation */
-    .gallery-dots-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 1.75rem;
-    }
-    
-    .gallery-dots {
-        display: flex;
-        gap: 8px;
-        background: rgba(0, 0, 0, 0.04);
-        padding: 6px 12px;
-        border-radius: 50px;
-    }
-    
-    .gallery-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #cbd5e1;
-        cursor: pointer;
-        transition: all 0.25s ease;
-    }
-    
-    .gallery-dot:hover {
-        background: var(--brand-orange, #F4A024);
-        transform: scale(1.2);
-    }
-    
-    .gallery-dot.active {
-        width: 24px;
-        border-radius: 12px;
-        background: linear-gradient(90deg, var(--brand-navy, #203C5C), var(--brand-orange, #F4A024));
-    }
-    
-    /* ============================================
-       LIGHTBOX MODAL - Professional Image Viewer
-    ============================================ */
-    .lightbox-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0.25s, opacity 0.25s ease;
-    }
-    
-    .lightbox-modal.active {
-        visibility: visible;
-        opacity: 1;
-    }
-    
-    .lightbox-overlay-close {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.92);
-        backdrop-filter: blur(12px);
-        cursor: pointer;
-    }
-    
-    .lightbox-container {
-        position: relative;
-        max-width: 90vw;
-        max-height: 90vh;
-        z-index: 10000;
-    }
-    
-    .lightbox-close-btn {
-        position: absolute;
-        top: -50px;
-        right: -10px;
-        background: rgba(255, 255, 255, 0.15);
-        border: none;
-        color: white;
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        backdrop-filter: blur(8px);
-        z-index: 10001;
-    }
-    
-    .lightbox-close-btn:hover {
-        background: #ef4444;
-        transform: scale(1.05);
-    }
-    
-    .lightbox-nav {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255, 255, 255, 0.15);
-        border: none;
-        color: white;
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-        backdrop-filter: blur(8px);
-        z-index: 10001;
-    }
-    
-    .lightbox-nav:hover {
-        background: var(--brand-orange, #F4A024);
-        transform: translateY(-50%) scale(1.08);
-    }
-    
-    .lightbox-prev {
-        left: -60px;
-    }
-    
-    .lightbox-next {
-        right: -60px;
-    }
-    
-    .lightbox-content {
-        text-align: center;
-        background: transparent;
-    }
-    
-    .lightbox-image {
-        max-width: 85vw;
-        max-height: 80vh;
-        object-fit: contain;
-        border-radius: 12px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        background: #0f172a;
-    }
-    
-    .lightbox-caption {
-        margin-top: 1rem;
-        color: #e2e8f0;
-        font-size: 0.9rem;
-        font-weight: 400;
-        background: rgba(0, 0, 0, 0.6);
-        display: inline-block;
-        padding: 6px 18px;
-        border-radius: 30px;
-        backdrop-filter: blur(4px);
-        font-family: 'Roboto', sans-serif;
-    }
-    
-    /* Animation Keyframes */
-    @keyframes scrollRightToLeft {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-50%);
-        }
-    }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
-        .alumni-gallery-section {
-            padding: 1.25rem;
-            border-radius: 20px;
-        }
-        
-        .alumni-gallery-title {
-            font-size: 1.4rem;
-        }
-        
-        .slider-item {
-            width: 220px;
-        }
-        
-        .img-wrapper {
-            height: 180px;
-        }
-        
-        .lightbox-prev {
-            left: 10px;
-        }
-        
-        .lightbox-next {
-            right: 10px;
-        }
-        
-        .lightbox-nav {
-            width: 40px;
-            height: 40px;
-            font-size: 1rem;
-        }
-        
-        .lightbox-close-btn {
-            top: -40px;
-            right: 5px;
-            width: 38px;
-            height: 38px;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .slider-item {
-            width: 180px;
-        }
-        
-        .img-wrapper {
-            height: 150px;
-        }
-        
-        .overlay-content span {
-            font-size: 0.7rem;
-        }
-        
-        .gallery-header-wrapper {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-    }
+  .alumni-gallery-section{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border-radius:24px;padding:2rem 1.5rem;margin:2rem 0;box-shadow:0 4px 20px rgba(0,0,0,0.05);border:1px solid rgba(32,60,92,0.08)}
+  .gallery-header-wrapper{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.75rem;flex-wrap:wrap;gap:1rem}
+  .gallery-title-container{position:relative}
+  .alumni-gallery-title{font-size:1.75rem;font-weight:700;background:linear-gradient(135deg,var(--brand-navy,#203C5C) 0%,#2c4c6e 100%);background-clip:text;-webkit-background-clip:text;color:transparent;margin:0;letter-spacing:-0.3px;font-family:'Roboto',sans-serif}
+  .title-underline{width:60px;height:3px;background:linear-gradient(90deg,var(--brand-orange,#F4A024),#ffc44d);border-radius:3px;margin-top:8px;transition:width 0.3s ease}
+  .gallery-title-container:hover .title-underline{width:100px}
+  .slider-wrapper{overflow:hidden;width:100%;position:relative;border-radius:16px;cursor:grab;user-select:none}
+  .slider-wrapper:active{cursor:grabbing}
+  .slider-track{display:flex;width:max-content;gap:1.25rem;animation:scrollRTL 28s linear infinite;will-change:transform}
+  .slider-wrapper:hover .slider-track{animation-play-state:paused}
+  .slider-item{flex:0 0 auto;width:240px;transition:transform 0.3s ease}
+  .slider-item:hover{transform:translateY(-4px)}
+  .img-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.06);transition:all 0.3s cubic-bezier(0.2,0,0,1);border:1px solid rgba(0,0,0,0.04)}
+  .slider-item:hover .img-card{box-shadow:0 15px 35px -12px rgba(0,0,0,0.15);border-color:rgba(244,160,36,0.2)}
+  .img-wrapper{position:relative;width:100%;height:260px;overflow:hidden;background:#f8fafc;display:flex;align-items:center;justify-content:center;}
+  .img-wrapper img{width:100%;height:100%;object-fit:contain;transition:transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);display:block}
+  .slider-item:hover .img-wrapper img{transform:scale(1.04)}
+  .image-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(32,60,92,0.82);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.3s ease;cursor:pointer;z-index:2}
+  .img-wrapper:hover .image-overlay{opacity:1}
+  .overlay-content{display:flex;flex-direction:column;align-items:center;gap:8px;transform:translateY(10px);transition:transform 0.3s ease}
+  .img-wrapper:hover .overlay-content{transform:translateY(0)}
+  .overlay-content i{font-size:2rem;color:var(--brand-orange,#F4A024)}
+  .overlay-content span{color:white;font-size:1.5rem;font-weight:500;background:rgba(255,255,255,0.15);padding:4px 12px;border-radius:30px}
+  .img-caption{padding:0.75rem 1rem;font-size:1.5rem;font-weight:500;color:#334155;background:#fff;border-top:1px solid #f0f2f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-family:'Roboto',sans-serif}
+  .gallery-dots-container{display:flex;justify-content:center;margin-top:1.75rem}
+  .gallery-dots{display:flex;gap:8px;background:rgba(0,0,0,0.04);padding:6px 12px;border-radius:50px}
+  .gallery-dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;cursor:pointer;transition:all 0.25s ease}
+  .gallery-dot:hover{background:var(--brand-orange,#F4A024);transform:scale(1.2)}
+  .gallery-dot.active{width:24px;border-radius:12px;background:linear-gradient(90deg,var(--brand-navy,#203C5C),var(--brand-orange,#F4A024))}
+  @keyframes scrollRTL{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  @media(max-width:768px){
+    .alumni-gallery-section{padding:1.25rem;border-radius:20px}
+    .alumni-gallery-title{font-size:1.4rem}
+    .slider-item{width:200px}
+    .img-wrapper{height:210px}
+  }
+  @media(max-width:480px){
+    .slider-item{width:170px}
+    .img-wrapper{height:180px}
+    .gallery-header-wrapper{flex-direction:column;align-items:flex-start}
+  }
 </style>
+
+<!-- ===== VERIFICATION MODAL ===== -->
+<div id="verifyModal" class="verify-modal">
+    <div class="verify-modal-content">
+        <div class="verify-modal-header">
+            <span id="modalTitle" style = "padding-left: 12rem;">Verify Your Identity</span>
+            <span class="verify-modal-close" onclick="closeModal()">&times;</span>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="otp-step-indicator">
+            <div class="step-dot active" id="stepDot1">1</div>
+            <div class="step-line" id="stepLine1"></div>
+            <div class="step-dot" id="stepDot2">2</div>
+            <div class="step-line" id="stepLine2"></div>
+            <div class="step-dot" id="stepDot3">✓</div>
+        </div>
+
+        <div class="verify-modal-body">
+
+            <!-- STEP 1: Phone Number Entry -->
+            <div id="step1">
+                <div class="phone-display">
+                    {% if student.bd_no%}
+                        <p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }} </p>
+                    {% else %}
+                        <p>You Don't have Bangladeshi Number *** ****</p>    
+                    {% endif %}
+                </div>
+                <input type="tel" id="verificationPhone" class="verify-input"
+                       placeholder="Enter your full phone number" autocomplete="off">
+                <div id="errorMessage" class="error-message"></div>
+                <button class="verify-submit-btn" id="step1Btn" onclick="verifyPhoneNumber()">
+                    <i class="fas fa-arrow-right"></i> Continue
+                </button>
+            </div>
+
+            <!-- STEP 2: OTP Entry (BD only) -->
+            <div id="step2" style="display: none;">
+                <p>We've sent a <strong>6-digit OTP</strong> to your BD mobile number:</p>
+                <div class="phone-display" id="otpPhoneDisplay">+880 *** ****</div>
+                <p style="font-size: 1.3rem; color: #6b7280; margin-top: -5px;">Enter the OTP below to proceed.</p>
+
+                <div class="otp-boxes">
+                    <input type="text" class="otp-box" maxlength="1" id="otp0" oninput="otpInput(this,0)" onkeydown="otpKeydown(event,0)">
+                    <input type="text" class="otp-box" maxlength="1" id="otp1" oninput="otpInput(this,1)" onkeydown="otpKeydown(event,1)">
+                    <input type="text" class="otp-box" maxlength="1" id="otp2" oninput="otpInput(this,2)" onkeydown="otpKeydown(event,2)">
+                    <input type="text" class="otp-box" maxlength="1" id="otp3" oninput="otpInput(this,3)" onkeydown="otpKeydown(event,3)">
+                    <input type="text" class="otp-box" maxlength="1" id="otp4" oninput="otpInput(this,4)" onkeydown="otpKeydown(event,4)">
+                    <input type="text" class="otp-box" maxlength="1" id="otp5" oninput="otpInput(this,5)" onkeydown="otpKeydown(event,5)">
+                </div>
+
+                <div id="otpErrorMessage" class="error-message"></div>
+
+                <button class="verify-submit-btn" id="verifyOtpBtn" onclick="verifyOtp()">
+                    <i class="fas fa-check-circle"></i> Verify OTP
+                </button>
+
+                <div class="resend-section">
+                    Didn't receive OTP?
+                    <button class="resend-btn" id="resendBtn" onclick="resendOtp()" disabled>Resend OTP</button>
+                    <span id="resendTimer">in <strong id="timerCount">30</strong>s</span>
+                </div>
+            </div>
+
+            <!-- STEP 3: Success -->
+            <div id="step3" style="display: none;">
+                <div class="success-animation">
+                    <div class="success-icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <p style="font-size: 1.6rem; font-weight: 700; color: var(--brand-navy); margin-bottom: 8px;">
+                        Identity Verified!
+                    </p>
+                    <p style="font-size: 1.4rem; color: #6b7280;">
+                        You can now edit your profile.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
 <div class="profile-main-wrapper">
     <div class="container">
         <div class="profile-card-container">
-            
+
             <!-- Sidebar (Left) -->
             <div class="profile-sidebar-card">
-                <div class="profile-image-box">
+                <div class="profile-image-box" id="profileImageBox">
                     {% if student.student_photo %}
-                        <img src="{{ student.student_photo.url }}" alt="{{ student.student_name }}">
+                        <img id="profileImage" src="{{ student.student_photo.url }}" alt="{{ student.student_name }}">
                     {% else %}
-                        <img src="{% static 'img/default_student.png' %}" alt="No Photo">
+                        <img id="profileImage" src="{% static 'img/default_student.png' %}" alt="No Photo">
                     {% endif %}
+                    <div class="photo-edit-overlay" id="photoEditOverlay" style="display: none;">
+                        <i class="fas fa-camera"></i>
+                        <span>Change Photo</span>
+                    </div>
+                    <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="previewPhoto(this)">
                 </div>
+
                 <div>
-                    <h1>{{ student.student_name }}</h1>
+                    <h1 id="nameDisplay">{{ student.student_name }}</h1>
+                    <input type="text" id="nameEditInput" class="name-edit-input" value="{{ student.student_name }}" placeholder="Enter full name">
                 </div>
+
                 <span class="batch-label">BATCH {{ student.batch }}</span>
-                
-                {% comment %} <!-- Verification Status -->
-                <div class="verification-ribbon mt-4">
-                    {% if student.is_verified %}
-                        <span class="whatsapp-status">
-                            <i class="fas fa-check-circle"></i> Is Not Verified Student
-                        </span>
-                    {% else %}
-                        <span class="whatsapp-status" style="background: #fef3c7; color: #d97706;">
-                            <i class="fas fa-clock"></i> Pending Verification
-                        </span>
-                    {% endif %}
-                </div> {% endcomment %}
-                
-                <!-- Bio Section in Sidebar -->
+
                 <div class="bio-section">
                     <div class="bio-title">
                         <i class="fas fa-align-left"></i>
                         <span>About Me</span>
                     </div>
                     {% if student.student_bio %}
-                        <div class="bio-content">
-                            {{ student.student_bio|linebreaks }}
-                        </div>
+                        <div class="bio-content" id="bioContent">{{ student.student_bio|linebreaks }}</div>
                     {% else %}
-                        <div class="no-data" style="text-align: center; padding: 20px;">
+                        <div class="no-data" style="text-align:center; padding:20px;" id="bioContent">
                             <i class="fas fa-info-circle"></i> No bio added yet
                         </div>
                     {% endif %}
+                    <div style="position: relative;">
+                        <textarea id="bioEditInput" class="edit-input edit-textarea" maxlength="1000"
+                                  style="display:none; width:100%; min-height:150px; padding:12px; font-size:1.5rem;">{{ student.student_bio }}</textarea>
+                        <div id="bioCounter" class="char-counter" style="display:none;">0 / 1000 characters</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Details Area (Right) -->
-            <div class="profile-details-card">
-                <!-- Header -->
+            <!-- Details (Right) -->
+            <div class="profile-details-card" id="profileDetailsCard">
                 <div class="detail-header">
                     <div>
-                                        <div class="d-flex justify-content-between mt-4">
-                    <!-- Previous Button -->
-                    {% if previous_student %}
-                        <a href="{% url 'registration_student_detail' previous_student.slug %}" 
-                        class="btn btn-primary">
-                            ← Previous
-                        </a>
-                    {% else %}
-                        <button class="btn btn-secondary" disabled>
-                            ← Previous
-                        </button>
-                    {% endif %}
-
-                    <!-- Next Button -->
-                    {% if next_student %}
-                        <a href="{% url 'registration_student_detail' next_student.slug %}" 
-                        class="btn btn-primary">
-                            Next →
-                        </a>
-                    {% else %}
-                        <button class="btn btn-secondary" disabled>
-                            Next →
-                        </button>
-                    {% endif %}
-                </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            {% if previous_student %}
+                                <a href="{% url 'registration_student_detail' previous_student.slug %}" class="btn btn-primary">← Previous</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>← Previous</button>
+                            {% endif %}
+                            {% if next_student %}
+                                <a href="{% url 'registration_student_detail' next_student.slug %}" class="btn btn-primary">Next →</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>Next →</button>
+                            {% endif %}
+                        </div>
                     </div>
-                    <a href="{% url 'registration_students_list' %}" class="btn-back-professional">
-                        <i class="fa fa-arrow-left mr-2"></i> Back to List
-                    </a>
+                    <div style="display: flex; gap: 15px;">
+                        <button id="editButton" class="btn-edit" onclick="openModal()">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </button>
+                        <a href="{% url 'registration_students_list' %}" class="btn-back-professional">
+                            <i class="fa fa-arrow-left mr-2"></i> Back to List
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Group 1: Personal -->
+                <!-- Personal Details -->
                 <span class="info-group-title">Personal Details</span>
                 <div class="data-grid">
                     <div class="data-item">
                         <span class="data-label">Gender</span>
-                        <span class="data-value"><i class="fa fa-venus-mars"></i> {{ student.get_gender_display }}</span>
+                        <span class="data-value" id="genderValue">
+                            <i class="fa fa-venus-mars"></i> {{ student.get_gender_display|default:"Not Specified" }}
+                        </span>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Marital Status</span>
-                        <span class="data-value"><i class="fa fa-heart"></i> {{ student.get_marrital_status_display }}</span>
+                        <span class="data-value" id="maritalStatusValue">
+                            <i class="fa fa-heart"></i> {{ student.get_marrital_status_display|default:"Not Specified" }}
+                        </span>
+                        <select id="maritalStatusEdit" name="marrital_status" class="edit-input" style="display:none;">
+                            <option value="">Select Marital Status</option>
+                            {% for maritalstatus in maritalstatus_choices %}
+                                <option value="{{ maritalstatus.0 }}" {% if student.marrital_status == maritalstatus.0 %}selected{% endif %}>
+                                    {{ maritalstatus.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Home Village</span>
-                        <span class="data-value"><i class="fa fa-home"></i> {{ student.village.name|default:"Not Specified" }}</span>
+                        <span class="data-value" id="villageValue">
+                            <i class="fa fa-home"></i> {{ student.village.name|default:"Not Specified" }}
+                        </span>
+                        <select id="villageEdit" class="edit-input" style="display:none;">
+                            <option value="">Select Village</option>
+                            {% for village in villages %}
+                                <option value="{{ village.name }}" {% if student.village.name == village.name %}selected{% endif %}>{{ village.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Country of Residence</span>
-                        <span class="data-value"><i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}</span>
+                        <span class="data-value" id="currentLocationValue">
+                            <i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}
+                        </span>
+                        <select id="currentLocationEdit" class="edit-input" style="display:none;">
+                            <option value="">Select Country</option>
+                            {% for code, name in countries %}
+                                <option value="{{ name }}" {% if student.current_location.name == name %}selected{% endif %}>{{ name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Job Location</span>
-                        <span class="data-value"><i class="fa fa-map-marker-alt"></i> {{ student.job_location.name }}</span>
+                        <span class="data-value" id="jobLocationValue">
+                            <i class="fa fa-map-marker-alt"></i> {{ student.job_location.name }}
+                        </span>
+                        <select id="jobLocationEdit" class="edit-input" style="display:none;">
+                            <option value="">Select Job Location</option>
+                            {% for code, name in countries %}
+                                <option value="{{ name }}" {% if student.job_location.name == name %}selected{% endif %}>{{ name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
 
-                <!-- Group 2: Career & Education -->
+                <!-- Career & Education -->
                 <span class="info-group-title">Career & Education</span>
                 <div class="data-grid">
                     <div class="data-item">
                         <span class="data-label">Highest Qualification</span>
-                        <span class="data-value"><i class="fa fa-graduation-cap"></i> {{ student.get_last_edu_display }}</span>
+                        <span class="data-value" id="lastEduValue">
+                            <i class="fa fa-graduation-cap"></i> {{ student.get_last_edu_display|default:"Not Specified" }}
+                        </span>
+                        <select id="lastEduEdit" name="last_edu" class="edit-input" style="display:none;">
+                            <option value="">Select Qualification</option>
+                            {% for value, label in education_choices %}
+                                <option value="{{ value }}" {% if student.last_edu == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Current Occupation</span>
-                        <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.get_occupation_display }}</span>
+                        <span class="data-value" id="occupationValue">
+                            <i class="fa fa-briefcase"></i> {{ student.get_occupation_display|default:"Not Specified" }}
+                        </span>
+                        <select id="occupationEdit" name="occupation" class="edit-input" style="display:none;">
+                            <option value="">Select Occupation</option>
+                            {% for value, label in occupation_choices %}
+                                <option value="{{ value }}" {% if student.occupation == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                 </div>
-                <div class="data-grid">
+
+                <div>
                     <div class="data-item">
                         <span class="data-label">Job Description</span>
-                        <span class="data-value"><i class="fa fa-briefcase"></i> {{ student.job_description }}</span>
+                        <span id="jobDescriptionValue">
+                            <i class="fa fa-briefcase"></i> {{ student.job_description|default:"Not specified" }}
+                        </span>
+                        <div style="position: relative; width: 100%;">
+                            <textarea id="jobDescriptionEdit" class="edit-input edit-textarea" maxlength="200" rows="3"
+                                      style="display:none; width:100%; padding:8px;">{{ student.job_description|default:'' }}</textarea>
+                            <div id="jobDescCounter" class="char-counter" style="display:none;">0 / 200 characters</div>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- Group 3: Contact Information -->
+
+                <!-- Contact Information -->
                 <span class="info-group-title">Contact Information</span>
                 <div class="data-grid">
-                
-                    <!-- Mobile Number (BD) -->
                     <div class="data-item">
                         <span class="data-label">Mobile Number (BD)</span>
                         <span class="data-value">
-                            <i class="fa fa-phone"></i> 
-                            {{ bd_no_display }}
+                            <i class="fa fa-phone"></i> {{ student.bd_no }}
                         </span>
                     </div>
-                
-                    <!-- WhatsApp (BD Number) -->
+
                     <div class="data-item">
                         <span class="data-label">WhatsApp (BD Number)</span>
                         <span class="data-value">
                             {% if student.is_whatsapp_bd == 1 %}
                                 {% if student.bd_no %}
                                     {% if student.is_no_hide == 1 %}
-                                        {# Show full number and WhatsApp link #}
                                         {% with clean_number=student.bd_no|cut:'+'|cut:' '|cut:'-'|cut:'('|cut:')'|cut:'*' %}
                                             <a href="https://wa.me/{{ clean_number }}" target="_blank" class="whatsapp-badge whatsapp-available">
                                                 <i class="fab fa-whatsapp"></i> Chat on WhatsApp
                                             </a>
                                         {% endwith %}
                                     {% else %}
-                                        {# Hide number but WhatsApp is available #}
-                                        <span class="whatsapp-badge whatsapp-hidden">
-                                            <i class="fas fa-user-secret"></i>Available (Number Hidden)
-                                        </span>
+                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available (Number Hidden)</span>
                                     {% endif %}
                                 {% else %}
-                                    <span class="whatsapp-badge whatsapp-not-available">
-                                        <i class="fas fa-exclamation-circle"></i> No Number
-                                    </span>
+                                    <span class="whatsapp-badge whatsapp-not-available"><i class="fas fa-exclamation-circle"></i> No Number</span>
                                 {% endif %}
                             {% else %}
-                                <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fab fa-whatsapp"></i> Not Available
-                                </span>
+                                <span class="whatsapp-badge whatsapp-not-available"><i class="fab fa-whatsapp"></i> Not Available</span>
                             {% endif %}
                         </span>
                     </div>
-                
-                    <!-- Mobile Number (Abroad) -->
+
                     <div class="data-item">
                         <span class="data-label">Mobile Number (Abroad)</span>
                         <span class="data-value">
-                            <i class="fa fa-globe"></i> 
+                            <i class="fa fa-globe"></i>
                             {% if student.abroad_no %}
                                 {% if student.is_no_hide == 1 %}
                                     {{ student.abroad_no }}
                                 {% else %}
-                                    <span class="whatsapp-badge whatsapp-hidden">
-                                        <i class="fas fa-user-secret"></i> Hidden
-                                    </span>
+                                    <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Hidden</span>
                                 {% endif %}
                             {% else %}
                                 <span class="no-data">Not Provided</span>
                             {% endif %}
                         </span>
                     </div>
-                
-                    <!-- WhatsApp (Abroad Number) -->
+
                     <div class="data-item">
                         <span class="data-label">WhatsApp (Abroad Number)</span>
                         <span class="data-value">
@@ -988,134 +969,992 @@
                                             </a>
                                         {% endwith %}
                                     {% else %}
-                                        <span class="whatsapp-badge whatsapp-hidden">
-                                            <i class="fas fa-user-secret"></i>Available (Number Hidden)
-                                        </span>
+                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available (Number Hidden)</span>
                                     {% endif %}
                                 {% else %}
-                                    <span class="whatsapp-badge whatsapp-not-available">
-                                        <i class="fas fa-exclamation-circle"></i> No Number
-                                    </span>
+                                    <span class="whatsapp-badge whatsapp-not-available"><i class="fas fa-exclamation-circle"></i> No Number</span>
                                 {% endif %}
                             {% else %}
-                                <span class="whatsapp-badge whatsapp-not-available">
-                                    <i class="fab fa-whatsapp"></i> Not Available
-                                </span>
+                                <span class="whatsapp-badge whatsapp-not-available"><i class="fab fa-whatsapp"></i> Not Available</span>
                             {% endif %}
                         </span>
                     </div>
+
                     <div class="data-item">
                         <span class="data-label">Facebook Profile</span>
-                        <span class="data-value">
-                            <!-- Facebook Profile Button -->
+                        <span class="data-value" id="facebookValue">
                             {% if student.facebook_profile %}
                                 <a href="{{ student.facebook_profile }}" target="_blank" class="facebook-btn">
                                     <i class="fab fa-facebook"></i> Connect on Facebook
                                 </a>
                             {% else %}
-                                <div class="no-data" style="text-align: center; margin-top: 20px; padding: 15px; background: #f9fafb; border-radius: 12px;">
+                                <div class="no-data" style="text-align:center; margin-top:20px; padding:15px; background:#f9fafb; border-radius:12px;">
                                     <i class="fab fa-facebook"></i> No Facebook profile added
                                 </div>
                             {% endif %}
                         </span>
+                        <input type="url" id="facebookEdit" class="edit-input"
+                               value="{{ student.facebook_profile|default:'' }}"
+                               placeholder="https://facebook.com/your-profile" style="display:none;">
                     </div>
                 </div>
-            </div> <!-- End Right Section -->
+
+                <!-- Edit Action Buttons -->
+                <div class="edit-actions" id="editActions" style="display: none;">
+                    <button class="btn-cancel-edit" onclick="cancelEdit()">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                    <button class="btn-save" onclick="saveChanges()">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    let isEditMode = false;
+    let verifiedPhone = null;
+    let selectedPhotoFile = null;
+    let currentBdPhone = null;
+    let resendInterval = null;
+
+    // ===== MODAL CONTROLS =====
+    function openModal() {
+        document.getElementById('verifyModal').classList.add('active');
+        resetModal();
+    }
+
+    function closeModal() {
+        document.getElementById('verifyModal').classList.remove('active');
+        clearInterval(resendInterval);
+    }
+
+    function resetModal() {
+        document.getElementById('verificationPhone').value = '';
+        document.getElementById('errorMessage').classList.remove('show');
+        document.getElementById('errorMessage').innerHTML = '';
+        document.getElementById('step1Btn').disabled = false;
+        document.getElementById('step1Btn').innerHTML = '<i class="fas fa-arrow-right"></i> Continue';
+        clearOtpBoxes();
+        showStep(1);
+        updateStepIndicator(1);
+    }
+
+    function showStep(step) {
+        document.getElementById('step1').style.display = step === 1 ? 'block' : 'none';
+        document.getElementById('step2').style.display = step === 2 ? 'block' : 'none';
+        document.getElementById('step3').style.display = step === 3 ? 'block' : 'none';
+    }
+
+    function updateStepIndicator(activeStep) {
+        const dot1 = document.getElementById('stepDot1');
+        const dot2 = document.getElementById('stepDot2');
+        const dot3 = document.getElementById('stepDot3');
+        const line1 = document.getElementById('stepLine1');
+        const line2 = document.getElementById('stepLine2');
+
+        dot1.className = 'step-dot';
+        dot2.className = 'step-dot';
+        dot3.className = 'step-dot';
+        line1.className = 'step-line';
+        line2.className = 'step-line';
+
+        if (activeStep === 1) {
+            dot1.classList.add('active');
+        } else if (activeStep === 2) {
+            dot1.classList.add('done');
+            dot1.innerHTML = '✓';
+            line1.classList.add('done');
+            dot2.classList.add('active');
+        } else if (activeStep === 3) {
+            dot1.classList.add('done'); dot1.innerHTML = '✓';
+            dot2.classList.add('done'); dot2.innerHTML = '✓';
+            dot3.classList.add('done');
+            line1.classList.add('done');
+            line2.classList.add('done');
+        }
+    }
+
+    function backToStep1() {
+        clearInterval(resendInterval);
+        clearOtpBoxes();
+        document.getElementById('otpErrorMessage').classList.remove('show');
+        showStep(1);
+        updateStepIndicator(1);
+    }
+
+    // ===== OTP BOX CONTROLS =====
+    function clearOtpBoxes() {
+        for (let i = 0; i < 6; i++) {
+            const box = document.getElementById('otp' + i);
+            if (box) { box.value = ''; box.classList.remove('filled'); }
+        }
+    }
+
+    function otpInput(el, index) {
+        el.value = el.value.replace(/[^0-9]/g, '');
+        if (el.value) {
+            el.classList.add('filled');
+            if (index < 5) {
+                document.getElementById('otp' + (index + 1)).focus();
+            } else {
+                el.blur();
+                // Auto verify when all 6 digits entered
+                verifyOtp();
+            }
+        } else {
+            el.classList.remove('filled');
+        }
+        document.getElementById('otpErrorMessage').classList.remove('show');
+    }
+
+    function otpKeydown(event, index) {
+        if (event.key === 'Backspace') {
+            const box = document.getElementById('otp' + index);
+            if (!box.value && index > 0) {
+                const prev = document.getElementById('otp' + (index - 1));
+                prev.value = '';
+                prev.classList.remove('filled');
+                prev.focus();
+            }
+        }
+        if (event.key === 'ArrowLeft' && index > 0) {
+            document.getElementById('otp' + (index - 1)).focus();
+        }
+        if (event.key === 'ArrowRight' && index < 5) {
+            document.getElementById('otp' + (index + 1)).focus();
+        }
+    }
+
+    function getOtpValue() {
+        let otp = '';
+        for (let i = 0; i < 6; i++) {
+            otp += document.getElementById('otp' + i).value;
+        }
+        return otp;
+    }
+
+    // ===== PHONE NORMALIZATION =====
+    function normalize(num) {
+        if (!num) return "";
+        num = num.replace(/[\s\-\(\)\+]/g, '');
+        if (num.startsWith('0')) num = num.substring(1);
+        if (num.startsWith('880')) num = num.substring(3);
+        return num;
+    }
+
+    // ===== STEP 1: VERIFY PHONE =====
+    function verifyPhoneNumber() {
+        const enteredNumber = document.getElementById('verificationPhone').value.trim();
+        const errorDiv = document.getElementById('errorMessage');
+
+        if (!enteredNumber) {
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your phone number';
+            errorDiv.classList.add('show');
+            return;
+        }
+
+        let cleanEntered = enteredNumber.replace(/[\s\-\(\)\+]/g, '');
+        let bdNumber = "{{ student.bd_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
+        let abroadNumber = "{{ student.abroad_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
+
+        let normalizedEntered = normalize(cleanEntered);
+        let normalizedBd = normalize(bdNumber);
+        let normalizedAbroad = normalize(abroadNumber);
+
+        const enteredLast10 = normalizedEntered.slice(-10);
+        const bdLast10 = normalizedBd.slice(-10);
+        const abroadLast10 = normalizedAbroad.slice(-10);
+
+        // ✅ BD Number Match → Send OTP
+        if (bdNumber && (bdLast10 === enteredLast10 || normalizedBd === normalizedEntered)) {
+            currentBdPhone = bdNumber;
+            sendOtp(bdNumber);
+            return;
+        }
+
+        // ✅ Abroad Number Match → Direct Edit (No OTP)
+        if (abroadNumber && (abroadLast10 === enteredLast10 || normalizedAbroad === normalizedEntered)) {
+            verifiedPhone = enteredNumber;
+            sendOtp(bdNumber);
+            return;
+        }
+
+        // ❌ No Match
+        errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> Phone number does not match our records. Please try again.';
+        errorDiv.classList.add('show');
+    }
+
+    // ===== SEND OTP =====
+    function sendOtp(bdPhone) {
+        const btn = document.getElementById('step1Btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+
+        const formData = new FormData();
+        formData.append('phone', bdPhone);
+        formData.append('student_id', '{{ student.id }}');
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch("{% url 'send_otp_1' %}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-right"></i> Continue';
+
+            if (data.success) {
+                // Mask phone for display
+                let displayPhone = bdPhone;
+                if (displayPhone.length >= 4) {
+                    displayPhone = '+880 ' + displayPhone.slice(-10, -6).replace(/./g, '*') + ' ' + displayPhone.slice(-4);
+                }
+                document.getElementById('otpPhoneDisplay').textContent = displayPhone;
+                document.getElementById('otpErrorMessage').classList.remove('show');
+                clearOtpBoxes();
+                showStep(2);
+                updateStepIndicator(2);
+                startResendTimer();
+                // Focus first OTP box
+                setTimeout(() => document.getElementById('otp0').focus(), 300);
+            } else {
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Failed to send OTP. Please try again.');
+                errorDiv.classList.add('show');
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrow-right"></i> Continue';
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.innerHTML = '<i class="fas fa-wifi"></i> Network error. Please try again.';
+            errorDiv.classList.add('show');
+        });
+    }
+
+    // ===== VERIFY OTP =====
+    function verifyOtp() {
+        const otp = getOtpValue();
+        const errorDiv = document.getElementById('otpErrorMessage');
+
+        if (otp.length !== 6) {
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter all 6 digits of the OTP.';
+            errorDiv.classList.add('show');
+            return;
+        }
+
+        const btn = document.getElementById('verifyOtpBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+
+        const formData = new FormData();
+        formData.append('phone', currentBdPhone);
+        formData.append('otp', otp);
+        formData.append('student_id', '{{ student.id }}');
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch("{% url 'verify_otp_1' %}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Verify OTP';
+
+            if (data.success) {
+                verifiedPhone = currentBdPhone;
+                clearInterval(resendInterval);
+                // Show success step briefly, then open edit mode
+                showStep(3);
+                updateStepIndicator(3);
+                setTimeout(() => {
+                    closeModal();
+                    enableEditMode();
+                }, 1200);
+            } else {
+                errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> ' + (data.message || 'Invalid OTP. Please try again.');
+                errorDiv.classList.add('show');
+                // Shake OTP boxes
+                document.querySelectorAll('.otp-box').forEach(box => {
+                    box.style.borderColor = '#dc2626';
+                    setTimeout(() => box.style.borderColor = '', 1500);
+                });
+            }
+        })
+        .catch(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-check-circle"></i> Verify OTP';
+            errorDiv.innerHTML = '<i class="fas fa-wifi"></i> Network error. Please try again.';
+            errorDiv.classList.add('show');
+        });
+    }
+
+    // ===== RESEND OTP =====
+    function resendOtp() {
+        clearOtpBoxes();
+        document.getElementById('otpErrorMessage').classList.remove('show');
+        sendOtp(currentBdPhone);
+    }
+
+    function startResendTimer() {
+        clearInterval(resendInterval);
+    
+        let seconds = 300; // 5 minutes
+    
+        const resendBtn = document.getElementById('resendBtn');
+        const resendTimer = document.getElementById('resendTimer');
+        const timerCount = document.getElementById('timerCount');
+    
+        resendBtn.disabled = true;
+        resendTimer.style.display = 'inline';
+    
+        function updateTimer() {
+            const min = Math.floor(seconds / 60);
+            const sec = seconds % 60;
+        
+            timerCount.textContent =
+                String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+        }
+    
+        updateTimer(); // show 05:00 first
+    
+        resendInterval = setInterval(() => {
+            seconds--;
+        
+            updateTimer(); // always show MM:SS only
+        
+            if (seconds <= 0) {
+                clearInterval(resendInterval);
+                resendBtn.disabled = false;
+                resendTimer.style.display = 'none';
+            }
+        }, 1000);
+    }
+
+    // ===== PHOTO PREVIEW =====
+    function previewPhoto(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+            selectedPhotoFile = input.files[0];
+        }
+    }
+
+    // ===== CHARACTER COUNTERS =====
+    function updateBioCounter() {
+        const textarea = document.getElementById('bioEditInput');
+        const counter = document.getElementById('bioCounter');
+        if (textarea && counter) {
+            const length = textarea.value.length;
+            counter.textContent = length + ' / 1000 characters';
+            counter.className = 'char-counter' + (length > 900 ? (length >= 1000 ? ' danger' : ' warning') : '');
+        }
+    }
+
+    function updateJobDescCounter() {
+        const textarea = document.getElementById('jobDescriptionEdit');
+        const counter = document.getElementById('jobDescCounter');
+        if (textarea && counter) {
+            const length = textarea.value.length;
+            counter.textContent = length + ' / 200 characters';
+            counter.className = 'char-counter' + (length > 180 ? (length >= 200 ? ' danger' : ' warning') : '');
+        }
+    }
+
+    // ===== ENABLE EDIT MODE =====
+    function enableEditMode() {
+        isEditMode = true;
+
+        document.getElementById('photoEditOverlay').style.display = 'flex';
+        document.getElementById('profileImageBox').style.cursor = 'pointer';
+
+        document.getElementById('nameDisplay').style.display = 'none';
+        document.getElementById('nameEditInput').style.display = 'block';
+
+        document.getElementById('maritalStatusValue').style.display = 'none';
+        document.getElementById('maritalStatusEdit').style.display = 'block';
+
+        document.getElementById('villageValue').style.display = 'none';
+        document.getElementById('villageEdit').style.display = 'block';
+
+        document.getElementById('currentLocationValue').style.display = 'none';
+        document.getElementById('currentLocationEdit').style.display = 'block';
+
+        document.getElementById('jobLocationValue').style.display = 'none';
+        document.getElementById('jobLocationEdit').style.display = 'block';
+
+        document.getElementById('lastEduValue').style.display = 'none';
+        document.getElementById('lastEduEdit').style.display = 'block';
+
+        document.getElementById('occupationValue').style.display = 'none';
+        document.getElementById('occupationEdit').style.display = 'block';
+
+        document.getElementById('jobDescriptionValue').style.display = 'none';
+        const jobDescEdit = document.getElementById('jobDescriptionEdit');
+        jobDescEdit.style.display = 'block';
+        document.getElementById('jobDescCounter').style.display = 'block';
+        updateJobDescCounter();
+        jobDescEdit.addEventListener('input', updateJobDescCounter);
+
+        document.getElementById('facebookValue').style.display = 'none';
+        document.getElementById('facebookEdit').style.display = 'block';
+
+        document.getElementById('bioContent').style.display = 'none';
+        const bioEdit = document.getElementById('bioEditInput');
+        bioEdit.style.display = 'block';
+        document.getElementById('bioCounter').style.display = 'block';
+        updateBioCounter();
+        bioEdit.addEventListener('input', updateBioCounter);
+
+        document.getElementById('editActions').style.display = 'flex';
+        document.getElementById('editButton').style.display = 'none';
+    }
+
+    // ===== CANCEL EDIT =====
+    function cancelEdit() {
+        isEditMode = false;
+        verifiedPhone = null;
+        selectedPhotoFile = null;
+
+        const originalPhotoSrc = "{% if student.student_photo %}{{ student.student_photo.url }}{% else %}{% static 'img/default_student.png' %}{% endif %}";
+        document.getElementById('profileImage').src = originalPhotoSrc;
+        document.getElementById('photoEditOverlay').style.display = 'none';
+
+        document.getElementById('nameDisplay').style.display = 'block';
+        document.getElementById('nameEditInput').style.display = 'none';
+
+        document.getElementById('maritalStatusValue').style.display = 'flex';
+        document.getElementById('maritalStatusEdit').style.display = 'none';
+
+        document.getElementById('villageValue').style.display = 'flex';
+        document.getElementById('villageEdit').style.display = 'none';
+
+        document.getElementById('currentLocationValue').style.display = 'flex';
+        document.getElementById('currentLocationEdit').style.display = 'none';
+
+        document.getElementById('jobLocationValue').style.display = 'flex';
+        document.getElementById('jobLocationEdit').style.display = 'none';
+
+        document.getElementById('lastEduValue').style.display = 'flex';
+        document.getElementById('lastEduEdit').style.display = 'none';
+
+        document.getElementById('occupationValue').style.display = 'flex';
+        document.getElementById('occupationEdit').style.display = 'none';
+
+        document.getElementById('jobDescriptionValue').style.display = 'flex';
+        document.getElementById('jobDescriptionEdit').style.display = 'none';
+        document.getElementById('jobDescCounter').style.display = 'none';
+
+        document.getElementById('facebookValue').style.display = 'block';
+        document.getElementById('facebookEdit').style.display = 'none';
+
+        document.getElementById('bioContent').style.display = 'block';
+        document.getElementById('bioEditInput').style.display = 'none';
+        document.getElementById('bioCounter').style.display = 'none';
+
+        document.getElementById('editActions').style.display = 'none';
+        document.getElementById('editButton').style.display = 'inline-flex';
+    }
+
+    // ===== SAVE CHANGES =====
+    function saveChanges() {
+        const bioText = document.getElementById('bioEditInput').value;
+        const jobDescText = document.getElementById('jobDescriptionEdit').value;
+
+        if (bioText.length > 1000) {
+            alert('About Me section cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
+            return;
+        }
+
+        if (jobDescText.length > 200) {
+            alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
+            return;
+        }
+
+        const saveBtn = document.querySelector('.btn-save');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const formData = new FormData();
+        formData.append('student_id', '{{ student.id }}');
+        formData.append('student_name', document.getElementById('nameEditInput').value);
+        formData.append('marital_status', document.getElementById('maritalStatusEdit').value);
+        formData.append('village', document.getElementById('villageEdit').value);
+        formData.append('current_location', document.getElementById('currentLocationEdit').value);
+        formData.append('job_location', document.getElementById('jobLocationEdit').value);
+        formData.append('last_edu', document.getElementById('lastEduEdit').value);
+        formData.append('occupation', document.getElementById('occupationEdit').value);
+        formData.append('job_description', jobDescText);
+        formData.append('facebook_profile', document.getElementById('facebookEdit').value);
+        formData.append('student_bio', bioText);
+
+        if (selectedPhotoFile) {
+            formData.append('student_photo', selectedPhotoFile);
+        }
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrfToken) formData.append('csrfmiddlewaretoken', csrfToken.value);
+
+        fetch("{% url 'update_student_profile' %}", {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                saveBtn.style.background = '#10b981';
+                setTimeout(() => location.reload(), 800);
+            } else {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            console.error('Error:', error);
+            alert('An error occurred while saving. Please try again.');
+        });
+    }
+
+    // ===== EVENT LISTENERS =====
+    document.getElementById('profileImageBox').addEventListener('click', function() {
+        if (isEditMode) document.getElementById('photoInput').click();
+    });
+
+    // Enter key on phone input
+    document.getElementById('verificationPhone').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verifyPhoneNumber();
+    });
+
+    // Close modal on backdrop click
+    window.onclick = function(event) {
+        const modal = document.getElementById('verifyModal');
+        if (event.target === modal) closeModal();
+    };
+
+    (function() {
+        // Target all select elements that are used for editing
+        const selects = document.querySelectorAll('select.edit-input');
+
+        selects.forEach(function(originalSelect) {
+            // Skip if already enhanced
+            if (originalSelect.hasAttribute('data-search-enhanced')) return;
+            originalSelect.setAttribute('data-search-enhanced', 'true');
+
+            // Store original options
+            let allOptions = [];
+
+            // Function to get all options
+            function refreshOptions() {
+                allOptions = [];
+                originalSelect.querySelectorAll('option').forEach(function(opt) {
+                    allOptions.push({
+                        value: opt.value,
+                        text: opt.textContent
+                    });
+                });
+            }
+            refreshOptions();
+
+            // Create wrapper div
+            const wrapper = document.createElement('div');
+            wrapper.className = 'searchable-select-wrapper';
+            wrapper.style.position = 'relative';
+            wrapper.style.width = '100%';
+
+            // Create search input (will be inside dropdown)
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.placeholder = '🔍 Search...';
+            searchInput.className = 'dropdown-search-input';
+            searchInput.style.cssText = `
+                width: calc(100% - 20px);
+                margin: 8px 10px;
+                padding: 8px 12px;
+                font-size: 1.4rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                font-family: 'Roboto', sans-serif;
+                box-sizing: border-box;
+                outline: none;
+            `;
+            searchInput.addEventListener('focus', function(e) {
+                e.stopPropagation();
+            });
+
+            // Create custom dropdown container
+            const customDropdown = document.createElement('div');
+            customDropdown.className = 'searchable-custom-dropdown';
+            customDropdown.style.cssText = `
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                border: 1px solid #d1d5db;
+                border-radius: 12px;
+                max-height: 280px;
+                overflow-y: auto;
+                z-index: 10000;
+                display: none;
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+                margin-top: 4px;
+            `;
+
+            // Options container inside dropdown
+            const optionsList = document.createElement('div');
+            optionsList.className = 'searchable-options-list';
+            optionsList.style.cssText = `
+                max-height: 220px;
+                overflow-y: auto;
+            `;
+
+            // Add search input and options list to dropdown
+            customDropdown.appendChild(searchInput);
+            customDropdown.appendChild(optionsList);
+
+            // Function to build options list based on search term
+            function buildOptionsList(searchTerm) {
+                const term = searchTerm.toLowerCase().trim();
+                optionsList.innerHTML = '';
+
+                let filteredOptions = allOptions;
+                if (term !== '') {
+                    filteredOptions = allOptions.filter(opt => 
+                        opt.text.toLowerCase().includes(term)
+                    );
+                }
+
+                if (filteredOptions.length === 0) {
+                    const noResult = document.createElement('div');
+                    noResult.textContent = '❌ No matching options';
+                    noResult.style.cssText = `
+                        padding: 12px;
+                        text-align: center;
+                        color: #9ca3af;
+                        font-size: 1.3rem;
+                        font-style: italic;
+                    `;
+                    optionsList.appendChild(noResult);
+                } else {
+                    filteredOptions.forEach(function(opt) {
+                        const optionDiv = document.createElement('div');
+                        optionDiv.className = 'searchable-option-item';
+                        optionDiv.textContent = opt.text;
+                        optionDiv.setAttribute('data-value', opt.value);
+                        optionDiv.style.cssText = `
+                            padding: 10px 14px;
+                            cursor: pointer;
+                            font-size: 1.4rem;
+                            font-family: 'Roboto', sans-serif;
+                            color: #111827;
+                            transition: all 0.15s ease;
+                            border-bottom: 1px solid #f3f4f6;
+                        `;
+
+                        // Highlight matching text
+                        if (term !== '' && opt.text.toLowerCase().includes(term)) {
+                            const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                            optionDiv.innerHTML = opt.text.replace(regex, '<mark style="background: #F4A024; color: #203C5C; padding: 0 2px; border-radius: 3px;">$1</mark>');
+                        }
+
+                        optionDiv.addEventListener('mouseenter', function() {
+                            this.style.backgroundColor = '#fef3c7';
+                        });
+                        optionDiv.addEventListener('mouseleave', function() {
+                            this.style.backgroundColor = 'transparent';
+                        });
+                        optionDiv.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const selectedValue = this.getAttribute('data-value');
+                            const selectedText = this.textContent.replace(/<mark>|<\/mark>/g, '');
+                            originalSelect.value = selectedValue;
+                            // Trigger change event
+                            const changeEvent = new Event('change', { bubbles: true });
+                            originalSelect.dispatchEvent(changeEvent);
+                            // Close dropdown
+                            customDropdown.style.display = 'none';
+                            // Optional: trigger any existing change handlers
+                            if (typeof window.updateJobDescCounter === 'function') {
+                                // preserve any existing handlers
+                            }
+                        });
+                        optionsList.appendChild(optionDiv);
+                    });
+                }
+            }
+
+            // Filter on input
+            searchInput.addEventListener('input', function(e) {
+                buildOptionsList(e.target.value);
+            });
+
+            // Prevent click from bubbling
+            searchInput.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Show custom dropdown when select is clicked (only in edit mode)
+            originalSelect.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Check if select is visible (edit mode)
+                if (originalSelect.style.display !== 'none' && originalSelect.offsetParent !== null) {
+                    // Refresh options in case they changed
+                    refreshOptions();
+                    buildOptionsList('');
+                    searchInput.value = '';
+                    customDropdown.style.display = 'block';
+                    // Focus search input
+                    setTimeout(function() {
+                        searchInput.focus();
+                    }, 50);
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!wrapper.contains(e.target) && !customDropdown.contains(e.target)) {
+                    customDropdown.style.display = 'none';
+                }
+            });
+
+            // Also close on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && customDropdown.style.display === 'block') {
+                    customDropdown.style.display = 'none';
+                    searchInput.value = '';
+                }
+            });
+
+            // Handle select changes (for when value changes programmatically)
+            originalSelect.addEventListener('change', function() {
+                customDropdown.style.display = 'none';
+            });
+
+            // Wrap the select element
+            originalSelect.parentNode.insertBefore(wrapper, originalSelect);
+            wrapper.appendChild(originalSelect);
+            wrapper.appendChild(customDropdown);
+
+            // Preserve original select styling
+            originalSelect.style.cssText = `
+                width: 100%;
+                padding: 10px 14px;
+                font-size: 1.5rem;
+                border: 2px solid var(--brand-orange, #F4A024);
+                border-radius: 10px;
+                font-family: 'Roboto', sans-serif;
+                background: white;
+                cursor: pointer;
+                appearance: none;
+                -webkit-appearance: none;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23203C5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 16px;
+            `;
+
+            // Hide the default arrow for better look
+            originalSelect.style.appearance = 'none';
+
+            // Also handle case when select is shown/hidden via edit mode toggle
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.attributeName === 'style' || mutation.attributeName === 'display') {
+                        if (originalSelect.style.display === 'none') {
+                            customDropdown.style.display = 'none';
+                        }
+                    }
+                });
+            });
+            observer.observe(originalSelect, { attributes: true });
+        });
+    })();
+    
+    function convertUrlsToLinks(text) {
+        if (!text) return text;
+        
+        // Regular expression to match URLs
+        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+[^\s]*)/gi;
+        
+        return text.replace(urlRegex, function(url) {
+            let href = url;
+            // Add https:// if missing for www or domain-only links
+            if (!href.startsWith('http://') && !href.startsWith('https://')) {
+                href = 'https://' + href;
+            }
+            return `<a href="${href}" target="_blank" rel="noopener noreferrer" 
+                       style="color: #0066cc; 
+                              text-decoration: underline; 
+                              font-weight: 500;
+                              word-break: break-all;">
+                        ${url}
+                    </a>`;
+        });
+    }
+    
+    // Function to update the job description display with clickable links
+    function updateJobDescriptionDisplay() {
+        const jobDescSpan = document.getElementById('jobDescriptionValue');
+        if (!jobDescSpan) return;
+        
+        const rawText = jobDescSpan.innerText || jobDescSpan.textContent || '';
+        // Remove existing icons and extra spaces for processing
+        let cleanText = rawText.replace(/<i\b[^>]*>.*?<\/i>/gi, '').trim();
+        // Remove any existing anchor tags to avoid double wrapping
+        cleanText = cleanText.replace(/<a\b[^>]*>.*?<\/a>/gi, '');
+        
+        if (cleanText === 'Not specified' || cleanText === '') {
+            jobDescSpan.innerHTML = '<i class="fa fa-briefcase"></i> Not specified';
+            return;
+        }
+        
+        // Convert URLs to links
+        const convertedText = convertUrlsToLinks(cleanText);
+        
+        // Preserve the icon
+        jobDescSpan.innerHTML = `<i class="fa fa-briefcase"></i> ${convertedText}`;
+    }
+    
+    // Also handle when saving/editing - convert links after save
+    function enhanceJobDescriptionOnLoad() {
+        updateJobDescriptionDisplay();
+        
+        // Watch for changes when edit mode saves (reload or AJAX success)
+        const originalSaveChanges = window.saveChanges;
+        if (typeof originalSaveChanges === 'function') {
+            window.saveChanges = function() {
+                // Call original save function
+                const result = originalSaveChanges.apply(this, arguments);
+                // After save, when page reloads, it will be handled by DOM load
+                return result;
+            };
+        }
+        
+        // Also observe if job description is updated dynamically
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' || mutation.type === 'characterData') {
+                    const jobDescSpan = document.getElementById('jobDescriptionValue');
+                    if (jobDescSpan && jobDescSpan.innerHTML.indexOf('href=') === -1) {
+                        updateJobDescriptionDisplay();
+                    }
+                }
+            });
+        });
+        
+        const jobDescSpan = document.getElementById('jobDescriptionValue');
+        if (jobDescSpan) {
+            observer.observe(jobDescSpan, { childList: true, characterData: true, subtree: true });
+        }
+    }
+    
+    // Run when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', enhanceJobDescriptionOnLoad);
+    } else {
+        enhanceJobDescriptionOnLoad();
+    }
+    
+    // Also update when edit mode is canceled (to revert any temporary changes)
+    const originalCancelEdit = window.cancelEdit;
+    if (typeof originalCancelEdit === 'function') {
+        window.cancelEdit = function() {
+            originalCancelEdit.apply(this, arguments);
+            updateJobDescriptionDisplay();
+        };
+    }
+    
+    // When saving, ensure the textarea value is preserved (no HTML tags in storage)
+    const originalSaveChangesFull = window.saveChanges;
+    if (typeof originalSaveChangesFull === 'function') {
+        window.saveChanges = function() {
+            const jobDescTextarea = document.getElementById('jobDescriptionEdit');
+            if (jobDescTextarea) {
+                // Strip any HTML tags from the textarea before saving
+                let plainText = jobDescTextarea.value;
+                plainText = plainText.replace(/<[^>]*>/g, '');
+                jobDescTextarea.value = plainText;
+            }
+            return originalSaveChangesFull.apply(this, arguments);
+        };
+    }
+    </script>
 
 {% endblock %}
 
 {% block photo_gallery %}
-<!-- Modern Alumni Gallery Section - Professional Gallery Display -->
 <div class="alumni-gallery-section">
-    <div class="gallery-header-wrapper">
-        <div class="gallery-title-container">
-            <h4 class="alumni-gallery-title">{{ t.alumni_gallery }}</h4>
-            <div class="title-underline"></div>
-        </div>
+  <div class="gallery-header-wrapper">
+    <div class="gallery-title-container">
+      <h4 class="alumni-gallery-title">{{ t.alumni_gallery }}</h4>
+      <div class="title-underline"></div>
     </div>
+  </div>
 
-    <div class="slider-wrapper">
-        <div class="slider-track">
-            <!-- Original images loop - Simple gallery display without student link -->
-            {% for image in last_students %}
-               <a href="{% url 'registration_student_detail' image.slug %}">
-                 <div class="slider-item">
-                    <div class="img-card">
-                        <div class="img-wrapper">
-                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
-                            <div class="image-overlay">
-                                <div class="overlay-content">
-                                    <i class="fas fa-search-plus"></i>
-                                    <span>View</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if image.batch %}
-                        <div class="img-caption">
-                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
-                        </div>
-                        {% endif %}
-                    </div>
+  <div class="slider-wrapper">
+    <div class="slider-track">
+      {% for image in last_students %}
+      <a href="{% url 'registration_student_detail' image.slug %}">
+        <div class="slider-item">
+          <div class="img-card">
+            <div class="img-wrapper">
+              <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni' }}" loading="lazy">
+              <div class="image-overlay">
+                <div class="overlay-content">
+                  <i class="fas fa-search-plus"></i>
+                  <span>View</span>
                 </div>
-               </a>
-            {% endfor %}
-
-            <!-- Duplicate for seamless infinite scroll -->
-            {% for image in last_students %}
-                <a href="{% url 'registration_student_detail' image.slug %}">
-                    <div class="slider-item">
-                    <div class="img-card">
-                        <div class="img-wrapper">
-                            <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni Gallery Image' }}" loading="lazy">
-                            <div class="image-overlay">
-                                <div class="overlay-content">
-                                    <i class="fas fa-search-plus"></i>
-                                    <span>View</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% if image.batch %}
-                        <div class="img-caption">
-                            <i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}
-                        </div>
-                        {% endif %}
-                    </div>
+              </div>
+            </div>
+            {% if image.batch %}
+            <div class="img-caption"><i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+      {% for image in last_students %}
+      <a href="{% url 'registration_student_detail' image.slug %}">
+        <div class="slider-item">
+          <div class="img-card">
+            <div class="img-wrapper">
+              <img src="{{ image.student_photo.url }}" alt="{{ image.student_name|default:'Alumni' }}" loading="lazy">
+              <div class="image-overlay">
+                <div class="overlay-content">
+                  <i class="fas fa-search-plus"></i>
+                  <span>View</span>
                 </div>
-                </a>
-            {% endfor %}
+              </div>
+            </div>
+            {% if image.batch %}
+            <div class="img-caption"><i class="fas fa-camera"></i> {{ image.batch|truncatechars:35 }}</div>
+            {% endif %}
+          </div>
         </div>
+      </a>
+      {% endfor %}
     </div>
+  </div>
 
-    <!-- Gallery Navigation Dots -->
-    <div class="gallery-dots-container">
-        <div class="gallery-dots">
-            {% for image in last_students %}
-                <span class="gallery-dot" data-index="{{ forloop.counter0 }}"></span>
-            {% endfor %}
-        </div>
+  <div class="gallery-dots-container">
+    <div class="gallery-dots">
+      {% for image in last_students %}
+      <span class="gallery-dot" data-index="{{ forloop.counter0 }}"></span>
+      {% endfor %}
     </div>
-</div>
-
-<!-- Lightbox Modal for Image Preview -->
-<div id="galleryLightbox" class="lightbox-modal" style="display: none;">
-    <div class="lightbox-overlay-close"></div>
-    <div class="lightbox-container">
-        <button class="lightbox-close-btn" aria-label="Close lightbox">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="lightbox-nav lightbox-prev" aria-label="Previous image">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="lightbox-content">
-            <img class="lightbox-image" src="" alt="">
-            <div class="lightbox-caption"></div>
-        </div>
-        <button class="lightbox-nav lightbox-next" aria-label="Next image">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
+  </div>
 </div>
 {% endblock %}

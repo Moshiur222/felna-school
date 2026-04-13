@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_countries',
-    'dj_translation', # শুধু এটুকুই যথেষ্ট
+    'dj_translation',
+    'ckeditor',
 ]
 
 LANGUAGES = (

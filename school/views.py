@@ -428,6 +428,7 @@ def get_common_data():
 
 def student_registration(request):
     context = get_common_data()
+
     
     if request.method == "POST":
         step = request.POST.get("step")
@@ -815,7 +816,7 @@ from django.templatetags.static import static
 
 def registration_student_detail(request, slug):
     student = get_object_or_404(StudentRegistration, slug=slug)
-
+    context = get_common_data()
     # Previous student
     previous_student = StudentRegistration.objects.filter( id__lt=student.id ).order_by('-id').first()
 
@@ -870,16 +871,116 @@ def registration_student_detail(request, slug):
         else:
             bd_no_display = student.bd_no
 
-    context = {
+    context.update({
         'student': student,
         'bd_no_display': bd_no_display,
         'seos': seos,
         'previous_student': previous_student,
         'next_student': next_student,
-    }
+    })
 
     return render(request, 'registration_students_details.html', context)
 
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django_countries import countries
+import json
+
+@require_http_methods(["POST"])
+def update_student_profile(request):
+    try:
+        student_id = request.POST.get('student_id')
+        student = get_object_or_404(StudentRegistration, id=student_id)
+        
+        # Update student name
+        if 'student_name' in request.POST:
+            student.student_name = request.POST.get('student_name')
+        
+        # Update marital status (using integer values from model)
+        if 'marital_status' in request.POST:
+            marital_status_value = request.POST.get('marital_status')
+            if marital_status_value and marital_status_value != '':
+                student.marrital_status = int(marital_status_value)
+        
+        # Update village
+        if 'village' in request.POST:
+            village_name = request.POST.get('village')
+            if village_name and village_name != '':
+                village, created = Village.objects.get_or_create(name=village_name)
+                student.village = village
+            else:
+                student.village = None
+        
+        # Update current location (country)
+        if 'current_location' in request.POST:
+            location_name = request.POST.get('current_location')
+            if location_name and location_name != '':
+                for code, name in countries:
+                    if name == location_name:
+                        student.current_location = code
+                        break
+            else:
+                student.current_location = None
+        
+        # Update job location (country)
+        if 'job_location' in request.POST:
+            job_loc_name = request.POST.get('job_location')
+            if job_loc_name and job_loc_name != '':
+                for code, name in countries:
+                    if name == job_loc_name:
+                        student.job_location = code
+                        break
+            else:
+                student.job_location = None
+        
+        # Update education
+        if 'last_edu' in request.POST:
+            last_edu_value = request.POST.get('last_edu')
+            if last_edu_value and last_edu_value != '':
+                student.last_edu = int(last_edu_value)
+            else:
+                student.last_edu = None
+        
+        # Update occupation
+        if 'occupation' in request.POST:
+            occupation_value = request.POST.get('occupation')
+            if occupation_value and occupation_value != '':
+                student.occupation = int(occupation_value)
+            else:
+                student.occupation = None
+        
+        # Update job description
+        if 'job_description' in request.POST:
+            student.job_description = request.POST.get('job_description')
+        
+        # Update Facebook profile
+        if 'facebook_profile' in request.POST:
+            student.facebook_profile = request.POST.get('facebook_profile')
+        
+        # Update student bio
+        if 'student_bio' in request.POST:
+            student.student_bio = request.POST.get('student_bio')
+        
+        # Update photo if provided
+        if 'student_photo' in request.FILES:
+            student.student_photo = request.FILES['student_photo']
+        
+        student.save()
+        
+        return JsonResponse({
+            'success': True, 
+            'message': 'Profile updated successfully'
+        })
+    
+    except Exception as e:
+        return JsonResponse({
+            'success': False, 
+            'message': str(e)
+        })
+    
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 
@@ -892,3 +993,34 @@ def switch_language(request):
         request.session['language'] = language
     
     return redirect(next_url)
+
+from django.http import JsonResponse
+
+
+def send_otp_1(request):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Invalid request"})
+
+    phone = request.POST.get("phone")
+
+    success, message = send_otp(phone)
+
+    return JsonResponse({
+        "success": success,
+        "message": message
+    })
+
+
+def verify_otp_1(request):
+    if request.method != "POST":
+        return JsonResponse({"success": False, "message": "Invalid request"})
+
+    phone = request.POST.get("phone")
+    otp = request.POST.get("otp")
+
+    success, message = verify_otp(phone, otp)
+
+    return JsonResponse({
+        "success": success,
+        "message": message
+    })

@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import utils
 # from . import views_admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -44,5 +45,8 @@ urlpatterns = [
     path('student/registration/', views.student_registration, name='student_registration'),
     path('student/registration/list', views.registration_students_list, name='registration_students_list'),
     path('student/registration/details/view/<slug:slug>/', views.registration_student_detail, name='registration_student_detail'),
+    path('update-student-profile/', views.update_student_profile, name='update_student_profile'),
     path('switch-language/', views.switch_language, name='switch_language'),
+    path('send-otp/', views.send_otp_1, name='send_otp_1'),
+    path('verify-otp/', views.verify_otp_1, name='verify_otp_1'),
 ]

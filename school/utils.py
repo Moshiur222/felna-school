@@ -29,13 +29,13 @@ def hash_otp(otp):
 #     # ৬ ডিজিটের র (Raw) ওটিপি জেনারেট করুন
 #     otp_raw = str(random.randint(100000, 999999))
 #     # প্রদর্শনের জন্য xxx-xxx ফরম্যাট তৈরি করুন
-#     otp_display = f"{otp_raw[:3]}-{otp_raw[3:]}"
+#     otp_display = f"{otp_raw[:3]}{otp_raw[3:]}"
 
 #     # ক্যাশে হাইফেন ছাড়া Raw ওটিপি হ্যাশ করে সেভ করুন
 #     cache.set(f"otp:{normalized}", hash_otp(otp_raw), timeout=300) # ৫ মিনিট মেয়াদ
 #     cache.set(otp_count_key, otp_count + 1, timeout=86400) # ২৪ ঘণ্টা মেয়াদ
 
-#     msg = f"Your OTP Is: 227-931, Exp for 5 Min, Don't Share With Any One.\nAlumni Association of Felna High School\nfelnahs.edu.bd\nFelnaTech.com"
+#     msg = f"Your OTP Is: {otp_display}, Exp for 5 Min, Don't Share With Any One.\nAlumni Association of Felna High School\nfelnahs.edu.bd\nFelnaTech.com"
     
 #     try:
 #         response = requests.post(SMS_API_URL, data={"api_key": SMS_API_KEY, "contacts": normalized, "senderid": SMS_SENDER_ID, "msg": msg}, timeout=10)
@@ -50,13 +50,14 @@ def send_otp(mobile):
 
     otp_count_key = f"otp_count:{normalized}"
     otp_count = cache.get(otp_count_key, 0)
+    cache.set(f"otp_count:{normalized}", 0, timeout=86400)
 
     if otp_count >= 2:
         return False, "আপনি ২৪ ঘণ্টায় সর্বোচ্চ ২ বার ওটিপি নিতে পারবেন।"
 
     # Generate OTP
     otp_raw = str(random.randint(100000, 999999))
-    otp_display = f"{otp_raw[:3]}-{otp_raw[3:]}"
+    otp_display = f"{otp_raw[:3]}{otp_raw[3:]}"
 
     # Save OTP hash
     cache.set(f"otp:{normalized}", hash_otp(otp_raw), timeout=300)
@@ -88,3 +89,24 @@ def verify_otp(mobile, user_otp):
         return True, "Verified"
     
     return False, "ভুল ওটিপি কোড।"
+
+
+
+
+def send_sms(phone, message):
+    try:
+        response = requests.post(
+            SMS_API_URL,
+            data={
+                "api_key": SMS_API_KEY.strip(),
+                "contacts": phone,
+                "senderid": SMS_SENDER_ID,
+                "msg": message
+            },
+            timeout=10
+        )
+        response.raise_for_status()
+        return True, response.text
+
+    except Exception as e:
+        return False, str(e)
