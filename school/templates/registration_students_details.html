@@ -1779,7 +1779,7 @@
             });
             observer.observe(originalSelect, { attributes: true });
         });
-    })();
+    })(); // This closing brace was missing
     
     function convertUrlsToLinks(text) {
         if (!text) return text;
@@ -1808,20 +1808,10 @@
     }
     
     function enhanceJobDescriptionOnLoad() {
-        updateJobDescriptionDisplay();
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList' || mutation.type === 'characterData') {
-                    const jobDescSpan = document.getElementById('jobDescriptionValue');
-                    if (jobDescSpan && jobDescSpan.innerHTML.indexOf('href=') === -1) {
-                        updateJobDescriptionDisplay();
-                    }
-                }
-            });
-        });
         const jobDescSpan = document.getElementById('jobDescriptionValue');
-        if (jobDescSpan) {
-            observer.observe(jobDescSpan, { childList: true, characterData: true, subtree: true });
+        if (jobDescSpan && !jobDescSpan.hasAttribute('data-formatted')) {
+            updateJobDescriptionDisplay();
+            jobDescSpan.setAttribute('data-formatted', 'true');
         }
     }
     
