@@ -49,4 +49,6 @@ urlpatterns = [
     path('switch-language/', views.switch_language, name='switch_language'),
     path('send-otp/', views.send_otp_1, name='send_otp_1'),
     path('verify-otp/', views.verify_otp_1, name='verify_otp_1'),
+    path('send-otp-email/', views.send_otp_email, name='send_otp_email'),
+    path('verify-otp-email/', views.verify_otp_email, name='verify_otp_email'),
 ]

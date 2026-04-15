@@ -23,20 +23,17 @@ def alumni_students(request):
 
     # get all batches (unique)
     batches = StudentRegistration.objects.filter(
-        is_verified=True
     ).values_list('batch', flat=True).distinct()
 
     last_students = []
 
     for batch in batches:
         student = StudentRegistration.objects.filter(
-            is_verified=True,
             batch=batch
         ).order_by('-id').first()
 
         if student:
             last_students.append(student)
-
     return {
         'last_students': last_students
     }

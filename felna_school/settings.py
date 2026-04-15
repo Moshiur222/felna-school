@@ -333,3 +333,14 @@ UNFOLD = {
         ],
     },
 }
+
+# settings.py - সঠিক কনফিগারেশন
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'felnahs.edu.bd'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True      # শুধু SSL True রাখুন (পোর্ট 465 এর জন্য)
+# EMAIL_USE_TLS = False   # এই লাইনটি সরিয়ে দিন অথবা কমেন্ট করুন
+EMAIL_HOST_USER = 'felnahs@felnahs.edu.bd'
+EMAIL_HOST_PASSWORD = 'felnahs1993@_'  # পাসওয়ার্ডে @ আছে, সমস্যা হতে পারে
+DEFAULT_FROM_EMAIL = 'felnahs@felnahs.edu.bd'

@@ -333,7 +333,7 @@
 
     .verify-modal-body p { margin-bottom: 15px; line-height: 1.6; }
 
-    .phone-display {
+    .destination-display {
         background: #f3f4f6;
         padding: 15px;
         border-radius: 12px;
@@ -343,19 +343,20 @@
         color: var(--brand-navy);
         margin: 15px 0;
         letter-spacing: 2px;
+        word-break: break-all;
     }
 
     .verify-input {
         width: 100%;
-        max-width: 400px; /* Optional: limits the width for better centering */
+        max-width: 400px;
         padding: 14px 16px;
         font-size: 1.6rem;
         border: 2px solid var(--border-color);
         border-radius: 12px;
-        margin: 15px auto; /* Changed from '15px 0' to '15px auto' for horizontal centering */
+        margin: 15px auto;
         font-family: 'Roboto', sans-serif;
         box-sizing: border-box;
-        display: block; /* Ensures margin auto works properly */
+        display: block;
     }
 
     .verify-input:focus { outline: none; border-color: var(--brand-orange); }
@@ -646,7 +647,7 @@
 <div id="verifyModal" class="verify-modal">
     <div class="verify-modal-content">
         <div class="verify-modal-header">
-            <span id="modalTitle" style = "padding-left: 12rem;">Verify Your Identity</span>
+            <span id="modalTitle" style="padding-left: 12rem;">Verify Your Identity</span>
             <span class="verify-modal-close" onclick="closeModal()">&times;</span>
         </div>
 
@@ -661,27 +662,28 @@
 
         <div class="verify-modal-body">
 
-            <!-- STEP 1: Phone Number Entry -->
+            <!-- STEP 1: Destination Entry (Phone or Email based on current location) -->
             <div id="step1">
-                <div class="phone-display">
-                    {% if student.bd_no%}
-                        <p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }} </p>
+                <div class="destination-display" id="destinationDisplay">
+                    {% if student.current_location.name != "Bangladesh" and student.email %}
+                        <p>We'll send a verification code to your email: <strong>{{ student.email|truncatechars:30 }}</strong></p>
                     {% else %}
-                        <p>You Don't have Bangladeshi Number *** ****</p>    
+                        <p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }} </p>
                     {% endif %}
                 </div>
-                <input type="tel" id="verificationPhone" class="verify-input"
-                       placeholder="Enter your full phone number" autocomplete="off">
+                <input type="text" id="verificationDestination" class="verify-input"
+                       placeholder="{% if student.current_location.name != 'Bangladesh' %}Enter your email address{% else %}Enter your full phone number{% endif %}" 
+                       autocomplete="off">
                 <div id="errorMessage" class="error-message"></div>
-                <button class="verify-submit-btn" id="step1Btn" onclick="verifyPhoneNumber()">
+                <button class="verify-submit-btn" id="step1Btn" onclick="verifyDestination()">
                     <i class="fas fa-arrow-right"></i> Continue
                 </button>
             </div>
 
-            <!-- STEP 2: OTP Entry (BD only) -->
+            <!-- STEP 2: OTP Entry -->
             <div id="step2" style="display: none;">
-                <p>We've sent a <strong>6-digit OTP</strong> to your BD mobile number:</p>
-                <div class="phone-display" id="otpPhoneDisplay">+880 *** ****</div>
+                <p>We've sent a <strong>6-digit OTP</strong> to your <strong id="otpDestinationType"></strong>:</p>
+                <div class="destination-display" id="otpDestinationDisplay">Loading...</div>
                 <p style="font-size: 1.3rem; color: #6b7280; margin-top: -5px;">Enter the OTP below to proceed.</p>
 
                 <div class="otp-boxes">
@@ -702,7 +704,7 @@
                 <div class="resend-section">
                     Didn't receive OTP?
                     <button class="resend-btn" id="resendBtn" onclick="resendOtp()" disabled>Resend OTP</button>
-                    <span id="resendTimer">in <strong id="timerCount">30</strong>s</span>
+                    <span id="resendTimer">in <strong id="timerCount">05:00</strong></span>
                 </div>
             </div>
 
@@ -995,7 +997,19 @@
                         </span>
                         <input type="url" id="facebookEdit" class="edit-input"
                                value="{{ student.facebook_profile|default:'' }}"
-                               placeholder="https://facebook.com/your-profile" style="display:none;">
+                               placeholder="https://facebook.com/username" style="display:none;">
+                    </div>
+                    
+                    <div class="data-item">
+                        <span class="data-label">Email Address</span>
+                        <span class="data-value" id="emailValue">
+                            <i class="fa fa-envelope"></i> 
+                            {% if student.email %}
+                                {{ student.email }}
+                            {% else %}
+                                <span class="no-data">Not Provided</span>
+                            {% endif %}
+                        </span>
                     </div>
                 </div>
 
@@ -1015,10 +1029,19 @@
 
 <script>
     let isEditMode = false;
-    let verifiedPhone = null;
+    let verifiedDestination = null;
     let selectedPhotoFile = null;
-    let currentBdPhone = null;
+    let currentDestination = null;
+    let currentVerificationType = null; // 'phone' or 'email'
     let resendInterval = null;
+
+    // ===== Determine verification type based on current location =====
+    function getVerificationType() {
+        const currentLocation = "{{ student.current_location.name|default:'' }}";
+        // Check if location is Bangladesh (case insensitive)
+        const isBangladesh = currentLocation.toLowerCase() === 'bangladesh';
+        return isBangladesh ? 'phone' : 'email';
+    }
 
     // ===== MODAL CONTROLS =====
     function openModal() {
@@ -1028,11 +1051,11 @@
 
     function closeModal() {
         document.getElementById('verifyModal').classList.remove('active');
-        clearInterval(resendInterval);
+        if (resendInterval) clearInterval(resendInterval);
     }
 
     function resetModal() {
-        document.getElementById('verificationPhone').value = '';
+        document.getElementById('verificationDestination').value = '';
         document.getElementById('errorMessage').classList.remove('show');
         document.getElementById('errorMessage').innerHTML = '';
         document.getElementById('step1Btn').disabled = false;
@@ -1040,6 +1063,17 @@
         clearOtpBoxes();
         showStep(1);
         updateStepIndicator(1);
+        
+        // Reset verification type display
+        currentVerificationType = getVerificationType();
+        const destinationDisplay = document.getElementById('destinationDisplay');
+        if (currentVerificationType === 'email') {
+            destinationDisplay.innerHTML = '<p>We\'ll send a verification code to your email: <strong>{{ student.email|truncatechars:30 }}</strong></p>';
+            document.getElementById('verificationDestination').placeholder = 'Enter your email address';
+        } else {
+            destinationDisplay.innerHTML = '<p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }}</p>';
+            document.getElementById('verificationDestination').placeholder = 'Enter your full phone number';
+        }
     }
 
     function showStep(step) {
@@ -1078,7 +1112,7 @@
     }
 
     function backToStep1() {
-        clearInterval(resendInterval);
+        if (resendInterval) clearInterval(resendInterval);
         clearOtpBoxes();
         document.getElementById('otpErrorMessage').classList.remove('show');
         showStep(1);
@@ -1101,7 +1135,6 @@
                 document.getElementById('otp' + (index + 1)).focus();
             } else {
                 el.blur();
-                // Auto verify when all 6 digits entered
                 verifyOtp();
             }
         } else {
@@ -1145,17 +1178,28 @@
         return num;
     }
 
-    // ===== STEP 1: VERIFY PHONE =====
-    function verifyPhoneNumber() {
-        const enteredNumber = document.getElementById('verificationPhone').value.trim();
+    // ===== STEP 1: VERIFY DESTINATION (Phone or Email) =====
+    function verifyDestination() {
+        currentVerificationType = getVerificationType();
+        const enteredValue = document.getElementById('verificationDestination').value.trim();
         const errorDiv = document.getElementById('errorMessage');
 
-        if (!enteredNumber) {
-            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your phone number';
+        if (!enteredValue) {
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter your ' + (currentVerificationType === 'phone' ? 'phone number' : 'email address');
             errorDiv.classList.add('show');
             return;
         }
 
+        if (currentVerificationType === 'phone') {
+            verifyPhoneNumber(enteredValue);
+        } else {
+            verifyEmailAddress(enteredValue);
+        }
+    }
+
+    // ===== VERIFY PHONE NUMBER (যখন লোকেশন বাংলাদেশ) =====
+    function verifyPhoneNumber(enteredNumber) {
+        const errorDiv = document.getElementById('errorMessage');
         let cleanEntered = enteredNumber.replace(/[\s\-\(\)\+]/g, '');
         let bdNumber = "{{ student.bd_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
         let abroadNumber = "{{ student.abroad_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
@@ -1168,17 +1212,17 @@
         const bdLast10 = normalizedBd.slice(-10);
         const abroadLast10 = normalizedAbroad.slice(-10);
 
-        // ✅ BD Number Match → Send OTP
+        // Check BD Number match
         if (bdNumber && (bdLast10 === enteredLast10 || normalizedBd === normalizedEntered)) {
-            currentBdPhone = bdNumber;
-            sendOtp(bdNumber);
+            currentDestination = bdNumber;
+            sendOtp('phone', bdNumber);
             return;
         }
 
-        // ✅ Abroad Number Match → Direct Edit (No OTP)
+        // Check Abroad Number match (also send OTP to phone if abroad matches)
         if (abroadNumber && (abroadLast10 === enteredLast10 || normalizedAbroad === normalizedEntered)) {
-            verifiedPhone = enteredNumber;
-            sendOtp(bdNumber);
+            currentDestination = abroadNumber;
+            sendOtp('phone', abroadNumber);
             return;
         }
 
@@ -1187,18 +1231,42 @@
         errorDiv.classList.add('show');
     }
 
+    // ===== VERIFY EMAIL ADDRESS (যখন লোকেশন বাংলাদেশ না) =====
+    function verifyEmailAddress(enteredEmail) {
+        const errorDiv = document.getElementById('errorMessage');
+        const registeredEmail = "{{ student.email|default:'' }}";
+
+        if (!registeredEmail) {
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> No email address registered for this account. Please contact support.';
+            errorDiv.classList.add('show');
+            return;
+        }
+
+        // Normalize emails for comparison
+        if (enteredEmail.toLowerCase().trim() === registeredEmail.toLowerCase().trim()) {
+            currentDestination = registeredEmail;
+            sendOtp('email', registeredEmail);
+        } else {
+            errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> Email address does not match our records. Please try again.';
+            errorDiv.classList.add('show');
+        }
+    }
+
     // ===== SEND OTP =====
-    function sendOtp(bdPhone) {
+    function sendOtp(type, destination) {
         const btn = document.getElementById('step1Btn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
 
         const formData = new FormData();
-        formData.append('phone', bdPhone);
+        formData.append('destination', destination);
+        formData.append('type', type);
         formData.append('student_id', '{{ student.id }}');
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-        fetch("{% url 'send_otp_1' %}", {
+        const url = (type === 'phone') ? "{% url 'send_otp_1' %}" : "{% url 'send_otp_email' %}";
+
+        fetch(url, {
             method: 'POST',
             body: formData
         })
@@ -1208,18 +1276,18 @@
             btn.innerHTML = '<i class="fas fa-arrow-right"></i> Continue';
 
             if (data.success) {
-                // Mask phone for display
-                let displayPhone = bdPhone;
-                if (displayPhone.length >= 4) {
-                    displayPhone = '+880 ' + displayPhone.slice(-10, -6).replace(/./g, '*') + ' ' + displayPhone.slice(-4);
+                // Display destination with masking
+                let displayDestination = destination;
+                if (type === 'phone' && displayDestination.length >= 4) {
+                    displayDestination = '+88 ' + displayDestination.slice(-10, -6).replace(/./g, '*') + ' ' + displayDestination.slice(-4);
                 }
-                document.getElementById('otpPhoneDisplay').textContent = displayPhone;
+                document.getElementById('otpDestinationDisplay').textContent = displayDestination;
+                document.getElementById('otpDestinationType').textContent = (type === 'phone') ? 'mobile number' : 'email';
                 document.getElementById('otpErrorMessage').classList.remove('show');
                 clearOtpBoxes();
                 showStep(2);
                 updateStepIndicator(2);
                 startResendTimer();
-                // Focus first OTP box
                 setTimeout(() => document.getElementById('otp0').focus(), 300);
             } else {
                 const errorDiv = document.getElementById('errorMessage');
@@ -1252,12 +1320,15 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
 
         const formData = new FormData();
-        formData.append('phone', currentBdPhone);
+        formData.append('destination', currentDestination);
         formData.append('otp', otp);
+        formData.append('type', currentVerificationType);
         formData.append('student_id', '{{ student.id }}');
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-        fetch("{% url 'verify_otp_1' %}", {
+        const url = (currentVerificationType === 'phone') ? "{% url 'verify_otp_1' %}" : "{% url 'verify_otp_email' %}";
+
+        fetch(url, {
             method: 'POST',
             body: formData
         })
@@ -1267,9 +1338,8 @@
             btn.innerHTML = '<i class="fas fa-check-circle"></i> Verify OTP';
 
             if (data.success) {
-                verifiedPhone = currentBdPhone;
-                clearInterval(resendInterval);
-                // Show success step briefly, then open edit mode
+                verifiedDestination = currentDestination;
+                if (resendInterval) clearInterval(resendInterval);
                 showStep(3);
                 updateStepIndicator(3);
                 setTimeout(() => {
@@ -1279,7 +1349,6 @@
             } else {
                 errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> ' + (data.message || 'Invalid OTP. Please try again.');
                 errorDiv.classList.add('show');
-                // Shake OTP boxes
                 document.querySelectorAll('.otp-box').forEach(box => {
                     box.style.borderColor = '#dc2626';
                     setTimeout(() => box.style.borderColor = '', 1500);
@@ -1298,11 +1367,11 @@
     function resendOtp() {
         clearOtpBoxes();
         document.getElementById('otpErrorMessage').classList.remove('show');
-        sendOtp(currentBdPhone);
+        sendOtp(currentVerificationType, currentDestination);
     }
 
     function startResendTimer() {
-        clearInterval(resendInterval);
+        if (resendInterval) clearInterval(resendInterval);
     
         let seconds = 300; // 5 minutes
     
@@ -1316,18 +1385,14 @@
         function updateTimer() {
             const min = Math.floor(seconds / 60);
             const sec = seconds % 60;
-        
-            timerCount.textContent =
-                String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+            timerCount.textContent = String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
         }
     
-        updateTimer(); // show 05:00 first
+        updateTimer();
     
         resendInterval = setInterval(() => {
             seconds--;
-        
-            updateTimer(); // always show MM:SS only
-        
+            updateTimer();
             if (seconds <= 0) {
                 clearInterval(resendInterval);
                 resendBtn.disabled = false;
@@ -1418,14 +1483,16 @@
         document.getElementById('editButton').style.display = 'none';
     }
 
-    // ===== CANCEL EDIT =====
     function cancelEdit() {
         isEditMode = false;
-        verifiedPhone = null;
+        verifiedDestination = null;
         selectedPhotoFile = null;
 
         const originalPhotoSrc = "{% if student.student_photo %}{{ student.student_photo.url }}{% else %}{% static 'img/default_student.png' %}{% endif %}";
-        document.getElementById('profileImage').src = originalPhotoSrc;
+        
+        const profileImage = document.getElementById('profileImage');
+        if (profileImage) profileImage.src = originalPhotoSrc;
+
         document.getElementById('photoEditOverlay').style.display = 'none';
 
         document.getElementById('nameDisplay').style.display = 'block';
@@ -1533,30 +1600,24 @@
         if (isEditMode) document.getElementById('photoInput').click();
     });
 
-    // Enter key on phone input
-    document.getElementById('verificationPhone').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') verifyPhoneNumber();
+    document.getElementById('verificationDestination').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verifyDestination();
     });
 
-    // Close modal on backdrop click
     window.onclick = function(event) {
         const modal = document.getElementById('verifyModal');
         if (event.target === modal) closeModal();
     };
 
+    // ===== SEARCHABLE SELECT DROPDOWN =====
     (function() {
-        // Target all select elements that are used for editing
         const selects = document.querySelectorAll('select.edit-input');
-
         selects.forEach(function(originalSelect) {
-            // Skip if already enhanced
             if (originalSelect.hasAttribute('data-search-enhanced')) return;
             originalSelect.setAttribute('data-search-enhanced', 'true');
 
-            // Store original options
             let allOptions = [];
 
-            // Function to get all options
             function refreshOptions() {
                 allOptions = [];
                 originalSelect.querySelectorAll('option').forEach(function(opt) {
@@ -1568,13 +1629,11 @@
             }
             refreshOptions();
 
-            // Create wrapper div
             const wrapper = document.createElement('div');
             wrapper.className = 'searchable-select-wrapper';
             wrapper.style.position = 'relative';
             wrapper.style.width = '100%';
 
-            // Create search input (will be inside dropdown)
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
             searchInput.placeholder = '🔍 Search...';
@@ -1590,11 +1649,8 @@
                 box-sizing: border-box;
                 outline: none;
             `;
-            searchInput.addEventListener('focus', function(e) {
-                e.stopPropagation();
-            });
+            searchInput.addEventListener('focus', function(e) { e.stopPropagation(); });
 
-            // Create custom dropdown container
             const customDropdown = document.createElement('div');
             customDropdown.className = 'searchable-custom-dropdown';
             customDropdown.style.cssText = `
@@ -1613,40 +1669,26 @@
                 margin-top: 4px;
             `;
 
-            // Options container inside dropdown
             const optionsList = document.createElement('div');
             optionsList.className = 'searchable-options-list';
-            optionsList.style.cssText = `
-                max-height: 220px;
-                overflow-y: auto;
-            `;
+            optionsList.style.cssText = `max-height: 220px; overflow-y: auto;`;
 
-            // Add search input and options list to dropdown
             customDropdown.appendChild(searchInput);
             customDropdown.appendChild(optionsList);
 
-            // Function to build options list based on search term
             function buildOptionsList(searchTerm) {
                 const term = searchTerm.toLowerCase().trim();
                 optionsList.innerHTML = '';
 
                 let filteredOptions = allOptions;
                 if (term !== '') {
-                    filteredOptions = allOptions.filter(opt => 
-                        opt.text.toLowerCase().includes(term)
-                    );
+                    filteredOptions = allOptions.filter(opt => opt.text.toLowerCase().includes(term));
                 }
 
                 if (filteredOptions.length === 0) {
                     const noResult = document.createElement('div');
                     noResult.textContent = '❌ No matching options';
-                    noResult.style.cssText = `
-                        padding: 12px;
-                        text-align: center;
-                        color: #9ca3af;
-                        font-size: 1.3rem;
-                        font-style: italic;
-                    `;
+                    noResult.style.cssText = `padding: 12px; text-align: center; color: #9ca3af; font-size: 1.3rem; font-style: italic;`;
                     optionsList.appendChild(noResult);
                 } else {
                     filteredOptions.forEach(function(opt) {
@@ -1654,83 +1696,48 @@
                         optionDiv.className = 'searchable-option-item';
                         optionDiv.textContent = opt.text;
                         optionDiv.setAttribute('data-value', opt.value);
-                        optionDiv.style.cssText = `
-                            padding: 10px 14px;
-                            cursor: pointer;
-                            font-size: 1.4rem;
-                            font-family: 'Roboto', sans-serif;
-                            color: #111827;
-                            transition: all 0.15s ease;
-                            border-bottom: 1px solid #f3f4f6;
-                        `;
+                        optionDiv.style.cssText = `padding: 10px 14px; cursor: pointer; font-size: 1.4rem; font-family: 'Roboto', sans-serif; color: #111827; transition: all 0.15s ease; border-bottom: 1px solid #f3f4f6;`;
 
-                        // Highlight matching text
                         if (term !== '' && opt.text.toLowerCase().includes(term)) {
                             const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
                             optionDiv.innerHTML = opt.text.replace(regex, '<mark style="background: #F4A024; color: #203C5C; padding: 0 2px; border-radius: 3px;">$1</mark>');
                         }
 
-                        optionDiv.addEventListener('mouseenter', function() {
-                            this.style.backgroundColor = '#fef3c7';
-                        });
-                        optionDiv.addEventListener('mouseleave', function() {
-                            this.style.backgroundColor = 'transparent';
-                        });
+                        optionDiv.addEventListener('mouseenter', function() { this.style.backgroundColor = '#fef3c7'; });
+                        optionDiv.addEventListener('mouseleave', function() { this.style.backgroundColor = 'transparent'; });
                         optionDiv.addEventListener('click', function(e) {
                             e.stopPropagation();
                             const selectedValue = this.getAttribute('data-value');
-                            const selectedText = this.textContent.replace(/<mark>|<\/mark>/g, '');
                             originalSelect.value = selectedValue;
-                            // Trigger change event
                             const changeEvent = new Event('change', { bubbles: true });
                             originalSelect.dispatchEvent(changeEvent);
-                            // Close dropdown
                             customDropdown.style.display = 'none';
-                            // Optional: trigger any existing change handlers
-                            if (typeof window.updateJobDescCounter === 'function') {
-                                // preserve any existing handlers
-                            }
                         });
                         optionsList.appendChild(optionDiv);
                     });
                 }
             }
 
-            // Filter on input
-            searchInput.addEventListener('input', function(e) {
-                buildOptionsList(e.target.value);
-            });
+            searchInput.addEventListener('input', function(e) { buildOptionsList(e.target.value); });
+            searchInput.addEventListener('click', function(e) { e.stopPropagation(); });
 
-            // Prevent click from bubbling
-            searchInput.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-
-            // Show custom dropdown when select is clicked (only in edit mode)
             originalSelect.addEventListener('click', function(e) {
                 e.stopPropagation();
-                // Check if select is visible (edit mode)
                 if (originalSelect.style.display !== 'none' && originalSelect.offsetParent !== null) {
-                    // Refresh options in case they changed
                     refreshOptions();
                     buildOptionsList('');
                     searchInput.value = '';
                     customDropdown.style.display = 'block';
-                    // Focus search input
-                    setTimeout(function() {
-                        searchInput.focus();
-                    }, 50);
+                    setTimeout(function() { searchInput.focus(); }, 50);
                 }
             });
 
-            // Close dropdown when clicking outside
             document.addEventListener('click', function(e) {
                 if (!wrapper.contains(e.target) && !customDropdown.contains(e.target)) {
                     customDropdown.style.display = 'none';
                 }
             });
 
-            // Also close on escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && customDropdown.style.display === 'block') {
                     customDropdown.style.display = 'none';
@@ -1738,17 +1745,12 @@
                 }
             });
 
-            // Handle select changes (for when value changes programmatically)
-            originalSelect.addEventListener('change', function() {
-                customDropdown.style.display = 'none';
-            });
+            originalSelect.addEventListener('change', function() { customDropdown.style.display = 'none'; });
 
-            // Wrap the select element
             originalSelect.parentNode.insertBefore(wrapper, originalSelect);
             wrapper.appendChild(originalSelect);
             wrapper.appendChild(customDropdown);
 
-            // Preserve original select styling
             originalSelect.style.cssText = `
                 width: 100%;
                 padding: 10px 14px;
@@ -1766,10 +1768,6 @@
                 background-size: 16px;
             `;
 
-            // Hide the default arrow for better look
-            originalSelect.style.appearance = 'none';
-
-            // Also handle case when select is shown/hidden via edit mode toggle
             const observer = new MutationObserver(function(mutations) {
                 mutations.forEach(function(mutation) {
                     if (mutation.attributeName === 'style' || mutation.attributeName === 'display') {
@@ -1785,65 +1783,32 @@
     
     function convertUrlsToLinks(text) {
         if (!text) return text;
-        
-        // Regular expression to match URLs
         const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+[^\s]*)/gi;
-        
         return text.replace(urlRegex, function(url) {
             let href = url;
-            // Add https:// if missing for www or domain-only links
             if (!href.startsWith('http://') && !href.startsWith('https://')) {
                 href = 'https://' + href;
             }
-            return `<a href="${href}" target="_blank" rel="noopener noreferrer" 
-                       style="color: #0066cc; 
-                              text-decoration: underline; 
-                              font-weight: 500;
-                              word-break: break-all;">
-                        ${url}
-                    </a>`;
+            return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline; font-weight: 500; word-break: break-all;">${url}</a>`;
         });
     }
     
-    // Function to update the job description display with clickable links
     function updateJobDescriptionDisplay() {
         const jobDescSpan = document.getElementById('jobDescriptionValue');
         if (!jobDescSpan) return;
-        
         const rawText = jobDescSpan.innerText || jobDescSpan.textContent || '';
-        // Remove existing icons and extra spaces for processing
         let cleanText = rawText.replace(/<i\b[^>]*>.*?<\/i>/gi, '').trim();
-        // Remove any existing anchor tags to avoid double wrapping
         cleanText = cleanText.replace(/<a\b[^>]*>.*?<\/a>/gi, '');
-        
         if (cleanText === 'Not specified' || cleanText === '') {
             jobDescSpan.innerHTML = '<i class="fa fa-briefcase"></i> Not specified';
             return;
         }
-        
-        // Convert URLs to links
         const convertedText = convertUrlsToLinks(cleanText);
-        
-        // Preserve the icon
         jobDescSpan.innerHTML = `<i class="fa fa-briefcase"></i> ${convertedText}`;
     }
     
-    // Also handle when saving/editing - convert links after save
     function enhanceJobDescriptionOnLoad() {
         updateJobDescriptionDisplay();
-        
-        // Watch for changes when edit mode saves (reload or AJAX success)
-        const originalSaveChanges = window.saveChanges;
-        if (typeof originalSaveChanges === 'function') {
-            window.saveChanges = function() {
-                // Call original save function
-                const result = originalSaveChanges.apply(this, arguments);
-                // After save, when page reloads, it will be handled by DOM load
-                return result;
-            };
-        }
-        
-        // Also observe if job description is updated dynamically
         const observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.type === 'childList' || mutation.type === 'characterData') {
@@ -1854,21 +1819,18 @@
                 }
             });
         });
-        
         const jobDescSpan = document.getElementById('jobDescriptionValue');
         if (jobDescSpan) {
             observer.observe(jobDescSpan, { childList: true, characterData: true, subtree: true });
         }
     }
     
-    // Run when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', enhanceJobDescriptionOnLoad);
     } else {
         enhanceJobDescriptionOnLoad();
     }
     
-    // Also update when edit mode is canceled (to revert any temporary changes)
     const originalCancelEdit = window.cancelEdit;
     if (typeof originalCancelEdit === 'function') {
         window.cancelEdit = function() {
@@ -1877,13 +1839,11 @@
         };
     }
     
-    // When saving, ensure the textarea value is preserved (no HTML tags in storage)
     const originalSaveChangesFull = window.saveChanges;
     if (typeof originalSaveChangesFull === 'function') {
         window.saveChanges = function() {
             const jobDescTextarea = document.getElementById('jobDescriptionEdit');
             if (jobDescTextarea) {
-                // Strip any HTML tags from the textarea before saving
                 let plainText = jobDescTextarea.value;
                 plainText = plainText.replace(/<[^>]*>/g, '');
                 jobDescTextarea.value = plainText;
@@ -1891,7 +1851,7 @@
             return originalSaveChangesFull.apply(this, arguments);
         };
     }
-    </script>
+</script>
 
 {% endblock %}
 
