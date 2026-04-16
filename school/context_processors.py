@@ -1,5 +1,5 @@
 # school/context_processors.py
-from .models import Notice, Gallery, Founder, HeadmasterMessage, AssistantHeadmasterMessage, Facility, Visitor
+from .models import Notice, Gallery, Founder, HeadmasterMessage, AssistantHeadmasterMessage, Facility, Visitor, ImportantLinks
 from django.utils import timezone
 from datetime import timedelta
 
@@ -14,6 +14,7 @@ def gallery_images(request):
 def school_context(request):
     return {
         "founders": Founder.objects.all(),
+        "important_links": ImportantLinks.objects.order_by('-id'),
         "headmaster_message": HeadmasterMessage.objects.first(),
         "assistant_headmaster_message": AssistantHeadmasterMessage.objects.first(),
     }

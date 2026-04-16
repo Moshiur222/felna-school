@@ -794,3 +794,11 @@ class StudentRegistration(models.Model):
 
     def __str__(self):
         return self.student_name
+    
+
+class ImportantLinks(models.Model):
+    title = models.CharField(max_length=255)
+    links = models.URLField()
+
+    def __str__(self):
+        return self.title

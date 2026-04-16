@@ -25,7 +25,7 @@ def home(request):
     welcome_message = WelcomeMessage.objects.first()
 
     # Teacher list
-    teachers = Teacher.objects.all().order_by('-id')  # or any ordering you prefer
+    teachers = Teacher.objects.all().order_by('id')  # or any ordering you prefer
 
     # Active students
     students = Student.objects.filter(is_active=True).order_by('class_name', 'roll_number')
@@ -576,7 +576,7 @@ def student_registration(request):
                 
                 student_data = {
                     'student_name': student_name,
-                    'email': email if not is_bangladesh else None,  # Only save email for non-BD
+                    'email': email, 
                     'student_bio': student_bio,
                     'facebook_profile': facebook_profile,
                     'gender': int(gender),
@@ -589,7 +589,7 @@ def student_registration(request):
                     'current_location': current_location,
                     'job_location': job_location,
                     'job_description': job_description,
-                    'bd_no': bd_no if is_bangladesh else None,  # Only save phone for BD
+                    'bd_no': bd_no,
                     'abroad_no': abroad_no,
                     'occupation': int(occupation),
                     'last_edu': int(last_edu),
@@ -954,7 +954,6 @@ def registration_students_list(request):
 # ============================================================
 # VIEWS
 # ============================================================
-
 def registration_student_detail(request, slug):
     student = get_object_or_404(StudentRegistration, slug=slug)
     context = get_common_data()
@@ -972,6 +971,13 @@ def registration_student_detail(request, slug):
         meta_image = request.build_absolute_uri(student.student_photo.url)
     else:
         meta_image = default_image
+    
+    # Get current location name from CountryField
+    current_location_name = student.current_location.name if student.current_location else ""
+    current_location_code = student.current_location.code if student.current_location else ""
+    
+    # Determine if Bangladesh
+    is_bangladesh = current_location_code == 'BD'
     
     # SEO DATA
     seos = [{
@@ -1001,12 +1007,27 @@ def registration_student_detail(request, slug):
         else:
             bd_no_display = student.bd_no
     
+    # Get education and occupation choices for template
+    education_choices = StudentRegistration.EDUCATION_CHOICES
+    occupation_choices = StudentRegistration.OCCUPATION_CHOICES
+    maritalstatus_choices = StudentRegistration.MARITAL_STATUS_CHOICES
+    
+    # Get villages for dropdown
+    villages = Village.objects.all().order_by('name')
+    
     context.update({
         'student': student,
         'bd_no_display': bd_no_display,
         'seos': seos,
         'previous_student': previous_student,
         'next_student': next_student,
+        'current_location_name': current_location_name,
+        'current_location_code': current_location_code,
+        'is_bangladesh': is_bangladesh,
+        'education_choices': education_choices,
+        'occupation_choices': occupation_choices,
+        'maritalstatus_choices': maritalstatus_choices,
+        'villages': villages,
     })
     
     return render(request, 'registration_students_details.html', context)
@@ -1054,74 +1075,165 @@ def verify_otp_1(request):
     })
 
 
+import random
+import time
+import secrets
+
+from django.http import JsonResponse
+from django.core.mail import EmailMultiAlternatives
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.conf import settings
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
 @csrf_exempt
 @require_http_methods(["POST"])
 def send_otp_email(request):
     """Send OTP to email address"""
-    if request.method != "POST":
-        return JsonResponse({"success": False, "message": "Invalid request method"})
-    
+
     email = request.POST.get('destination')
-    student_id = request.POST.get('student_id')
-    
+    student_name = request.POST.get('student_name', 'Alumni')
+
     if not email:
         return JsonResponse({'success': False, 'message': 'ইমেইল ঠিকানা দিন'})
-    
+
     # Email validation
-    if '@' not in email or '.' not in email:
+    try:
+        validate_email(email)
+    except ValidationError:
         return JsonResponse({'success': False, 'message': 'সঠিক ইমেইল ঠিকানা দিন'})
-    
-    # Generate OTP
-    otp = str(random.randint(100000, 999999))
-    
-    # Store in session
+
+    # 🔐 Secure OTP generate
+    otp = ''.join(secrets.choice('0123456789') for _ in range(6))
+    otp_display = otp
+
+    # 💾 Store in session
     request.session['email_otp'] = otp
     request.session['email_otp_time'] = time.time()
     request.session['email_address'] = email
-    
-    # Send email
+    request.session.set_expiry(300)  # 5 minutes
+
+    # 📩 TEXT MESSAGE
+    msg = (
+        f"Your OTP Is: {otp_display}, Exp for 5 Min, Don't Share With Any One.\n"
+        f"Alumni Association of Felna High School\n"
+        f"felnahs.edu.bd\n"
+        f"FelnaTech.com"
+    )
+
+    # 📩 HTML MESSAGE
+    subject = "Your OTP Code - Felna High School Alumni"
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to = [email]
+
+    text_content = msg
+
+    html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; background-color:#f4f4f4; padding:20px;">
+
+            <div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; border-radius:10px;">
+
+                <h2 style="color:#2E86C1; text-align:center;">
+                    Felna High School Alumni Association
+                </h2>
+
+                <hr>
+
+                <p>Dear {student_name},</p>
+
+                <p>Your OTP verification code is:</p>
+
+                <h1 style="color:#2E86C1; text-align:center; letter-spacing:3px;">
+                    {otp_display}
+                </h1>
+
+                <p style="text-align:center; color:red;">
+                    ⚠️ This OTP is valid for <b>5 minutes</b> only
+                </p>
+
+                <p style="text-align:center;">
+                    Please do not share this code with anyone.
+                </p>
+
+                <hr>
+
+                <p style="text-align:center;">
+                    <b>Felna High School Alumni Association</b><br>
+                    <a href="https://felnahs.edu.bd">felnahs.edu.bd</a> | 
+                    <a href="https://felnatech.com">FelnaTech.com</a>
+                </p>
+
+            </div>
+
+        </body>
+        </html>
+        """
+
     try:
-        send_mail(
-            'Your OTP Code - Felna High School Alumni',
-            f'Dear Alumni,\n\nYour OTP code is: {otp}\n\nThis code expires in 5 minutes.\n\nThank you,\nFelna High School Alumni Association',
-            'noreply@felna.edu.bd',
-            [email],
-            fail_silently=False,
+        email_message = EmailMultiAlternatives(
+            subject,
+            text_content,
+            from_email,
+            to
         )
-        return JsonResponse({'success': True, 'message': 'OTP sent to your email'})
+        email_message.attach_alternative(html_content, "text/html")
+        email_message.send()
+
+        return JsonResponse({
+            'success': True,
+            'message': 'OTP sent to your email'
+        })
+
     except Exception as e:
-        print(f"Email error: {e}")
-        # For testing, still return success but log the error
-        return JsonResponse({'success': True, 'message': 'OTP generated (email sending failed - check email settings)'})
-
-
+        print("Email error:", e)
+        return JsonResponse({
+            'success': False,
+            'message': 'Email sending failed'
+        })
+    
 @csrf_exempt
 @require_http_methods(["POST"])
 def verify_otp_email(request):
-    """Verify email OTP"""
-    if request.method != "POST":
-        return JsonResponse({"success": False, "message": "Invalid request method"})
-    
+    """Verify OTP"""
+
     entered_otp = request.POST.get('otp')
     stored_otp = request.session.get('email_otp')
     otp_time = request.session.get('email_otp_time', 0)
-    
+    email = request.session.get('email_address')
+
     if not stored_otp:
-        return JsonResponse({'success': False, 'message': 'No OTP requested. Please request OTP first.'})
-    
-    # Check if OTP expired (5 minutes = 300 seconds)
+        return JsonResponse({
+            'success': False,
+            'message': 'No OTP requested'
+        })
+
+    # ⏳ Expiry check (5 min)
     if time.time() - otp_time > 300:
-        request.session.pop('email_otp', None)
-        request.session.pop('email_otp_time', None)
-        return JsonResponse({'success': False, 'message': 'OTP expired. Please request again.'})
-    
+        request.session.flush()
+        return JsonResponse({
+            'success': False,
+            'message': 'OTP expired'
+        })
+
+    # ✅ Match OTP
     if entered_otp == stored_otp:
-        # Clear OTP from session
         request.session.pop('email_otp', None)
         request.session.pop('email_otp_time', None)
-        return JsonResponse({'success': True, 'message': 'OTP verified successfully'})
-    else:
-        return JsonResponse({'success': False, 'message': 'Invalid OTP. Please try again.'})
+
+        return JsonResponse({
+            'success': True,
+            'message': 'OTP verified successfully',
+            'email': email
+        })
+
+    return JsonResponse({
+        'success': False,
+        'message': 'Invalid OTP'
+    })
+
+
 
 
 @require_http_methods(["POST"])
@@ -1149,14 +1261,12 @@ def update_student_profile(request):
             else:
                 student.village = None
         
-        # Update current location (country)
+        # Update current location (CountryField expects country code)
         if 'current_location' in request.POST:
             location_name = request.POST.get('current_location')
             if location_name and location_name != '':
-                for code, name in countries:
-                    if name == location_name:
-                        student.current_location = code
-                        break
+                # CountryField can accept country name directly
+                student.current_location = location_name
             else:
                 student.current_location = None
         
@@ -1164,10 +1274,7 @@ def update_student_profile(request):
         if 'job_location' in request.POST:
             job_loc_name = request.POST.get('job_location')
             if job_loc_name and job_loc_name != '':
-                for code, name in countries:
-                    if name == job_loc_name:
-                        student.job_location = code
-                        break
+                student.job_location = job_loc_name
             else:
                 student.job_location = None
         
@@ -1215,7 +1322,6 @@ def update_student_profile(request):
             'success': False,
             'message': str(e)
         })
-
 
 @require_http_methods(["POST"])
 def switch_language(request):

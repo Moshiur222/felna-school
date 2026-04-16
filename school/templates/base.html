@@ -10,6 +10,16 @@
 {% block meta_tags %}{% endblock %} 
 {% block extra_css %}{% endblock %} 
 <style>
+
+/* Sticky Top Navigation */
+.wrapper.row2 {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #284669; /* Ensures proper background when sticky */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .row2 {
     background-color: #284669;
     font-family: Arial, sans-serif;
@@ -715,24 +725,23 @@
 
                 <div class="footbox">
                     <h2><span>{{t.important_links}}</span></h2>
+
                     <div>
                         <table cellspacing="0" cellpadding="0" style="border-collapse:collapse; border:0;">
+
+                            {% for link in important_links %}
                             <tr>
-                                <td><a href="https://www.comillaeducationboard.gov.bd/">{{t.comilla_education_board}}</a></td>
+                                <td>
+                                    <a href="{{ link.links }}" target="_blank">
+                                        {{ link.title }}
+                                    </a>
+                                </td>
                             </tr>
-                            <tr>
-                                <td><a href="https://dshe.gov.bd/">{{t.dshe}}</a></td>
-                            </tr>
-                            <tr>
-                                <td><a href="https://shed.gov.bd/">{{t.shed}}</a></td>
-                            </tr>
-                            <tr>
-                                <td><a href="https://www.nu.edu.bd/">{{t.national_university}}</a></td>
-                            </tr>
+                            {% endfor %}
+
                         </table>
                     </div>
                 </div>
-
                 <div class="footbox last">
                     <h2><span>{{t.CONTACT_WITH_US}}</span></h2>
                     <ul>

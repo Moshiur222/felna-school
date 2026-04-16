@@ -740,17 +740,25 @@
                   </div>
 
                   <!-- Email Field - Dynamically visible -->
-                  <div class="form-horizontal-row email-field-wrapper" id="emailFieldWrapper" style="display: none;">
-                      <label for="email" class="form-label fw-bold">
-                          <i class="fas fa-envelope"></i> ইমেইল ঠিকানা <span class="required-star" id="emailRequiredStar">*</span>
-                      </label>
-                      <div class="form-field-wrapper">
-                          <input type="email" name="email" id="email"
-                              class="form-control form-control-lg modern-input"
-                              placeholder="example@gmail.com"
-                              value="{{ form_data.email|default:'' }}" />
-                      </div>
-                  </div>
+                    <div class="form-horizontal-row email-field-wrapper" id="emailFieldWrapper" style="display: none;">
+                        <label for="email" class="form-label fw-bold">
+                            <i class="fas fa-envelope"></i> Email Address 
+                            <span class="required-star" id="emailRequiredStar">*</span>
+                        </label>
+                        <div class="form-field-wrapper">
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                class="form-control form-control-lg modern-input"
+                                placeholder="example@gmail.com"
+                                value="{{ form_data.email|default:''|lower }}"
+                                style="text-transform: lowercase;"
+                                oninput="formatEmailInput(this)"
+                                required
+                            />
+                        </div>
+                    </div>
 
                   <!-- PROFESSIONAL SECTION -->
                   <div class="mb-4">
@@ -923,7 +931,6 @@
               </form>
             </div>
 
-            <!-- INLINE CHANGE SECTION (AJAX ছাড়া - পুরো পেজ রিলোড) -->
             <div id="inlineChangeSection" class="inline-change-section hide-inline-change">
               <div class="inline-change-form">
                 <div class="inline-change-title">
@@ -1008,6 +1015,18 @@
 {% block extra_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js?hl=bn" async defer></script>
+
+<script>
+    function formatEmailInput(input) {
+        // Convert to lowercase
+        let value = input.value.toLowerCase();
+
+        // Allow only English letters, numbers, and valid email characters
+        value = value.replace(/[^a-z0-9@._\-]/g, '');
+
+        input.value = value;
+    }
+</script>
 <script>
 // ============================================================
 // SEARCHABLE DROPDOWN (আগের মতোই)
@@ -1353,56 +1372,124 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // Registration Form validation
-  const frm = document.getElementById('registrationForm');
-  if(frm){
-    frm.addEventListener('submit', function(e){
-      let ok = true;
-      const n = document.getElementById('student_name');
-      const bH = document.getElementById('batchHidden');
-      const vH = document.getElementById('villageHidden');
-      const cH = document.getElementById('currentLocationHidden');
-      const oH = document.getElementById('occupationHidden');
-      const eH = document.getElementById('lastEduHidden');
-      const ph = document.getElementById('student_photo');
-      const wbd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
-      const nh = document.querySelector('input[name="is_no_hide"]:checked');
-      const bd = document.getElementById('bangladesh_number');
-      const g = document.querySelector('input[name="gender"]:checked');
-      const ms = document.querySelector('input[name="marital_status"]:checked');
-      const emailWrapper = document.getElementById('emailFieldWrapper');
-      const emailInput = document.getElementById('email');
-      
-      if(!n || !n.value.trim()){ if(n) n.classList.add('is-invalid'); ok=false; alert('শিক্ষার্থীর নাম দিন'); }
-      else if(!/^[A-Za-z\s\.\-]+$/.test(n.value.trim())){ n.classList.add('is-invalid'); ok=false; alert('শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন'); }
-      if(!g){ alert('লিঙ্গ নির্বাচন করুন'); ok=false; }
-      if(!ms){ alert('বৈবাহিক অবস্থা নির্বাচন করুন'); ok=false; }
-      if(!bH || !bH.value.trim()){ alert('ব্যাচের বছর নির্বাচন করুন'); ok=false; }
-      if(!vH || !vH.value.trim()){ alert('গ্রাম নির্বাচন করুন'); ok=false; }
-      if(!cH || !cH.value.trim()){ alert('বর্তমান অবস্থান নির্বাচন করুন'); ok=false; }
-      if(!oH || !oH.value.trim()){ alert('পেশা নির্বাচন করুন'); ok=false; }
-      if(!eH || !eH.value.trim()){ alert('শিক্ষাগত যোগ্যতা নির্বাচন করুন'); ok=false; }
-      if(!ph || !ph.files || !ph.files.length){ alert('শিক্ষার্থীর ছবি আপলোড করুন'); ok=false; }
-      if(!bd || !bd.value.trim()){ alert('বাংলাদেশ নম্বর দিন'); ok=false; }
-      else if(!/^01[0-9]{8,9}$/.test(bd.value.trim())){ alert('সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)'); ok=false; }
-      if(!wbd){ alert('হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন'); ok=false; }
-      if(!nh){ alert('নম্বর হাইড কিনা নির্বাচন করুন'); ok=false; }
-      
-      if(emailWrapper && emailWrapper.style.display === 'flex') {
-        if(!emailInput || !emailInput.value.trim()) {
-          alert('বর্তমান অবস্থান বাংলাদেশ না হওয়ায় ইমেইল ঠিকানা প্রদান করা আবশ্যক');
-          ok=false;
-        } else if(!/^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/.test(emailInput.value.trim())) {
-          alert('সঠিক ইমেইল ঠিকানা দিন (যেমন: example@gmail.com)');
-          ok=false;
+ // Email validator (clean & safe)
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+// Registration Form validation
+const frm = document.getElementById('registrationForm');
+
+if (frm) {
+  frm.addEventListener('submit', function (e) {
+    let ok = true;
+
+    const n = document.getElementById('student_name');
+    const bH = document.getElementById('batchHidden');
+    const vH = document.getElementById('villageHidden');
+    const cH = document.getElementById('currentLocationHidden');
+    const oH = document.getElementById('occupationHidden');
+    const eH = document.getElementById('lastEduHidden');
+    const ph = document.getElementById('student_photo');
+
+    const wbd = document.querySelector('input[name="is_whatsapp_bd"]:checked');
+    const nh = document.querySelector('input[name="is_no_hide"]:checked');
+    const bd = document.getElementById('bangladesh_number');
+    const g = document.querySelector('input[name="gender"]:checked');
+    const ms = document.querySelector('input[name="marital_status"]:checked');
+
+    const emailWrapper = document.getElementById('emailFieldWrapper');
+    const emailInput = document.getElementById('email');
+
+    // Name
+    if (!n || !n.value.trim()) {
+      if (n) n.classList.add('is-invalid');
+      ok = false;
+      alert('শিক্ষার্থীর নাম দিন');
+    }
+    else if (!/^[A-Za-z\s.\-]+$/.test(n.value.trim())) {
+      n.classList.add('is-invalid');
+      ok = false;
+      alert('শুধুমাত্র ইংরেজি অক্ষর ব্যবহার করুন');
+    }
+
+    // Gender
+    if (!g) {
+      alert('লিঙ্গ নির্বাচন করুন');
+      ok = false;
+    }
+
+    // Marital status
+    if (!ms) {
+      alert('বৈবাহিক অবস্থা নির্বাচন করুন');
+      ok = false;
+    }
+
+    // Hidden fields
+    if (!bH || !bH.value.trim()) { alert('ব্যাচের বছর নির্বাচন করুন'); ok = false; }
+    if (!vH || !vH.value.trim()) { alert('গ্রাম নির্বাচন করুন'); ok = false; }
+    if (!cH || !cH.value.trim()) { alert('বর্তমান অবস্থান নির্বাচন করুন'); ok = false; }
+    if (!oH || !oH.value.trim()) { alert('পেশা নির্বাচন করুন'); ok = false; }
+    if (!eH || !eH.value.trim()) { alert('শিক্ষাগত যোগ্যতা নির্বাচন করুন'); ok = false; }
+
+    // Photo
+    if (!ph || !ph.files || !ph.files.length) {
+      alert('শিক্ষার্থীর ছবি আপলোড করুন');
+      ok = false;
+    }
+
+    // Bangladesh number
+    if (!bd || !bd.value.trim()) {
+      alert('বাংলাদেশ নম্বর দিন');
+      ok = false;
+    }
+    else if (!/^01[0-9]{8,9}$/.test(bd.value.trim())) {
+      alert('সঠিক বাংলাদেশি নম্বর দিন (যেমন: 01712345678)');
+      ok = false;
+    }
+
+    // WhatsApp + Hide options
+    if (!wbd) { alert('হোয়াটসঅ্যাপ নম্বর কিনা নির্বাচন করুন'); ok = false; }
+    if (!nh) { alert('নম্বর হাইড কিনা নির্বাচন করুন'); ok = false; }
+
+    // Email (ONLY if visible)
+    const emailVisible = emailWrapper && emailWrapper.offsetParent !== null;
+
+    if (emailVisible) {
+
+      if (!emailInput || !emailInput.value.trim()) {
+        alert('ইমেইল ঠিকানা প্রদান করা আবশ্যক');
+        ok = false;
+      }
+      else {
+        const email = emailInput.value.trim().toLowerCase();
+
+        if (!isValidEmail(email)) {
+          alert('সঠিক ইমেইল ঠিকানা দিন');
+          ok = false;
         }
       }
-      
-      if(!chkCaptcha()) ok=false;
-      if(!ok){ e.preventDefault(); const fi = frm.querySelector('.is-invalid'); if(fi) fi.scrollIntoView({behavior:'smooth', block:'center'}); }
-    });
-  }
-  
+    }
+
+    // CAPTCHA
+    if (typeof chkCaptcha === "function") {
+      if (!chkCaptcha()) ok = false;
+    }
+
+    // Stop submit
+    if (!ok) {
+      e.preventDefault();
+
+      const fi = frm.querySelector('.is-invalid');
+      if (fi) {
+        fi.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+    }
+  });
+} 
   // Character counters
   const bioTA = document.getElementById('student_bio');
   const bioCnt = document.getElementById('bioCharCount');

@@ -185,6 +185,50 @@ class VisitorAdmin(UnfoldAdmin):
     readonly_fields = ('ip_address', 'visited_at', 'user_agent', 'session_key')
 
 
+from django.utils.html import format_html
+
+
+@admin.register(ImportantLinks)
+class ImportantLinksAdmin(UnfoldAdmin):
+    list_display = ('title', 'display_link', 'action_buttons')
+    search_fields = ('title',)
+    list_per_page = 20
+    ordering = ('title',)
+
+    @display(description="Link")
+    def display_link(self, obj):
+        return format_html(
+            '<a href="{}" target="_blank" style="color:#2563eb;font-weight:600;">Open Link</a>',
+            obj.links
+        )
+
+    @display(description="Actions")
+    def action_buttons(self, obj):
+        from django.urls import reverse
+        from django.utils.safestring import mark_safe
+
+        change_url = reverse("admin:school_importantlinks_change", args=[obj.pk])
+        delete_url = reverse("admin:school_importantlinks_delete", args=[obj.pk])
+        btn = """
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding:6px 12px;
+        border-radius:8px;
+        font-size:11px;
+        font-weight:700;
+        text-decoration:none;
+        color:#fff;
+        """
+
+        return mark_safe(f"""
+            <div style="display:flex;gap:8px;">
+                <a href="{change_url}" style="{btn} background:#4f46e5;">Edit</a>
+                <a href="{delete_url}" onclick="return confirm('Are you sure?')" style="{btn} background:#ef4444;">Delete</a>
+            </div>
+        """)
+
+
 
 # সাইট সেটিংস
 admin.site.site_header = "Felna High School"

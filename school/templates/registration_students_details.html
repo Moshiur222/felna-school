@@ -663,22 +663,36 @@
         <div class="verify-modal-body">
 
             <!-- STEP 1: Destination Entry (Phone or Email based on current location) -->
-            <div id="step1">
-                <div class="destination-display" id="destinationDisplay">
-                    {% if student.current_location.name != "Bangladesh" and student.email %}
-                        <p>We'll send a verification code to your email: <strong>{{ student.email|truncatechars:30 }}</strong></p>
-                    {% else %}
-                        <p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }} </p>
-                    {% endif %}
-                </div>
-                <input type="text" id="verificationDestination" class="verify-input"
-                       placeholder="{% if student.current_location.name != 'Bangladesh' %}Enter your email address{% else %}Enter your full phone number{% endif %}" 
-                       autocomplete="off">
-                <div id="errorMessage" class="error-message"></div>
-                <button class="verify-submit-btn" id="step1Btn" onclick="verifyDestination()">
-                    <i class="fas fa-arrow-right"></i> Continue
-                </button>
+        <div id="step1">
+            <div class="destination-display" id="destinationDisplay">
+                {% if student.current_location.name != "Bangladesh" and student.email %}
+                    <p>
+                        We'll send a verification code to your email:
+                        <strong>{{ student.email|truncatechars:30|lower }}</strong>
+                    </p>
+                {% else %}
+                    <p>
+                        Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }}
+                    </p>
+                {% endif %}
             </div>
+        
+            <input 
+                type="text"
+                id="verificationDestination"
+                class="verify-input"
+                autocomplete="off"
+                inputmode="{% if student.current_location.name != 'Bangladesh' %}email{% else %}numeric{% endif %}"
+                placeholder="{% if student.current_location.name != 'Bangladesh' %}Enter your email address{% else %}Enter your full phone number{% endif %}"
+                oninput="validateDestination()"
+            >
+        
+            <div id="errorMessage" class="error-message"></div>
+        
+            <button class="verify-submit-btn" id="step1Btn" onclick="verifyDestination()">
+                <i class="fas fa-arrow-right"></i> Continue
+            </button>
+        </div>
 
             <!-- STEP 2: OTP Entry -->
             <div id="step2" style="display: none;">
@@ -1035,11 +1049,13 @@
     let currentVerificationType = null; // 'phone' or 'email'
     let resendInterval = null;
 
-    // ===== Determine verification type based on current location =====
     function getVerificationType() {
-        const currentLocation = "{{ student.current_location.name|default:'' }}";
-        // Check if location is Bangladesh (case insensitive)
-        const isBangladesh = currentLocation.toLowerCase() === 'bangladesh';
+        // Use the is_bangladesh flag from Django context
+        const isBangladesh = {% if is_bangladesh %}true{% else %}false{% endif %};
+        const currentLocationCode = "{{ current_location_code|default:'' }}";
+        
+        console.log("Is Bangladesh:", isBangladesh, "Location Code:", currentLocationCode);
+        
         return isBangladesh ? 'phone' : 'email';
     }
 
@@ -1067,11 +1083,17 @@
         // Reset verification type display
         currentVerificationType = getVerificationType();
         const destinationDisplay = document.getElementById('destinationDisplay');
+        
+        console.log("Verification Type:", currentVerificationType);
+        
         if (currentVerificationType === 'email') {
-            destinationDisplay.innerHTML = '<p>We\'ll send a verification code to your email: <strong>{{ student.email|truncatechars:30 }}</strong></p>';
+            const email = "{{ student.email|default:'' }}";
+            const emailDisplay = email ? email.substring(0, 30) : 'your registered email';
+            destinationDisplay.innerHTML = '<p>We\'ll send a verification code to your email: <strong>' + emailDisplay + '</strong></p>';
             document.getElementById('verificationDestination').placeholder = 'Enter your email address';
         } else {
-            destinationDisplay.innerHTML = '<p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }}</p>';
+            const lastFour = "{{ student.bd_no|slice:'-4:' }}";
+            destinationDisplay.innerHTML = '<p>Please enter your registered phone number *** **** ' + lastFour + '</p>';
             document.getElementById('verificationDestination').placeholder = 'Enter your full phone number';
         }
     }
