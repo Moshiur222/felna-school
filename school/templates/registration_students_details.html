@@ -859,9 +859,9 @@
                             <i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}
                         </span>
                         <select id="currentLocationEdit" class="edit-input" style="display:none;">
-                            <option value="">Select Country</option>
+                            <option name="">Select Country</option>
                             {% for code, name in countries %}
-                                <option value="{{ name }}" {% if student.current_location.name == name %}selected{% endif %}>{{ name }}</option>
+                                <option name = "code" value="{{ name }}" {% if student.current_location.name == name %}selected{% endif %}>{{ name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -872,9 +872,9 @@
                             <i class="fa fa-map-marker-alt"></i> {{ student.job_location.name }}
                         </span>
                         <select id="jobLocationEdit" class="edit-input" style="display:none;">
-                            <option value="">Select Job Location</option>
+                            <option name="">Select Job Location</option>
                             {% for code, name in countries %}
-                                <option value="{{ name }}" {% if student.job_location.name == name %}selected{% endif %}>{{ name }}</option>
+                                <option name = "code" value="{{ name }}" {% if student.job_location.name == name %}selected{% endif %}>{{ name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -1553,69 +1553,117 @@
         document.getElementById('editButton').style.display = 'inline-flex';
     }
 
-    // ===== SAVE CHANGES =====
-    function saveChanges() {
-        const bioText = document.getElementById('bioEditInput').value;
-        const jobDescText = document.getElementById('jobDescriptionEdit').value;
+  // ===== SAVE CHANGES =====
+// ===== SAVE CHANGES =====
+function saveChanges() {
+    const bioText = document.getElementById('bioEditInput').value;
+    const jobDescText = document.getElementById('jobDescriptionEdit').value;
 
-        if (bioText.length > 1000) {
-            alert('About Me section cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
-            return;
+    if (bioText.length > 1000) {
+        alert('About Me section cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
+        return;
+    }
+
+    if (jobDescText.length > 200) {
+        alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
+        return;
+    }
+
+    const saveBtn = document.querySelector('.btn-save');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+    const formData = new FormData();
+
+    // Always include student_id
+    formData.append('student_id', '{{ student.id }}');
+    
+    // Always include student_name
+    formData.append('student_name', document.getElementById('nameEditInput').value);
+
+    // ✅ Get current values from SELECT dropdowns
+    const maritalStatus = document.getElementById('maritalStatusEdit').value;
+    const village = document.getElementById('villageEdit').value;
+    const currentLocation = document.getElementById('currentLocationEdit').name;
+    const jobLocation = document.getElementById('jobLocationEdit').value;
+    const lastEdu = document.getElementById('lastEduEdit').value;
+    const occupation = document.getElementById('occupationEdit').value;
+
+    // ✅ ONLY append if value exists (not empty string)
+    if (maritalStatus && maritalStatus !== '') {
+        formData.append('marital_status', maritalStatus);
+    }
+
+    if (village && village !== '') {
+        formData.append('village', village);
+    }
+
+    if (currentLocation && currentLocation !== '') {
+        formData.append('current_location', currentLocation);
+        console.log('Sending current_location:', currentLocation); // Debug log
+    }
+
+    if (jobLocation && jobLocation !== '') {
+        formData.append('job_location', jobLocation);
+        console.log('Sending job_location:', jobLocation); // Debug log
+    }
+
+    if (lastEdu && lastEdu !== '') {
+        formData.append('last_edu', lastEdu);
+    }
+
+    if (occupation && occupation !== '') {
+        formData.append('occupation', occupation);
+    }
+
+    // These can be empty strings
+    formData.append('job_description', jobDescText);
+    formData.append('facebook_profile', document.getElementById('facebookEdit').value);
+    formData.append('student_bio', bioText);
+
+    // Photo upload
+    if (selectedPhotoFile) {
+        formData.append('student_photo', selectedPhotoFile);
+    }
+
+    // CSRF Token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (csrfToken) {
+        formData.append('csrfmiddlewaretoken', csrfToken.value);
+    }
+
+    // ✅ Debug: Log what we're sending
+    console.log('FormData contents:');
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+
+    fetch("{% url 'update_student_profile' %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
         }
-
-        if (jobDescText.length > 200) {
-            alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
-            return;
-        }
-
-        const saveBtn = document.querySelector('.btn-save');
-        saveBtn.disabled = true;
-        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-        const formData = new FormData();
-        formData.append('student_id', '{{ student.id }}');
-        formData.append('student_name', document.getElementById('nameEditInput').value);
-        formData.append('marital_status', document.getElementById('maritalStatusEdit').value);
-        formData.append('village', document.getElementById('villageEdit').value);
-        formData.append('current_location', document.getElementById('currentLocationEdit').value);
-        formData.append('job_location', document.getElementById('jobLocationEdit').value);
-        formData.append('last_edu', document.getElementById('lastEduEdit').value);
-        formData.append('occupation', document.getElementById('occupationEdit').value);
-        formData.append('job_description', jobDescText);
-        formData.append('facebook_profile', document.getElementById('facebookEdit').value);
-        formData.append('student_bio', bioText);
-
-        if (selectedPhotoFile) {
-            formData.append('student_photo', selectedPhotoFile);
-        }
-
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-        if (csrfToken) formData.append('csrfmiddlewaretoken', csrfToken.value);
-
-        fetch("{% url 'update_student_profile' %}", {
-            method: 'POST',
-            body: formData,
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
-                saveBtn.style.background = '#10b981';
-                setTimeout(() => location.reload(), 800);
-            } else {
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+            saveBtn.style.background = '#10b981';
+            setTimeout(() => location.reload(), 800);
+        } else {
             saveBtn.disabled = false;
             saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-            console.error('Error:', error);
-            alert('An error occurred while saving. Please try again.');
-        });
-    }
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        console.error('Error:', error);
+        alert('An error occurred while saving. Please try again.');
+    });
+}
 
     // ===== EVENT LISTENERS =====
     document.getElementById('profileImageBox').addEventListener('click', function() {

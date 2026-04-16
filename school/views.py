@@ -1244,67 +1244,60 @@ def update_student_profile(request):
         
         # Update student name
         if 'student_name' in request.POST:
-            student.student_name = request.POST.get('student_name')
+            student_name = request.POST.get('student_name', '').strip()
+            if student_name:
+                student.student_name = student_name
         
         # Update marital status
         if 'marital_status' in request.POST:
-            marital_status_value = request.POST.get('marital_status')
-            if marital_status_value and marital_status_value != '':
+            marital_status_value = request.POST.get('marital_status', '').strip()
+            if marital_status_value:
                 student.marrital_status = int(marital_status_value)
         
         # Update village
         if 'village' in request.POST:
-            village_name = request.POST.get('village')
-            if village_name and village_name != '':
+            village_name = request.POST.get('village', '').strip()
+            if village_name:
                 village, created = Village.objects.get_or_create(name=village_name)
                 student.village = village
-            else:
-                student.village = None
         
-        # Update current location (CountryField expects country code)
+        # ✅ Update current location - ONLY IF SENT (ধুধু যদি পাঠানো হয়)
         if 'current_location' in request.POST:
-            location_name = request.POST.get('current_location')
-            if location_name and location_name != '':
-                # CountryField can accept country name directly
+            location_name = request.POST.get('current_location', '').strip()
+            if location_name:
                 student.current_location = location_name
-            else:
-                student.current_location = None
+                print(f"Updated current_location to: {location_name}")
         
-        # Update job location
+        # ✅ Update job location - ONLY IF SENT
         if 'job_location' in request.POST:
-            job_loc_name = request.POST.get('job_location')
-            if job_loc_name and job_loc_name != '':
+            job_loc_name = request.POST.get('job_location', '').strip()
+            if job_loc_name:
                 student.job_location = job_loc_name
-            else:
-                student.job_location = None
+                print(f"Updated job_location to: {job_loc_name}")
         
-        # Update education
+        # ✅ Update education - ONLY IF SENT
         if 'last_edu' in request.POST:
-            last_edu_value = request.POST.get('last_edu')
-            if last_edu_value and last_edu_value != '':
+            last_edu_value = request.POST.get('last_edu', '').strip()
+            if last_edu_value:
                 student.last_edu = int(last_edu_value)
-            else:
-                student.last_edu = None
         
-        # Update occupation
+        # ✅ Update occupation - ONLY IF SENT
         if 'occupation' in request.POST:
-            occupation_value = request.POST.get('occupation')
-            if occupation_value and occupation_value != '':
+            occupation_value = request.POST.get('occupation', '').strip()
+            if occupation_value:
                 student.occupation = int(occupation_value)
-            else:
-                student.occupation = None
         
-        # Update job description
+        # Update job description (can be empty)
         if 'job_description' in request.POST:
-            student.job_description = request.POST.get('job_description')
+            student.job_description = request.POST.get('job_description', '')
         
-        # Update Facebook profile
+        # Update Facebook profile (can be empty)
         if 'facebook_profile' in request.POST:
-            student.facebook_profile = request.POST.get('facebook_profile')
+            student.facebook_profile = request.POST.get('facebook_profile', '')
         
-        # Update student bio
+        # Update student bio (can be empty)
         if 'student_bio' in request.POST:
-            student.student_bio = request.POST.get('student_bio')
+            student.student_bio = request.POST.get('student_bio', '')
         
         # Update photo if provided
         if 'student_photo' in request.FILES:
@@ -1318,6 +1311,7 @@ def update_student_profile(request):
         })
     
     except Exception as e:
+        print(f"Error updating profile: {str(e)}")  # Debug log
         return JsonResponse({
             'success': False,
             'message': str(e)
