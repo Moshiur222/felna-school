@@ -577,6 +577,8 @@
         margin-bottom: 10px;
     }
 
+    .required-field { color: red; }
+
     @media (max-width: 992px) {
         .data-grid { grid-template-columns: 1fr; }
         .profile-sidebar-card { flex: 0 0 100%; }
@@ -836,9 +838,8 @@
                         </select>
                     </div>
 
-                    <!-- ✅ FIX: option value="{{ code }}" instead of name -->
                     <div class="data-item">
-                        <span class="data-label">Country of Residence</span>
+                        <span class="data-label" id="currentLocationLabel">Country of Residence</span>
                         <span class="data-value" id="currentLocationValue">
                             <i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}
                         </span>
@@ -850,7 +851,6 @@
                         </select>
                     </div>
 
-                    <!-- ✅ FIX: option value="{{ code }}" instead of name -->
                     <div class="data-item">
                         <span class="data-label">Job Location</span>
                         <span class="data-value" id="jobLocationValue">
@@ -915,7 +915,7 @@
                     <div class="data-item">
                         <span class="data-label">Mobile Number (BD)</span>
                         <span class="data-value">
-                            <i class="fa fa-phone"></i> {{ student.bd_no }}
+                            <i class="fa fa-phone"></i> {{ bd_no_display }}
                         </span>
                     </div>
 
@@ -931,7 +931,7 @@
                                             </a>
                                         {% endwith %}
                                     {% else %}
-                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available (Number Hidden)</span>
+                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available</span>
                                     {% endif %}
                                 {% else %}
                                     <span class="whatsapp-badge whatsapp-not-available"><i class="fas fa-exclamation-circle"></i> No Number</span>
@@ -947,11 +947,7 @@
                         <span class="data-value">
                             <i class="fa fa-globe"></i>
                             {% if student.abroad_no %}
-                                {% if student.is_no_hide == 1 %}
-                                    {{ student.abroad_no }}
-                                {% else %}
-                                    <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Hidden</span>
-                                {% endif %}
+                                {{bd_no_display}}
                             {% else %}
                                 <span class="no-data">Not Provided</span>
                             {% endif %}
@@ -970,7 +966,7 @@
                                             </a>
                                         {% endwith %}
                                     {% else %}
-                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available (Number Hidden)</span>
+                                        <span class="whatsapp-badge whatsapp-hidden"><i class="fas fa-user-secret"></i> Available</span>
                                     {% endif %}
                                 {% else %}
                                     <span class="whatsapp-badge whatsapp-not-available"><i class="fas fa-exclamation-circle"></i> No Number</span>
@@ -1000,7 +996,7 @@
                     </div>
 
                     <div class="data-item">
-                        <span class="data-label">Email Address</span>
+                        <span class="data-label" id="emailLabel">Email Address</span>
                         <span class="data-value" id="emailValue">
                             <i class="fa fa-envelope"></i>
                             {% if student.email %}
@@ -1009,6 +1005,9 @@
                                 <span class="no-data">Not Provided</span>
                             {% endif %}
                         </span>
+                        <input type="email" id="emailEdit" class="edit-input"
+                               value="{{ student.email|default:'' }}"
+                               placeholder="your.email@example.com" style="display:none;">
                     </div>
                 </div>
 
@@ -1034,7 +1033,39 @@
     let currentVerificationType = null;
     let resendInterval = null;
 
-    // ✅ FIX: Use country code (BD) instead of name
+    // ✅ Check if email is required based on current location
+    function isEmailRequired() {
+        const currentLocationCode = getSelectVal('currentLocationEdit');
+        return currentLocationCode && currentLocationCode !== 'BD';
+    }
+
+    // ✅ Update email field requirement indicator
+    function updateEmailRequirement() {
+        const emailEdit = document.getElementById('emailEdit');
+        const emailLabel = document.getElementById('emailLabel');
+        
+        if (isEmailRequired()) {
+            emailEdit.required = true;
+            emailLabel.innerHTML = 'Email Address <span class="required-field">*</span>';
+            
+            // If no email exists, highlight the field
+            if (!emailEdit.value.trim()) {
+                emailEdit.style.borderColor = '#dc2626';
+            }
+        } else {
+            emailEdit.required = false;
+            emailLabel.innerHTML = 'Email Address';
+            emailEdit.style.borderColor = '';
+        }
+    }
+
+    // ✅ Email validation helper
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    // ✅ Use country code (BD) instead of name
     function getVerificationType() {
         const locationCode = "{{ student.current_location.code|default:'' }}";
         return (locationCode === 'BD') ? 'phone' : 'email';
@@ -1067,12 +1098,12 @@
         if (currentVerificationType === 'email') {
             const email = "{{ student.email|default:'' }}";
             const emailDisplay = email ? email.substring(0, 30) : 'your registered email';
-            destinationDisplay.innerHTML = '<p>We\'ll send a verification code to your email: <strong>' + emailDisplay + '</strong></p>';
+            destinationDisplay.innerHTML = '<p>send a verification code to The email: <strong><br>' + emailDisplay + '</strong></p>';
             verificationInput.placeholder = 'Enter your email address';
             verificationInput.inputMode = 'email';
         } else {
             const lastFour = "{{ student.bd_no|slice:'-4:' }}";
-            destinationDisplay.innerHTML = '<p>Please enter your registered phone number *** **** ' + lastFour + '</p>';
+            destinationDisplay.innerHTML = '<p>Please enter your registered phone<br>number *** **** ' + lastFour + '</p>';
             verificationInput.placeholder = 'Enter your full phone number';
             verificationInput.inputMode = 'numeric';
         }
@@ -1161,6 +1192,10 @@
         if (num.startsWith('0')) num = num.substring(1);
         if (num.startsWith('880')) num = num.substring(3);
         return num;
+    }
+
+    function validateDestination() {
+        // Real-time validation can be added here if needed
     }
 
     function verifyDestination() {
@@ -1424,6 +1459,10 @@
         document.getElementById('facebookValue').style.display = 'none';
         document.getElementById('facebookEdit').style.display = 'block';
 
+        // ✅ Enable email editing
+        document.getElementById('emailValue').style.display = 'none';
+        document.getElementById('emailEdit').style.display = 'block';
+
         document.getElementById('bioContent').style.display = 'none';
         const bioEdit = document.getElementById('bioEditInput');
         bioEdit.style.display = 'block';
@@ -1433,6 +1472,9 @@
 
         document.getElementById('editActions').style.display = 'flex';
         document.getElementById('editButton').style.display = 'none';
+
+        // ✅ Update email requirement based on location
+        updateEmailRequirement();
     }
 
     function cancelEdit() {
@@ -1472,15 +1514,22 @@
         document.getElementById('facebookValue').style.display = 'block';
         document.getElementById('facebookEdit').style.display = 'none';
 
+        // ✅ Hide email editing
+        document.getElementById('emailValue').style.display = 'flex';
+        document.getElementById('emailEdit').style.display = 'none';
+
         document.getElementById('bioContent').style.display = 'block';
         document.getElementById('bioEditInput').style.display = 'none';
         document.getElementById('bioCounter').style.display = 'none';
 
         document.getElementById('editActions').style.display = 'none';
         document.getElementById('editButton').style.display = 'inline-flex';
+
+        // Reset email label
+        document.getElementById('emailLabel').innerHTML = 'Email Address';
     }
 
-    // ✅ FIX: Helper to read select value regardless of display:none
+    // ✅ Helper to read select value regardless of display:none
     function getSelectVal(id) {
         const el = document.getElementById(id);
         if (!el) return '';
@@ -1490,6 +1539,7 @@
     function saveChanges() {
         const bioText = document.getElementById('bioEditInput').value;
         const jobDescText = document.getElementById('jobDescriptionEdit').value;
+        const emailText = document.getElementById('emailEdit').value.trim();
 
         if (bioText.length > 1000) {
             alert('About Me cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
@@ -1497,6 +1547,22 @@
         }
         if (jobDescText.length > 200) {
             alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
+            return;
+        }
+
+        // ✅ Validate email if location is not Bangladesh
+        if (isEmailRequired() && !emailText) {
+            alert('Email address is required when residing outside Bangladesh.');
+            document.getElementById('emailEdit').focus();
+            document.getElementById('emailEdit').style.borderColor = '#dc2626';
+            return;
+        }
+
+        // ✅ Basic email validation
+        if (emailText && !isValidEmail(emailText)) {
+            alert('Please enter a valid email address.');
+            document.getElementById('emailEdit').focus();
+            document.getElementById('emailEdit').style.borderColor = '#dc2626';
             return;
         }
 
@@ -1526,6 +1592,9 @@
         formData.append('job_description',  jobDescText);
         formData.append('facebook_profile', document.getElementById('facebookEdit').value);
         formData.append('student_bio',      bioText);
+        
+        // ✅ Add email to formData
+        formData.append('email', emailText);
 
         if (selectedPhotoFile) formData.append('student_photo', selectedPhotoFile);
 
@@ -1568,6 +1637,18 @@
         const modal = document.getElementById('verifyModal');
         if (event.target === modal) closeModal();
     };
+
+    // ✅ Add event listener to current location dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentLocationEdit = document.getElementById('currentLocationEdit');
+        if (currentLocationEdit) {
+            currentLocationEdit.addEventListener('change', function() {
+                if (isEditMode) {
+                    updateEmailRequirement();
+                }
+            });
+        }
+    });
 
     // Searchable Select Dropdown
     (function() {

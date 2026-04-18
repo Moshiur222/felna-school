@@ -1010,7 +1010,7 @@ def registration_student_detail(request, slug):
         'occupation_choices': occupation_choices,
         'maritalstatus_choices': maritalstatus_choices,
         'villages': villages,
-        # ✅ FIX: Pass countries list so template can use code as option value
+        # ✅ Pass countries list so template can use code as option value
         'countries': list(country_list),
     })
 
@@ -1018,7 +1018,7 @@ def registration_student_detail(request, slug):
 
 
 # ============================================================
-# 2. update_student_profile  —  FIXED: accepts country CODE
+# 2. update_student_profile  —  FIXED: accepts country CODE and email
 # ============================================================
 @require_http_methods(["POST"])
 def update_student_profile(request):
@@ -1096,6 +1096,26 @@ def update_student_profile(request):
 
         if 'student_bio' in request.POST:
             student.student_bio = request.POST.get('student_bio', '')
+
+        # ✅ Email field — NEW
+        if 'email' in request.POST:
+            email_value = request.POST.get('email', '').strip()
+            
+            # Validate email format if provided
+            if email_value:
+                from django.core.validators import validate_email
+                from django.core.exceptions import ValidationError
+                try:
+                    validate_email(email_value)
+                    student.email = email_value
+                except ValidationError:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Invalid email format'
+                    })
+            else:
+                # Allow empty email (clear the field)
+                student.email = ''
 
         # Photo
         if 'student_photo' in request.FILES:
