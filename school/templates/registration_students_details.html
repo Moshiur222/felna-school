@@ -278,7 +278,6 @@
 
     .btn-edit:hover { background: #d48c1a; transform: translateY(-2px); }
 
-    /* ===== MODAL STYLES ===== */
     .verify-modal {
         display: none;
         position: fixed;
@@ -330,7 +329,6 @@
     .verify-modal-close:hover { color: #333; }
 
     .verify-modal-body { font-size: 1.5rem; color: var(--text-muted); }
-
     .verify-modal-body p { margin-bottom: 15px; line-height: 1.6; }
 
     .destination-display {
@@ -392,7 +390,6 @@
     .verify-submit-btn:hover { background: #152f48; }
     .verify-submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
 
-    /* OTP Steps */
     .otp-step-indicator {
         display: flex;
         align-items: center;
@@ -486,10 +483,7 @@
         text-align: center;
     }
 
-    .success-animation {
-        text-align: center;
-        padding: 20px;
-    }
+    .success-animation { text-align: center; padding: 20px; }
 
     .success-icon {
         width: 70px;
@@ -511,7 +505,6 @@
 
     .success-icon i { color: white; font-size: 2.5rem; }
 
-    /* Edit Form Styles */
     .edit-input {
         display: none;
         width: 100%;
@@ -592,7 +585,7 @@
         .otp-box { width: 42px; height: 52px; font-size: 1.8rem; }
     }
 
-    #container h1{
+    #container h1 {
         color: green;
         background-color: transparent;
         font-size: 2.5rem;
@@ -643,7 +636,7 @@
   }
 </style>
 
-<!-- ===== VERIFICATION MODAL ===== -->
+<!-- VERIFICATION MODAL -->
 <div id="verifyModal" class="verify-modal">
     <div class="verify-modal-content">
         <div class="verify-modal-header">
@@ -651,7 +644,6 @@
             <span class="verify-modal-close" onclick="closeModal()">&times;</span>
         </div>
 
-        <!-- Step Indicator -->
         <div class="otp-step-indicator">
             <div class="step-dot active" id="stepDot1">1</div>
             <div class="step-line" id="stepLine1"></div>
@@ -662,39 +654,36 @@
 
         <div class="verify-modal-body">
 
-            <!-- STEP 1: Destination Entry (Phone or Email based on current location) -->
-        <div id="step1">
-            <div class="destination-display" id="destinationDisplay">
-                {% if student.current_location.name != "Bangladesh" and student.email %}
-                    <p>
-                        We'll send a verification code to your email:
-                        <strong>{{ student.email|truncatechars:30|lower }}</strong>
-                    </p>
-                {% else %}
-                    <p>
-                        Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }}
-                    </p>
-                {% endif %}
-            </div>
-        
-            <input 
-                type="text"
-                id="verificationDestination"
-                class="verify-input"
-                autocomplete="off"
-                inputmode="{% if student.current_location.name != 'Bangladesh' %}email{% else %}numeric{% endif %}"
-                placeholder="{% if student.current_location.name != 'Bangladesh' %}Enter your email address{% else %}Enter your full phone number{% endif %}"
-                oninput="validateDestination()"
-            >
-        
-            <div id="errorMessage" class="error-message"></div>
-        
-            <button class="verify-submit-btn" id="step1Btn" onclick="verifyDestination()">
-                <i class="fas fa-arrow-right"></i> Continue
-            </button>
-        </div>
+            <!-- STEP 1 -->
+            <div id="step1">
+                <div class="destination-display" id="destinationDisplay">
+                    {% if student.current_location.code != "BD" and student.email %}
+                        <p>We'll send a verification code to your email:
+                            <strong>{{ student.email|truncatechars:30|lower }}</strong>
+                        </p>
+                    {% else %}
+                        <p>Please enter your registered phone number *** **** {{ student.bd_no|slice:"-4:" }}</p>
+                    {% endif %}
+                </div>
 
-            <!-- STEP 2: OTP Entry -->
+                <input
+                    type="text"
+                    id="verificationDestination"
+                    class="verify-input"
+                    autocomplete="off"
+                    inputmode="{% if student.current_location.code != 'BD' %}email{% else %}numeric{% endif %}"
+                    placeholder="{% if student.current_location.code != 'BD' %}Enter your email address{% else %}Enter your full phone number{% endif %}"
+                    oninput="validateDestination()"
+                >
+
+                <div id="errorMessage" class="error-message"></div>
+
+                <button class="verify-submit-btn" id="step1Btn" onclick="verifyDestination()">
+                    <i class="fas fa-arrow-right"></i> Continue
+                </button>
+            </div>
+
+            <!-- STEP 2 -->
             <div id="step2" style="display: none;">
                 <p>We've sent a <strong>6-digit OTP</strong> to your <strong id="otpDestinationType"></strong>:</p>
                 <div class="destination-display" id="otpDestinationDisplay">Loading...</div>
@@ -722,18 +711,12 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Success -->
+            <!-- STEP 3 -->
             <div id="step3" style="display: none;">
                 <div class="success-animation">
-                    <div class="success-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <p style="font-size: 1.6rem; font-weight: 700; color: var(--brand-navy); margin-bottom: 8px;">
-                        Identity Verified!
-                    </p>
-                    <p style="font-size: 1.4rem; color: #6b7280;">
-                        You can now edit your profile.
-                    </p>
+                    <div class="success-icon"><i class="fas fa-check"></i></div>
+                    <p style="font-size: 1.6rem; font-weight: 700; color: var(--brand-navy); margin-bottom: 8px;">Identity Verified!</p>
+                    <p style="font-size: 1.4rem; color: #6b7280;">You can now edit your profile.</p>
                 </div>
             </div>
 
@@ -741,12 +724,12 @@
     </div>
 </div>
 
-<!-- ===== MAIN CONTENT ===== -->
+<!-- MAIN CONTENT -->
 <div class="profile-main-wrapper">
     <div class="container">
         <div class="profile-card-container">
 
-            <!-- Sidebar (Left) -->
+            <!-- Sidebar -->
             <div class="profile-sidebar-card">
                 <div class="profile-image-box" id="profileImageBox">
                     {% if student.student_photo %}
@@ -788,7 +771,7 @@
                 </div>
             </div>
 
-            <!-- Details (Right) -->
+            <!-- Details -->
             <div class="profile-details-card" id="profileDetailsCard">
                 <div class="detail-header">
                     <div>
@@ -853,28 +836,30 @@
                         </select>
                     </div>
 
+                    <!-- ✅ FIX: option value="{{ code }}" instead of name -->
                     <div class="data-item">
                         <span class="data-label">Country of Residence</span>
                         <span class="data-value" id="currentLocationValue">
                             <i class="fa fa-map-marker-alt"></i> {{ student.current_location.name }}
                         </span>
                         <select id="currentLocationEdit" class="edit-input" style="display:none;">
-                            <option name="">Select Country</option>
+                            <option value="">Select Country</option>
                             {% for code, name in countries %}
-                                <option name = "code" value="{{ name }}" {% if student.current_location.name == name %}selected{% endif %}>{{ name }}</option>
+                                <option value="{{ code }}" {% if student.current_location.code == code %}selected{% endif %}>{{ name }}</option>
                             {% endfor %}
                         </select>
                     </div>
 
+                    <!-- ✅ FIX: option value="{{ code }}" instead of name -->
                     <div class="data-item">
                         <span class="data-label">Job Location</span>
                         <span class="data-value" id="jobLocationValue">
                             <i class="fa fa-map-marker-alt"></i> {{ student.job_location.name }}
                         </span>
                         <select id="jobLocationEdit" class="edit-input" style="display:none;">
-                            <option name="">Select Job Location</option>
+                            <option value="">Select Job Location</option>
                             {% for code, name in countries %}
-                                <option name = "code" value="{{ name }}" {% if student.job_location.name == name %}selected{% endif %}>{{ name }}</option>
+                                <option value="{{ code }}" {% if student.job_location.code == code %}selected{% endif %}>{{ name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -1013,11 +998,11 @@
                                value="{{ student.facebook_profile|default:'' }}"
                                placeholder="https://facebook.com/username" style="display:none;">
                     </div>
-                    
+
                     <div class="data-item">
                         <span class="data-label">Email Address</span>
                         <span class="data-value" id="emailValue">
-                            <i class="fa fa-envelope"></i> 
+                            <i class="fa fa-envelope"></i>
                             {% if student.email %}
                                 {{ student.email }}
                             {% else %}
@@ -1027,7 +1012,7 @@
                     </div>
                 </div>
 
-                <!-- Edit Action Buttons -->
+                <!-- Edit Actions -->
                 <div class="edit-actions" id="editActions" style="display: none;">
                     <button class="btn-cancel-edit" onclick="cancelEdit()">
                         <i class="fas fa-times"></i> Cancel
@@ -1046,20 +1031,15 @@
     let verifiedDestination = null;
     let selectedPhotoFile = null;
     let currentDestination = null;
-    let currentVerificationType = null; // 'phone' or 'email'
+    let currentVerificationType = null;
     let resendInterval = null;
 
+    // ✅ FIX: Use country code (BD) instead of name
     function getVerificationType() {
-        // Use the is_bangladesh flag from Django context
-        const isBangladesh = {% if is_bangladesh %}true{% else %}false{% endif %};
-        const currentLocationCode = "{{ current_location_code|default:'' }}";
-        
-        console.log("Is Bangladesh:", isBangladesh, "Location Code:", currentLocationCode);
-        
-        return isBangladesh ? 'phone' : 'email';
+        const locationCode = "{{ student.current_location.code|default:'' }}";
+        return (locationCode === 'BD') ? 'phone' : 'email';
     }
 
-    // ===== MODAL CONTROLS =====
     function openModal() {
         document.getElementById('verifyModal').classList.add('active');
         resetModal();
@@ -1079,22 +1059,22 @@
         clearOtpBoxes();
         showStep(1);
         updateStepIndicator(1);
-        
-        // Reset verification type display
+
         currentVerificationType = getVerificationType();
         const destinationDisplay = document.getElementById('destinationDisplay');
-        
-        console.log("Verification Type:", currentVerificationType);
-        
+        const verificationInput = document.getElementById('verificationDestination');
+
         if (currentVerificationType === 'email') {
             const email = "{{ student.email|default:'' }}";
             const emailDisplay = email ? email.substring(0, 30) : 'your registered email';
             destinationDisplay.innerHTML = '<p>We\'ll send a verification code to your email: <strong>' + emailDisplay + '</strong></p>';
-            document.getElementById('verificationDestination').placeholder = 'Enter your email address';
+            verificationInput.placeholder = 'Enter your email address';
+            verificationInput.inputMode = 'email';
         } else {
             const lastFour = "{{ student.bd_no|slice:'-4:' }}";
             destinationDisplay.innerHTML = '<p>Please enter your registered phone number *** **** ' + lastFour + '</p>';
-            document.getElementById('verificationDestination').placeholder = 'Enter your full phone number';
+            verificationInput.placeholder = 'Enter your full phone number';
+            verificationInput.inputMode = 'numeric';
         }
     }
 
@@ -1120,8 +1100,7 @@
         if (activeStep === 1) {
             dot1.classList.add('active');
         } else if (activeStep === 2) {
-            dot1.classList.add('done');
-            dot1.innerHTML = '✓';
+            dot1.classList.add('done'); dot1.innerHTML = '✓';
             line1.classList.add('done');
             dot2.classList.add('active');
         } else if (activeStep === 3) {
@@ -1133,15 +1112,6 @@
         }
     }
 
-    function backToStep1() {
-        if (resendInterval) clearInterval(resendInterval);
-        clearOtpBoxes();
-        document.getElementById('otpErrorMessage').classList.remove('show');
-        showStep(1);
-        updateStepIndicator(1);
-    }
-
-    // ===== OTP BOX CONTROLS =====
     function clearOtpBoxes() {
         for (let i = 0; i < 6; i++) {
             const box = document.getElementById('otp' + i);
@@ -1175,23 +1145,16 @@
                 prev.focus();
             }
         }
-        if (event.key === 'ArrowLeft' && index > 0) {
-            document.getElementById('otp' + (index - 1)).focus();
-        }
-        if (event.key === 'ArrowRight' && index < 5) {
-            document.getElementById('otp' + (index + 1)).focus();
-        }
+        if (event.key === 'ArrowLeft' && index > 0) document.getElementById('otp' + (index - 1)).focus();
+        if (event.key === 'ArrowRight' && index < 5) document.getElementById('otp' + (index + 1)).focus();
     }
 
     function getOtpValue() {
         let otp = '';
-        for (let i = 0; i < 6; i++) {
-            otp += document.getElementById('otp' + i).value;
-        }
+        for (let i = 0; i < 6; i++) otp += document.getElementById('otp' + i).value;
         return otp;
     }
 
-    // ===== PHONE NORMALIZATION =====
     function normalize(num) {
         if (!num) return "";
         num = num.replace(/[\s\-\(\)\+]/g, '');
@@ -1200,7 +1163,6 @@
         return num;
     }
 
-    // ===== STEP 1: VERIFY DESTINATION (Phone or Email) =====
     function verifyDestination() {
         currentVerificationType = getVerificationType();
         const enteredValue = document.getElementById('verificationDestination').value.trim();
@@ -1219,62 +1181,52 @@
         }
     }
 
-    // ===== VERIFY PHONE NUMBER (যখন লোকেশন বাংলাদেশ) =====
     function verifyPhoneNumber(enteredNumber) {
         const errorDiv = document.getElementById('errorMessage');
-        let cleanEntered = enteredNumber.replace(/[\s\-\(\)\+]/g, '');
         let bdNumber = "{{ student.bd_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
         let abroadNumber = "{{ student.abroad_no|default:'' }}".replace(/[\s\-\(\)\+]/g, '');
 
-        let normalizedEntered = normalize(cleanEntered);
+        let normalizedEntered = normalize(enteredNumber.replace(/[\s\-\(\)\+]/g, ''));
         let normalizedBd = normalize(bdNumber);
         let normalizedAbroad = normalize(abroadNumber);
 
         const enteredLast10 = normalizedEntered.slice(-10);
-        const bdLast10 = normalizedBd.slice(-10);
-        const abroadLast10 = normalizedAbroad.slice(-10);
 
-        // Check BD Number match
-        if (bdNumber && (bdLast10 === enteredLast10 || normalizedBd === normalizedEntered)) {
+        if (bdNumber && (normalizedBd.slice(-10) === enteredLast10 || normalizedBd === normalizedEntered)) {
             currentDestination = bdNumber;
             sendOtp('phone', bdNumber);
             return;
         }
 
-        // Check Abroad Number match (also send OTP to phone if abroad matches)
-        if (abroadNumber && (abroadLast10 === enteredLast10 || normalizedAbroad === normalizedEntered)) {
+        if (abroadNumber && (normalizedAbroad.slice(-10) === enteredLast10 || normalizedAbroad === normalizedEntered)) {
             currentDestination = abroadNumber;
             sendOtp('phone', abroadNumber);
             return;
         }
 
-        // ❌ No Match
         errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> Phone number does not match our records. Please try again.';
         errorDiv.classList.add('show');
     }
 
-    // ===== VERIFY EMAIL ADDRESS (যখন লোকেশন বাংলাদেশ না) =====
     function verifyEmailAddress(enteredEmail) {
         const errorDiv = document.getElementById('errorMessage');
         const registeredEmail = "{{ student.email|default:'' }}";
 
         if (!registeredEmail) {
-            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> No email address registered for this account. Please contact support.';
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> No email address registered for this account.';
             errorDiv.classList.add('show');
             return;
         }
 
-        // Normalize emails for comparison
         if (enteredEmail.toLowerCase().trim() === registeredEmail.toLowerCase().trim()) {
             currentDestination = registeredEmail;
             sendOtp('email', registeredEmail);
         } else {
-            errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> Email address does not match our records. Please try again.';
+            errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> Email address does not match our records.';
             errorDiv.classList.add('show');
         }
     }
 
-    // ===== SEND OTP =====
     function sendOtp(type, destination) {
         const btn = document.getElementById('step1Btn');
         btn.disabled = true;
@@ -1288,17 +1240,13 @@
 
         const url = (type === 'phone') ? "{% url 'send_otp_1' %}" : "{% url 'send_otp_email' %}";
 
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
+        fetch(url, { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-arrow-right"></i> Continue';
 
             if (data.success) {
-                // Display destination with masking
                 let displayDestination = destination;
                 if (type === 'phone' && displayDestination.length >= 4) {
                     displayDestination = '+88 ' + displayDestination.slice(-10, -6).replace(/./g, '*') + ' ' + displayDestination.slice(-4);
@@ -1313,7 +1261,7 @@
                 setTimeout(() => document.getElementById('otp0').focus(), 300);
             } else {
                 const errorDiv = document.getElementById('errorMessage');
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Failed to send OTP. Please try again.');
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.message || 'Failed to send OTP.');
                 errorDiv.classList.add('show');
             }
         })
@@ -1326,13 +1274,12 @@
         });
     }
 
-    // ===== VERIFY OTP =====
     function verifyOtp() {
         const otp = getOtpValue();
         const errorDiv = document.getElementById('otpErrorMessage');
 
         if (otp.length !== 6) {
-            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter all 6 digits of the OTP.';
+            errorDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter all 6 digits.';
             errorDiv.classList.add('show');
             return;
         }
@@ -1350,10 +1297,7 @@
 
         const url = (currentVerificationType === 'phone') ? "{% url 'verify_otp_1' %}" : "{% url 'verify_otp_email' %}";
 
-        fetch(url, {
-            method: 'POST',
-            body: formData
-        })
+        fetch(url, { method: 'POST', body: formData })
         .then(res => res.json())
         .then(data => {
             btn.disabled = false;
@@ -1364,12 +1308,9 @@
                 if (resendInterval) clearInterval(resendInterval);
                 showStep(3);
                 updateStepIndicator(3);
-                setTimeout(() => {
-                    closeModal();
-                    enableEditMode();
-                }, 1200);
+                setTimeout(() => { closeModal(); enableEditMode(); }, 1200);
             } else {
-                errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> ' + (data.message || 'Invalid OTP. Please try again.');
+                errorDiv.innerHTML = '<i class="fas fa-times-circle"></i> ' + (data.message || 'Invalid OTP.');
                 errorDiv.classList.add('show');
                 document.querySelectorAll('.otp-box').forEach(box => {
                     box.style.borderColor = '#dc2626';
@@ -1380,12 +1321,11 @@
         .catch(() => {
             btn.disabled = false;
             btn.innerHTML = '<i class="fas fa-check-circle"></i> Verify OTP';
-            errorDiv.innerHTML = '<i class="fas fa-wifi"></i> Network error. Please try again.';
+            errorDiv.innerHTML = '<i class="fas fa-wifi"></i> Network error.';
             errorDiv.classList.add('show');
         });
     }
 
-    // ===== RESEND OTP =====
     function resendOtp() {
         clearOtpBoxes();
         document.getElementById('otpErrorMessage').classList.remove('show');
@@ -1394,24 +1334,21 @@
 
     function startResendTimer() {
         if (resendInterval) clearInterval(resendInterval);
-    
-        let seconds = 300; // 5 minutes
-    
+        let seconds = 300;
         const resendBtn = document.getElementById('resendBtn');
         const resendTimer = document.getElementById('resendTimer');
         const timerCount = document.getElementById('timerCount');
-    
+
         resendBtn.disabled = true;
         resendTimer.style.display = 'inline';
-    
+
         function updateTimer() {
             const min = Math.floor(seconds / 60);
             const sec = seconds % 60;
             timerCount.textContent = String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
         }
-    
         updateTimer();
-    
+
         resendInterval = setInterval(() => {
             seconds--;
             updateTimer();
@@ -1423,19 +1360,15 @@
         }, 1000);
     }
 
-    // ===== PHOTO PREVIEW =====
     function previewPhoto(input) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('profileImage').src = e.target.result;
-            };
+            reader.onload = function(e) { document.getElementById('profileImage').src = e.target.result; };
             reader.readAsDataURL(input.files[0]);
             selectedPhotoFile = input.files[0];
         }
     }
 
-    // ===== CHARACTER COUNTERS =====
     function updateBioCounter() {
         const textarea = document.getElementById('bioEditInput');
         const counter = document.getElementById('bioCounter');
@@ -1456,13 +1389,10 @@
         }
     }
 
-    // ===== ENABLE EDIT MODE =====
     function enableEditMode() {
         isEditMode = true;
 
         document.getElementById('photoEditOverlay').style.display = 'flex';
-        document.getElementById('profileImageBox').style.cursor = 'pointer';
-
         document.getElementById('nameDisplay').style.display = 'none';
         document.getElementById('nameEditInput').style.display = 'block';
 
@@ -1511,10 +1441,7 @@
         selectedPhotoFile = null;
 
         const originalPhotoSrc = "{% if student.student_photo %}{{ student.student_photo.url }}{% else %}{% static 'img/default_student.png' %}{% endif %}";
-        
-        const profileImage = document.getElementById('profileImage');
-        if (profileImage) profileImage.src = originalPhotoSrc;
-
+        document.getElementById('profileImage').src = originalPhotoSrc;
         document.getElementById('photoEditOverlay').style.display = 'none';
 
         document.getElementById('nameDisplay').style.display = 'block';
@@ -1553,119 +1480,82 @@
         document.getElementById('editButton').style.display = 'inline-flex';
     }
 
-  // ===== SAVE CHANGES =====
-// ===== SAVE CHANGES =====
-function saveChanges() {
-    const bioText = document.getElementById('bioEditInput').value;
-    const jobDescText = document.getElementById('jobDescriptionEdit').value;
-
-    if (bioText.length > 1000) {
-        alert('About Me section cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
-        return;
+    // ✅ FIX: Helper to read select value regardless of display:none
+    function getSelectVal(id) {
+        const el = document.getElementById(id);
+        if (!el) return '';
+        return el.value || '';
     }
 
-    if (jobDescText.length > 200) {
-        alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
-        return;
-    }
+    function saveChanges() {
+        const bioText = document.getElementById('bioEditInput').value;
+        const jobDescText = document.getElementById('jobDescriptionEdit').value;
 
-    const saveBtn = document.querySelector('.btn-save');
-    saveBtn.disabled = true;
-    saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-
-    const formData = new FormData();
-
-    // Always include student_id
-    formData.append('student_id', '{{ student.id }}');
-    
-    // Always include student_name
-    formData.append('student_name', document.getElementById('nameEditInput').value);
-
-    // ✅ Get current values from SELECT dropdowns
-    const maritalStatus = document.getElementById('maritalStatusEdit').value;
-    const village = document.getElementById('villageEdit').value;
-    const currentLocation = document.getElementById('currentLocationEdit').name;
-    const jobLocation = document.getElementById('jobLocationEdit').value;
-    const lastEdu = document.getElementById('lastEduEdit').value;
-    const occupation = document.getElementById('occupationEdit').value;
-
-    // ✅ ONLY append if value exists (not empty string)
-    if (maritalStatus && maritalStatus !== '') {
-        formData.append('marital_status', maritalStatus);
-    }
-
-    if (village && village !== '') {
-        formData.append('village', village);
-    }
-
-    if (currentLocation && currentLocation !== '') {
-        formData.append('current_location', currentLocation);
-        console.log('Sending current_location:', currentLocation); // Debug log
-    }
-
-    if (jobLocation && jobLocation !== '') {
-        formData.append('job_location', jobLocation);
-        console.log('Sending job_location:', jobLocation); // Debug log
-    }
-
-    if (lastEdu && lastEdu !== '') {
-        formData.append('last_edu', lastEdu);
-    }
-
-    if (occupation && occupation !== '') {
-        formData.append('occupation', occupation);
-    }
-
-    // These can be empty strings
-    formData.append('job_description', jobDescText);
-    formData.append('facebook_profile', document.getElementById('facebookEdit').value);
-    formData.append('student_bio', bioText);
-
-    // Photo upload
-    if (selectedPhotoFile) {
-        formData.append('student_photo', selectedPhotoFile);
-    }
-
-    // CSRF Token
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
-    if (csrfToken) {
-        formData.append('csrfmiddlewaretoken', csrfToken.value);
-    }
-
-    // ✅ Debug: Log what we're sending
-    console.log('FormData contents:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-
-    fetch("{% url 'update_student_profile' %}", {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
+        if (bioText.length > 1000) {
+            alert('About Me cannot exceed 1000 characters. Current: ' + bioText.length + '/1000');
+            return;
         }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
-            saveBtn.style.background = '#10b981';
-            setTimeout(() => location.reload(), 800);
-        } else {
+        if (jobDescText.length > 200) {
+            alert('Job Description cannot exceed 200 characters. Current: ' + jobDescText.length + '/200');
+            return;
+        }
+
+        const saveBtn = document.querySelector('.btn-save');
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const formData = new FormData();
+        formData.append('student_id', '{{ student.id }}');
+        formData.append('student_name', document.getElementById('nameEditInput').value);
+
+        // ✅ Use helper — works even when select is display:none
+        const maritalStatus   = getSelectVal('maritalStatusEdit');
+        const village         = getSelectVal('villageEdit');
+        const currentLocation = getSelectVal('currentLocationEdit'); // now sends code e.g. "BD"
+        const jobLocation     = getSelectVal('jobLocationEdit');     // now sends code e.g. "US"
+        const lastEdu         = getSelectVal('lastEduEdit');
+        const occupation      = getSelectVal('occupationEdit');
+
+        if (maritalStatus)   formData.append('marital_status',   maritalStatus);
+        if (village)         formData.append('village',          village);
+        if (currentLocation) formData.append('current_location', currentLocation);
+        if (jobLocation)     formData.append('job_location',     jobLocation);
+        if (lastEdu)         formData.append('last_edu',         lastEdu);
+        if (occupation)      formData.append('occupation',       occupation);
+
+        formData.append('job_description',  jobDescText);
+        formData.append('facebook_profile', document.getElementById('facebookEdit').value);
+        formData.append('student_bio',      bioText);
+
+        if (selectedPhotoFile) formData.append('student_photo', selectedPhotoFile);
+
+        const csrf = document.querySelector('[name=csrfmiddlewaretoken]');
+        if (csrf) formData.append('csrfmiddlewaretoken', csrf.value);
+
+        fetch("{% url 'update_student_profile' %}", {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+                saveBtn.style.background = '#10b981';
+                setTimeout(() => location.reload(), 800);
+            } else {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(() => {
             saveBtn.disabled = false;
             saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        saveBtn.disabled = false;
-        saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-        console.error('Error:', error);
-        alert('An error occurred while saving. Please try again.');
-    });
-}
+            alert('Network error. Please try again.');
+        });
+    }
 
-    // ===== EVENT LISTENERS =====
     document.getElementById('profileImageBox').addEventListener('click', function() {
         if (isEditMode) document.getElementById('photoInput').click();
     });
@@ -1679,7 +1569,7 @@ function saveChanges() {
         if (event.target === modal) closeModal();
     };
 
-    // ===== SEARCHABLE SELECT DROPDOWN =====
+    // Searchable Select Dropdown
     (function() {
         const selects = document.querySelectorAll('select.edit-input');
         selects.forEach(function(originalSelect) {
@@ -1691,57 +1581,25 @@ function saveChanges() {
             function refreshOptions() {
                 allOptions = [];
                 originalSelect.querySelectorAll('option').forEach(function(opt) {
-                    allOptions.push({
-                        value: opt.value,
-                        text: opt.textContent
-                    });
+                    allOptions.push({ value: opt.value, text: opt.textContent.trim() });
                 });
             }
             refreshOptions();
 
             const wrapper = document.createElement('div');
-            wrapper.className = 'searchable-select-wrapper';
-            wrapper.style.position = 'relative';
-            wrapper.style.width = '100%';
+            wrapper.style.cssText = 'position:relative;width:100%;';
 
             const searchInput = document.createElement('input');
             searchInput.type = 'text';
-            searchInput.placeholder = '🔍 Search...';
-            searchInput.className = 'dropdown-search-input';
-            searchInput.style.cssText = `
-                width: calc(100% - 20px);
-                margin: 8px 10px;
-                padding: 8px 12px;
-                font-size: 1.4rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 8px;
-                font-family: 'Roboto', sans-serif;
-                box-sizing: border-box;
-                outline: none;
-            `;
+            searchInput.placeholder = 'Search...';
+            searchInput.style.cssText = 'width:calc(100% - 20px);margin:8px 10px;padding:8px 12px;font-size:1.4rem;border:1px solid #e5e7eb;border-radius:8px;font-family:Roboto,sans-serif;box-sizing:border-box;outline:none;';
             searchInput.addEventListener('focus', function(e) { e.stopPropagation(); });
 
             const customDropdown = document.createElement('div');
-            customDropdown.className = 'searchable-custom-dropdown';
-            customDropdown.style.cssText = `
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: white;
-                border: 1px solid #d1d5db;
-                border-radius: 12px;
-                max-height: 280px;
-                overflow-y: auto;
-                z-index: 10000;
-                display: none;
-                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
-                margin-top: 4px;
-            `;
+            customDropdown.style.cssText = 'position:absolute;top:100%;left:0;right:0;background:white;border:1px solid #d1d5db;border-radius:12px;max-height:280px;overflow-y:auto;z-index:10000;display:none;box-shadow:0 10px 25px -5px rgba(0,0,0,0.15);margin-top:4px;';
 
             const optionsList = document.createElement('div');
-            optionsList.className = 'searchable-options-list';
-            optionsList.style.cssText = `max-height: 220px; overflow-y: auto;`;
+            optionsList.style.cssText = 'max-height:220px;overflow-y:auto;';
 
             customDropdown.appendChild(searchInput);
             customDropdown.appendChild(optionsList);
@@ -1750,37 +1608,32 @@ function saveChanges() {
                 const term = searchTerm.toLowerCase().trim();
                 optionsList.innerHTML = '';
 
-                let filteredOptions = allOptions;
-                if (term !== '') {
-                    filteredOptions = allOptions.filter(opt => opt.text.toLowerCase().includes(term));
-                }
+                let filtered = term ? allOptions.filter(o => o.text.toLowerCase().includes(term)) : allOptions;
 
-                if (filteredOptions.length === 0) {
+                if (filtered.length === 0) {
                     const noResult = document.createElement('div');
-                    noResult.textContent = '❌ No matching options';
-                    noResult.style.cssText = `padding: 12px; text-align: center; color: #9ca3af; font-size: 1.3rem; font-style: italic;`;
+                    noResult.textContent = 'No matching options';
+                    noResult.style.cssText = 'padding:12px;text-align:center;color:#9ca3af;font-size:1.3rem;font-style:italic;';
                     optionsList.appendChild(noResult);
                 } else {
-                    filteredOptions.forEach(function(opt) {
+                    filtered.forEach(function(opt) {
                         const optionDiv = document.createElement('div');
-                        optionDiv.className = 'searchable-option-item';
-                        optionDiv.textContent = opt.text;
                         optionDiv.setAttribute('data-value', opt.value);
-                        optionDiv.style.cssText = `padding: 10px 14px; cursor: pointer; font-size: 1.4rem; font-family: 'Roboto', sans-serif; color: #111827; transition: all 0.15s ease; border-bottom: 1px solid #f3f4f6;`;
+                        optionDiv.style.cssText = 'padding:10px 14px;cursor:pointer;font-size:1.4rem;font-family:Roboto,sans-serif;color:#111827;transition:all 0.15s ease;border-bottom:1px solid #f3f4f6;';
 
-                        if (term !== '' && opt.text.toLowerCase().includes(term)) {
-                            const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-                            optionDiv.innerHTML = opt.text.replace(regex, '<mark style="background: #F4A024; color: #203C5C; padding: 0 2px; border-radius: 3px;">$1</mark>');
+                        if (term) {
+                            const regex = new RegExp('(' + term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+                            optionDiv.innerHTML = opt.text.replace(regex, '<mark style="background:#F4A024;color:#203C5C;padding:0 2px;border-radius:3px;">$1</mark>');
+                        } else {
+                            optionDiv.textContent = opt.text;
                         }
 
                         optionDiv.addEventListener('mouseenter', function() { this.style.backgroundColor = '#fef3c7'; });
                         optionDiv.addEventListener('mouseleave', function() { this.style.backgroundColor = 'transparent'; });
                         optionDiv.addEventListener('click', function(e) {
                             e.stopPropagation();
-                            const selectedValue = this.getAttribute('data-value');
-                            originalSelect.value = selectedValue;
-                            const changeEvent = new Event('change', { bubbles: true });
-                            originalSelect.dispatchEvent(changeEvent);
+                            originalSelect.value = this.getAttribute('data-value');
+                            originalSelect.dispatchEvent(new Event('change', { bubbles: true }));
                             customDropdown.style.display = 'none';
                         });
                         optionsList.appendChild(optionDiv);
@@ -1803,113 +1656,55 @@ function saveChanges() {
             });
 
             document.addEventListener('click', function(e) {
-                if (!wrapper.contains(e.target) && !customDropdown.contains(e.target)) {
-                    customDropdown.style.display = 'none';
-                }
+                if (!wrapper.contains(e.target)) customDropdown.style.display = 'none';
             });
 
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && customDropdown.style.display === 'block') {
-                    customDropdown.style.display = 'none';
-                    searchInput.value = '';
-                }
+                if (e.key === 'Escape') customDropdown.style.display = 'none';
             });
 
-            originalSelect.addEventListener('change', function() { customDropdown.style.display = 'none'; });
+            originalSelect.style.cssText = 'width:100%;padding:10px 14px;font-size:1.5rem;border:2px solid var(--brand-orange,#F4A024);border-radius:10px;font-family:Roboto,sans-serif;background:white;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23203C5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>\');background-repeat:no-repeat;background-position:right 12px center;background-size:16px;';
 
             originalSelect.parentNode.insertBefore(wrapper, originalSelect);
             wrapper.appendChild(originalSelect);
             wrapper.appendChild(customDropdown);
 
-            originalSelect.style.cssText = `
-                width: 100%;
-                padding: 10px 14px;
-                font-size: 1.5rem;
-                border: 2px solid var(--brand-orange, #F4A024);
-                border-radius: 10px;
-                font-family: 'Roboto', sans-serif;
-                background: white;
-                cursor: pointer;
-                appearance: none;
-                -webkit-appearance: none;
-                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23203C5C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-                background-repeat: no-repeat;
-                background-position: right 12px center;
-                background-size: 16px;
-            `;
-
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.attributeName === 'style' || mutation.attributeName === 'display') {
-                        if (originalSelect.style.display === 'none') {
-                            customDropdown.style.display = 'none';
-                        }
+            new MutationObserver(function(mutations) {
+                mutations.forEach(function(m) {
+                    if (m.attributeName === 'style' && originalSelect.style.display === 'none') {
+                        customDropdown.style.display = 'none';
                     }
                 });
-            });
-            observer.observe(originalSelect, { attributes: true });
+            }).observe(originalSelect, { attributes: true });
         });
-    })(); // This closing brace was missing
-    
+    })();
+
+    // Auto-link URLs in job description
     function convertUrlsToLinks(text) {
         if (!text) return text;
-        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+[^\s]*)/gi;
+        const urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+)/gi;
         return text.replace(urlRegex, function(url) {
-            let href = url;
-            if (!href.startsWith('http://') && !href.startsWith('https://')) {
-                href = 'https://' + href;
-            }
-            return `<a href="${href}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline; font-weight: 500; word-break: break-all;">${url}</a>`;
+            let href = url.startsWith('http') ? url : 'https://' + url;
+            return '<a href="' + href + '" target="_blank" rel="noopener noreferrer" style="color:#0066cc;text-decoration:underline;word-break:break-all;">' + url + '</a>';
         });
     }
-    
+
     function updateJobDescriptionDisplay() {
-        const jobDescSpan = document.getElementById('jobDescriptionValue');
-        if (!jobDescSpan) return;
-        const rawText = jobDescSpan.innerText || jobDescSpan.textContent || '';
-        let cleanText = rawText.replace(/<i\b[^>]*>.*?<\/i>/gi, '').trim();
-        cleanText = cleanText.replace(/<a\b[^>]*>.*?<\/a>/gi, '');
-        if (cleanText === 'Not specified' || cleanText === '') {
-            jobDescSpan.innerHTML = '<i class="fa fa-briefcase"></i> Not specified';
+        const el = document.getElementById('jobDescriptionValue');
+        if (!el) return;
+        const rawText = el.innerText || el.textContent || '';
+        const cleanText = rawText.replace(/<[^>]*>/g, '').trim();
+        if (!cleanText || cleanText === 'Not specified') {
+            el.innerHTML = '<i class="fa fa-briefcase"></i> Not specified';
             return;
         }
-        const convertedText = convertUrlsToLinks(cleanText);
-        jobDescSpan.innerHTML = `<i class="fa fa-briefcase"></i> ${convertedText}`;
+        el.innerHTML = '<i class="fa fa-briefcase"></i> ' + convertUrlsToLinks(cleanText);
     }
-    
-    function enhanceJobDescriptionOnLoad() {
-        const jobDescSpan = document.getElementById('jobDescriptionValue');
-        if (jobDescSpan && !jobDescSpan.hasAttribute('data-formatted')) {
-            updateJobDescriptionDisplay();
-            jobDescSpan.setAttribute('data-formatted', 'true');
-        }
-    }
-    
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', enhanceJobDescriptionOnLoad);
+        document.addEventListener('DOMContentLoaded', updateJobDescriptionDisplay);
     } else {
-        enhanceJobDescriptionOnLoad();
-    }
-    
-    const originalCancelEdit = window.cancelEdit;
-    if (typeof originalCancelEdit === 'function') {
-        window.cancelEdit = function() {
-            originalCancelEdit.apply(this, arguments);
-            updateJobDescriptionDisplay();
-        };
-    }
-    
-    const originalSaveChangesFull = window.saveChanges;
-    if (typeof originalSaveChangesFull === 'function') {
-        window.saveChanges = function() {
-            const jobDescTextarea = document.getElementById('jobDescriptionEdit');
-            if (jobDescTextarea) {
-                let plainText = jobDescTextarea.value;
-                plainText = plainText.replace(/<[^>]*>/g, '');
-                jobDescTextarea.value = plainText;
-            }
-            return originalSaveChangesFull.apply(this, arguments);
-        };
+        updateJobDescriptionDisplay();
     }
 </script>
 

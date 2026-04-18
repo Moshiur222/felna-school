@@ -749,7 +749,7 @@ class StudentRegistration(models.Model):
     IS_VERIFIED_CHOICES = [ (0, 'Pending'), (1, 'Accepted')]
 
     student_name = models.CharField(max_length=100) 
-    email = models.EmailField(unique=True, null=True, blank=True) 
+    email = models.EmailField(null=True, blank=True) 
     facebook_profile = models.CharField(max_length=1000, null=True, blank=True)
     student_bio = models.TextField(max_length=1000, null=True, blank=True)
     student_photo = models.ImageField(upload_to='student_photos/', null=True, blank=True)
