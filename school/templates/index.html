@@ -67,7 +67,7 @@
     width:200px;
     border-radius:100px;
     border:4px solid #F68B1F;
-    object-fit:cover;
+    object-fit: contain;
 }
 
 .student-photo{
@@ -75,7 +75,7 @@
     width:150px;
     border-radius:75px;
     border:4px solid #2c2f60 !important;
-    object-fit:cover;
+    object-fit: contain;
 }
 
 .person-name{
@@ -229,7 +229,7 @@
                                             {% if student.photo %}
                                                 <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="student-photo">
                                             {% else %}
-                                                <img src="{% static 'images/default_student.png' %}" alt="{{ student.name }}" class="student-photo">
+                                                <img src="{% static 'img/felna.png' %}" alt="{{ student.name }}" class="student-photo">
                                             {% endif %}
 
                                             <div style="width:200px;margin:auto;">
