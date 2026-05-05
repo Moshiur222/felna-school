@@ -325,7 +325,7 @@ body {
                 <!-- INTRODUCTION -->
                 <li>
                     <a class="Menu1_1 Menu1_3 
-                    {% if active_url == 'history' or active_url == 'mv' or active_url == 'achievements_list' or active_url == 'achievement_detail' %}
+                    {% if active_url == 'history' or active_url == 'mv' or active_url == 'about_view' or active_url == 'achievements_list' or active_url == 'achievement_detail' %}
                     active
                     {% endif %}" 
                     href="">
@@ -333,7 +333,7 @@ body {
                     </a>
                     <ul>
                         <li>
-                            <a class="{% if active_url == 'history' %}active{% endif %}" 
+                            <a class="{% if active_url == 'about_view' %}active{% endif %}" 
                             href="{% url 'about_view'%}">
                             প্রতিষ্ঠান সম্পর্কে
                             </a>
