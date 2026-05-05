@@ -227,12 +227,12 @@ body{ background:var(--bg); }
 
     <!--  LEFT COLUMN -->
     <div class="col-lg-8">
-        <a href="{% url 'news' %}" class="back-link">
-            ← Back to News
-        </a>
-
+        
         <div class="news-detail-wrap">
             <div class="news-top">
+                <a href="{% url 'news' %}" class="back-link">
+                    ← Back to News
+                </a>
                 <h1 class="news-title">{{ newses.title }}</h1>
 
                 <div class="news-meta">
