@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}প্রতিষ্ঠান সম্পর্কে{% endblock %}
+
+{% block content %}
+
+<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
+    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
+        <span>প্রতিষ্ঠান সম্পর্কে</span>
+    </h4>
+    <div class="col-md-12 img-thumbnail" style="padding: 15px; height: auto;">                      
+        <p style="text-align: justify; line-height: 25px;">
+            {% if welcome_message %}
+                {{ welcome_message.message|linebreaksbr }}
+            {% else %}
+                <p>এখানে প্রতিষ্ঠানের সম্পর্কে বিস্তারিত তথ্য প্রদর্শিত হবে।</p>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+{% endblock content %}

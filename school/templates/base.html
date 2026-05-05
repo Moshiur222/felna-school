@@ -10,7 +10,10 @@
 {% block meta_tags %}{% endblock %} 
 {% block extra_css %}{% endblock %} 
 <style>
-
+body {
+    background: url("{% static 'img/slider 1.jpg' %}") no-repeat center center fixed;
+    background-size: cover;
+}
 /* Sticky Top Navigation */
 .wrapper.row2 {
     position: sticky;
@@ -265,26 +268,7 @@
                             </ul>
                         </td>
 
-                        <td style="text-align: center; width: 130px; padding-right: 15px;">
-                        {% if current_language == 'en' %}
-                            <form action="{% url 'switch_language' %}" method="post" id="lang-form-bn" style="display: inline;">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                <input name="language" type="hidden" value="bn">
-                                <a href="javascript:void(0)" onclick="document.getElementById('lang-form-bn').submit();" class="version">
-                                    বাংলা ভার্সন
-                                </a>
-                            </form>
-                        {% else %}
-                            <form action="{% url 'switch_language' %}" method="post" id="lang-form-en" style="display: inline;">
-                                {% csrf_token %}
-                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                <input name="language" type="hidden" value="en">
-                                <a href="javascript:void(0)" onclick="document.getElementById('lang-form-en').submit();" class="version">
-                                    English Version
-                                </a>
-                            </form>
-                        {% endif %}
+                    <td style="text-align: center; width: 130px; padding-right: 15px;">
                     </td>
                     </tr>
                 </table>
@@ -325,17 +309,28 @@
     <div class="wrapper row2">
         <div id="topnav">
             <ul class="Menu1_2">
-                
+                <li>
+                    <a class="Menu1_1 Menu1_3 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                    href="{% url 'home'%}">
+                    {{t.home}}
+                    </a>
+                </li>
                 <!-- INTRODUCTION -->
                 <li>
                     <a class="Menu1_1 Menu1_3 
-                    {% if active_url == 'home' or active_url == 'history' or active_url == 'mv' or active_url == 'achievements_list' or active_url == 'achievement_detail' %}
+                    {% if active_url == 'history' or active_url == 'mv' or active_url == 'achievements_list' or active_url == 'achievement_detail' %}
                     active
                     {% endif %}" 
-                    href="{% url 'home'%}">
+                    href="">
                     {{t.INTRODUCTION}}
                     </a>
                     <ul>
+                        <li>
+                            <a class="{% if active_url == 'history' %}active{% endif %}" 
+                            href="{% url 'about_view'%}">
+                            প্রতিষ্ঠান সম্পর্কে
+                            </a>
+                        </li>
                         <li>
                             <a class="{% if active_url == 'history' %}active{% endif %}" 
                             href="{% url 'history'%}">
@@ -460,8 +455,43 @@
                     {{t.BOARD_PERMISSION}}
                     </a>
                 </li>
+                
+                <!-- news and media -->
+                <li>
+                    <a class="Menu1_1 Menu1_3 
+                    {% if active_url == 'gallery' or active_url == 'news' or active_url == 'gallery' or active_url == 'video_gallery'  or active_url == 'news_details' or active_url == 'photos' %}
+                    active
+                    {% endif %}" href="#">
+                    নিউজ অ্যান্ড মিডিয়া
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="{% if active_url == 'news' or active_url == 'news_details' %}active{% endif %}" 
+                            href="{% url 'news'%}">
+                            নিউজ
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'gallery' or active_url == 'photos' %}active{% endif %}" 
+                            href="{% url 'gallery'%}">
+                            ফটো গ্যালারি
+                            </a>
+                        </li>
+                        <li>
+                            <a class="{% if active_url == 'video_gallery' %}active{% endif %}" 
+                            href="{% url 'video_gallery'%}">
+                            ভিডিও গ্যালারি
+                            </a>
+                        </li>
+                        <li>
+                            <a 
+                            href="">
+                            টেন্ডার
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
-                <!-- ALUMNI -->
                 <li>
                     <a class="Menu1_1 Menu1_3 
                     {% if active_url == 'student_registration' or active_url == 'registration_students_list' or active_url == 'registration_student_detail' %}
@@ -489,12 +519,12 @@
         </div>
     </div>
 
-<div class="wrapper row4">
-    <div id="maincontainer" class="clear">
+<div class="wrapper row4" >
+    <div id="maincontainer" class="clear" >
         <div class="clear"></div>
         <div class="clear"></div>
         <div class="wrapper row7">
-            <div id="container" class="clear">
+            <div id="container" class="clear" style = "background: #fff">
 
                 {% if request.resolver_match.url_name == 'home' %}
                     <table style="width: 100%; margin-top: 2px; margin-bottom: 30px">
@@ -509,20 +539,20 @@
                                                 </td>
                                                 <td style="font-size: 16px; font-weight: bold; padding: 6px; border: 1px solid #F68B1F; text-align: center" class="newsbody">
                                                     <marquee direction="left" onmouseover="this.stop()" onmouseout="this.start()" scrolldelay="70">
-                                                        {% if notices %}
-                                                            {% for notice in notices %}
-                                                                {% if notice.file %}
-                                                                    <a href="{{ notice.file.url }}" target="_blank">
-                                                                        *** {{ notice.date|date:"Y-m-d" }}, {{ notice.title }} ***
+                                                        {% if newsws %}
+                                                            {% for news in newsws %}
+                                                                {% if news.file %}
+                                                                    <a href="{{ news.file.url }}" target="_blank">
+                                                                        *** {{ news.date|date:"Y-m-d" }}, {{ news.title }} ***
                                                                     </a>
                                                                     {% if not forloop.last %} &nbsp;&nbsp; | &nbsp;&nbsp; {% endif %}
                                                                 {% else %}
-                                                                    *** {{ notice.date|date:"Y-m-d" }}, {{ notice.title }} ***
+                                                                    *** {{ news.date|date:"Y-m-d" }}, {{ news.title }} ***
                                                                     {% if not forloop.last %} &nbsp;&nbsp; | &nbsp;&nbsp; {% endif %}
                                                                 {% endif %}
                                                             {% endfor %}
                                                         {% else %}
-                                                            {{t.No_notices_found}}
+                                                            {{t.No_news_found}}
                                                         {% endif %}
                                                     </marquee>
                                                 </td>

@@ -1340,11 +1340,22 @@ html {
 }
 
 body {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    background-color: #fff;
+    background: url("{% static 'img/bg-pattern.png' %}") no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+}
+
+/* Blur Overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Safari support */
+
+    background: rgba(255, 255, 255, 0.2); /* slight tint */
+    z-index: -1;
 }
 
 button, input, select, textarea {

@@ -30,9 +30,9 @@
         <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
             <span>About Institute</span>
         </div>
-        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
+        <div style="border-top: 5px solid #F4A024;text-align: justify;padding-top: 5px;overflow-x: hidden;width: 100%;border-bottom: 0;background: #fff;"">
             {% if welcome_message %}
-                {{ welcome_message.message|linebreaks }}
+                {{ welcome_message.message|truncatewords:100 }}<a href= "{% url 'about_view' %}" style = "cursor: pointer;">আরও পড়ুন</a>
             {% else %}
                 
             {% endif %}
@@ -46,7 +46,7 @@
             <span>Teacher's & Staffs</span>
         </div>
         <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-            <marquee direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
+            <marquee direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();" style = "background: #fff">
                 <table>
                     <tr>
                         {% for teacher in teachers %}
@@ -71,7 +71,7 @@
                                 </tr>
                                 <tr>
                                     <td style="text-align: center; padding-top: 1px; padding-bottom: 10px;">
-                                        <a href="{% url 'teacher_detail' teacher.id %}" class="btn btn-danger btn-sm">View Detail</a>
+                                        <a href="{% url 'teacher_detail' teacher.slug %}" class="btn btn-danger btn-sm">View Detail</a>
                                     </td>
                                 </tr>
                             </table>
@@ -90,7 +90,7 @@
             <span>Meritorious Students</span>
         </div>
         <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-             <marquee direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();">
+             <marquee direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();"style = "background: #fff">
                 <table>
                     <tr>
                         {% for student in students %}

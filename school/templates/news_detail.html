@@ -1,0 +1,555 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --news-red: #c1121f;
+        --text-dark: #1a1a1a;
+        --text-muted: #5a5a5a;
+        --border-light: #e5e5e5;
+        --bg-paper: #fcfcfc;
+        --bg-cream: #f9f7f1;
+        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04);
+        --shadow-md: 0 12px 40px rgba(0, 0, 0, 0.08);
+        --font-heading: 'Lora', 'Georgia', 'Times New Roman', serif;
+        --font-body: 'Merriweather', 'Georgia', 'Times New Roman', serif;
+        --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+        --transition: 0.2s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #f4f2ed;
+        font-family: var(--font-body);
+        color: var(--text-dark);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    #container h1{
+        font-size: 5rem;
+    }
+
+    /* MAIN NEWSPAPER CONTAINER */
+    .newspaper-page {
+        max-width: 1000px; /* Slightly wider to accommodate larger text */
+        margin: 40px auto;
+        background: var(--bg-paper);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-light);
+        position: relative;
+        /* subtle vintage paper texture effect */
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(245, 240, 235, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(230, 225, 215, 0.3) 0%, transparent 40%);
+        background-color: #fffdf9;
+    }
+
+    /* TOP BAR - DATE / EDITION */
+    .newspaper-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px; /* Increased padding */
+        border-bottom: 2px solid #000;
+        font-family: var(--font-ui);
+        font-size: 0.85rem; /* Slightly larger */
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-muted);
+        background: #fafaf8;
+    }
+
+    .newspaper-header .edition {
+        font-weight: 600;
+        color: #000;
+    }
+
+    .newspaper-header .date {
+        font-weight: 500;
+    }
+
+    /* MASTHEAD / LOGO AREA */
+    .masthead {
+        text-align: center;
+        padding: 30px 40px 25px; /* Increased padding */
+        border-bottom: 1px solid #000;
+        margin-bottom: 0;
+    }
+
+    .masthead h1 {
+        font-family: var(--font-heading);
+        font-size: 4.2rem; /* Slightly larger */
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #000;
+        text-transform: uppercase;
+        line-height: 1;
+        margin-bottom: 5px;
+    }
+
+    .masthead .tagline {
+        font-family: var(--font-ui);
+        font-size: 0.85rem; /* Increased */
+        text-transform: uppercase;
+        letter-spacing: 0.3em;
+        color: var(--text-muted);
+        border-top: 1px solid #ccc;
+        display: inline-block;
+        padding-top: 12px;
+        margin-top: 10px;
+    }
+
+    /* ARTICLE CONTENT WRAPPER */
+    .article-wrapper {
+        padding: 35px 45px 55px; /* Increased padding */
+    }
+
+    /* CATEGORY + LIVE INDICATOR */
+    .article-category-row {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .article-category {
+        font-family: var(--font-ui);
+        color: var(--news-red);
+        font-weight: 700;
+        font-size: 2rem; /* Increased */
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        background: rgba(193, 18, 31, 0.04);
+        padding: 7px 15px;
+        border-radius: 2px;
+        border-left: 4px solid var(--news-red);
+    }
+
+    .live-badge {
+        background: var(--news-red);
+        color: white;
+        font-family: var(--font-ui);
+        font-size: 0.8rem; /* Increased */
+        font-weight: 700;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 2px;
+        letter-spacing: 0.5px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .live-badge::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        background: white;
+        border-radius: 50%;
+        display: inline-block;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(0.8); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* TITLE */
+    .article-title {
+        font-family: var(--font-heading);
+        font-size: 3.5rem; /* Slightly larger */
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 25px;
+        color: #000;
+        letter-spacing: -0.3px;
+        word-break: break-word;
+    }
+
+    /* META BAR */
+    .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 30px;
+        font-family: var(--font-ui);
+        font-size: 1.5rem; /* Increased */
+        color: var(--text-muted);
+        padding: 16px 0;
+        border-top: 1px solid #d9d9d9;
+        border-bottom: 1px solid #d9d9d9;
+        margin-bottom: 35px;
+        font-weight: 500;
+    }
+
+    .article-meta .author {
+        font-weight: 700;
+        color: #000;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        font-size: 1.5rem;
+    }
+
+    .article-meta .location {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .article-meta .location::before {
+        content: "📍";
+        font-size: 1rem;
+    }
+
+    .article-meta .reading-time {
+        margin-left: auto;
+        font-style: italic;
+        font-size: 1.5rem;
+    }
+
+    /* FEATURED IMAGE */
+    .article-image-container {
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .article-image {
+        width: 100%;
+        max-height: 550px;
+        object-fit: cover;
+        display: block;
+        filter: contrast(1.02) brightness(0.98);
+        border: 1px solid #e0e0e0;
+        transition: filter 0.3s;
+    }
+
+    .image-caption {
+        font-family: var(--font-ui);
+        font-size: 0.9rem; /* Increased */
+        color: #6b6b6b;
+        margin-top: 10px;
+        padding-bottom: 25px;
+        border-bottom: 1px dotted #bfbfbf;
+        font-style: italic;
+        letter-spacing: 0.2px;
+    }
+
+    /* CONTENT BODY - MAIN TEXT SIZE INCREASED */
+    .article-content {
+        font-family: var(--font-body);
+        font-size: 1.5rem; /* INCREASED to minimum 1.5rem */
+        line-height: 1.9; /* Adjusted for larger text */
+        color: #222;
+        text-align: justify;
+        margin-top: 30px;
+    }
+
+    /* DROP CAP - first letter of first paragraph */
+    .article-content p:first-of-type:first-letter {
+        float: left;
+        font-size: 5.5rem; /* Increased proportionally */
+        line-height: 0.85;
+        margin-right: 15px;
+        margin-top: 8px;
+        color: #000;
+        font-weight: 800;
+        font-family: var(--font-heading);
+        text-transform: uppercase;
+        background: linear-gradient(180deg, #000 0%, #2b2b2b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .article-content p {
+        margin-bottom: 1.6rem; /* Increased spacing */
+    }
+
+    /* QUOTE BLOCK */
+    .article-content blockquote {
+        border-left: 5px solid var(--news-red);
+        margin: 2.5rem 0;
+        padding: 1.5rem 2rem;
+        background: #faf9f7;
+        font-style: italic;
+        color: #2d2d2d;
+        font-size: 1.6rem; /* Increased */
+        line-height: 1.7;
+    }
+
+    /* SHARE & TOOLS */
+    .share-toolbar {
+        margin-top: 55px;
+        padding-top: 25px;
+        border-top: 2px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 20px;
+        font-family: var(--font-ui);
+    }
+
+    .share-label {
+        font-weight: 700;
+        font-size: 0.95rem; /* Increased */
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #000;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .share-btn {
+        background: white;
+        border: 1px solid #aaa;
+        padding: 12px 22px; /* Larger buttons */
+        font-size: 0.9rem; /* Increased */
+        font-weight: 600;
+        font-family: var(--font-ui);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: all 0.2s ease;
+        color: #1a1a1a;
+        background: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .share-btn i {
+        font-style: normal;
+        font-size: 1.1rem;
+    }
+
+    .share-btn:hover {
+        background: #000;
+        color: white;
+        border-color: #000;
+    }
+
+    .copy-btn {
+        background: #f0f0f0;
+    }
+
+    /* MOBILE REFINEMENTS */
+    @media (max-width: 768px) {
+        .newspaper-page {
+            margin: 15px;
+        }
+
+        .masthead h1 {
+            font-size: 2.6rem;
+        }
+
+        .article-wrapper {
+            padding: 20px 20px 30px;
+        }
+
+        .article-title {
+            font-size: 2.2rem;
+        }
+
+        /* Mobile text size - still larger than original */
+        .article-content {
+            font-size: 1.3rem; /* Minimum 1.3rem on mobile */
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        .article-content p:first-of-type:first-letter {
+            font-size: 4rem;
+        }
+
+        .article-meta {
+            gap: 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            font-size: 0.85rem;
+        }
+
+        .article-meta .reading-time {
+            margin-left: 0;
+        }
+
+        .share-toolbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .share-btn {
+            padding: 10px 18px;
+            font-size: 0.85rem;
+        }
+        
+        .article-content blockquote {
+            font-size: 1.4rem;
+            padding: 1.2rem 1.5rem;
+        }
+    }
+
+    /* Tablet adjustments */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .article-content {
+            font-size: 1.4rem;
+        }
+        
+        .article-content blockquote {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* hidden utility */
+    .hidden {
+        display: none;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="newspaper-page">
+
+    {% if news %}
+    <div class="article-wrapper">
+
+        <!-- Category Row -->
+        <div class="article-category-row">
+            <span class="article-category">{{ news.category|default:"NEWS" }}</span>
+            {% if news.is_breaking %}
+            <span class="live-badge">LIVE</span>
+            {% endif %}
+        </div>
+
+        <!-- Title -->
+        <h1 class="article-title">{{ news.title }}</h1>
+
+        <!-- Meta information -->
+        <div class="article-meta">
+            <span class="author">By {{ news.author|default:"Staff Reporter" }}</span>
+            <span class="location">{{ news.location|default:"Global Desk" }}</span>
+            <span>{{ news.created_at|date:"F d, Y" }}</span>
+            <span>{{ news.created_at|date:"h:i A" }} EST</span>
+            <span class="reading-time">{{ news.reading_time|default:"4 min read" }}</span>
+        </div>
+
+        <!-- Featured Image -->
+        {% if news.image %}
+        <div class="article-image-container">
+            <img src="{{ news.image.url }}" alt="{{ news.title }}" class="article-image" loading="lazy">
+            <div class="image-caption">
+                {{ news.title|truncatewords:15 }} — Photo by {{ news.photographer|default:"Staff" }}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Article Content -->
+        <div class="article-content">
+            {{ news.description|safe }}
+        </div>
+
+        <!-- Share & Engagement -->
+        <div class="share-toolbar">
+            <span class="share-label">Share this story</span>
+            <div class="share-buttons">
+                <button class="share-btn" onclick="shareOnFacebook()">
+                    <i>📘</i> Facebook
+                </button>
+                <button class="share-btn" onclick="shareOnTwitter()">
+                    <i>𝕏</i> Twitter
+                </button>
+                <button class="share-btn" onclick="shareOnWhatsApp()">
+                    <i>💬</i> WhatsApp
+                </button>
+                <button class="share-btn copy-btn" onclick="copyToClipboard()">
+                    <i>🔗</i> Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="article-wrapper" style="text-align: center; padding: 60px;">
+        <p style="font-family: var(--font-heading); font-size: 1.8rem;">Article not available.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    // Format current date for newspaper header
+    function setCurrentDate() {
+        const dateElement = document.getElementById('currentDate');
+        if (dateElement) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date();
+            dateElement.textContent = today.toLocaleDateString('en-US', options).toUpperCase();
+        }
+    }
+    setCurrentDate();
+
+    // Share functions
+    const currentUrl = encodeURIComponent(window.location.href);
+    const currentTitle = encodeURIComponent(document.title);
+
+    function shareOnFacebook() {
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`, '_blank', 'width=600,height=400');
+    }
+
+    function shareOnTwitter() {
+        window.open(`https://twitter.com/intent/tweet?text=${currentTitle}&url=${currentUrl}`, '_blank', 'width=600,height=400');
+    }
+
+    function shareOnWhatsApp() {
+        window.open(`https://wa.me/?text=${currentTitle}%20${currentUrl}`, '_blank');
+    }
+
+    function copyToClipboard() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+            const copyBtn = document.querySelector('.copy-btn');
+            if (copyBtn) {
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i>✓</i> Copied!';
+                copyBtn.style.background = '#e8f5e9';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '#f0f0f0';
+                }, 2000);
+            } else {
+                alert("Link copied to clipboard!");
+            }
+        }).catch(() => {
+            alert("Could not copy link.");
+        });
+    }
+
+    // Add reading time estimate if not provided by backend
+    document.addEventListener('DOMContentLoaded', function() {
+        const contentDiv = document.querySelector('.article-content');
+        const readingTimeSpan = document.querySelector('.reading-time');
+        if (contentDiv && readingTimeSpan && readingTimeSpan.textContent.includes('min read')) {
+            const text = contentDiv.innerText || contentDiv.textContent;
+            const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+            const minutes = Math.max(1, Math.ceil(wordCount / 200));
+            readingTimeSpan.textContent = `${minutes} min read`;
+        }
+    });
+</script>
+{% endblock extra_js %}

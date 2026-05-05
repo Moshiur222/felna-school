@@ -1,11 +1,15 @@
 # school/context_processors.py
-from .models import Notice, Gallery, Founder, HeadmasterMessage, AssistantHeadmasterMessage, Facility, Visitor, ImportantLinks
+from .models import Notice,TopNews, Gallery, Founder, HeadmasterMessage, AssistantHeadmasterMessage, Facility, Visitor, ImportantLinks
 from django.utils import timezone
 from datetime import timedelta
 
 def notice_board(request):
     notices = Notice.objects.all()[:5]
     return {'notices': notices}
+
+def top_news(request):
+    newsws = TopNews.objects.all()[:5]
+    return {'newsws': newsws}
 
 def gallery_images(request):
     gallery_images = Gallery.objects.all().order_by('-created_at')[:7]
@@ -114,6 +118,7 @@ def get_translations(request):
             # Notice and messages
             'notices': 'নোটিশ',
             'No_notices_found': 'কোন নোটিশ পাওয়া যায়নি।',
+            'No_news_found': 'কোন সংবাদ পাওয়া যায়নি।',
             'MESSAGES_OF_HEADMASTER': 'প্রধান শিক্ষকের বার্তা',
             'MESSAGES_OF_ASSISTANT_HEADMASTER': 'সহকারী প্রধান শিক্ষকের বার্তা',
             'read_more': 'বিস্তারিত',
@@ -414,6 +419,7 @@ def get_translations(request):
             # Notice and messages
             'notices': 'Notices',
             'No_notices_found': 'No notices found.',
+            'No_news_found': 'No news found.',
             'MESSAGES_OF_HEADMASTER': 'MESSAGES OF HEADMASTER',
             'MESSAGES_OF_ASSISTANT_HEADMASTER': 'MESSAGES OF ASSISTANT HEADMASTER',
             'read_more': 'Read more',

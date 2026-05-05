@@ -90,6 +90,7 @@ TEMPLATES = [
                 'school.context_processors.active_menu',
                 'school.context_processors.get_translations',
                 'school.context_processors.alumni_students',
+                'school.context_processors.top_news',
             ],
         },
     },
@@ -154,147 +155,46 @@ SASS_PROCESSOR_ROOT = BASE_DIR / 'static/sass'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 from django.urls import reverse_lazy
 
 UNFOLD = {
     "SITE_TITLE": "Felna High School Admin",
     "SITE_HEADER": "Felna High School",
     "SITE_SYMBOL": "school", 
-    "SHOW_HISTORY": True,
-    "SHOW_VIEW_ON_SITE": True,
-    "SHOW_USERNAME": True,
-    "SHOW_AVATAR": True,
-    
-    "COLORS": {
-        "primary": {
-            "50": "238 242 255", "100": "224 231 255", "200": "199 210 254",
-            "300": "165 180 252", "400": "129 140 248", "500": "99 102 241",
-            "600": "79 70 229", "700": "67 56 202", "800": "55 48 163",
-            "900": "49 46 129", "950": "30 27 75",
-        },
-    },
 
-    "USER_MENU": [
-        {
-            "title": "My Profile",
-            "link": "/admin/auth/user/",
-            "icon": "person",
-        },
-        {
-            "title": "Log Out",
-            "link": "/admin/logout/",
-            "icon": "logout",
-        },
-    ],
-        
     "SIDEBAR": {
         "show_search": True,
-        "show_all_applications": False, 
+        "show_all_applications": False,
+
         "navigation": [
-            # {
-            #     "title": "Main Dashboard",
-            #     "separator": True,
-            #     "items": [
-            #         {"title": "Overview", "icon": "dashboard", "link": reverse_lazy("admin:index")},
-            #     ],
-            # },
+
             {
                 "title": "Home Page",
                 "collapsible": True,
                 "separator": True,
                 "items": [
-                    {"title": "Home Slider", "icon": "imagesmode", "link": "/admin/school/slider/"}, 
+                    {"title": "Home Slider", "icon": "imagesmode", "link": "/admin/school/slider/"},
                     {"title": "About Institute", "icon": "chat", "link": "/admin/school/welcomemessage/"},
                 ],
             },
-            {
-                "title": "Committe Member",
-                "separator": True,  
-                "items": [
-                    {"title": "Management", "icon": "manage_accounts", "link": "/admin/school/management/"},
-                ],
-            },
+
             {
                 "title": "Teachers",
-                "separator": True,  
+                "separator": True,
                 "items": [
                     {"title": "Teacher's & Staffs", "icon": "person_pin", "link": "/admin/school/teacher/"},
                 ],
             },
-            {
-                "title": "Gallery",
-                "collapsible": True,
-                "separator": True,  
-                "items": [
-                    {"title": "Album", "icon": "photo_library", "link": "/admin/school/album/"},
-                    {"title": "Photo Gallery", "icon": "photo_library", "link": "/admin/school/gallery/"},
-                ],
-            },
-            {
-                "title": "Introduction",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {"title": "History", "icon": "history", "link": "/admin/school/ourhistory/"},
-                    {"title": "Mission & Vision", "icon": "flag", "link": "/admin/school/missionvision/"},
-                    {"title": "Achievements", "icon": "military_tech", "link": "/admin/school/schoolachievement/"},
-                ],
-            },
+
             {
                 "title": "Academics",
-                "separator": True,
                 "collapsible": True,
+                "separator": True,
                 "items": [
                     {"title": "Student List", "icon": "people", "link": "/admin/school/student/"},
-                    {"title": "Class Routine", "icon": "calendar_month", "link": "/admin/school/classroutine/"},
-                    {"title": "Syllabus", "icon": "description", "link": "/admin/school/syllabus/"},
-                    {"title": "Exam Routine", "icon": "schedule", "link": "/admin/school/examroutine/"},
                 ],
             },
-            {
-                "title": "Result",
-                "separator": True,
-                "collapsible": True,
-                "items": [
-                    {"title": "Exam Results", "icon": "grade", "link": "/admin/school/examresult/"},
-                ],
-            },
-            {
-                "title": "Admission Information",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {"title": "Admission Circular", "icon": "campaign", "link": "/admin/school/admissioncircular/"},
-                    {"title": "Prospectus", "icon": "menu_book", "link": "/admin/school/prospectus/"},
-                    {"title": "Admission Results", "icon": "assignment_turned_in", "link": "/admin/school/admissionresult/"},
-                ],
-            },
-            {
-                "title": "Facilities",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {"title": "Facilities", "icon": "apartment", "link": "/admin/school/facility/"},
-                ],
-            },
-            {
-                "title": "Board Permission",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    # Add board permission items here if needed
-                ],
-            },
-            {
-                "title": "Alumni Associations",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {"title": "Alumni Students", "icon": "how_to_reg", "link": "/admin/school/studentregistration/"},
-                    {"title": "Villages", "icon": "location_city", "link": "/admin/school/village/"},
-                ],
-            },
+
             {
                 "title": "Administration",
                 "collapsible": True,
@@ -311,36 +211,28 @@ UNFOLD = {
                         "link": "/admin/school/notice/",
                     },
                     {
-                        "title": "Important Links",
-                        "icon": "link",
-                        "link": "/admin/school/importantlinks/",
+                        "title": "News",
+                        "icon": "newspaper",
+                        "link": "/admin/school/news/",
+                    },
+                    {
+                        "title": "Video",
+                        "icon": "newspaper",
+                        "link": "/admin/school/video/",
+                    },
+                    {
+                        "title": "Top News",
+                        "icon": "campaign",
+                        "link": "/admin/school/topnews/",
                     },
                 ],
             },
-            {
-                "title": "Website & Media",
-                "collapsible": True,
-                "separator": True,  
-                "items": [
-                    {"title": "Founders", "icon": "workspace_premium", "link": "/admin/school/founder/"},
-                    {"title": "Donors", "icon": "volunteer_activism", "link": "/admin/school/donor/"},
-                ],
-            },
-            {
-                "title": "Messages",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {"title": "Headmaster Msg", "icon": "person", "link": "/admin/school/headmastermessage/"},
-                    {"title": "Asst. Headmaster", "icon": "groups", "link": "/admin/school/assistantheadmastermessage/"},
-                ],
-            },
+
             {
                 "title": "System Control",
                 "collapsible": True,
                 "items": [
                     {"title": "User Accounts", "icon": "admin_panel_settings", "link": "/admin/auth/user/"},
-                    {"title": "Visitor Logs", "icon": "visibility", "link": "/admin/school/visitor/"},
                 ],
             },
         ],

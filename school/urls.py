@@ -7,12 +7,18 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('about/', views.about_view, name='about_view'),
     path("contact/", views.contact, name="contact"),
     path('notice/', views.notice_list, name='notice'),
     path('exam-result/', views.exam_result_view, name='exam_result'),
     path('admission-result/', views.admission_result_view, name='admission_result'),
     path('gallery/', views.gallery_view, name='gallery'),
     path('gallery/photos/<slug:slug>/', views.album_detail_view, name='photos'),
+
+    path('news/', views.news, name='news'),
+    path('<slug:slug>', views.news_details, name='news_details'),
+    path('video/', views.video_gallery, name='video_gallery'),
+
     path('history/', views.history_view, name='history'),
     path('donors/', views.donor_list, name='donor_list'),
     path('management/', views.management_list, name='management_list'),
@@ -23,7 +29,7 @@ urlpatterns = [
     path('teachers/', views.teacher_list, name='teachers'),
     path("founder/<int:pk>/", views.founder_detail, name="founder_detail"),
     path("headmaster-message/<int:pk>/", views.headmaster_message_detail, name="headmaster_message_detail"),
-    path("teacher/<int:pk>/", views.teacher_detail, name="teacher_detail"),
+    path("teacher/<slug:slug>/", views.teacher_detail, name="teacher_detail"),
     path("assistant-headmaster-message/<int:pk>/", views.assistant_headmaster_message_detail, name="assistant_headmaster_message_detail"),
     path('students/', views.student_list, name='student_list'),
     path('students/<int:pk>/', views.student_detail, name='student_detail'),
@@ -44,7 +50,7 @@ urlpatterns = [
     path('facilities/<int:pk>/', views.facility_detail, name='facility_detail'),
     path('student/registration/', views.student_registration, name='student_registration'),
     path('student/registration/list', views.registration_students_list, name='registration_students_list'),
-    path('student/registration/details/view/<slug:slug>/', views.registration_student_detail, name='registration_student_detail'),
+    path('<slug:slug>/', views.registration_student_detail, name='registration_student_detail'),
     path('update-student-profile/', views.update_student_profile, name='update_student_profile'),
     path('switch-language/', views.switch_language, name='switch_language'),
     path('send-otp/', views.send_otp_1, name='send_otp_1'),

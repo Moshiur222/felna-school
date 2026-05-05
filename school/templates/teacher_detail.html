@@ -222,12 +222,22 @@
                     <span class="contact-label">{{ t.email_label }}</span>
                     <a href="mailto:{{ teacher.email }}" class="contact-data">{{ teacher.email }}</a>
                 </div>
+                {% else %}
+                <div class="contact-row">
+                    <span class="contact-label">{{ t.email_label }}</span>
+                    <a href="" class="contact-data">ইমেইল প্রদান করা হয়নি</a>
+                </div>
                 {% endif %}
 
                 {% if teacher.phone %}
                 <div class="contact-row">
                     <span class="contact-label">{{ t.direct_line }}</span>
                     <span class="contact-data">{{ teacher.phone }}</span>
+                </div>
+                {% else %}
+                <div class="contact-row">
+                    <span class="contact-label">{{ t.direct_line }}</span>
+                    <a href="" class="contact-data">নম্বর প্রদান করা হয়নি</a>
                 </div>
                 {% endif %}
             </div>

@@ -4,9 +4,7 @@ from io import BytesIO
 from django.utils.text import slugify
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
-import sys
-import os
-import time
+import sys, os, io, time, re
 
 # Define the dimensions for each model
 WELCOME_MESSAGE_SIZE = (350, 200)
@@ -166,6 +164,18 @@ class Notice(models.Model):
     title = models.CharField(max_length=255)
     date = models.DateField()
     file = models.FileField(upload_to='notices/', blank=True, null=True)  # PDF, DOC, etc.
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date']  # latest notices first
+
+    def __str__(self):
+        return self.title
+    
+class TopNews(models.Model):
+    title = models.CharField(max_length=255)
+    date = models.DateField()
+    file = models.FileField(upload_to='notices/', blank=True, null=True) 
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -446,37 +456,55 @@ class AssistantHeadmasterMessage(models.Model):
         super().save(*args, **kwargs)
         
         
+from django.db import models
+from django.utils.text import slugify
+
 class Teacher(models.Model):
     GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
         ('O', 'Other'),
     )
-    EDUCATION_CHOICES = [ (1, 'SSC'), (2, 'HSC'), (3, 'BSc'), (4, 'MSc'), (5, 'Phd')]
 
-    name = models.CharField(max_length=150, verbose_name="Name")
-    designation = models.CharField(max_length=100, verbose_name="Designation")
-    subject = models.CharField(max_length=100, verbose_name="Subject", blank=True, null=True)
-    phone = models.CharField(max_length=20, verbose_name="Phone Number", blank=True, null=True)
-    email = models.EmailField(verbose_name="Email", blank=True, null=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, verbose_name="Gender", blank=True, null=True)
-    photo = models.ImageField(upload_to="teachers/", verbose_name="Photo", blank=True, null=True)
-    bio = models.TextField(verbose_name="Biography", blank=True, null=True)
-    join_date = models.DateField(verbose_name="Join Date", blank=True, null=True)
-    is_active = models.BooleanField(default=True, verbose_name="Active")
+    EDUCATION_CHOICES = [
+        (1, 'MA .M.Ed'), (2, ' M.Sc. M.Ed '), (3, 'MBS. M.Ed '),
+        (4, 'MBA. M.Ed'), (5, ' MA.B.Ed '), (6, ' M.Sc. B.Ed '),
+        (7, 'MBS. B.Ed'), (8, 'MBA. B.Ed'), (9, 'B.Com '),
+        (10, 'M.Com'), (11, 'BA'), (12, 'B.Sc'),
+        (13, 'M.Sc'), (14, ' Kamil ')
+    ]
+
+    name = models.CharField(max_length=150)
+    designation = models.CharField(max_length=100)
+    subject = models.CharField(max_length=100, blank=True, null=True)
+
+    slug = models.SlugField(blank=True, null=True)
+
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
+    photo = models.ImageField(upload_to="teachers/", blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    join_date = models.DateField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
     last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        verbose_name = "Teacher"
-        verbose_name_plural = "Teachers"
-        ordering = ["name"]
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(f"felna high school teacher {self.name}")
+            slug = base_slug
+            counter = 1
 
-    def __str__(self):
-        return self.name
-    
+            while Teacher.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
 class Student(models.Model):
     GENDER_CHOICES = [
@@ -802,3 +830,102 @@ class ImportantLinks(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+from unidecode import unidecode
+
+class News(models.Model):
+    location = models.CharField(max_length=150, default="News Location")
+    category = models.CharField(max_length=150, default="News Category")
+    title = models.CharField(max_length=150, default="News Title")
+    slug = models.SlugField(unique=True, blank=True, max_length=255)
+    image = models.ImageField(upload_to="news/")
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def compress_to_webp(self, uploaded_image):
+        img = Image.open(uploaded_image).convert("RGB")
+        output = io.BytesIO()
+        quality = 85
+
+        while True:
+            output.seek(0)
+            img.save(output, format="WEBP", quality=quality, optimize=True)
+            size_kb = output.tell() / 1024
+
+            if size_kb <= 30 or quality <= 10:
+                break
+
+            quality -= 5
+
+        output.seek(0)
+        return output
+
+    def save(self, *args, **kwargs):
+
+        # FIX: Bangla → English → slug
+        if not self.slug:
+            english_title = unidecode(self.title)   # convert Bangla → English
+            base_slug = slugify(english_title)
+
+            # fallback যদি empty হয়
+            if not base_slug:
+                base_slug = "news"
+
+            slug = base_slug
+            counter = 1
+
+            while News.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        #Image compress
+        if self.image and hasattr(self.image, "file"):
+            img_io = self.compress_to_webp(self.image)
+            new_name = f"{self.slug}.webp"
+            self.image.save(new_name, ContentFile(img_io.read()), save=False)
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+    
+
+class Video (models.Model):
+    title = models.CharField(max_length=155)
+    url = models.URLField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def generate_embed_url(self, url):
+        if not url:
+            return None
+
+        si_param = "FzYOnU1EAQsQ4JFe"
+
+        # If already an embed URL
+        if "youtube.com/embed/" in url:
+            clean_url = re.sub(r'\?si=.*', '', url)
+            return f"{clean_url}?si={si_param}"
+
+        # Extract video ID from normal YouTube URLs
+        youtube_regex = (
+            r'(?:https?://)?(?:www\.)?'
+            r'(?:youtube\.com/watch\?v=|youtu\.be/)'
+            r'([A-Za-z0-9_-]{11})'
+        )
+        match = re.search(youtube_regex, url)
+        if match:
+            video_id = match.group(1)
+            return f"https://www.youtube.com/embed/{video_id}?si={si_param}"
+
+        return url
+
+    @property
+    def embed_url(self):
+        return self.generate_embed_url(self.url)
+
+    def __str__(self):
+        return self.title
+    

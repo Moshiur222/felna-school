@@ -39,6 +39,28 @@ def home(request):
     
     return render(request, 'index.html', context)
 
+def about_view(request):
+    # Active sliders
+    sliders = Slider.objects.filter(is_active=True).order_by('order')
+    
+    # Welcome message (optional)
+    welcome_message = WelcomeMessage.objects.first()
+
+    # Teacher list
+    teachers = Teacher.objects.all().order_by('id')  # or any ordering you prefer
+
+    # Active students
+    students = Student.objects.filter(is_active=True).order_by('class_name', 'roll_number')
+
+    context = {
+        'sliders': sliders,
+        'welcome_message': welcome_message,
+        'teachers': teachers,
+        'students': students,  # added here
+    }
+    
+    return render(request, 'about_page.html', context)
+
 
 def contact(request):
     return render(request, "contact.html")
@@ -145,6 +167,20 @@ def donor_list(request):
     return render(request, 'donors.html', {'donors': donors})
 
 
+def news(request):
+    newses = News.objects.all().order_by("-created_at")
+    return render(request, 'news.html', {'newses' : newses})
+
+def news_details(request, slug):
+    news = get_object_or_404(News, slug=slug)
+    return render(request, 'news_detail.html', {'news': news})
+
+
+def video_gallery(request):
+    videos = Video.objects.all().order_by("-created_at")
+    return render(request, 'video_gallery.html', {'page_obj': videos})
+
+
 # View to list all management members
 def management_list(request):
     members = Management.objects.all()  # fetch all management entries
@@ -182,7 +218,7 @@ def teacher_list(request):
     View to display all teachers with their details.
     """
     # ডাটাবেস থেকে শুধুমাত্র একটি কুয়েরিতে ডেটা আনা হচ্ছে
-    teachers = Teacher.objects.filter(is_active=True).order_by('name')
+    teachers = Teacher.objects.filter(is_active=True).order_by('id')
     
     context = {
         'teachers': teachers,
@@ -204,11 +240,11 @@ def assistant_headmaster_message_detail(request, pk):
     message = get_object_or_404(AssistantHeadmasterMessage, pk=pk)
     return render(request, "assistant_headmaster_message_detail.html", {"message": message})
 
-def teacher_detail(request, pk):
+def teacher_detail(request, slug):
     """
     Display details of a single teacher.
     """
-    teacher = get_object_or_404(Teacher, pk=pk)
+    teacher = get_object_or_404(Teacher, slug=slug)
     return render(request, 'teacher_detail.html', {'teacher': teacher})
 
 

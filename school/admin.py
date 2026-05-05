@@ -229,6 +229,91 @@ class ImportantLinksAdmin(UnfoldAdmin):
         """)
 
 
+@admin.register(TopNews)
+class TopNewsAdmin(BaseDescriptionAdmin):
+    list_display = ('title', 'date', 'file', 'created_at', 'action_buttons')
+    search_fields = ('title',)
+    list_filter = ('date',)
+    ordering = ('-date',)
+
+    fieldsets = (
+        ("Top News Information", {
+            "fields": (
+                "title",
+                "date",
+                "file",
+            )
+        }),
+    )
+
+
+
+
+
+@admin.register(News)
+class NewsAdmin(BaseDescriptionAdmin):
+    form = ProfessionalForm
+
+    list_display = (
+        'display_image',
+        'title',
+        'category',
+        'location',
+        'created_at',
+        'action_buttons'
+    )
+
+    search_fields = ('title', 'category', 'location')
+    list_filter = ('category', 'location', 'created_at')
+    readonly_fields = ('slug', 'created_at')
+    ordering = ('-created_at',)
+
+    @display(description="Image")
+    def display_image(self, obj):
+        if obj.image:
+            return mark_safe(
+                f'<img src="{obj.image.url}" '
+                f'style="width:70px;height:45px;border-radius:10px;object-fit:cover;"/>'
+            )
+        return "—"
+
+    fieldsets = (
+        ("News Information", {
+            "fields": (
+                ("title", "slug"),
+                ("category", "location"),
+                "image",
+                "description",
+                "created_at",
+            )
+        }),
+    )
+
+
+@admin.register(Video)
+class VideoAdmin(BaseDescriptionAdmin):
+    form = ProfessionalForm
+
+    list_display = (
+        'title',
+        'url',
+        'created_at',
+    )
+
+    search_fields = ('title', 'url')
+    list_filter = ('title', 'url', 'created_at')
+    ordering = ('-created_at',)
+
+    fieldsets = (
+        ("Video Information", {
+            "fields": (
+                ('title', 'url'),
+            )
+        }),
+    )
+
+
+
 
 # সাইট সেটিংস
 admin.site.site_header = "Felna High School"

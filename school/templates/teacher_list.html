@@ -13,7 +13,7 @@
     }
 
     .teacher-card-link {
-        text-decoration: none !important; /* Remove underline */
+        text-decoration: none !important;
         color: inherit;
         display: block;
         transition: transform 0.2s ease;
@@ -34,7 +34,6 @@
         transform: translateY(-5px);
     }
 
-    /* Maintain a perfect 1:1 or 4:5 aspect ratio for images */
     .image-box {
         width: 100%;
         height: 260px;
@@ -45,16 +44,13 @@
         justify-content: center;
     }
 
-    #container h5{
-        background: transparent;
-        font-size: 1.5rem;
-    }
-
     .image-box img {
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
+        transition: transform 0.3s ease;
     }
+    
     .teacher-card:hover .image-box img {
         transform: scale(1.05);
     }
@@ -94,16 +90,25 @@
         text-align: center;
         color: var(--text-muted);
     }
+    
+    /* Custom row gap for larger spacing between rows */
+    .custom-row-gap {
+        row-gap: 3rem; /* Adjust this value as needed - 3rem = 48px */
+    }
+    
+    /* Or use margin-bottom on columns for even more control */
+    .custom-row-gap > [class*="col-"] {
+        margin-bottom: 3rem; /* Adjust this value as needed */
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <div class="row g-4"> <!-- g-4 adds standard professional spacing between columns -->
+    <div class="row g-4 custom-row-gap">
         {% for teacher in teachers %}
             <div class="col-6 col-md-4 col-lg-3">
-                <!-- Anchor Tag wrapping the entire card -->
-                <a href="{% url 'teacher_detail' teacher.id %}" class="teacher-card-link">
+                <a href="{% url 'teacher_detail' teacher.slug %}" class="teacher-card-link">
                     <div class="teacher-card">
                         <div class="image-box">
                             {% if teacher.photo %}
@@ -116,9 +121,6 @@
                         <div class="teacher-details">
                             <p class="t-designation">{{ teacher.designation }}</p>
                             <h5 class="t-name">{{ teacher.name }}</h5>
-                            {% if teacher.subject %}
-                                <p class="t-subject">{{ teacher.subject }}</p>
-                            {% endif %}
                         </div>
                     </div>
                 </a>
