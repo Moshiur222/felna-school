@@ -141,7 +141,6 @@ from django.db.models import Count
 
 # সব অ্যালবাম দেখানোর জন্য
 def gallery_view(request):
-    # প্রতিটি অ্যালবামের সাথে তার মধ্যে কয়টি ছবি আছে তা গণনা করা হচ্ছে
     albums = Album.objects.annotate(photo_count=Count('photos')).order_by('-id')
     return render(request, 'gallery.html', {'albums': albums})
 
@@ -172,13 +171,23 @@ def news(request):
     return render(request, 'news.html', {'newses' : newses})
 
 def news_details(request, slug):
-    news = get_object_or_404(News, slug=slug)
-    return render(request, 'news_detail.html', {'news': news})
+    newses = get_object_or_404(News, slug=slug)
+    return render(request, 'news_detail.html', {'newses': newses})
 
 
 def video_gallery(request):
     videos = Video.objects.all().order_by("-created_at")
     return render(request, 'video_gallery.html', {'page_obj': videos})
+
+
+def tender_list(request):
+    tenders = Tender.objects.filter(is_active=True).order_by("-publish_date", "-created_at")
+    return render(request, "tender.html", {"tenders": tenders})
+
+
+def tender_detail(request, slug):
+    tender = get_object_or_404(Tender, slug=slug, is_active=True)
+    return render(request, "tender_detail.html", {"tender": tender})
 
 
 # View to list all management members

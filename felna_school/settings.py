@@ -160,7 +160,7 @@ from django.urls import reverse_lazy
 UNFOLD = {
     "SITE_TITLE": "Felna High School Admin",
     "SITE_HEADER": "Felna High School",
-    "SITE_SYMBOL": "school", 
+    "SITE_SYMBOL": "school",
 
     "SIDEBAR": {
         "show_search": True,
@@ -169,67 +169,52 @@ UNFOLD = {
         "navigation": [
 
             {
-                "title": "Home Page",
+                "title": "Dashboard",
+                "icon": "dashboard",
+                "separator": True,
+                "items": [
+                    {"title": "Home Slider", "icon": "slideshow", "link": "/admin/school/slider/"},
+                    {"title": "About Institute", "icon": "info", "link": "/admin/school/welcomemessage/"},
+                ],
+            },
+
+            {
+                "title": "Faculty Management",
+                "icon": "groups",
+                "separator": True,
+                "items": [
+                    {"title": "Teachers & Staff", "icon": "person_pin", "link": "/admin/school/teacher/"},
+                ],
+            },
+
+            {
+                "title": "Academic Records",
+                "icon": "school",
                 "collapsible": True,
                 "separator": True,
                 "items": [
-                    {"title": "Home Slider", "icon": "imagesmode", "link": "/admin/school/slider/"},
-                    {"title": "About Institute", "icon": "chat", "link": "/admin/school/welcomemessage/"},
+                    {"title": "Students", "icon": "people", "link": "/admin/school/student/"},
                 ],
             },
 
             {
-                "title": "Teachers",
-                "separator": True,
-                "items": [
-                    {"title": "Teacher's & Staffs", "icon": "person_pin", "link": "/admin/school/teacher/"},
-                ],
-            },
-
-            {
-                "title": "Academics",
+                "title": "Content Management",
+                "icon": "article",
                 "collapsible": True,
                 "separator": True,
                 "items": [
-                    {"title": "Student List", "icon": "people", "link": "/admin/school/student/"},
+                    {"title": "School Profile", "icon": "domain", "link": "/admin/school/schoolprofile/"},
+                    {"title": "Notices", "icon": "notifications", "link": "/admin/school/notice/"},
+                    {"title": "News", "icon": "newspaper", "link": "/admin/school/news/"},
+                    {"title": "Videos", "icon": "video_library", "link": "/admin/school/video/"},
+                    {"title": "Top News", "icon": "campaign", "link": "/admin/school/topnews/"},
+                    {"title": "Tender", "icon": "gavel", "link": "/admin/school/tender/"},
                 ],
             },
 
             {
-                "title": "Administration",
-                "collapsible": True,
-                "separator": True,
-                "items": [
-                    {
-                        "title": "School Profile",
-                        "icon": "domain",
-                        "link": "/admin/school/schoolprofile/",
-                    },
-                    {
-                        "title": "Official Notices",
-                        "icon": "notifications",
-                        "link": "/admin/school/notice/",
-                    },
-                    {
-                        "title": "News",
-                        "icon": "newspaper",
-                        "link": "/admin/school/news/",
-                    },
-                    {
-                        "title": "Video",
-                        "icon": "newspaper",
-                        "link": "/admin/school/video/",
-                    },
-                    {
-                        "title": "Top News",
-                        "icon": "campaign",
-                        "link": "/admin/school/topnews/",
-                    },
-                ],
-            },
-
-            {
-                "title": "System Control",
+                "title": "System Settings",
+                "icon": "settings",
                 "collapsible": True,
                 "items": [
                     {"title": "User Accounts", "icon": "admin_panel_settings", "link": "/admin/auth/user/"},
@@ -238,7 +223,6 @@ UNFOLD = {
         ],
     },
 }
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # SMTP Configuration

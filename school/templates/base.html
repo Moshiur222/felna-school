@@ -23,6 +23,13 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+#container h1{
+    background: transparent;
+}
+#container h3{
+    background: transparent;
+}
+
 .row2 {
     background-color: #284669;
     font-family: Arial, sans-serif;
@@ -459,7 +466,7 @@ body {
                 <!-- news and media -->
                 <li>
                     <a class="Menu1_1 Menu1_3 
-                    {% if active_url == 'gallery' or active_url == 'news' or active_url == 'gallery' or active_url == 'video_gallery'  or active_url == 'news_details' or active_url == 'photos' %}
+                    {% if active_url == 'gallery' or active_url == 'news' or active_url == 'gallery' or active_url == 'video_gallery'  or active_url == 'news_details' or active_url == 'photos' or active_url == 'tender' or active_url == 'tender_detail' %}
                     active
                     {% endif %}" href="#">
                     নিউজ অ্যান্ড মিডিয়া
@@ -484,8 +491,8 @@ body {
                             </a>
                         </li>
                         <li>
-                            <a 
-                            href="">
+                            <a class="{% if active_url == 'tender' or active_url == 'tender_detail' %}active{% endif %}"
+                            href="{% url 'tender'%}">
                             টেন্ডার
                             </a>
                         </li>

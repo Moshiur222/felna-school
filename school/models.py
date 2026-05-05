@@ -929,3 +929,45 @@ class Video (models.Model):
     def __str__(self):
         return self.title
     
+    
+
+class Tender(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
+
+    description = models.TextField()
+    tender_file = models.FileField(upload_to="tenders/", blank=True, null=True)
+
+    publish_date = models.DateField()
+    last_submission_date = models.DateField()
+
+    contact_phone = models.CharField(max_length=30, blank=True, null=True)
+    contact_email = models.EmailField(blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-publish_date", "-created_at"]
+        verbose_name = "Tender"
+        verbose_name_plural = "Tenders"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(unidecode(self.title))
+            if not base_slug:
+                base_slug = "tender"
+
+            slug = base_slug
+            counter = 1
+
+            while Tender.objects.filter(slug=slug).exclude(id=self.id).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
+            self.slug = slug
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

@@ -313,6 +313,35 @@ class VideoAdmin(BaseDescriptionAdmin):
     )
 
 
+@admin.register(Tender)
+class TenderAdmin(BaseDescriptionAdmin):
+    form = ProfessionalForm
+
+    list_display = (
+        'title',
+        'publish_date',
+        'last_submission_date',
+        'is_active',
+        'action_buttons'
+    )
+
+    search_fields = ('title', 'description')
+    list_filter = ('is_active', 'publish_date', 'last_submission_date')
+    ordering = ('-publish_date', '-created_at')
+
+    readonly_fields = ('slug', 'created_at')
+
+    fieldsets = (
+        ("Tender Information", {
+            "fields": (
+                ("title", "slug"),
+                ("publish_date", "last_submission_date"),
+                ("tender_file","description"),
+                ("contact_phone", "contact_email"),
+                ("is_active","created_at"),
+            )
+        }),
+    )
 
 
 # সাইট সেটিংস

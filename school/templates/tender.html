@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Tender Notice{% endblock %}
+
+{% block extra_css %}
+<style>
+.tender-section{
+    padding:40px 0 60px;
+    background:#f5f7fb;
+}
+
+.tender-hero{
+    background:linear-gradient(135deg,#0f3d66,#082b49);
+    color:white;
+    padding:42px 30px;
+    border-radius:18px;
+    margin-bottom:30px;
+}
+
+.tender-hero span{
+    color:#fde68a;
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.tender-hero h1{
+    font-size:38px;
+    font-weight:900;
+    margin:10px 0;
+}
+
+.tender-card{
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:18px;
+    box-shadow:0 8px 24px rgba(15,23,42,.06);
+    transition:.25s;
+}
+
+.tender-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 14px 36px rgba(15,23,42,.12);
+}
+
+.tender-title{
+    font-size:22px;
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+.tender-title a{
+    color:#111827;
+    text-decoration:none;
+}
+
+.tender-title a:hover{
+    color:#c1121f;
+}
+
+.tender-meta{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    color:#6b7280;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.tender-desc{
+    color:#4b5563;
+    line-height:1.7;
+}
+
+.tender-btn{
+    display:inline-block;
+    margin-top:12px;
+    background:#0f3d66;
+    color:white;
+    padding:10px 16px;
+    border-radius:10px;
+    font-weight:800;
+    text-decoration:none;
+}
+
+.tender-btn:hover{
+    background:#c1121f;
+    color:white;
+}
+
+.empty-box{
+    background:white;
+    border:2px dashed #e5e7eb;
+    padding:50px;
+    text-align:center;
+    border-radius:16px;
+    color:#6b7280;
+    font-weight:800;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="tender-section">
+    <div class="container">
+
+        <div class="tender-hero">
+            <span>Official Notice</span>
+            <h1>Tender Notice</h1>
+            <p>Latest tender notices and official procurement announcements.</p>
+        </div>
+
+        {% for tender in tenders %}
+        <div class="tender-card">
+            <h2 class="tender-title">
+                <a href="{% url 'tender_detail' tender.slug %}">
+                    {{ tender.title }}
+                </a>
+            </h2>
+
+            <div class="tender-meta">
+                <span>Publish: {{ tender.publish_date|date:"d M Y" }}</span>
+                <span>Last Date: {{ tender.last_submission_date|date:"d M Y" }}</span>
+            </div>
+
+            <p class="tender-desc">
+                {{ tender.description|striptags|truncatewords:30 }}
+            </p>
+
+            <a href="{% url 'tender_detail' tender.slug %}" class="tender-btn">
+                View Details
+            </a>
+        </div>
+        {% empty %}
+        <div class="empty-box">
+            No tender notice available.
+        </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endblock %}

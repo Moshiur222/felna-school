@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ tender.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.tender-detail-section{
+    padding:40px 0 60px;
+    background:#f5f7fb;
+}
+
+.tender-detail-card{
+    max-width:950px;
+    margin:0 auto;
+    background:white;
+    border:1px solid #e5e7eb;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 12px 35px rgba(15,23,42,.08);
+}
+
+.tender-top{
+    padding:30px 34px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.back-link{
+    display:inline-block;
+    margin-bottom:18px;
+    color:#6b7280;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.back-link:hover{
+    color:#c1121f;
+}
+
+.badge{
+    display:inline-block;
+    background:#fee2e2;
+    color:#c1121f;
+    padding:7px 14px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:13px;
+    margin-bottom:14px;
+}
+
+.tender-title{
+    font-size:38px;
+    font-weight:900;
+    line-height:1.3;
+    color:#111827;
+    margin-bottom:15px;
+}
+
+.tender-meta{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    color:#6b7280;
+    font-size:14px;
+    font-weight:700;
+}
+
+.tender-body{
+    padding:34px;
+}
+
+.tender-content{
+    font-size:18px;
+    line-height:1.9;
+    color:#1f2937;
+    text-align:justify;
+}
+
+.tender-content p{
+    margin-bottom:18px;
+}
+
+.download-btn{
+    display:inline-block;
+    margin-top:25px;
+    background:#0f3d66;
+    color:white;
+    padding:12px 18px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:900;
+}
+
+.download-btn:hover{
+    background:#c1121f;
+    color:white;
+}
+
+.contact-box{
+    margin-top:30px;
+    padding:20px;
+    background:#f8fafc;
+    border-left:5px solid #0f3d66;
+    border-radius:12px;
+}
+
+.contact-box h3{
+    font-weight:900;
+    margin-bottom:10px;
+}
+
+@media(max-width:768px){
+    .tender-title{
+        font-size:28px;
+    }
+
+    .tender-top,
+    .tender-body{
+        padding:22px 18px;
+    }
+
+    .tender-content{
+        font-size:16px;
+        text-align:left;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="tender-detail-section">
+    <div class="container">
+
+        <article class="tender-detail-card">
+
+            <div class="tender-top">
+                <a href="{% url 'tender' %}" class="back-link">
+                    ← Back to Tender
+                </a>
+
+                <br>
+
+                <span class="badge">Tender Notice</span>
+
+                <h1 class="tender-title">{{ tender.title }}</h1>
+
+                <div class="tender-meta">
+                    <span>Publish Date: {{ tender.publish_date|date:"d M Y" }}</span>
+                    <span>Submission Last Date: {{ tender.last_submission_date|date:"d M Y" }}</span>
+                </div>
+            </div>
+
+            <div class="tender-body">
+                <div class="tender-content">
+                    {{ tender.description|safe }}
+                </div>
+
+                {% if tender.tender_file %}
+                <a href="{{ tender.tender_file.url }}" class="download-btn" target="_blank">
+                    Download Tender File
+                </a>
+                {% endif %}
+
+                <div class="contact-box">
+                    <h3>Contact Information</h3>
+
+                    {% if tender.contact_phone %}
+                        <p><strong>Phone:</strong> {{ tender.contact_phone }}</p>
+                    {% endif %}
+
+                    {% if tender.contact_email %}
+                        <p><strong>Email:</strong> {{ tender.contact_email }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </article>
+
+    </div>
+</section>
+{% endblock %}

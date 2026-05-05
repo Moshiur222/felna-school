@@ -1,202 +1,330 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Gallery | Premium Collection{% endblock %}
+
+{% block title %}Photo Gallery | Felna High School{% endblock %}
 
 {% block extra_css %}
-<!-- Google Fonts: Inter & Playfair Display -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-    :root {
-        --glass-bg: rgba(255, 255, 255, 0.05);
-        --glass-border: rgba(255, 255, 255, 0.1);
-        --text-main: #111827;
-        --text-muted: #6b7280;
-        --accent: #000;
-        --min-font: 1.5rem; /* Enforced Minimum */
+:root{
+    --primary:#0f3d66;
+    --primary-dark:#082b49;
+    --accent:#f59e0b;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --bg:#f5f7fb;
+    --white:#ffffff;
+}
+
+body{
+    background:var(--bg);
+}
+
+#container h3{
+    background: transparent;
+}
+.gallery-section{
+    padding:40px 0 60px;
+}
+
+/* Header */
+.gallery-header{
+    background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color:white;
+    padding:45px 30px;
+    border-radius:18px;
+    margin-bottom:35px;
+    position:relative;
+    overflow:hidden;
+}
+
+.gallery-header::after{
+    content:"";
+    position:absolute;
+    right:-80px;
+    top:-80px;
+    width:220px;
+    height:220px;
+    background:rgba(255,255,255,0.08);
+    border-radius:50%;
+}
+
+.gallery-subtitle{
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:#fde68a;
+    margin-bottom:10px;
+    display:inline-block;
+}
+
+.gallery-title{
+    font-size:38px;
+    font-weight:900;
+    margin:0 0 10px;
+}
+
+.gallery-desc{
+    max-width:720px;
+    font-size:16px;
+    line-height:1.7;
+    opacity:.9;
+    margin:0;
+}
+
+/* Section top */
+.gallery-toolbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:14px;
+}
+
+.gallery-toolbar h2{
+    font-size:24px;
+    font-weight:900;
+    color:var(--text);
+    margin:0;
+}
+
+.album-total{
+    font-size:14px;
+    color:var(--muted);
+    font-weight:600;
+}
+
+/* Album Card */
+.album-card{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:16px;
+    overflow:hidden;
+    height:100%;
+    box-shadow:0 8px 24px rgba(15, 23, 42, 0.06);
+    transition:.25s ease;
+}
+
+.album-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 14px 36px rgba(15, 23, 42, 0.12);
+}
+
+.album-img-wrap{
+    position:relative;
+    height:240px;
+    overflow:hidden;
+    background:#e5e7eb;
+}
+
+.album-img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.45s ease;
+}
+
+.album-card:hover .album-img{
+    transform:scale(1.06);
+}
+
+.album-badge{
+    position:absolute;
+    top:14px;
+    left:14px;
+    background:rgba(15,61,102,.92);
+    color:white;
+    padding:7px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:800;
+}
+
+.album-body{
+    padding:20px;
+}
+
+.album-title{
+    font-size:20px;
+    font-weight:900;
+    line-height:1.35;
+    color:var(--text);
+    margin:0 0 10px;
+}
+
+.album-meta{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    color:var(--muted);
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:16px;
+}
+
+.album-meta i{
+    color:var(--accent);
+    margin-right:5px;
+}
+
+.album-desc{
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:18px;
+}
+
+.album-btn{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    text-decoration:none;
+    background:#f8fafc;
+    border:1px solid var(--border);
+    color:var(--primary);
+    font-weight:800;
+    padding:11px 14px;
+    border-radius:10px;
+    transition:.2s ease;
+}
+
+.album-btn:hover{
+    background:var(--primary);
+    color:white;
+}
+
+/* Empty */
+.empty-state{
+    background:white;
+    border:2px dashed var(--border);
+    padding:60px 20px;
+    border-radius:18px;
+    text-align:center;
+}
+
+.empty-state i{
+    font-size:42px;
+    color:var(--muted);
+    margin-bottom:12px;
+}
+
+.empty-state h3{
+    font-weight:900;
+    color:var(--text);
+}
+
+.empty-state p{
+    color:var(--muted);
+    margin:0;
+}
+
+#container h1{
+    background-color: transparent;
+    color: #fff;
+}
+
+@media(max-width:768px){
+    .gallery-header{
+        padding:32px 22px;
+        border-radius:14px;
     }
 
-
-    .gallery-section {
-        padding: 10px 0;
+    .gallery-title{
+        font-size:29px;
     }
 
-
-    /* Archive Label */
-    .label-caps {
-        font-size: var(--min-font);
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        font-weight: 600;
-        display: block;
-        margin-bottom: 1rem;
+    .gallery-toolbar{
+        align-items:flex-start;
+        gap:8px;
+        flex-direction:column;
     }
 
-    .section-header {
-        text-align: center;
+    .album-img-wrap{
+        height:210px;
     }
-    
-    .section-header .line {
-        width: 60px;
-        height: 3px;
-        background: var(--accent);
-        margin: 30px auto;
-    }
-
-    .display-title {
-        text-align: center;
-        font-family: 'Playfair Display', serif;
-        font-size: 4.5rem; /* Increased to maintain scale */
-        font-weight: 700;
-        letter-spacing: -1px;
-        line-height: 1.1;
-    }
-
-    .header-description {
-        font-size: 1.75rem; /* Larger than min */
-        color: var(--text-muted);
-        max-width: 800px;
-    }
-
-    /* The "Editorial" Card */
-    .album-item {
-        position: relative;
-        border-radius: 0px; /* Sharp edges for high-end look */
-        overflow: hidden;
-        aspect-ratio: 4 / 5;
-        background: #f3f4f6;
-        cursor: pointer;
-        margin-bottom: 3rem;
-    }
-
-    .album-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Sophisticated Gradient Overlay */
-    .album-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            to bottom,
-            transparent 30%,
-            rgba(0, 0, 0, 0.4) 60%,
-            rgba(0, 0, 0, 0.9) 100%
-        );
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 40px;
-        transition: opacity 0.4s ease;
-    }
-
-    .album-content {
-        transform: translateY(10px);
-        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Enforcing 1.5rem on small text */
-    .album-category {
-        font-size: var(--min-font); 
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        color: rgba(255,255,255,0.8);
-        margin-bottom: 12px;
-        display: block;
-        font-weight: 300;
-    }
-
-    .album-title {
-        color: white;
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5rem; /* Scaled up */
-        margin: 0;
-        line-height: 1.2;
-    }
-
-    /* Enforcing 1.5rem on counts */
-    .photo-count {
-        font-size: var(--min-font);
-        color: rgba(255,255,255,0.6);
-        margin-top: 10px;
-        display: block;
-    }
-
-    /* Hover Effects */
-    .album-item:hover .album-image {
-        transform: scale(1.1);
-    }
-
-    .album-item:hover .album-content {
-        transform: translateY(0);
-    }
-
-    .empty-state {
-        font-size: 2rem;
-        font-family: 'Playfair Display', serif;
-        padding: 100px 0;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-        width: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #ccc;
-    }
-
-    @media (max-width: 768px) {
-        .display-title { font-size: 3rem; }
-        .album-title { font-size: 2rem; }
-    }
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <section class="gallery-section">
     <div class="container">
-        <!-- Professional Header -->
-        <div class="row section-header">
-            <div class="col-12">
-                <h1 class="display-title">Photo Albums</h1>
-                <div class="line"></div>
-            </div>
+
+        <div class="gallery-header">
+            <span class="gallery-subtitle">School Memories</span>
+            <h1 class="gallery-title">Photo Gallery</h1>
+            <p class="gallery-desc">
+                Explore memorable moments, school programs, events and campus activities of Felna High School.
+            </p>
         </div>
 
-        <!-- অ্যালবামের গ্রিড শুরু -->
-        <div class="row gx-5">
+        <div class="gallery-toolbar">
+            <h2><i class="fas fa-images"></i> Album Collection</h2>
+            <span class="album-total">{{ albums|length }} Albums Available</span>
+        </div>
+
+        <div class="row g-4">
             {% for album in albums %}
+            <a href="{% url 'photos' album.slug %}">
             <div class="col-lg-4 col-md-6">
-                <!-- লিঙ্কে ক্লিক করলে নির্দিষ্ট অ্যালবামের ফটো পেজে নিয়ে যাবে -->
-                <a href="{% url 'photos' album.slug %}" class="text-decoration-none">
-                    <div class="album-item">
-                        <!-- ব্যানার চেক করা হচ্ছে -->
+                <div class="album-card">
+
+                    <div class="album-img-wrap">
                         {% if album.banner %}
-                            <img src="{{ album.banner.url }}" alt="{{ album.title }}" class="album-image" loading="lazy">
+                            <img src="{{ album.banner.url }}" alt="{{ album.title }}" class="album-img" loading="lazy">
                         {% else %}
-                            <img src="{% static 'images/default.jpg' %}" class="album-image">
+                            <img src="{% static 'images/default.jpg' %}" alt="{{ album.title }}" class="album-img">
                         {% endif %}
-                        
-                        <div class="album-overlay">
-                            <div class="album-content">
-                                <span class="album-category">Collection</span>
-                                <h3 class="album-title">{{ album.title }}</h3>
-                                <!-- আপনার মডেলে related_name='photos' থাকলে নিচের লাইনটি কাজ করবে -->
-                                <span class="photo-count">{{ album.photos.count }} Photos</span>
-                            </div>
-                        </div>
+
+                        <span class="album-badge">
+                            <i class="fas fa-camera"></i> Album
+                        </span>
                     </div>
-                </a>
+
+                    <div class="album-body">
+                        <h3 class="album-title">{{ album.title }}</h3>
+
+                        <div class="album-meta">
+                            <span><i class="far fa-images"></i> {{ album.photos.count }} Photos</span>
+                            {% if album.created_at %}
+                                <span><i class="far fa-calendar-alt"></i> {{ album.created_at|date:"d M Y" }}</span>
+                            {% endif %}
+                        </div>
+
+                        {% if album.description %}
+                            <p class="album-desc">
+                                {{ album.description|striptags|truncatewords:18 }}
+                            </p>
+                        {% else %}
+                            <p class="album-desc">
+                                View photos from this school album collection.
+                            </p>
+                        {% endif %}
+
+                        <a href="{% url 'photos' album.slug %}" class="album-btn">
+                            <span>View Album</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    
+                </div>
+            </a>
             </div>
             {% empty %}
-            <div class="col-12 text-center">
-                <p class="empty-state text-muted italic">The archive is currently empty.</p>
+            <div class="col-12">
+                <div class="empty-state">
+                    <i class="far fa-images"></i>
+                    <h3>No Albums Found</h3>
+                    <p>The gallery archive is currently empty.</p>
+                </div>
             </div>
             {% endfor %}
         </div>
+
     </div>
 </section>
 {% endblock %}
