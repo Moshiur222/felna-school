@@ -1,127 +1,250 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block slider %}
+{% block extra_css %}
+<style>
+.home-section-box{
+    margin-top:20px;
+    background:#ffffff;
+    border:1px solid #d9e2ec;
+    box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
 
+.home-section-title{
+    padding:8px 12px;
+    font-size:20px;
+    font-weight:bold;
+    background:#203C5C;
+    color:white;
+    text-align:left;
+    border-bottom:5px solid #F4A024;
+}
+
+.home-section-content{
+    background:#fff;
+    text-align:justify;
+    padding:12px;
+    overflow:hidden;
+    width:100%;
+}
+
+.home-read-more{
+    color:#c1121f;
+    font-weight:bold;
+    margin-left:6px;
+    text-decoration:none;
+}
+
+.home-read-more:hover{
+    text-decoration:underline;
+}
+
+.slider-img{
+    height:400px !important;
+    width:100% !important;
+    object-fit:cover;
+}
+
+.teacher-card,
+.student-card{
+    margin:8px;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:12px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.07);
+    transition:0.3s;
+}
+
+.teacher-card:hover,
+.student-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+}
+
+.teacher-photo{
+    height:200px;
+    width:200px;
+    border-radius:100px;
+    border:4px solid #F68B1F;
+    object-fit:cover;
+}
+
+.student-photo{
+    height:150px;
+    width:150px;
+    border-radius:75px;
+    border:4px solid #2c2f60 !important;
+    object-fit:cover;
+}
+
+.person-name{
+    padding-top:8px;
+    text-align:center;
+    font-size:15px;
+    color:#292e8e;
+    font-weight:bold;
+}
+
+.person-info{
+    padding-bottom:8px;
+    text-align:center;
+    font-size:13px;
+    color:#4c4b4b;
+    font-weight:bold;
+}
+
+.home-marquee{
+    background:#fff;
+    padding:8px 0;
+}
+
+@media(max-width:768px){
+    .slider-img{
+        height:240px !important;
+    }
+
+    .teacher-photo{
+        height:150px;
+        width:150px;
+    }
+
+    .student-photo{
+        height:130px;
+        width:130px;
+    }
+
+    marquee{
+        width:100% !important;
+    }
+}
+</style>
+{% endblock extra_css %}
+
+{% block slider %}
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
-    <!-- Wrapper for slides -->
     <div class="carousel-inner">
         {% for slider in sliders %}
             <div class="item {% if forloop.first %}active{% endif %}">
-                <img src="{{ slider.image.url }}" class="img-responsive" style="height: 400px; width: 100%;">
+                <img src="{{ slider.image.url }}" class="img-responsive slider-img" alt="{{ slider.headline|default:'School Slider' }}">
             </div>
         {% endfor %}
     </div>
 
-    <!-- Indicators -->
     <ul class="nav nav-pills nav-justified">
         {% for slider in sliders %}
-            <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}>
-            </li>
+            <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
         {% endfor %}
     </ul>
 </div>
 {% endblock slider %}
 
-
 {% block content_index %}
+
+<!-- ABOUT INSTITUTE -->
 <div class="row">
-      <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
-        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
-            <span>About Institute</span>
-        </div>
-        <div style="border-top: 5px solid #F4A024;text-align: justify;padding-top: 5px;overflow-x: hidden;width: 100%;border-bottom: 0;background: #fff;"">
-            {% if welcome_message %}
-                {{ welcome_message.message|truncatewords:100 }}<a href= "{% url 'about_view' %}" style = "cursor: pointer;">আরও পড়ুন</a>
-            {% else %}
-                
-            {% endif %}
+    <div class="col-md-12">
+        <div class="home-section-box">
+            <div class="home-section-title">
+                <span>About Institute</span>
+            </div>
+
+            <div class="home-section-content">
+                {% if welcome_message %}
+                    {{ welcome_message.message|safe|truncatewords:100 }}
+                    <a href="{% url 'about_view' %}" class="home-read-more">আরও পড়ুন</a>
+                {% else %}
+                    <p>No information available.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>
 
+<!-- TEACHERS -->
 <div class="row">
-    <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
-        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
-            <span>Teacher's & Staffs</span>
-        </div>
-        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-            <marquee direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();" style = "background: #fff">
-                <table>
-                    <tr>
-                        {% for teacher in teachers %}
-                        <td>
-                            <table cellpadding="0" cellspacing="0" class="nav-justified" style="margin: 5px;">
-                                <tr>
-                                    <td style="text-align: center; padding-top: 10px; padding-bottom: 10px;">
-                                        {% if teacher.photo %}
-                                            <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" style="height:200px;width:200px;border-radius:100px;border:4px solid #F68B1F;">
-                                        {% else %}
-                                            <img src="{% static 'img/default_teacher.png' %}" alt="{{ teacher.name }}" style="height:200px;width:200px;border-radius:100px;border:4px solid #F68B1F;">
-                                        {% endif %}
-                                        <div style="width: 250px; margin: auto;">
-                                            <div style="padding-top: 6px; text-align: center; font-size: 14px; color: #292e8e; font-weight:bold;">
-                                                {{ teacher.name }}
+    <div class="col-md-12">
+        <div class="home-section-box">
+            <div class="home-section-title">
+                <span>Teacher's & Staffs</span>
+            </div>
+
+            <div class="home-section-content" style="padding:0;">
+                <marquee class="home-marquee" direction="left" behavior="scroll" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();">
+                    <table>
+                        <tr>
+                            {% for teacher in teachers %}
+                            <td>
+                                <table cellpadding="0" cellspacing="0" class="teacher-card">
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            {% if teacher.photo %}
+                                                <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" class="teacher-photo">
+                                            {% else %}
+                                                <img src="{% static 'img/default_teacher.png' %}" alt="{{ teacher.name }}" class="teacher-photo">
+                                            {% endif %}
+
+                                            <div style="width:250px;margin:auto;">
+                                                <div class="person-name">{{ teacher.name }}</div>
+                                                <div class="person-info">{{ teacher.designation }}</div>
                                             </div>
-                                            <div style="padding-bottom: 7px; text-align: center; font-size: 12px; color: #4c4b4b; font-weight:bold;">
-                                                {{ teacher.designation }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: center; padding-top: 1px; padding-bottom: 10px;">
-                                        <a href="{% url 'teacher_detail' teacher.slug %}" class="btn btn-danger btn-sm">View Detail</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        {% endfor %}
-                    </tr>
-                </table>
-            </marquee>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="text-align:center;padding-bottom:8px;">
+                                            <a href="{% url 'teacher_detail' teacher.slug %}" class="btn btn-danger btn-sm">
+                                                View Detail
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </marquee>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- MERITORIOUS STUDENTS -->
 <div class="row">
-    <div id="ContentPlaceHolder1_pnlteachers" class="col-md-12">
-        <div style="padding: 5px; font-size: 20px; background-color: #203C5C; color: white; text-align: left; margin-top: 20px;">
-            <span>Meritorious Students</span>
-        </div>
-        <div style="border-top: 5px solid #F4A024; text-align: justify; padding-top: 5px; overflow-x: hidden; width: 100%; border-bottom: 0;">
-             <marquee direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();"style = "background: #fff">
-                <table>
-                    <tr>
-                        {% for student in students %}
-                        <td>
-                            <table cellpadding="0" cellspacing="0" class="nav-justified" style="margin: 5px;">
-                                <tr>
-                                    <td style="text-align: center; padding-top: 10px; padding-bottom: 10px">
-                                        {% if student.photo %}
-                                            <img src="{{ student.photo.url }}" 
-                                                 style="height:150px;width:150px;border-radius:75px 75px;border:4px solid #2c2f60 !important" />
-                                        {% else %}
-                                            <img src="{% static 'images/default_student.png' %}" 
-                                                 style="height:150px;width:150px;border-radius:75px 75px;border:4px solid #2c2f60 !important" />
-                                        {% endif %}
+    <div class="col-md-12">
+        <div class="home-section-box">
+            <div class="home-section-title">
+                <span>Meritorious Students</span>
+            </div>
 
-                                        <div style="width: 200px; margin-left: auto; margin-right: auto;">
-                                            <div style="padding-top: 6px; text-align: center; padding-right: 25px; padding-left: 25px; font-size: 14px; color: #292e8e">
-                                                <span style="font-weight:bold;">{{ student.name }}</span>
+            <div class="home-section-content" style="padding:0;">
+                <marquee class="home-marquee" direction="left" behavior="scroll" scrollamount="4" width="900" onmouseover="this.stop();" onmouseout="this.start();">
+                    <table>
+                        <tr>
+                            {% for student in students %}
+                            <td>
+                                <table cellpadding="0" cellspacing="0" class="student-card">
+                                    <tr>
+                                        <td style="text-align:center;">
+                                            {% if student.photo %}
+                                                <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="student-photo">
+                                            {% else %}
+                                                <img src="{% static 'images/default_student.png' %}" alt="{{ student.name }}" class="student-photo">
+                                            {% endif %}
+
+                                            <div style="width:200px;margin:auto;">
+                                                <div class="person-name">{{ student.name }}</div>
+                                                <div class="person-info">Class: {{ student.class_name }}</div>
                                             </div>
-                                            <div style="padding-bottom: 7px; text-align: center; padding-right: 25px; padding-left: 25px; font-size: 12px; color: #4c4b4b">
-                                                <span style="font-weight:bold;">Class:{{ student.class_name }}</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        {% endfor %}
-                    </tr>
-                </table>
-            </marquee>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </marquee>
+            </div>
         </div>
     </div>
 </div>
