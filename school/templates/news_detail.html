@@ -193,6 +193,19 @@ body{ background:var(--bg); }
     transform:translateY(0);
 }
 
+.back-link{
+    display:inline-block;
+    margin-bottom:18px;
+    color:#6b7280;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.back-link:hover{
+    color:#c1121f;
+}
+
+
 .copy-toast i{
     color:#22c55e;
 }
@@ -214,9 +227,11 @@ body{ background:var(--bg); }
 
     <!--  LEFT COLUMN -->
     <div class="col-lg-8">
+        <a href="{% url 'news' %}" class="back-link">
+            ← Back to News
+        </a>
 
         <div class="news-detail-wrap">
-
             <div class="news-top">
                 <h1 class="news-title">{{ newses.title }}</h1>
 
