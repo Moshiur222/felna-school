@@ -91,20 +91,20 @@ class TeacherAdmin(BaseDescriptionAdmin):
         if obj.photo: return mark_safe(f'<img src="{obj.photo.url}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;"/>')
         return "—"
     @display(description="Status", label={True: "success", False: "danger"})
-    def display_status(self, obj): return obj.is_active
+    def display_status(self, obj): return obj.status
     fieldsets = (
         ("Personal Details", {
             "fields": (
                 ("name", "gender"), 
                 ("photo", "bio"), 
-                "join_date"
+                ("join_date", "leave_date")
             )
         }),
         ("Professional Info", {
             "fields": (
                 ("designation", "subject"), 
                 ("phone", "email"), 
-                ("last_edu", "is_active") # এখানে কমা (,) যোগ করা হয়েছে
+                ("last_edu", "status") 
             )
         }),
     )

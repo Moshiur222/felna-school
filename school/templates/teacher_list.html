@@ -3,7 +3,6 @@
 
 {% block extra_css %}
 <style>
-    /* Professional Grid Variables */
     :root {
         --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         --card-hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
@@ -12,11 +11,48 @@
         --accent: #2563eb;
     }
 
+    .toggle-wrapper {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .toggle-wrapper input {
+        display: none;
+    }
+
+    .toggle-wrapper label {
+        display: inline-block;
+        padding: 10px 22px;
+        border: 1px solid var(--accent);
+        cursor: pointer;
+        font-weight: 600;
+        color: var(--accent);
+        transition: 0.3s;
+        margin: 0 -2px;
+    }
+
+    .toggle-wrapper label:first-of-type {
+        border-radius: 8px 0 0 8px;
+    }
+
+    .toggle-wrapper label:last-of-type {
+        border-radius: 0 8px 8px 0;
+    }
+
+    .toggle-wrapper input:checked + label {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    .teacher-section {
+        display: none;
+    }
+
     .teacher-card-link {
         text-decoration: none !important;
         color: inherit;
         display: block;
-        transition: transform 0.2s ease;
+        height: 100%;
     }
 
     .teacher-card {
@@ -50,7 +86,7 @@
         object-fit: contain;
         transition: transform 0.3s ease;
     }
-    
+
     .teacher-card:hover .image-box img {
         transform: scale(1.05);
     }
@@ -71,7 +107,7 @@
     }
 
     .t-designation {
-        font-size: 1.5rem;
+        font-size: 1rem;
         font-weight: 600;
         color: var(--accent);
         text-transform: uppercase;
@@ -79,58 +115,123 @@
         margin-bottom: 4px;
     }
 
-    .t-subject {
-        font-size: 1.5rem;
+    .t-status {
+        font-size: 0.85rem;
         color: var(--text-muted);
         margin-bottom: 0;
     }
 
     .no-results {
-        padding: 60px 0;
+        padding: 40px 0;
         text-align: center;
         color: var(--text-muted);
     }
-    
-    /* Custom row gap for larger spacing between rows */
-    .custom-row-gap {
-        row-gap: 3rem; /* Adjust this value as needed - 3rem = 48px */
-    }
-    
-    /* Or use margin-bottom on columns for even more control */
+
     .custom-row-gap > [class*="col-"] {
-        margin-bottom: 3rem; /* Adjust this value as needed */
+        margin-bottom: 3rem;
+    }
+    #container h1, #container h2, #container h3, #container h4, #container h5, #container h6 {
+        background: transparent;
+        color: #000;
     }
 </style>
-{% endblock %}
+{% endblock extra_css %}
 
 {% block content %}
 <div class="container py-5">
-    <div class="row g-4 custom-row-gap">
-        {% for teacher in teachers %}
-            <div class="col-6 col-md-4 col-lg-3">
-                <a href="{% url 'teacher_detail' teacher.slug %}" class="teacher-card-link">
-                    <div class="teacher-card">
-                        <div class="image-box">
-                            {% if teacher.photo %}
-                                <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
-                            {% else %}
-                                <img src="{% static 'img/default_teacher.png' %}" alt="Default Profile">
-                            {% endif %}
-                        </div>
-                        
-                        <div class="teacher-details">
-                            <p class="t-designation">{{ teacher.designation }}</p>
-                            <h5 class="t-name">{{ teacher.name }}</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        {% empty %}
-            <div class="col-12 no-results">
-                <i class="fa-regular fa-face-frown mb-3" style="font-size: 3rem;"></i>
-                <p class="fs-5">No faculty members found in the directory.</p>
-            </div>
-        {% endfor %}
+
+    <!-- Toggle Buttons -->
+    <div class="toggle-wrapper">
+        <input type="radio" id="activeBtn" name="teacherToggle" checked>
+        <label for="activeBtn">Active Teachers</label>
+
+        <input type="radio" id="oldBtn" name="teacherToggle">
+        <label for="oldBtn">Old Teachers</label>
     </div>
+
+    <!-- Active Teachers -->
+    <div id="activeSection" class="teacher-section">
+        <h2 >Active Teachers</h2>
+
+        <div class="row g-4 custom-row-gap">
+            {% for teacher in active_teachers %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="{% url 'teacher_detail' teacher.slug %}" class="teacher-card-link">
+                        <div class="teacher-card">
+                            <div class="image-box">
+                                {% if teacher.photo %}
+                                    <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/default_teacher.png' %}" alt="Default Profile">
+                                {% endif %}
+                            </div>
+
+                            <div class="teacher-details">
+                                <p class="t-designation">{{ teacher.designation }}</p>
+                                <h5 class="t-name">{{ teacher.name }}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-12 no-results">
+                    <p class="fs-5">No active teachers found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Old Teachers -->
+    <div id="oldSection" class="teacher-section">
+        <h2>Old Teachers</h2>
+
+        <div class="row g-4 custom-row-gap">
+            {% for teacher in old_teachers %}
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="{% url 'teacher_detail' teacher.slug %}" class="teacher-card-link">
+                        <div class="teacher-card">
+                            <div class="image-box">
+                                {% if teacher.photo %}
+                                    <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}">
+                                {% else %}
+                                    <img src="{% static 'img/default_teacher.png' %}" alt="Default Profile">
+                                {% endif %}
+                            </div>
+
+                            <div class="teacher-details">
+                                <p class="t-designation">{{ teacher.designation }}</p>
+                                <h5 class="t-name">{{ teacher.name }}</h5>
+                                <p class="t-status">{{ teacher.get_status_display }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-12 no-results">
+                    <p class="fs-5">No old teachers found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const activeBtn = document.getElementById("activeBtn");
+    const oldBtn = document.getElementById("oldBtn");
+    const activeSection = document.getElementById("activeSection");
+    const oldSection = document.getElementById("oldSection");
+
+    function toggleSection() {
+        activeSection.style.display = activeBtn.checked ? "block" : "none";
+        oldSection.style.display = oldBtn.checked ? "block" : "none";
+    }
+
+    activeBtn.addEventListener("change", toggleSection);
+    oldBtn.addEventListener("change", toggleSection);
+
+    toggleSection();
+});
+</script>
 {% endblock content %}

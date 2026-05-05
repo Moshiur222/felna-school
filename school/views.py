@@ -229,17 +229,14 @@ def profile(request):
     
     
 def teacher_list(request):
-    """
-    View to display all teachers with their details.
-    """
-    # ডাটাবেস থেকে শুধুমাত্র একটি কুয়েরিতে ডেটা আনা হচ্ছে
-    teachers = Teacher.objects.filter(is_active=True).order_by('id')
-    
+    active_teachers = Teacher.objects.filter(status=1).order_by('-id')
+    old_teachers = Teacher.objects.filter(status__in=[2, 3]).order_by('-id')
+
     context = {
-        'teachers': teachers,
-        'title': 'Faculty Directory'
+        'active_teachers': active_teachers,
+        'old_teachers': old_teachers,
     }
-    
+
     return render(request, 'teacher_list.html', context)
 
 

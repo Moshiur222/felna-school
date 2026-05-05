@@ -459,6 +459,7 @@ class AssistantHeadmasterMessage(models.Model):
 from django.db import models
 from django.utils.text import slugify
 
+
 class Teacher(models.Model):
     GENDER_CHOICES = (
         ('M', 'Male'),
@@ -466,19 +467,62 @@ class Teacher(models.Model):
         ('O', 'Other'),
     )
 
+    STATUS_CHOICES = (
+        (1, 'Active'),
+        (2, 'Retired'),
+        (3, 'Transferred'),
+    )
+
+    DESIGNATION_CHOICES = (
+        (1, 'Head Teacher'),
+        (2, 'Assistant Head Teacher'),
+        (3, 'Senior Teacher'),
+        (4, 'Assistant Teacher'),
+    )
+
     EDUCATION_CHOICES = [
-        (1, 'MA .M.Ed'), (2, ' M.Sc. M.Ed '), (3, 'MBS. M.Ed '),
-        (4, 'MBA. M.Ed'), (5, ' MA.B.Ed '), (6, ' M.Sc. B.Ed '),
-        (7, 'MBS. B.Ed'), (8, 'MBA. B.Ed'), (9, 'B.Com '),
-        (10, 'M.Com'), (11, 'BA'), (12, 'B.Sc'),
-        (13, 'M.Sc'), (14, ' Kamil ')
+        (1, 'MA M.Ed'),
+        (2, 'M.Sc M.Ed'),
+        (3, 'MBS M.Ed'),
+        (4, 'MBA M.Ed'),
+        (5, 'MA B.Ed'),
+        (6, 'M.Sc B.Ed'),
+        (7, 'MBS B.Ed'),
+        (8, 'MBA B.Ed'),
+        (9, 'B.Com'),
+        (10, 'M.Com'),
+        (11, 'BA'),
+        (12, 'B.Sc'),
+        (13, 'M.Sc'),
+        (14, 'Kamil'),
+    ]
+
+    SUBJECTS_CHOICES = [
+        (1, 'Accounting'),
+        (2, 'Biology'),
+        (3, 'Math'),
+        (4, 'Library Science'),
+        (5, 'English'),
+        (6, 'Agriculture'),
+        (7, 'Bangladesh and Global Studies'),
+        (8, 'Islam and Moral Education'),
     ]
 
     name = models.CharField(max_length=150)
-    designation = models.CharField(max_length=100)
-    subject = models.CharField(max_length=100, blank=True, null=True)
+    designation = models.CharField(choices= DESIGNATION_CHOICES,max_length=100)
 
-    slug = models.SlugField(blank=True, null=True)
+    subject = models.IntegerField(
+        choices=SUBJECTS_CHOICES,
+        blank=True,
+        null=True
+    )
+
+    slug = models.SlugField(
+        unique=True,
+        blank=True,
+        null=True,
+        max_length=255
+    )
 
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
@@ -486,8 +530,18 @@ class Teacher(models.Model):
     photo = models.ImageField(upload_to="teachers/", blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     join_date = models.DateField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    last_edu = models.IntegerField(choices=EDUCATION_CHOICES, null=True)
+    leave_date = models.DateField(blank=True, null=True)
+
+    status = models.IntegerField(
+        choices=STATUS_CHOICES,
+        default=1
+    )
+
+    last_edu = models.IntegerField(
+        choices=EDUCATION_CHOICES,
+        blank=True,
+        null=True
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -495,16 +549,23 @@ class Teacher(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(f"felna high school teacher {self.name}")
+
+            if not base_slug:
+                base_slug = "teacher"
+
             slug = base_slug
             counter = 1
 
-            while Teacher.objects.filter(slug=slug).exists():
+            while Teacher.objects.filter(slug=slug).exclude(pk=self.pk).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
 
             self.slug = slug
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 class Student(models.Model):
     GENDER_CHOICES = [
