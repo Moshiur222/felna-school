@@ -831,8 +831,14 @@ class ImportantLinks(models.Model):
     def __str__(self):
         return self.title
     
+from deep_translator import GoogleTranslator
 
-from unidecode import unidecode
+def translate_to_english(text):
+    try:
+        return GoogleTranslator(source="bn", target="en").translate(text)
+    except Exception:
+        return text
+
 
 class News(models.Model):
     location = models.CharField(max_length=150, default="News Location")
@@ -850,6 +856,8 @@ class News(models.Model):
 
         while True:
             output.seek(0)
+            output.truncate()
+
             img.save(output, format="WEBP", quality=quality, optimize=True)
             size_kb = output.tell() / 1024
 
@@ -862,26 +870,22 @@ class News(models.Model):
         return output
 
     def save(self, *args, **kwargs):
-
-        # FIX: Bangla → English → slug
         if not self.slug:
-            english_title = unidecode(self.title)   # convert Bangla → English
+            english_title = translate_to_english(self.title)
             base_slug = slugify(english_title)
 
-            # fallback যদি empty হয়
             if not base_slug:
                 base_slug = "news"
 
             slug = base_slug
             counter = 1
 
-            while News.objects.filter(slug=slug).exists():
+            while News.objects.filter(slug=slug).exclude(id=self.id).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
 
             self.slug = slug
 
-        #Image compress
         if self.image and hasattr(self.image, "file"):
             img_io = self.compress_to_webp(self.image)
             new_name = f"{self.slug}.webp"
@@ -954,7 +958,9 @@ class Tender(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            base_slug = slugify(unidecode(self.title))
+            english_title = translate_to_english(self.title)
+            base_slug = slugify(english_title)
+
             if not base_slug:
                 base_slug = "tender"
 
