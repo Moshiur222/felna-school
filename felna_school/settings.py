@@ -168,35 +168,45 @@ UNFOLD = {
 
         "navigation": [
 
+            # ================= DASHBOARD =================
             {
                 "title": "Dashboard",
                 "icon": "dashboard",
                 "separator": True,
                 "items": [
-                    {"title": "Home Slider", "icon": "slideshow", "link": "/admin/school/slider/"},
-                    {"title": "About Institute", "icon": "info", "link": "/admin/school/welcomemessage/"},
+                    {"title": "Slider", "icon": "slideshow", "link": "/admin/school/slider/"},
+                    {"title": "Welcome Message", "icon": "info", "link": "/admin/school/welcomemessage/"},
                 ],
             },
 
+            # ================= PEOPLE =================
             {
-                "title": "Faculty Management",
+                "title": "People Management",
                 "icon": "groups",
                 "separator": True,
                 "items": [
-                    {"title": "Teachers & Staff", "icon": "person_pin", "link": "/admin/school/teacher/"},
+                    {"title": "Teachers", "icon": "person", "link": "/admin/school/teacher/"},
+                    {"title": "Students", "icon": "school", "link": "/admin/school/student/"},
+                    {"title": "Student Registration", "icon": "how_to_reg", "link": "/admin/school/studentregistration/"},
                 ],
             },
 
+            # ================= ACADEMICS =================
             {
-                "title": "Academic Records",
-                "icon": "school",
+                "title": "Academic System",
+                "icon": "menu_book",
                 "collapsible": True,
                 "separator": True,
                 "items": [
-                    {"title": "Students", "icon": "people", "link": "/admin/school/student/"},
+                    {"title": "Exam Results", "icon": "grading", "link": "/admin/school/examresult/"},
+                    {"title": "Admission Results", "icon": "fact_check", "link": "/admin/school/admissionresult/"},
+                    {"title": "Class Routine", "icon": "schedule", "link": "/admin/school/classroutine/"},
+                    {"title": "Syllabus", "icon": "description", "link": "/admin/school/syllabus/"},
+                    {"title": "Exam Routine", "icon": "event_note", "link": "/admin/school/examroutine/"},
                 ],
             },
 
+            # ================= CONTENT =================
             {
                 "title": "Content Management",
                 "icon": "article",
@@ -204,25 +214,74 @@ UNFOLD = {
                 "separator": True,
                 "items": [
                     {"title": "School Profile", "icon": "domain", "link": "/admin/school/schoolprofile/"},
+                    {"title": "Mission & Vision", "icon": "flag", "link": "/admin/school/missionvision/"},
+                    {"title": "History", "icon": "history", "link": "/admin/school/ourhistory/"},
+
+                    {"title": "Headmaster Message", "icon": "record_voice_over", "link": "/admin/school/headmastermessage/"},
+                    {"title": "Assistant Headmaster", "icon": "person", "link": "/admin/school/assistantheadmastermessage/"},
+
                     {"title": "Notices", "icon": "notifications", "link": "/admin/school/notice/"},
-                    {"title": "News", "icon": "newspaper", "link": "/admin/school/news/"},
-                    {"title": "Videos", "icon": "video_library", "link": "/admin/school/video/"},
                     {"title": "Top News", "icon": "campaign", "link": "/admin/school/topnews/"},
+                    {"title": "News", "icon": "newspaper", "link": "/admin/school/news/"},
                     {"title": "Tender", "icon": "gavel", "link": "/admin/school/tender/"},
+                    {"title": "Important Links", "icon": "link", "link": "/admin/school/importantlinks/"},
                 ],
             },
 
+            # ================= MEDIA =================
+            {
+                "title": "Media Management",
+                "icon": "perm_media",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Albums", "icon": "photo_album", "link": "/admin/school/album/"},
+                    {"title": "Gallery Photos", "icon": "image", "link": "/admin/school/gallery/"},
+                    {"title": "Videos", "icon": "video_library", "link": "/admin/school/video/"},
+                ],
+            },
+
+            # ================= INSTITUTION =================
+            {
+                "title": "Institution Info",
+                "icon": "business",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Founder", "icon": "person_outline", "link": "/admin/school/founder/"},
+                    {"title": "Donor", "icon": "volunteer_activism", "link": "/admin/school/donor/"},
+                    {"title": "Management", "icon": "groups", "link": "/admin/school/management/"},
+                    {"title": "Facilities", "icon": "apartment", "link": "/admin/school/facility/"},
+                    {"title": "Achievements", "icon": "emoji_events", "link": "/admin/school/schoolachievement/"},
+                ],
+            },
+
+            # ================= ADMISSION =================
+            {
+                "title": "Admission System",
+                "icon": "assignment",
+                "collapsible": True,
+                "separator": True,
+                "items": [
+                    {"title": "Admission Circular", "icon": "description", "link": "/admin/school/admissioncircular/"},
+                    {"title": "Prospectus", "icon": "menu_book", "link": "/admin/school/prospectus/"},
+                ],
+            },
+
+            # ================= SYSTEM =================
             {
                 "title": "System Settings",
                 "icon": "settings",
                 "collapsible": True,
                 "items": [
-                    {"title": "User Accounts", "icon": "admin_panel_settings", "link": "/admin/auth/user/"},
+                    {"title": "Users", "icon": "admin_panel_settings", "link": "/admin/auth/user/"},
+                    {"title": "Visitors", "icon": "visibility", "link": "/admin/school/visitor/"},
                 ],
             },
         ],
     },
 }
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # SMTP Configuration

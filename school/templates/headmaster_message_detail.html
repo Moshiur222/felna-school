@@ -1,27 +1,123 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ message.title }} - Headmaster{% endblock %}
+
+{% block title %}{{ message.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.article-box{
+    background:#ffffff;
+    padding:25px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* TITLE */
+.article-title{
+    font-size:28px;
+    font-weight:900;
+    color:#111827;
+    margin-bottom:15px;
+    line-height:1.3;
+    border-left:5px solid #c1121f;
+    padding-left:10px;
+}
+
+/* IMAGE STYLE */
+.article-image{
+    width:20%;
+    height:220px;
+    object-fit:contain;
+    border:1px solid #ddd;
+    float:left;
+    margin:5px 20px 10px 0;
+    background:#fff;
+    padding:5px;
+    border-radius:6px;
+}
+
+/* CONTENT */
+.article-content{
+    font-size:17px;
+    line-height:1.95;
+    text-align:justify;
+    color:#1f2937;
+    letter-spacing:0.2px;
+}
+
+/* paragraph spacing */
+.article-content p{
+    margin-bottom:16px;
+}
+
+/* 🔥 first paragraph highlight */
+.article-content p:first-child{
+    font-size:19px;
+    font-weight:500;
+}
+
+/* 🔥 drop cap (newspaper style) */
+.article-content p:first-child::first-letter{
+    float:left;
+    font-size:55px;
+    font-weight:900;
+    margin-right:8px;
+    line-height:1;
+    color:#c1121f;
+}
+
+/* clear float */
+.article-content::after{
+    content:"";
+    display:block;
+    clear:both;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .article-image{
+        float:none;
+        width:100%;
+        height:auto;
+        margin:0 0 15px 0;
+    }
+
+    .article-title{
+        font-size:22px;
+    }
+
+    .article-content{
+        font-size:16px;
+        text-align:left;
+    }
+
+    .article-content p:first-child::first-letter{
+        font-size:40px;
+    }
+}
+</style>
+{% endblock %}
 
 {% block content %}
+<div class="col-md-12">
+    <article class="article-box">
 
-<div class="col-md-12" style="background: whitesmoke; margin-bottom: 15px; padding: 15px;">
-    <h4 style="font-size: 18px; font-weight: bold; background: #1d1836; padding: 5px; color: #fff;">
-        {{ message.title }}
-    </h4>
-    <div class="row">
-        <div class="col-md-4 text-center">
+        <!-- TITLE -->
+        <h1>প্রধান শিক্ষকের বার্তা:</h1>
+        
+        <!-- CONTENT -->
+        <div class="article-content">
+            
             {% if message.image %}
-            <img src="{{ message.image.url }}" class="img-responsive img-thumbnail" alt="{{ message.title }}">
+            <img src="{{ message.image.url }}" class="article-image" alt="{{ message.title }}">
             {% else %}
-            <img src="{% static 'img/default_headmaster.png' %}" class="img-responsive img-thumbnail" alt="{{ message.title }}">
+            <img src="{% static 'img/default_headmaster.png' %}" class="article-image" alt="{{ message.title }}">
             {% endif %}
-        </div>
-        <div class="col-md-8">
-            <p style="text-align: justify; line-height: 25px;">
-                {{ message.message|safen  |linebreaks }}
-            </p>
-        </div>
-    </div>
-</div>
+            <h1>{{ message.title }}</h1>
+            {{ message.message|safe }}
 
-{% endblock content %}
+        </div>
+
+    </article>
+</div>
+{% endblock %}
