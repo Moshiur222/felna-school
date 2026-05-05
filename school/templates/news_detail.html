@@ -4,8 +4,8 @@
 {% block title %}{{ newses.title }}{% endblock %}
 
 {% block extra_css %}
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
 :root{
     --red:#c1121f;
@@ -16,326 +16,282 @@
     --paper:#ffffff;
 }
 
-body{
-    background:var(--bg);
-}
+body{ background:var(--bg); }
 
-#container h1{
-    background: transparent;
-    color: #000;
-}
+/* ===== LAYOUT ===== */
+.news-detail-section{ padding:35px 0; }
 
-.news-detail-section{
-    padding:35px 0 60px;
-}
-
+/* LEFT */
 .news-detail-wrap{
-    max-width:980px;
-    margin:0 auto;
     background:var(--paper);
     border:1px solid var(--border);
-    border-radius:18px;
+    border-radius:12px;
     overflow:hidden;
-    box-shadow:0 12px 35px rgba(15,23,42,.08);
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
-.news-top{
-    padding:28px 34px 20px;
-    border-bottom:1px solid var(--border);
-}
-
-.back-link{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:var(--muted);
-    text-decoration:none;
-    font-size:14px;
-    font-weight:700;
-    margin-bottom:18px;
-}
-
-.back-link:hover{
-    color:var(--red);
-}
-
-.news-category{
-    display:inline-block;
-    background:#fee2e2;
-    color:var(--red);
-    padding:7px 14px;
-    border-radius:999px;
-    font-size:13px;
-    font-weight:900;
-    margin-bottom:14px;
-}
+.news-top{ padding:25px; border-bottom:1px solid var(--border); }
 
 .news-title{
-    font-size:42px;
+    font-size:36px;
     font-weight:900;
-    line-height:1.25;
     color:var(--dark);
-    margin:0 0 16px;
+    margin-bottom:10px;
 }
 
 .news-meta{
-    display:flex;
-    flex-wrap:wrap;
-    gap:18px;
-    color:var(--muted);
     font-size:14px;
-    font-weight:600;
-}
-
-.news-meta i{
-    color:var(--red);
-    margin-right:5px;
-}
-
-.news-image-box{
-    background:#f3f4f6;
+    color:var(--muted);
+    display:flex;
+    gap:15px;
 }
 
 .news-image{
     width:100%;
-    max-height:520px;
+    max-height:400px;
     object-fit:cover;
-    display:block;
 }
 
-.news-body{
-    padding:34px 38px 42px;
-}
+.news-body{ padding:25px; }
 
-/* CONTENT ADJUSTMENT */
 .news-content{
     font-size:18px;
     line-height:1.9;
-    color:#1f2937;
     text-align:justify;
-    word-break:break-word;
 }
 
-.news-content p{
-    margin-bottom:20px;
-}
-
-.news-content p:first-child{
-    font-size:20px;
-    font-weight:500;
-    color:#111827;
-}
-
-.news-content p:first-child::first-letter{
-    float:left;
-    font-size:60px;
-    font-weight:900;
-    line-height:1;
-    margin-right:10px;
-    color:var(--red);
-}
-
-.news-content h1,
-.news-content h2,
-.news-content h3,
-.news-content h4{
-    margin-top:28px;
-    margin-bottom:14px;
-    font-weight:900;
-    color:#111827;
-    line-height:1.35;
-}
-
-.news-content ul,
-.news-content ol{
-    padding-left:24px;
-    margin-bottom:22px;
-}
-
-.news-content li{
-    margin-bottom:9px;
-}
-
-.news-content img{
-    max-width:100%;
-    height:auto;
+/* ===== RIGHT SIDEBAR ===== */
+.sidebar{
+    background:#fff;
+    padding:15px;
     border-radius:12px;
-    margin:24px 0;
-    display:block;
+    border:1px solid var(--border);
 }
 
-.news-content blockquote{
-    border-left:5px solid var(--red);
-    padding:16px 22px;
-    background:#f9fafb;
-    margin:28px 0;
-    font-style:italic;
-    color:#374151;
+.sidebar-title{
+    font-weight:900;
+    border-left:4px solid var(--red);
+    padding-left:10px;
+    margin-bottom:15px;
 }
 
-.news-content a{
-    color:var(--red);
+.related-item{
+    display:flex;
+    gap:10px;
+    margin-bottom:12px;
+    border-bottom:1px solid #eee;
+    padding-bottom:10px;
+}
+
+.related-item img{
+    width:80px;
+    height:60px;
+    object-fit:cover;
+    border-radius:6px;
+}
+
+.related-item span{
+    font-size:14px;
     font-weight:700;
-    text-decoration:none;
-}
-
-.news-content a:hover{
-    text-decoration:underline;
+    color:#111;
 }
 
 .share-box{
-    margin-top:38px;
-    padding-top:24px;
-    border-top:1px solid var(--border);
+    margin-top:30px;
+    padding-top:20px;
+    border-top:1px solid #e5e7eb;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:15px;
     flex-wrap:wrap;
+    gap:15px;
 }
 
 .share-title{
+    font-size:15px;
     font-weight:900;
-    color:var(--dark);
+    color:#111827;
 }
 
+/* buttons container */
 .share-buttons{
     display:flex;
     gap:10px;
     flex-wrap:wrap;
 }
 
+/* base button */
 .share-btn{
-    border:1px solid var(--border);
-    background:#f9fafb;
-    padding:10px 14px;
-    border-radius:9px;
-    color:var(--dark);
-    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 16px;
+    border-radius:8px;
     font-size:14px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.share-btn:hover{
-    background:var(--red);
-    color:white;
-    border-color:var(--red);
-}
-
-.empty-news{
-    padding:60px 20px;
-    text-align:center;
-    color:var(--muted);
     font-weight:800;
+    border:none;
+    cursor:pointer;
+    transition:.25s;
+    color:#fff;
 }
 
+/* 🔥 FACEBOOK */
+.share-facebook{
+    background:#1877f2;
+}
+.share-facebook:hover{
+    background:#0d65d9;
+}
+
+/* 🔥 WHATSAPP */
+.share-whatsapp{
+    background:#25d366;
+}
+.share-whatsapp:hover{
+    background:#1ebe5d;
+}
+
+/* 🔥 COPY LINK */
+.share-copy{
+    background:#374151;
+}
+.share-copy:hover{
+    background:#111827;
+}
+
+/* hover effect */
+.share-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 15px rgba(0,0,0,0.15);
+}
+
+.copy-toast{
+    position:fixed;
+    bottom:25px;
+    right:25px;
+    background:#111827;
+    color:#fff;
+    padding:12px 18px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:.3s ease;
+    z-index:9999;
+}
+
+.copy-toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.copy-toast i{
+    color:#22c55e;
+}
+
+.related-item:hover span{ color:var(--red); }
+
+/* MOBILE */
 @media(max-width:768px){
-    .news-detail-section{
-        padding:20px 12px 40px;
-    }
-
-    .news-top,
-    .news-body{
-        padding:22px 18px;
-    }
-
-    .news-title{
-        font-size:28px;
-    }
-
-    .news-content{
-        font-size:16px;
-        line-height:1.8;
-        text-align:left;
-    }
-
-    .news-content p:first-child{
-        font-size:17px;
-    }
-
-    .news-content p:first-child::first-letter{
-        font-size:42px;
-    }
+    .news-title{ font-size:26px; }
 }
 </style>
-{% endblock extra_css %}
+{% endblock %}
 
 {% block content %}
+
 <section class="news-detail-section">
-    <div class="container">
+<div class="container">
+<div class="row">
 
-        <article class="news-detail-wrap">
+    <!--  LEFT COLUMN -->
+    <div class="col-lg-8">
 
-            {% if newses %}
-                <div class="news-top">
-                    <a href="{% url 'news' %}" class="back-link">
-                        <i class="fas fa-arrow-left"></i> Back to News
-                    </a>
+        <div class="news-detail-wrap">
 
-                    <br>
+            <div class="news-top">
+                <h1 class="news-title">{{ newses.title }}</h1>
 
-                    <span class="news-category">
-                        {{ newses.category|default:"News" }}
-                    </span>
-
-                    <h1 class="news-title">
-                        {{ newses.title }}
-                    </h1>
-
-                    <div class="news-meta">
-                        <span>
-                            <i class="far fa-calendar-alt"></i>
-                            {{ newses.created_at|date:"d M Y" }}
-                        </span>
-
-                        <span>
-                            <i class="far fa-clock"></i>
-                            {{ newses.created_at|date:"h:i A" }}
-                        </span>
-
-                        {% if newses.location %}
-                        <span>
-                            <i class="fas fa-map-marker-alt"></i>
-                            {{ newses.location }}
-                        </span>
-                        {% endif %}
-                    </div>
+                <div class="news-meta">
+                    <span><i class="fa fa-calendar"></i> {{ newses.created_at|date:"d M Y" }}</span>
+                    <span><i class="fa fa-clock"></i> {{ newses.created_at|date:"h:i A" }}</span>
                 </div>
+            </div>
 
-                {% if newses.image %}
-                <div class="news-image-box">
-                    <img src="{{ newses.image.url }}" alt="{{ newses.title }}" class="news-image">
-                </div>
-                {% endif %}
-
-                <div class="news-body">
-                    <div class="news-content">
-                        {{ newses.description|safe }}
-                    </div>
-
-                    <div class="share-box">
-                        <div class="share-title">Share this news</div>
-
-                        <div class="share-buttons">
-                            <button class="share-btn" onclick="shareFacebook()">Facebook</button>
-                            <button class="share-btn" onclick="shareWhatsApp()">WhatsApp</button>
-                            <button class="share-btn" onclick="copyLink()">Copy Link</button>
-                        </div>
-                    </div>
-                </div>
-
-            {% else %}
-                <div class="empty-news">
-                    News article not found.
-                </div>
+            {% if newses.image %}
+                <img src="{{ newses.image.url }}" class="news-image">
             {% endif %}
 
-        </article>
+            <div class="news-body">
+                <div class="news-content">
+                    {{ newses.description|safe }}
+                </div>
+                <div class="share-box">
+
+                    <div class="share-title">
+                        <i class="fas fa-share-alt"></i> Share this news
+                    </div>
+
+                    <div class="share-buttons">
+
+                        <button class="share-btn share-facebook" onclick="shareFacebook()">
+                            <i class="fab fa-facebook-f"></i> Facebook
+                        </button>
+
+                        <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </button>
+                        
+                        <button class="share-btn share-copy" onclick="copyLink()">
+                            <i class="fas fa-link"></i> Copy Link
+                        </button>
+
+                    </div>
+                    <div id="copyToast" class="copy-toast">
+                        <i class="fas fa-check-circle"></i> Link copied successfully
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
     </div>
+
+    <!--  RIGHT COLUMN -->
+    <div class="col-lg-4">
+
+        <div class="sidebar">
+
+            <h4 class="sidebar-title">More News</h4>
+
+            {% for item in related_news %}
+            <a href="{% url 'news_details' item.slug %}">
+                <div class="related-item">
+
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}">
+                    {% endif %}
+
+                    <span>{{ item.title|truncatewords:8 }}</span>
+
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+</div>
 </section>
-{% endblock content %}
+{% endblock %}
 
 {% block extra_js %}
 <script>
@@ -356,7 +312,15 @@ function shareWhatsApp(){
 
 function copyLink(){
     navigator.clipboard.writeText(window.location.href).then(function(){
-        alert("Link copied!");
+        
+        const toast = document.getElementById("copyToast");
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 2500);
+
     });
 }
 </script>

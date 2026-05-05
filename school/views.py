@@ -172,7 +172,13 @@ def news(request):
 
 def news_details(request, slug):
     newses = get_object_or_404(News, slug=slug)
-    return render(request, 'news_detail.html', {'newses': newses})
+
+    related_news = News.objects.exclude(id=newses.id).order_by('-created_at')[:6]
+
+    return render(request, 'news_detail.html', {
+        'newses': newses,
+        'related_news': related_news
+    })
 
 
 def video_gallery(request):
